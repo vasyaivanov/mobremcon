@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="index,follow" name="robots" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<link href="iWebKit/pics/homescreen.gif" rel="apple-touch-icon" />
+<meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+<link href="iWebKit/css/style.css" rel="stylesheet" media="screen" type="text/css" />
+<title>iWebKit Demo - combine your Website with iPhone applications</title>
+<script src="iWebKit/javascript/functions.js" type="text/javascript"></script>
+<meta content="iPod,iPhone,Webkit,iWebkit,Website,Create,mobile,Tutorial,free" name="Keywords" />
+<meta content="Try out the awsome ways to interact with the iphone. It goes as far as mail, telephone and even google maps! Right from your iPhone." name="description" />
+ <script class="include" type="text/javascript" src="jqplot/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+	function showLanguage(){
+		$(".webpage").css("display","none");
+		$("#language").css("display","block");
+		$("#leftbutton").html('<a href="javascript:showMenu();" class="noeffect" style="font-size:16px"><b>&nbsp;☰&nbsp;<b></a> </div>');
+	}
+	
+	function showUnits(){
+		$(".webpage").css("display","none");
+		$("#units").css("display","block");
+		$("#leftbutton").html('<a href="javascript:showMenu();" class="noeffect" style="font-size:16px"><b>&nbsp;☰&nbsp;<b></a> </div>');
+	}
+	
+	function showLocation(){
+		$(".webpage").css("display","none");
+		$("#location").css("display","block");
+		$("#leftbutton").html('<a href="javascript:showMenu();" class="noeffect" style="font-size:16px"><b>&nbsp;☰&nbsp;<b></a> </div>');
+	}
+	
+	function showMenu(){
+		$(".webpage").css("display","none");
+		$("#content").css("display","block");
+		$("#leftbutton").html('<a href="index.html" class="noeffect">Home</a> </div>');
+	}
+	
+	function setUnits(value){
+		//localStorage.units = value;
+		//alert("units="+value);
+	}
+</script>
+
+</head>
+
+<body>
+
+
+        <div id="topbar" style="padding-bottom:1px;margin-bottom:1px">
+            <div id="title">Health Climate</div>
+			<div id="leftbutton">
+                <a href="index.html" class="noeffect">Home</a> </div>
+			</div>
+		</div>
+
+
+<div id="content" class="webpage">
+	<ul class="pageitem">
+		<li class="menu">
+			<span>
+				<a class="noeffect" href="javascript:showLanguage();">
+				<span class="name">Label Language</span>
+				<span class="comment" id="languageValue">English</span>
+				<span class="arrow"></span></a>
+			</span>
+		</li>
+		<li class="menu">
+			<span>
+				<a class="noeffect" href="javascript:showUnits()">
+				<span class="name">Units</span>
+				<span class="comment" id="unitsValue">Fahrenheit</span>
+				<span class="arrow"></span></a>
+			</span>
+		</li>
+		<li class="menu">
+			<span>
+				<a class="noeffect" href="chooseLocation.html">
+				<span class="name">Choose Location</span>
+				<span class="comment" id="locationValue">Current</span>
+				<span class="arrow"></span></a>
+			</span>
+		</li>
+		<li class="menu">
+			<a class="noeffect" href="about.html">
+			<span class="name">About</span><span class="arrow"></span></a>
+		</li>
+	</ul>
+</div>
+
+</div>
+
+<div id="language" class="webpage" style="display:none">
+		<span class="graytitle">Data Language</span>
+		<ul class="pageitem">
+			<li class="radiobutton"><span class="name">English</span>
+			<input name="lang" type="radio" value="English" /></li>
+			<li class="radiobutton"><span class="name">Spanish</span>
+			<input name="lang" type="radio" value="Spanish" /></li>
+			<li class="radiobutton"><span class="name">Russian</span>
+			<input name="lang" type="radio" value="Russian" /></li>
+		</ul>
+</div>
+
+
+<div id="units" class="webpage" style="display:none">
+		<span class="graytitle">Units</span>
+		<ul class="pageitem">
+			<li class="radiobutton"><span class="name" id='fahrenheit'>Fahrenheit</span>
+			<input name="unitsChoice" type="radio" value="Fahrenheit" /></li>
+			<li class="radiobutton"><span class="name">Celcius</span>
+			<input name="unitsChoice" type="radio" value="Celcius" /></li>
+		</ul>
+</div>
+
+<div id="footer">
+	<a class="noeffect" href="http://snippetspace.com">Developed by Jim Dukhovny © 2013</a>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+	if(localStorage.units && localStorage.units!=null){
+		$("#unitsValue").html(localStorage.units);
+	}
+
+	if(localStorage.language && localStorage.language!=null){
+		$("#languageValue").html(localStorage.language);
+	}
+	
+	if((typeof localStorage.locationName != "undefined") && localStorage.locationName != "null"){
+		$("#locationValue").html(localStorage.locationName.substring(0,5));
+	}else{
+		$("#locationValue").html("Current");
+	}
+
+	$("input[name='unitsChoice']").change(function(){
+		localStorage.units = $(this).val();
+	});
+	
+	$("input[name='lang']").change(function(){
+		localStorage.language = $(this).val();
+		$("#languageValue").html(localStorage.language);
+	});	
+	
+});
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>SENDER</title>
+		<link rel="stylesheet" type="text/css" href="index1.css">
+		<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
+		<!--<script src="http://localhost:1337/socket.io/socket.io.js"></script>-->
+		<script>
+		  var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+		  //var socket = io.connect('http://localhost:1337');
+		  function buttonClicked(numClicked){
+			//alert("clicked " + numClicked);
+			socket.emit('mymessage', { my: numClicked });
+		  }
+		</script>
+
+	</head>
+<body>
+<div id="remote-control">
+	<h2>
+		Main navigation
+	</h2>
+	<ul>
+		<li id="home"><a href="javascript:buttonClicked(-101)" title="Home"><span>Home</span></a></li>
+		<li id="sitemap"><a href="javascript:buttonClicked(-100)" title="Sitemap"><span>Sitemap</span></a></li>
+	</ul>
+	<h2>
+		MICROSOFT REMOTE CONTROL ©
+	</h2>
+	<ul>
+		<li id="button1"><a href="javascript:buttonClicked(1)" title="Section 1"><span>Section 1</span></a></li>
+		<li id="button2"><a href="javascript:buttonClicked(2)" title="Section 2"><span>Section 2</span></a></li>
+		<li id="button3"><a href="javascript:buttonClicked(3)" title="Section 3"><span>Section 3</span></a></li>
+		<li id="button4"><a href="javascript:buttonClicked(4)" title="Section 4"><span>Section 4</span></a></li>
+		<li id="button5"><a href="javascript:buttonClicked(5)" title="Section 5"><span>Section 5</span></a></li>
+		<li id="button6"><a href="javascript:buttonClicked(6)" title="Section 6"><span>Section 6</span></a></li>
+		<li id="button7"><a href="javascript:buttonClicked(7)" title="Section 7"><span>Section 7</span></a></li>
+		<li id="button8"><a href="javascript:buttonClicked(8)" title="Section 8"><span>Section 8</span></a></li>
+		<li id="button9"><a href="javascript:buttonClicked(9)" title="Section 9"><span>Section 9</span></a></li>
+		<li id="button10"><a href="javascript:buttonClicked(10)" title="Section 10"><span>Section 10</span></a></li>
+		<li id="button11"><a href="javascript:buttonClicked(11)" title="Section 11"><span>Section 11</span></a></li>
+		<li id="button12"><a href="javascript:buttonClicked(12)" title="Section 12"><span>Section 12</span></a></li>
+	</ul>
+	<h2>
+		developed by Bing Social
+	</h2>
+	<ul>
+		<li id="view"><a href="#" title="View full gallery"><span>View</span></a></li>
+		<li id="info"><a href="#" title="Info on gallery"><span>Info</span></a></li>
+		<li id="help"><a href="#" title="Help"><span>Help</span></a></li>
+		<li id="rewind"><a href="#" title="Go back to beginning"><span>Rewind</span></a></li>
+		<li id="back"><a href="javascript:buttonClicked(100)" title="Back"><span>Back</span></a></li>
+		<li id="forward"><a href="javascript:buttonClicked(101)" title="Forward"><span>Forward</span></a></li>
+		<li id="top"><a href="javascript:buttonClicked(102)" title="Top of gallery"><span>Top of Gallery</span></a></li>
+		<li id="bottom"><a href="javascript:buttonClicked(103)" title="Bottom of gallery"><span>Bottom of Gallery</span></a></li>
+		<li id="ok"><a href="javascript:buttonClicked(0)" title="OK - start slideshow"><span>OK - start slideshow</span></a></li>
+	</ul>
+</div>
+</BODY>
+</HTML>

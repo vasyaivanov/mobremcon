@@ -1,0 +1,24 @@
+{
+  "name": "remotecontrol",
+  "version": "0.0.1-25",
+  "description": "remote control graph app",
+  "main": "APP.JS",
+  "dependencies": {
+    "socket.io": "~0.9.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./APP.JS"
+  },
+  "keywords": [
+    "health",
+    "weather"
+  ],
+  "author": "Jim Dukhovny",
+  "license": "All Rights",
+  "subdomain": "remotecontrol",
+  "engines": {
+    "node": "0.10.x"
+  }
+}
