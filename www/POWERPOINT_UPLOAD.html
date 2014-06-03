@@ -14,7 +14,8 @@
 	<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
 	<script src="client.js"></script>
 	<script>
-	  	var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+	  	//var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+		var socket = io.connect('http://localhost:1337');
 		
 		document.addEventListener("DOMContentLoaded", function(){
 
@@ -91,12 +92,12 @@
 </head>
 
 <body>
-<form action="http://localhost:8080" method="post">
-	<p><label>Choose File: <input type="file" multiple></label></p>
+
+	<p><label>Choose File: <input type="file" id="upload_input" multiple></label></p>
 	<div id="file_drop" dropzone="copy" title="drop files for upload" style='width:300px;height:300px;border-width:2px;border-color:blue;border-style:solid'>Drop File</div>
 	<input type="submit" value="Submit">
 
-</form>
+
 	<script>
 
 jQuery(document).ready(function($) {

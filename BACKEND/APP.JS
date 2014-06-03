@@ -6,21 +6,11 @@ var app = require('http').createServer(handler)
   , formidable = require('formidable')
   , SocketIOFileUploadServer = require("socketio-file-upload");
 
-app.listen(80);//80
+app.listen(1337);//80
 
 io.set('log level', 1);
 
 SocketIOFileUploadServer.listen(app);
-
-
-http.createServer(function(req,res){
-	var form = formidable.IncomingForm();
-	form.parse(req, function(err, fields, files){
-		console.log("JD: files="+JSON.stringify(files));
-		console.log("JD: fields="+JSON.stringify(fields);
-	});
-}).listen(8080);
-
 
 function handler (req, res) {
   fs.readFile(__dirname + '/index.html',
@@ -41,14 +31,14 @@ var clients = [];
 console.log('in remote control');
 		
 io.sockets.on('connection', function (socket) {
-		console.log('started sockettt');
+		console.log('started socket');
 		
 		var imageCount = 1;
-		var dirname = "/Users/mac/Documents/REMOTECONTROL3/BACKEND/UPLOADS";
+		//var dirname = "/Users/mac/Documents/REMOTECONTROL3/BACKEND/UPLOADS";
 		
 		var uploader = new SocketIOFileUploadServer();
     	uploader.listen(socket);
-    	uploader.dir = dirname;
+    	uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST";
     	
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + event.file);
@@ -58,16 +48,18 @@ io.sockets.on('connection', function (socket) {
         	//console.log("JD: progress: " + JSON.stringify(event));
     	});
 
-		uploader.on("saved", function(event){
+	uploader.on("complete", function(event){
         	console.log("JD: saved: " + event.file.name + " file extension=" + event.file.name.split(".")[1]);
         	var extention = event.file.name.split(".")[1];
-        	var fullFileName = dirname + "/" + event.file.name;
+        	var fullFileName = uploader.dir + "/" + event.file.name;
         	
-        	//console.log("JD: stringify ppt2png=" + JSON.stringify(ppt.ppt2png));
+		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);	
+        	
+		console.log("JD: stringify ppt2png=" + JSON.stringify(ppt.ppt2png));
         	
         	
         	ppt.ppt2png(fullFileName , fullFileName, function(){
-        		//console.log("JD: in ppt2png call back");
+        		console.log("JD: in ppt2png call back");
         	});
         	
         	/*fs.rename(dirname + "/" + event.file.name , dirname + "/" + imageCount + "." + extention, function (err){
@@ -90,7 +82,7 @@ io.sockets.on('connection', function (socket) {
 		}); */
 		
 		socket.on('fileUploaded', function (data) {
-			console.log("JD: received from remote this data: " + JSON.stringify(data));
+			//console.log("JD: received from remote this data: " + JSON.stringify(data));
 		});
 
 		//socket.emit('news', { hello: 0 });
