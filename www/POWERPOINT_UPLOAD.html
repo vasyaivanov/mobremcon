@@ -24,8 +24,9 @@
 
 			// Configure the three ways that SocketIOFileUpload can read files:
 			//document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
-			siofu.listenOnInput(document.getElementById("upload_input"));
-			siofu.listenOnDrop(document.getElementById("file_drop"));
+			siofu.listenOnSubmit(document.getElementById("upload_btn"), document.getElementById("upload_input"));
+			//siofu.listenOnInput(document.getElementById("upload_input"));
+			//siofu.listenOnDrop(document.getElementById("file_drop"));
 
 
 			// Do something when a file is uploaded:
@@ -95,7 +96,7 @@
 
 	<p><label>Choose File: <input type="file" id="upload_input" multiple></label></p>
 	<div id="file_drop" dropzone="copy" title="drop files for upload" style='width:300px;height:300px;border-width:2px;border-color:blue;border-style:solid'>Drop File</div>
-	<input type="submit" value="Submit">
+	<input type="submit" id="upload_btn" value="Submit">
 
 
 	<script>
