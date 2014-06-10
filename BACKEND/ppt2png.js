@@ -6,7 +6,7 @@ function ppt2png(){
 	this.ppt2png = function(input, output, callback) {
 	  exec('unoconv -f pdf -o ' + output + '.pdf ' + input, 
 		  function( error, stdout, stderr) {
-			//console.log('unoconv stdout: ', stdout);
+			console.log('unoconv stdout: ', stdout);
 			//console.log('unoconv stderr: ', stderr);
 			if (error !== null) {
 			  callback(error);

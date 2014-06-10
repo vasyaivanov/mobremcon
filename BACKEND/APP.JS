@@ -1,7 +1,7 @@
 var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app, { log: false })
   , fs = require('fs')
-  , ppt = require('./ppt2png.js')
+  , exec = require('child_process').exec
   , http = require('http')
   , formidable = require('formidable')
   , SocketIOFileUploadServer = require("socketio-file-upload");
@@ -38,7 +38,7 @@ io.sockets.on('connection', function (socket) {
 		
 		var uploader = new SocketIOFileUploadServer();
     	uploader.listen(socket);
-    	uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST";
+    	uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
     	
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + event.file);
@@ -51,16 +51,19 @@ io.sockets.on('connection', function (socket) {
 	uploader.on("complete", function(event){
         	console.log("JD: saved: " + event.file.name + " file extension=" + event.file.name.split(".")[1]);
         	var extention = event.file.name.split(".")[1];
-        	var fullFileName = uploader.dir + "/" + event.file.name;
+        	var fullFileName = uploader.dir + event.file.name;
         	
-		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);	
+		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
+		console.log('MA C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv -f html -o ' + fullFileName + '.html ' + fullFileName);	
         	
-		console.log("JD: stringify ppt2png=" + JSON.stringify(ppt.ppt2png));
-        	
-        	
-        	ppt.ppt2png(fullFileName , fullFileName, function(){
-        		console.log("JD: in ppt2png call back");
-        	});
+        	exec('C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv -f html -o ' + fullFileName + '.html ' + fullFileName, 
+		  function( error, stdout, stderr) {
+			//console.log('unoconv stdout: ', stdout);
+			console.log('Converted presentation: ', fullFileName + '.html\\index.html');
+			if (error !== null) {
+			  console.log('unoconv stderr: ', stderr);
+			}
+		  });
         	
         	/*fs.rename(dirname + "/" + event.file.name , dirname + "/" + imageCount + "." + extention, function (err){
         		console.log("JD: renamed");
