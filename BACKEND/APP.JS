@@ -1,4 +1,5 @@
 var app = require('http').createServer(handler)
+  , url = require('url')
   , io = require('socket.io').listen(app, { log: false })
   , fs = require('fs')
   , exec = require('child_process').exec
@@ -13,11 +14,12 @@ io.set('log level', 1);
 SocketIOFileUploadServer.listen(app);
 
 function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
+  var url_parts = url.parse(req.url, true);
+  fs.readFile(__dirname + url_parts.pathname,
   function (err, data) {
     if (err) {
       res.writeHead(500);
-      return res.end('Error loading index.html');
+      return res.end('Error loading ' + url_parts.pathname);
     }
 
     res.writeHead(200);
