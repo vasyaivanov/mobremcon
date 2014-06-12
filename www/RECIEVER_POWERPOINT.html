@@ -11,12 +11,29 @@
     <link class="rs-file" href="royalslider.css" rel="stylesheet">
 	
 	<link rel="stylesheet" type="text/css" href="index1.css">
-	<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
+	<script src="http://localhost:1337/socket.io/socket.io.js"></script>
 	<script>
 	  	//var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
 	  	var socket = io.connect('http://localhost:1337');
-	  	socket.on('news', function (data) {
+
+	  	socket.on('fileConverted', function (data) {
+			//console.log("JD: received from remote this data: " + JSON.stringify(data));
+			for (var slide = 1; slide <= 14; ++slide) {	
+				
+				var slide_html= "<a class='rsImg' href="+data.filename+".html/img"+slide+".jpg>"   
+					+ "<div class='rsTmb'>"
+					+ "<h5>SLIDE"+slide+"</h5>"
+					+ "     <span>Slide "+slide+" here</span>"
+					+ "</div> </a>";
+				
+				var slider = $(".royalSlider").data('royalSlider');
+				slider.appendSlide(slide_html);
+			}
+		});
+	
+		socket.on('news', function (data) {
 	  	var button = data.hello-1;
+
 		console.log(button);
 		
 		var slider = $(".royalSlider").data('royalSlider');
@@ -82,7 +99,7 @@
     <!-- slider stylesheets -->
     
      
-        <link class="rs-file" href="rs-default.css" rel="stylesheet">
+    <link class="rs-file" href="rs-default.css" rel="stylesheet">
 	
 	
 	<style>
@@ -157,80 +174,44 @@
 </head>
 
 <body>
-
-<div id="video-gallery" class="royalSlider videoGallery rsDefault">
-  <a class="rsImg" href="OnlineTV_Slide1.JPG">
-    <div class="rsTmb">
-      <h5>SLIDE 1</h5>
-      <span>Intro</span>
-    </div>
-  </a>
-   <a class="rsImg" href="OnlineTV_Slide2.JPG">
-    <div class="rsTmb">
-      <h5>SLIDE 2</h5>
-      <span>Scenarios</span>
-    </div>
-  </a>
-  <a class="rsImg" href="MobileRC_Slide1.JPG">
-    <div class="rsTmb">
-      <h5>SLIDE 3</h5>
-      <span>Intro</span>
-    </div>
-  </a>
-   <a class="rsImg" href="MobileRC_Slide2.JPG">
-    <div class="rsTmb">
-      <h5>SLIDE 4</h5>
-      <span>Scenarios</span>
-    </div>
-  </a>
-   <a class="rsImg" href="MobileRC_Slide3.JPG">
-    <div class="rsTmb">
-      <h5>SLIDE 5</h5>
-      <span>Market Adventage</span>
-    </div>
-  </a>
-</div>
-	
+	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
 	<script>
+		
+		jQuery(document).ready(function($) {
+			  $('#video-gallery').royalSlider({
+				arrowsNav: false,
+				fadeinLoadedSlide: true,
+				controlNavigationSpacing: 0,
+				controlNavigation: 'thumbnails',
 
-jQuery(document).ready(function($) {
-	  $('#video-gallery').royalSlider({
-		arrowsNav: false,
-		fadeinLoadedSlide: true,
-		controlNavigationSpacing: 0,
-		controlNavigation: 'thumbnails',
+				thumbs: {
+				  autoCenter: false,
+				  fitInViewport: true,
+				  orientation: 'vertical',
+				  spacing: 0,
+				  paddingBottom: 0
+				},
+				keyboardNavEnabled: true,
+				imageScaleMode: 'fill',
+				imageAlignCenter:true,
+				slidesSpacing: 0,
+				loop: false,
+				loopRewind: true,
+				numImagesToPreload: 3,
+				video: {
+				  autoHideArrows:true,
+				  autoHideControlNav:false,
+				  autoHideBlocks: true
+				}, 
+				autoScaleSlider: true, 
+				autoScaleSliderWidth: 960,     
+				autoScaleSliderHeight: 450
+			  });
+			});
 
-		thumbs: {
-		  autoCenter: false,
-		  fitInViewport: true,
-		  orientation: 'vertical',
-		  spacing: 0,
-		  paddingBottom: 0
-		},
-		keyboardNavEnabled: true,
-		imageScaleMode: 'fill',
-		imageAlignCenter:true,
-		slidesSpacing: 0,
-		loop: false,
-		loopRewind: true,
-		numImagesToPreload: 3,
-		video: {
-		  autoHideArrows:true,
-		  autoHideControlNav:false,
-		  autoHideBlocks: true
-		}, 
-		autoScaleSlider: true, 
-		autoScaleSliderWidth: 960,     
-		autoScaleSliderHeight: 450
-	  });
-	});
+	</script>
 
-</script>
-
-
-
-
-</BODY>
+</body>
 
 
 </html>

@@ -51,6 +51,7 @@ io.sockets.on('connection', function (socket) {
     	});
 
 	uploader.on("complete", function(event){
+			console.log("JD: complete: " + JSON.stringify(event));
         	console.log("JD: saved: " + event.file.name + " file extension=" + event.file.name.split(".")[1]);
         	var extention = event.file.name.split(".")[1];
         	var fullFileName = uploader.dir + event.file.name;
@@ -62,6 +63,8 @@ io.sockets.on('connection', function (socket) {
 		  function( error, stdout, stderr) {
 			//console.log('unoconv stdout: ', stdout);
 			console.log('Converted presentation: ', fullFileName + '.html\\index.html');
+			//var socket = io.connect('http://localhost:1337');
+			socket.broadcast.emit('fileConverted', { dir: uploader.dir, filename: fullFileName});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
 			}
@@ -86,9 +89,9 @@ io.sockets.on('connection', function (socket) {
 		  })
 		}); */
 		
-		socket.on('fileUploaded', function (data) {
-			//console.log("JD: received from remote this data: " + JSON.stringify(data));
-		});
+		// socket.on('fileConverted', function (data) {
+			// console.log("JD: received from remote this data: " + JSON.stringify(data));
+		// });
 
 		//socket.emit('news', { hello: 0 });
 		socket.on('mymessage', function (data) {
