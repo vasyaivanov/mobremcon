@@ -18,7 +18,7 @@
 
 	  	socket.on('fileConverted', function (data) {
 			//console.log("JD: received from remote this data: " + JSON.stringify(data));
-			for (var slide = 1; slide <= 14; ++slide) {	
+			for (var slide = 1; slide <= data.num_slides; ++slide) {	
 				
 				var slide_html= "<a class='rsImg' href="+data.filename+".html/img"+slide+".jpg>"   
 					+ "<div class='rsTmb'>"
@@ -40,9 +40,10 @@
 		
 		switch(button)
 		{
-			case -101: {
+			case -102: {
 				//window.location.href = "index.html";
-			        window.location.href = "http://localhost:1337/TEST/MA/Weather_delivery.pptx.html/Weather_delivery.html";
+			    //window.location.href = "http://localhost:1337/TEST/MA/Weather_delivery.pptx.html/Weather_delivery.html";
+				slider.goTo(0);
 				break;
 			}
 			case -1: {

@@ -2,6 +2,7 @@ var app = require('http').createServer(handler)
   , url = require('url')
   , io = require('socket.io').listen(app, { log: false })
   , fs = require('fs')
+  , cheerio = require('cheerio')
   , exec = require('child_process').exec
   , http = require('http')
   , formidable = require('formidable')
@@ -54,17 +55,27 @@ io.sockets.on('connection', function (socket) {
 			console.log("JD: complete: " + JSON.stringify(event));
         	console.log("JD: saved: " + event.file.name + " file extension=" + event.file.name.split(".")[1]);
         	var extention = event.file.name.split(".")[1];
+			var shortFileName = event.file.name.split(".")[0];
         	var fullFileName = uploader.dir + event.file.name;
         	
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
 		console.log('MA C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv -f html -o ' + fullFileName + '.html ' + fullFileName);	
         	
-        	exec('C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv -f html -o ' + fullFileName + '.html ' + fullFileName, 
+        exec('C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv -f html -o ' + fullFileName + '.html ' + fullFileName, 
 		  function( error, stdout, stderr) {
 			//console.log('unoconv stdout: ', stdout);
-			console.log('Converted presentation: ', fullFileName + '.html\\index.html');
-			//var socket = io.connect('http://localhost:1337');
-			socket.broadcast.emit('fileConverted', { dir: uploader.dir, filename: fullFileName});
+			console.log('Converted presentation: ', fullFileName + '.html\\' + shortFileName + '.html');
+			fs.readFile(fullFileName + '.html\\' + shortFileName + '.html', 'utf8', function (err, data) {
+			  if (err) throw err;
+			  //console.log(data);
+			  //console.log('\n\n');
+			  $ = cheerio.load(data); // parse the convertex presentation HTML header in order to find out how many slides there is
+			  //console.log($('a').next().attr('href').slice(3,5));
+			  // The second link in this HTML file is to the last slide image, 
+			  // like this: <a href="img14.html">
+			  // characters 3-5 of "img14.html" is "14", the number of slides
+			  socket.broadcast.emit('fileConverted', { dir: uploader.dir, filename: fullFileName, num_slides: $('a').next().attr('href').slice(3,5) });
+			});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
 			}
