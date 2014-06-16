@@ -15,22 +15,23 @@
 	<script>
 	  	//var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
 	  	var socket = io.connect('http://localhost:1337');
-
+		
 	  	socket.on('fileConverted', function (data) {
 			//console.log("JD: received from remote this data: " + JSON.stringify(data));
 			for (var slide = 1; slide <= data.num_slides; ++slide) {	
-				
-				var slide_html= "<a class='rsImg' href="+data.filename+".html/img"+slide+".jpg>"   
+				//var slide_html= "<iframe src='C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\Weather_delivery.pptx.html\\img1.html' seamless></iframe>";
+				var slide_html= "<div class='rsContent'>" 
+					+ "<iframe src='"+data.filename+".html/img"+slide+".html' width='1600' height='1000' seamless> </iframe>"   
 					+ "<div class='rsTmb'>"
 					+ "<h5>SLIDE"+slide+"</h5>"
 					+ "     <span>Slide "+slide+" here</span>"
-					+ "</div> </a>";
+					+ "</div> </div>";
 				
 				var slider = $(".royalSlider").data('royalSlider');
 				slider.appendSlide(slide_html);
 			}
 		});
-	
+
 		socket.on('news', function (data) {
 	  	var button = data.hello-1;
 
