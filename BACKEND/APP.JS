@@ -41,7 +41,8 @@ io.sockets.on('connection', function (socket) {
 		
 		var uploader = new SocketIOFileUploadServer();
     	uploader.listen(socket);
-    	uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
+    	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
+    	uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
     	
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + event.file);
@@ -59,13 +60,15 @@ io.sockets.on('connection', function (socket) {
         	var fullFileName = uploader.dir + event.file.name;
         	
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
-		console.log('MA C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv -f html -o ' + fullFileName + '.html ' + fullFileName);	
+		//var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
+		var unoconv_cmd = "python ../unoconv-master/unoconv";
+		console.log(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName);	
         	
-        exec('C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv -f html -o ' + fullFileName + '.html ' + fullFileName, 
+        exec(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName, 
 		  function( error, stdout, stderr) {
 			//console.log('unoconv stdout: ', stdout);
-			console.log('Converted presentation: ', fullFileName + '.html\\' + shortFileName + '.html');
-			fs.readFile(fullFileName + '.html\\' + shortFileName + '.html', 'utf8', function (err, data) {
+			console.log('Converted presentation: ', fullFileName + '.html/' + shortFileName + '.html');
+			fs.readFile(fullFileName + '.html/' + shortFileName + '.html', 'utf8', function (err, data) {
 			  if (err) throw err;
 			  //console.log(data);
 			  //console.log('\n\n');
