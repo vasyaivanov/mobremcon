@@ -41,12 +41,9 @@ io.sockets.on('connection', function (socket) {
 		
 		var uploader = new SocketIOFileUploadServer();
     	uploader.listen(socket);
-<<<<<<< HEAD
-    	uploader.dir = "C:\\Users\\regina\\mobremcon\\mobremcon\\www\\RECEIVER_POWERPOINT\\";
-=======
+
     	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
     	uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
->>>>>>> upstream/master
     	
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + event.file);
