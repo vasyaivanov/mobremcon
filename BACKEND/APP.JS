@@ -5,7 +5,6 @@ var app = require('http').createServer(handler)
   , cheerio = require('cheerio')
   , exec = require('child_process').exec
   , http = require('http')
-  , formidable = require('formidable')
   , SocketIOFileUploadServer = require("socketio-file-upload");
 
 app.listen(1337);//80
@@ -42,7 +41,8 @@ io.sockets.on('connection', function (socket) {
 		var uploader = new SocketIOFileUploadServer();
     	uploader.listen(socket);
     	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
-    	uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
+    	//uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
+		uploader.dir = "./TEST/MA/";
     	
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + event.file);
@@ -56,8 +56,10 @@ io.sockets.on('connection', function (socket) {
 			console.log("JD: complete: " + JSON.stringify(event));
         	console.log("JD: saved: " + event.file.name + " file extension=" + event.file.name.split(".")[1]);
         	var extention = event.file.name.split(".")[1];
-			var shortFileName = event.file.name.split(".")[0];
-        	var fullFileName = uploader.dir + event.file.name;
+			//var shortFileName = event.file.name.split(".")[0];
+        	//var fullFileName = uploader.dir + event.file.name;
+			var shortFileName = "Weather_delivery";
+			var fullFileName = uploader.dir + "Weather_delivery.pptx";
         	
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
 		//var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
