@@ -2,3 +2,14 @@
 *.html~
 BACKEND/.APP.JS.swp
 *.swp
+*.pptx
+
+www/.DS_Store
+
+*.xcuserstate
+
+*.xcscheme
+
+*.plist
+
+www/.DS_Store
