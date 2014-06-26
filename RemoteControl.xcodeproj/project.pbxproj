@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0493315E195BD39500B8DD14 /* RECIEVER_POWERPOINT_static.html in Resources */ = {isa = PBXBuildFile; fileRef = 0493315D195BD39500B8DD14 /* RECIEVER_POWERPOINT_static.html */; };
 		04F4F98C1904876400A36DF1 /* client.js in Sources */ = {isa = PBXBuildFile; fileRef = 04F4F98B1904876400A36DF1 /* client.js */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -68,6 +69,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0493315D195BD39500B8DD14 /* RECIEVER_POWERPOINT_static.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = RECIEVER_POWERPOINT_static.html; path = www/RECIEVER_POWERPOINT_static.html; sourceTree = "<group>"; };
 		04F4F98B1904876400A36DF1 /* client.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = client.js; path = www/client.js; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				0493315D195BD39500B8DD14 /* RECIEVER_POWERPOINT_static.html */,
 				04F4F98B1904876400A36DF1 /* client.js */,
 				F840E1F0165FE0F500CFE078 /* config.xml */,
 				301BF56E109A69640062928A /* www */,
@@ -391,6 +394,7 @@
 				1F766FE113BBADB100FB74C0 /* Localizable.strings in Resources */,
 				1F766FE213BBADB100FB74C0 /* Localizable.strings in Resources */,
 				302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */,
+				0493315E195BD39500B8DD14 /* RECIEVER_POWERPOINT_static.html in Resources */,
 				30A0434814DC770100060A13 /* Localizable.strings in Resources */,
 				30A0434914DC770100060A13 /* Localizable.strings in Resources */,
 				3088BBBD154F3926009F9C59 /* Default-Landscape@2x~ipad.png in Resources */,
