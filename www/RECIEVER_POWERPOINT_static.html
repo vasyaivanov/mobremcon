@@ -1,3 +1,4 @@
+
 <html>
 <head>
 	<title>RECEIVER POWER POINT</title>
@@ -12,29 +13,11 @@
     <link class="rs-file" href="royalslider.css" rel="stylesheet">
 	
 	<link rel="stylesheet" type="text/css" href="index1.css">
-	<script src="http://localhost:1337/socket.io/socket.io.js"></script>
-	<!--<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>-->
+	<!--<script src="http://localhost:1337/socket.io/socket.io.js"></script> -->
+	<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
 	<script>
-	  	//var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
-	  	var socket = io.connect('http://localhost:1337');
-		
-	  	socket.on('fileConverted', function (data) {
-			//console.log("JD: received from remote this data: " + JSON.stringify(data));
-			for (var slide = 1; slide <= data.num_slides; ++slide) {	
-				//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\Weather_delivery.pptx.html\\";
-				//var slide_html_path = data.filename;
-				var slide_html_path= "./Weather_delivery.pptx.html/";
-				var slide_html= "<div style='text-align:center' id=slide class='rsContent'>" 
-					+ "<iframe src='"+slide_html_path+".html/img"+slide+".html' width='850' height='850' seamless> </iframe>"   
-					+ "<div class='rsTmb'>"
-					+ "<h5>SLIDE"+slide+"</h5>"
-					+ "     <span>Slide "+slide+" here</span>"
-					+ "</div> </div>";
-				
-				var slider = $(".royalSlider").data('royalSlider');
-				slider.appendSlide(slide_html);
-			}
-		});
+	  	var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+	  	//var socket = io.connect('http://localhost:1337');
 
 		socket.on('news', function (data) {
 	  	var button = data.hello-1;
@@ -241,12 +224,20 @@
 						navigateByCenterClick: true
 					}
 				  });
-				  $('#video-gallery').infinitescroll({
-					 behavior: 'local',
-					 binder: $('#video-gallery'), // scroll on this element rather than on the window
-					 navSelector  : "div.rsNav",
-					 nextSelector 	: "div.rsThumbsArrow",
-				  });
+					for (var slide = 1; slide <= 14; ++slide) {	
+						//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\Weather_delivery.pptx.html\\";
+						//var slide_html_path = data.filename;
+						var slide_html_path= "../BACKEND/TEST/MA/Weather_delivery.pptx";
+						var slide_html= "<div style='text-align:center' id=slide class='rsContent'>" 
+							+ "<iframe src='"+slide_html_path+".html/img"+slide+".html' width='850' height='850' seamless> </iframe>"   
+							+ "<div class='rsTmb'>"
+							+ "<h5>SLIDE"+slide+"</h5>"
+							+ "     <span>Slide "+slide+" here</span>"
+							+ "</div> </div>";
+						
+						var slider = $(".royalSlider").data('royalSlider');
+						slider.appendSlide(slide_html);
+					}
 			});
 
 	</script>
