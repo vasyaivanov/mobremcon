@@ -1,0 +1,142 @@
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <title>MicroPoll modified by MA</title>  
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/sitestyle-new.css"/>
+    <script type="text/javascript" src="/javascript/urchin.js"></script>
+    <script type="text/javascript" src="/javascript/__utm.js"></script>
+  
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/lightbox.css"/>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/common.css"/>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/micropoll-outside.css"/>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/micropoll-inside.css"/>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/porterpopup.css"/>
+  <script language="JavaScript" src="./global.js"></script>
+  <script language="JavaScript" src="/javascript/jquery.js"></script>
+  <script language="JavaScript" src="/javascript/jquery.lightbox.js"></script>
+  <script language="JavaScript" src="/javascript/jquery.corner.js"></script>
+  <script language="JavaScript" src="/javascript/jquery-ui.min.js"></script>
+
+</head>
+
+<body>
+
+
+ 
+   <tr>
+    <td colspan="3">
+     <div class="poll-box">
+       <div class="container">
+         <h1 class="white">MicroPoll modified by MA</h1>
+         <div class="box-940">
+           
+
+
+
+
+
+
+<input type="hidden" value="Would you like to setup polls on your website?" name="pollQuestion" id="pollQuestion">
+<textarea name="pollAnswers" id="pollAnswers" style="display:none;">Yes
+No</textarea>
+<table width="90%" border="0" align="center">
+  <tr>
+    <td valign="top">
+    <table width="50%" style="padding-top:25px;">
+    <tr>	
+    <td><span style="color:#062D54; font-size:30px; margin-left:4px;"><b>Enter poll question and list of answers</b></span></td>
+    </tr>
+	<tr>
+    <td width="50%">
+      <table width="100%" cellspacing="7">
+       <tr>
+         <td>
+           <textarea class="no_resize textareaBox" style="height:25px; padding: 8px 6px 0px 4px; width:342px;" id="questionTextID" name="questionText" onclick="if (this.value=='Would you like to setup polls on your website?')this.value='';"  onblur="if (this.value == '') this.value='Would you like to setup polls on your website?';document.getElementById('questionTextDisplayDiv').innerHTML=this.value;" onkeyup="document.getElementById('questionTextDisplayDiv').innerHTML=this.value;document.getElementById('pollQuestion').value=this.value;">Why chicken crossed the street?</textarea>
+         </td>
+       </tr>
+       <tr>
+        <td>
+           <textarea class="no_resize textareaBox" style="height:55px; padding: 8px 6px 0px 4px; width:342px;" id="answerTextID" name="answers"   onclick="if (this.value.replace(/(\r)?\n/i, ' ') == 'Yes No')this.value='';" onblur="if (this.value == '') this.value='Yes\nNo';document.getElementById('voteButtonID').style.display='inline';updateQuickPollAnswers('answerDisplayTable', this.value);" onkeyup="document.getElementById('voteButtonID').style.display='inline';updateQuickPollAnswers('answerDisplayTable', this.value);document.getElementById('pollAnswers').value=this.value;">
+Chto 
+Gde 
+Kogda </textarea>
+        </td>
+       </tr>
+      </table>	
+    </td>
+  </tr>
+
+    </table>
+    <td>
+     <table width="50%">	
+     <tr>	 	
+     <td valign="top" style="padding-left:30px;" rowspan="2">
+        <table width="304">
+        <tr>
+         <td valign="top">
+           <div style="background:url('/images/micropoll/WhiteImage/top-300.png') no-repeat top left;height:25px; width:300;"></div>
+           <div style="background:url('/images/micropoll/WhiteImage/mid-300.png') repeat-y top; width:300px;">
+           <div id="questionTextDisplayDiv" style="width:230px;word-wrap:break-word; font-family:Tahoma;font-size:11pt; color:#4B4B4B;font-weight:bold; padding-left:15px;">
+	     Why chicken crossed the street?
+	   </div>
+           <hr style="width:90%; border:1px solid ridge; _color:#EEEEEE; ">
+
+	   <table id="answerDisplayTable" style="font-size:10.5pt; padding-left:15px;">
+             <TR>
+               <TD></TD> <TD></TD>
+             </TR>
+             
+             <TR>
+                    <TD><input type="radio" name="u_quickPoll" value="1" id="1"></TD>
+                    <TD style="font-size:10.5pt;"><label for="1">Chto</label></TD>
+               </TR>
+                  
+             <TR>
+                    <TD><input type="radio" name="u_quickPoll" value="2" id="2"></TD>
+                    <TD style="font-size:10.5pt;"><label for="2">Gde</label></TD>
+               </TR>
+              
+			  <TR>
+                    <TD><input type="radio" name="u_quickPoll" value="2" id="2"></TD>
+                    <TD style="font-size:10.5pt;"><label for="2">Kogda</label></TD>
+               </TR> 
+              </table>
+<table width="100%">
+                <tr>
+                  <td width="100%" align="center" colspan="2">
+                   <table cellspacing="0" cellpadding="0" border="0" style="padding:0px;cursor:pointer;cursor:hand;">
+                   <tr>
+          <td align="center">
+           <img class="handPointer" id="voteButtonID" style="display: block; width: 128px ! important; height: 47px ! important; border: medium none ! important; background: url('./White.png') no-repeat scroll 0px 0px transparent;" onmouseout="this.style.background='url(./White.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(./White.png) 0px -50px no-repeat';" src="./img_trans.gif" onclick="this.style.display='none';cyopDummyResults('answerDisplayTable', document.getElementById('answerTextID').value);">
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+</tr>	
+  <tr><td><hr style="width:90%; border:1px solid ridge; _color:#EEEEEE;"></td></tr>
+
+</table>
+
+
+
+
+
+
+
+ 
