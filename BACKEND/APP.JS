@@ -8,7 +8,7 @@ var app = require('http').createServer(handler)
   , formidable = require('formidable')
   , SocketIOFileUploadServer = require("socketio-file-upload");
 
-app.listen(1337);//80
+app.listen(1337);// change to port 80 for use with nodejitsu
 
 io.set('log level', 1);
 
@@ -121,8 +121,27 @@ io.sockets.on('connection', function (socket) {
 			socket.broadcast.emit('news',{ hello: data.my});
 			//io.sockets.emit('news',clients);
 			socket.emit('news', { hello: 1 });
-			
 		});
+        
+        // receive laser coordinates from the remote
+        socket.on('laserCoords', function(data) {
+            // 2 next lines are logs for testing
+            // console.log("Laser Coordinates Received");
+            // console.log("X: " + data.x + ", " + "Y: " + data.y);
+            
+            // send coordinates on to the display (RECEIVER_POWERPOINT.html)
+            socket.broadcast.emit('moveLaser', data);
+        });
+        
+        socket.on('mouseDown', function() {
+            console.log("laser on");
+            socket.broadcast.emit('laserOn');
+        });
+        
+        socket.on('mouseUp', function() {
+            console.log("laser off");
+            socket.broadcast.emit('laserOff');
+        });
 /*
 	for(var i=0;i<5;i++){
 			
