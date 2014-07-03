@@ -25,8 +25,9 @@
 		}, false);
 				
 	  	socket.on('pollUpdate', function (data) {
-			if (data.statistics.length == 0) updateQuickPollAnswers('answerDisplayTable', data.answers);
-			else cyopDummyResults('answerDisplayTable', data.answers, data.statistics);
+			//if (data.statistics.length == 0) statisticsShown = false;
+			updateQuickPollAnswers('answerDisplayTable', data.answers);
+			cyopDummyResults('answerDisplayTable', data.answers, data.statistics);
 		});
 	</script>
   
@@ -67,7 +68,7 @@ Kogda </textarea>
         </td>
 		       <tr>
         <td align="center">
-			<img class="handPointer" onmouseout="this.style.background='url(./create-poll.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(./create-poll-hover.png) 0px -50px no-repeat';" src="./create-poll.png" onclick="updateQuickPollAnswers('answerDisplayTable', document.getElementById('answerTextID').value); socket.emit('pollStarted', { answers: document.getElementById('answerTextID').value }); document.getElementById('voteButtonID').style.display='block'">
+			<img class="handPointer" onmouseout="this.style.background='url(./create-poll.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(./create-poll-hover.png) 0px -50px no-repeat';" src="./create-poll.png" onclick="socket.emit('pollStarted', { answers: document.getElementById('answerTextID').value });">
 		</td>
        </tr>
       </table>	
@@ -113,7 +114,7 @@ Kogda </textarea>
                    <table cellspacing="0" cellpadding="0" border="0" style="padding:0px;cursor:pointer;cursor:hand;">
                    <tr>
           <td align="center">
-           <img class="handPointer" id="voteButtonID" style="display: block; width: 128px ! important; height: 47px ! important; border: medium none ! important; background: url('./White.png') no-repeat scroll 0px 0px transparent;" onmouseout="this.style.background='url(./White.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(./White.png) 0px -50px no-repeat';" src="./img_trans.gif" onclick="this.style.display='none';votePoll('answerDisplayTable');">
+           <img class="handPointer" id="voteButtonID" style="display: block; width: 128px ! important; height: 47px ! important; border: medium none ! important; background: url('./White.png') no-repeat scroll 0px 0px transparent;" onmouseout="this.style.background='url(./White.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(./White.png) 0px -50px no-repeat';" src="./img_trans.gif" onclick="votePoll('answerDisplayTable');">
           </td>
         </tr>
       </table>

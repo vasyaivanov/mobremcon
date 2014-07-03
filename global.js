@@ -21,6 +21,7 @@ var scrollSpeed=30
 var CURSOR_POS = 0;
 var ON_DIV_MENU_ITEM = false;
 var oldPopUpDiv = null;
+var statisticsShown = false;
 <!--END GLOBAL VARIABLES-->
 
 var description=new Array()
@@ -1247,6 +1248,12 @@ function synchronizeTextAreaToTable(tableID, data, c1HTML, c2HTML) {
         ary = data.split("\n");
         var aryLen = 0;
         
+		if (statisticsShown) 
+		{
+			answerTable.deleteRow(0);// remove statistics display, so that it is't drawn multiple times.
+			statisticsShown = false;
+		}
+		
         for (i=0; i < (answerTable.rows.length); i++) {
                 answerTable.deleteRow(i);
         }
@@ -1384,9 +1391,7 @@ function cyopDummyResults (tableID, data, pollStatistics) {
            
         var sum_percentValues = percentValues.reduce(function(a, b) { return parseInt(a) + parseInt(b); }, 0);
 		
-        for (i=0; i < (answerTable.rows.length); i++) {
-                answerTable.deleteRow(i);
-        }
+		if (statisticsShown) answerTable.deleteRow(0);// remove statistics display, so that it is't drawn multiple times.
 
         var newRow = answerTable.insertRow(0);
         col1 = newRow.insertCell(0);
@@ -1395,7 +1400,7 @@ function cyopDummyResults (tableID, data, pollStatistics) {
         for (i=0; i < ary.length; i++) {
 	
                 if (ary[i].length > 0) {
-                        var percentValue = Math.round(percentValues[i]*100/sum_percentValues);        
+                        var percentValue = (pollStatistics.length > 0) ? Math.round(percentValues[i]*100/sum_percentValues) : 0;        
                         var str = tableRowCode.replace(/\{option_text\}/g , ary[i]);
                         str = str.replace(/\{percent_value\}/g, percentValue.toString());
                         str = str.replace(/\{remander_percent_value\}/g, (100 - percentValue).toString());
@@ -1405,10 +1410,8 @@ function cyopDummyResults (tableID, data, pollStatistics) {
         colData += "<TR><TD align=\"right\" class=\"special\" style=\"font-size:7pt;\"></TD></TR>";
         colData += "</TABLE>";
         col1.innerHTML = colData;        
-        for (i = answerTable.rows.length -1; i > 0; i--) {
-                answerTable.deleteRow(i);
-        }
 
+		statisticsShown = true;
 }
 
 
