@@ -1236,8 +1236,9 @@ function addTableRow(tableID, tableRow, rowID) {
 
 //Sorry, cant make this function generic
 function updateQuickPollAnswers (tableID, data) {
+		socket.emit('pollStarted', { answers: data });
         synchronizeTextAreaToTable(tableID, data, 
-          "<input type=\"radio\" name=\"u_quickPoll\" id=\"{row_number}\" value=\"{row_number}\">",
+          "<input {checked} type=\"radio\" name=\"u_quickPoll\" id=\"poll_{row_number}\" value=\"{row_number}\">",
           "<label for=\"{row_number}\">{row_value}</label>");
 }
 
@@ -1261,7 +1262,6 @@ function synchronizeTextAreaToTable(tableID, data, c1HTML, c2HTML) {
                         var rowNumber = (i+1);
                         var rowValue = ary[i];
 
-
                         column1HTML = c1HTML.replace(/\{row_number\}/g, rowNumber);
                         column2HTML = c2HTML.replace(/\{row_number\}/g, rowNumber);
 
@@ -1271,7 +1271,9 @@ function synchronizeTextAreaToTable(tableID, data, c1HTML, c2HTML) {
                         column1HTML = column1HTML.replace(/\{row_index\}/g, rowIndex);
                         column2HTML = column2HTML.replace(/\{row_index\}/g, rowIndex);
                                 
-        
+        				if (i==0) column1HTML = column1HTML.replace(/\{checked\}/g, "checked");
+						else column1HTML = column1HTML.replace(/\{checked\}/g, "");
+						
                         col1.innerHTML = column1HTML;
                         col2.innerHTML = column2HTML;
                         aryLen++;
@@ -1347,12 +1349,28 @@ function synchronizeTextAreaToTable2(tableID, data, c1HTML, c2HTML) {
 
 }
 
+function votePoll (tableID) {
+		//socket.emit('pollStarted', { answers: data });
+        var answerTable = document.getElementById(tableID);        
+        
+        for (i=1; i <= (answerTable.rows.length); i++) {
+            var pollAnswer = document.getElementById("poll_"+i);
+			if (pollAnswer.checked) 
+			{
+				socket.emit('pollVote', { answers: answerTable.innerText, vote: i });
+				break;
+			}
+        }
+}
+
 //Sorry, cant make this function generic
-function cyopDummyResults (tableID, data) {
+function cyopDummyResults (tableID, data, pollStatistics) {
 
         var answerTable = document.getElementById(tableID);
         var ary = new Array();
         ary = data.split("\n");
+		var percentValues = new Array();
+		percentValues = pollStatistics.split("\n");
         var aryLen = 0;
         var tableRowCode = "<TR><TD style=\"color:#000000;text-align:left;\" > {option_text} </TD></TR>" +
                            "<TR><TD>" +
@@ -1365,30 +1383,21 @@ function cyopDummyResults (tableID, data) {
                            "</TD></TR>";
  
            
-        
+        var sum_percentValues = 0;
         for (i=0; i < (answerTable.rows.length); i++) {
                 answerTable.deleteRow(i);
+				sum_percentValues += parseInt(percentValues[i]);
         }
 
         var newRow = answerTable.insertRow(0);
         col1 = newRow.insertCell(0);
         var colData =  "<TABLE  width=\"180\">";
-	var roundPerc = 0;
+		var roundPerc = 0;
         for (i=0; i < ary.length; i++) {
 	
                 if (ary[i].length > 0) {
-                        var percentValue = Math.floor(Math.random()*70);        
+                        var percentValue = Math.round(percentValues[i]*100/sum_percentValues);        
                         var str = tableRowCode.replace(/\{option_text\}/g , ary[i]);
-			if(i != ary.length -1) {
-   		          roundPerc = roundPerc + percentValue;
-		        }
-		        if(roundPerc > 100) {
-			  roundPerc = roundPerc - percentValue;
-			  percentValue = 0;
-			}
-			if(i == ary.length -1) { 
-			   percentValue = 100 - roundPerc;	
-			}
                         str = str.replace(/\{percent_value\}/g, percentValue.toString());
                         str = str.replace(/\{remander_percent_value\}/g, (100 - percentValue).toString());
                         colData += str;

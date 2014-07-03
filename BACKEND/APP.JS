@@ -27,6 +27,7 @@ function handler (req, res) {
   });
 }
 
+var pollStatisticsArray = new Array();
 
 var clients = [];
 
@@ -109,6 +110,38 @@ io.sockets.on('connection', function (socket) {
 			// console.log("JD: received from remote this data: " + JSON.stringify(data));
 		// });
 
+		socket.on('pollStarted', function (data) {
+			console.log("JD: received from remote this data: " + JSON.stringify(data));
+			var answerArray = new Array();
+			answerArray = data.answers.split("\n");
+			for (i=0; i < answerArray.length; i++) {
+				pollStatisticsArray[i] = 0; //initialize statistics to 0
+			}
+			console.log("MA: pollStatisticsUpdate reset: " + JSON.stringify(pollStatisticsArray));
+		});
+		
+		socket.on('pollVote', function (data) {
+			console.log("JD: received from remote this data: " + JSON.stringify(data));
+			console.log("MA: pollStatisticsArray on current vote: " + JSON.stringify(pollStatisticsArray));
+			if (pollStatisticsArray.length == 0) // empty statistics, let the voting commence!
+			{
+				var answerArray = new Array();
+				answerArray = data.answers.split("\n");
+				for (i=0; i < answerArray.length; i++) {
+					pollStatisticsArray[i] = 0; //initialize statistics to 0
+				}
+				console.log("MA: pollStatisticsUpdate reset: " + JSON.stringify(pollStatisticsArray));
+			}
+			pollStatisticsArray[data.vote-1] += 1;
+			var pollStatisticsString = "";
+			for (i=0; i < pollStatisticsArray.length-1; i++) {
+				pollStatisticsString += pollStatisticsArray[i] + "\n"; //construct statistics string. TODO - proper JSON
+			}
+			pollStatisticsString += pollStatisticsArray[i]; // the last element has no '\n"
+			console.log("MA: pollStatisticsUpdate: " + JSON.stringify(pollStatisticsString));
+			socket.emit('pollStatisticsUpdate', pollStatisticsString);
+		});
+		
 		//socket.emit('news', { hello: 0 });
 		socket.on('mymessage', function (data) {
 			console.log("JD received data: "+data);
@@ -121,8 +154,7 @@ io.sockets.on('connection', function (socket) {
 			}
 			socket.broadcast.emit('news',{ hello: data.my});
 			//io.sockets.emit('news',clients);
-			socket.emit('news', { hello: 1 });
-			
+			socket.emit('news', { hello: 1 });		
 		});
 /*
 	for(var i=0;i<5;i++){
