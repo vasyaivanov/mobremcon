@@ -24,9 +24,9 @@
 			//socket.emit('pollStarted', { answers: answerTable });
 		}, false);
 				
-	  	socket.on('pollStatisticsUpdate', function (data) {
-			//window.pollStatistics = data;
-			cyopDummyResults('answerDisplayTable', document.getElementById('answerTextID').value, data);
+	  	socket.on('pollUpdate', function (data) {
+			if (data.statistics.length == 0) updateQuickPollAnswers('answerDisplayTable', data.answers);
+			else cyopDummyResults('answerDisplayTable', data.answers, data.statistics);
 		});
 	</script>
   
@@ -67,7 +67,7 @@ Kogda </textarea>
         </td>
 		       <tr>
         <td align="center">
-			<img class="handPointer" onmouseout="this.style.background='url(./create-poll.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(./create-poll-hover.png) 0px -50px no-repeat';" src="./create-poll.png" onclick="updateQuickPollAnswers('answerDisplayTable', document.getElementById('answerTextID').value); document.getElementById('voteButtonID').style.display='inline'">
+			<img class="handPointer" onmouseout="this.style.background='url(./create-poll.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(./create-poll-hover.png) 0px -50px no-repeat';" src="./create-poll.png" onclick="updateQuickPollAnswers('answerDisplayTable', document.getElementById('answerTextID').value); socket.emit('pollStarted', { answers: document.getElementById('answerTextID').value }); document.getElementById('voteButtonID').style.display='block'">
 		</td>
        </tr>
       </table>	

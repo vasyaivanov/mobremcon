@@ -1236,7 +1236,6 @@ function addTableRow(tableID, tableRow, rowID) {
 
 //Sorry, cant make this function generic
 function updateQuickPollAnswers (tableID, data) {
-		socket.emit('pollStarted', { answers: data });
         synchronizeTextAreaToTable(tableID, data, 
           "<input {checked} type=\"radio\" name=\"u_quickPoll\" id=\"poll_{row_number}\" value=\"{row_number}\">",
           "<label for=\"{row_number}\">{row_value}</label>");
@@ -1383,10 +1382,10 @@ function cyopDummyResults (tableID, data, pollStatistics) {
                            "</TD></TR>";
  
            
-        var sum_percentValues = 0;
+        var sum_percentValues = percentValues.reduce(function(a, b) { return parseInt(a) + parseInt(b); }, 0);
+		
         for (i=0; i < (answerTable.rows.length); i++) {
                 answerTable.deleteRow(i);
-				sum_percentValues += parseInt(percentValues[i]);
         }
 
         var newRow = answerTable.insertRow(0);

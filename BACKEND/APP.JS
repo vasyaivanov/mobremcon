@@ -28,6 +28,7 @@ function handler (req, res) {
 }
 
 var pollStatisticsArray = new Array();
+var pollAnswerArray = new Array();
 
 var clients = [];
 
@@ -35,6 +36,21 @@ console.log('in remote control');
 		
 io.sockets.on('connection', function (socket) {
 		console.log('started socket');
+		
+		if (pollAnswerArray.length > 0) 
+		{
+			var pollStatisticsString = "";
+			var pollAnswersString = "";
+			for (i=0; i < pollStatisticsArray.length-1; i++) {
+				pollStatisticsString += pollStatisticsArray[i] + "\n"; //construct statistics string. TODO - proper JSON
+				pollAnswersString += pollAnswerArray[i] + "\n";
+			}
+			pollStatisticsString += pollStatisticsArray[i]; // the last element has no '\n"
+			pollAnswersString += pollAnswerArray[i]; // the last element has no '\n"
+			console.log("MA: connection pollAnswerArray: " + JSON.stringify(pollAnswersString));
+			console.log("MA: connection pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
+			socket.emit('pollUpdate', { answers : pollAnswersString, statistics : []});
+		}
 		
 		var imageCount = 1;
 		//var dirname = "/Users/mac/Documents/REMOTECONTROL3/BACKEND/UPLOADS";
@@ -53,7 +69,7 @@ io.sockets.on('connection', function (socket) {
         	//console.log("JD: progress: " + JSON.stringify(event));
     	});
 
-	uploader.on("complete", function(event){
+		uploader.on("complete", function(event){
 			console.log("JD: complete: " + JSON.stringify(event));
         	console.log("JD: saved: " + event.file.name + " file extension=" + event.file.name.split(".")[1]);
         	var extention = event.file.name.split(".")[1];
@@ -111,13 +127,15 @@ io.sockets.on('connection', function (socket) {
 		// });
 
 		socket.on('pollStarted', function (data) {
-			console.log("JD: received from remote this data: " + JSON.stringify(data));
-			var answerArray = new Array();
-			answerArray = data.answers.split("\n");
-			for (i=0; i < answerArray.length; i++) {
+			console.log("JD: received from remote this data: " + JSON.stringify(data));	
+			pollStatisticsArray = new Array();
+			pollAnswerArray = new Array();
+			pollAnswerArray = data.answers.split("\n");
+			for (i=0; i < pollAnswerArray.length; i++) {
 				pollStatisticsArray[i] = 0; //initialize statistics to 0
 			}
-			console.log("MA: pollStatisticsUpdate reset: " + JSON.stringify(pollStatisticsArray));
+			console.log("MA: pollStarted pollAnswerArray: " + JSON.stringify(pollStatisticsArray));
+			console.log("MA: pollStarted pollStatisticsArray: " + JSON.stringify(pollAnswerArray));
 		});
 		
 		socket.on('pollVote', function (data) {
@@ -125,21 +143,26 @@ io.sockets.on('connection', function (socket) {
 			console.log("MA: pollStatisticsArray on current vote: " + JSON.stringify(pollStatisticsArray));
 			if (pollStatisticsArray.length == 0) // empty statistics, let the voting commence!
 			{
-				var answerArray = new Array();
-				answerArray = data.answers.split("\n");
-				for (i=0; i < answerArray.length; i++) {
+				pollAnswerArray = data.answers.split("\n");
+				for (i=0; i < pollAnswerArray.length; i++) {
 					pollStatisticsArray[i] = 0; //initialize statistics to 0
 				}
-				console.log("MA: pollStatisticsUpdate reset: " + JSON.stringify(pollStatisticsArray));
+				console.log("MA: pollVote pollAnswerArray: " + JSON.stringify(pollAnswersString));
+				console.log("MA: pollVote pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
 			}
 			pollStatisticsArray[data.vote-1] += 1;
+			
 			var pollStatisticsString = "";
+			var pollAnswersString = "";
 			for (i=0; i < pollStatisticsArray.length-1; i++) {
 				pollStatisticsString += pollStatisticsArray[i] + "\n"; //construct statistics string. TODO - proper JSON
+				pollAnswersString += pollAnswerArray[i] + "\n";
 			}
 			pollStatisticsString += pollStatisticsArray[i]; // the last element has no '\n"
-			console.log("MA: pollStatisticsUpdate: " + JSON.stringify(pollStatisticsString));
-			socket.emit('pollStatisticsUpdate', pollStatisticsString);
+			pollAnswersString += pollAnswerArray[i]; // the last element has no '\n"
+			console.log("MA: pollVote pollUpdate pollAnswerArray: " + JSON.stringify(pollAnswersString));
+			console.log("MA: pollVote pollUpdate pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
+			socket.emit('pollUpdate', { answers : pollAnswersString, statistics : pollStatisticsString});
 		});
 		
 		//socket.emit('news', { hello: 0 });
