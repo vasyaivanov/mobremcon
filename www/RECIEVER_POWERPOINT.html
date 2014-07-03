@@ -22,8 +22,8 @@
 			//console.log("JD: received from remote this data: " + JSON.stringify(data));
 			for (var slide = 1; slide <= data.num_slides; ++slide) {	
 				//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\Weather_delivery.pptx.html\\";
-				//var slide_html_path = data.filename;
-				var slide_html_path= "./Weather_delivery.pptx.html/";
+				var slide_html_path = data.filename;
+				//var slide_html_path= "./Weather_delivery.pptx.html/";
 				var slide_html= "<div style='text-align:center' id=slide class='rsContent'>" 
 					+ "<iframe src='"+slide_html_path+".html/img"+slide+".html' width='850' height='850' seamless> </iframe>"   
 					+ "<div class='rsTmb'>"

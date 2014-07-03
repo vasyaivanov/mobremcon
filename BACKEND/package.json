@@ -1,10 +1,12 @@
 {
   "name": "remotecontrol",
-  "version": "0.0.1-25",
+  "version": "0.0.1-29",
   "description": "remote control graph app",
   "main": "APP.JS",
   "dependencies": {
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "cheerio": "0.17.0",
+    "socketio-file-upload": "0.2.7"
   },
   "devDependencies": {},
   "scripts": {

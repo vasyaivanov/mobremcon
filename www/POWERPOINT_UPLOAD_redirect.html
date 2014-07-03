@@ -1,0 +1,145 @@
+<html>
+<head>
+	<title>RECEIVER POWER POINT</title>
+	
+	    <!-- slider JS files -->
+    
+    <script src="jquery-1.8.3.js"></script>
+    <script src="jquery-ui-1.8.22.custom.min.js"></script>
+    <script class="rs-file" src="jquery.royalslider.min.js"></script>
+    <link href="jquery-ui-1.8.22.custom.css" rel="stylesheet">
+    <link class="rs-file" href="royalslider.css" rel="stylesheet">
+	
+	<link rel="stylesheet" type="text/css" href="index1.css">
+	<!--<script src="http://localhost:1337/socket.io/socket.io.js"></script> -->
+	<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
+	<script src="client.js"></script>
+	<script>
+	  	var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+		//var socket = io.connect('http://localhost:1337');
+		
+		document.addEventListener("DOMContentLoaded", function(){
+
+			// Initialize instances:
+			var siofu = new SocketIOFileUpload(socket);
+
+			// Configure the three ways that SocketIOFileUpload can read files:
+			//document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
+			siofu.listenOnSubmit(document.getElementById("upload_btn"), document.getElementById("upload_input"));
+			//siofu.listenOnInput(document.getElementById("upload_input"));
+			siofu.listenOnDrop(document.getElementById("file_drop"));
+
+
+			// Do something when a file is uploaded:
+			siofu.addEventListener("start", function(event){
+				console.log(event.success);
+				console.log(event.file);
+				socket.emit('fileStarted', { myStart: "start=" });
+			});
+
+			// Do something when a file is uploaded:
+			siofu.addEventListener("load", function(event){
+				console.log(event.success);
+				console.log(event.file);
+				socket.emit('fileLoaded', { myLoad: "load=" });
+			});
+
+			// Do something when a file is uploaded:
+			siofu.addEventListener("complete", function(event){
+				console.log(event.success);
+				console.log(event.file);
+				window.location.href = "f418Vz6p";
+			});
+
+		}, false);
+		
+		
+	  	socket.on('news', function (data) {
+	  	var button = data.hello-1;
+		console.log(button);
+		
+		
+		socket.emit('my other event', { my: 'data' });
+	  });
+	</script>
+	
+    
+    <!-- syntax highlighter -->
+    <script src="highlight.pack.js"></script>
+    <script> hljs.initHighlightingOnLoad();</script>
+
+
+    
+
+    <!-- preview-related stylesheets -->
+    <link href="reset.css" rel="stylesheet">
+    <link href="github.css" rel="stylesheet">
+
+    <!-- slider stylesheets -->
+    
+     
+        <link class="rs-file" href="rs-default.css" rel="stylesheet">
+	
+	
+	<style>
+	
+	
+		body{
+			background-color:rgba(0,0,255,0.3);
+		}
+	
+	
+	</style>
+
+</head>
+
+<body>
+
+	<p><label>Choose File: <input type="file" id="upload_input" multiple></label></p>
+	<div id="file_drop" dropzone="copy" title="drop files for upload" style='width:300px;height:300px;border-width:2px;border-color:blue;border-style:solid'>Drop File</div>
+	<input type="submit" id="upload_btn" value="Submit">
+
+
+	<script>
+
+jQuery(document).ready(function($) {
+	  $('#video-gallery').royalSlider({
+		arrowsNav: false,
+		fadeinLoadedSlide: true,
+		controlNavigationSpacing: 0,
+		controlNavigation: 'thumbnails',
+
+		thumbs: {
+		  autoCenter: false,
+		  fitInViewport: true,
+		  orientation: 'vertical',
+		  spacing: 0,
+		  paddingBottom: 0
+		},
+		keyboardNavEnabled: true,
+		imageScaleMode: 'fill',
+		imageAlignCenter:true,
+		slidesSpacing: 0,
+		loop: false,
+		loopRewind: true,
+		numImagesToPreload: 3,
+		video: {
+		  autoHideArrows:true,
+		  autoHideControlNav:false,
+		  autoHideBlocks: true
+		}, 
+		autoScaleSlider: true, 
+		autoScaleSliderWidth: 960,     
+		autoScaleSliderHeight: 450
+	  });
+	});
+
+</script>
+
+
+
+
+</BODY>
+
+
+</html>
