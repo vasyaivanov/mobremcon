@@ -183,6 +183,11 @@
       position: relative;
       left:0px;
       top:0px;
+      z-index: 2;
+    }
+    
+    #myCanvas {
+      position: absolute;
       z-index: 1;
     }
 	
@@ -192,8 +197,39 @@
 
 <body>
   <div id="redDot"><img src="redDot.png" alt="Laser Pointer"></div>
+  <canvas id="myCanvas" width="670" height="450" ></canvas>
 	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
 	<script>
+// <basic draw program> [Lev]
+var click = false;
+
+function clicked(event) {
+    click = true;
+}
+
+function unclick(event) {
+    click = false;
+}
+
+function drawSquare(event) {
+    if (!click)
+        return;
+    
+    var myCanvas = document.getElementById("myCanvas");
+    
+    var x = event.clientX - myCanvas.offsetLeft;
+    var y = event.clientY - myCanvas.offsetTop;
+    
+    var myContext = myCanvas.getContext('2d');
+    
+    myContext.fillStyle = '#FF0000'; 
+    myContext.fillRect(x, y, 10, 10);
+};
+
+document.getElementById("myCanvas").addEventListener("mousedown", clicked, false);
+document.getElementById("myCanvas").addEventListener("mouseup", unclick, false);
+document.getElementById("myCanvas").addEventListener("mousemove", drawSquare, false);
+// </basic draw program>
 		
 		jQuery(document).ready(function($) {
 				  $('#video-gallery').royalSlider({
