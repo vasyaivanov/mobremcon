@@ -27,6 +27,20 @@ function handler (req, res) {
   });
 }
 
+function pollUpdate () {
+	var pollStatisticsString = "";
+	var pollAnswersString = "";
+	for (i=0; i < pollStatisticsArray.length-1; i++) {
+		pollStatisticsString += pollStatisticsArray[i] + "\n"; //construct statistics string. TODO - proper JSON
+		pollAnswersString += pollAnswerArray[i] + "\n";
+	}
+	pollStatisticsString += pollStatisticsArray[i]; // the last element has no '\n"
+	pollAnswersString += pollAnswerArray[i]; // the last element has no '\n"
+	console.log("MA: pollVote pollUpdate pollAnswerArray: " + JSON.stringify(pollAnswersString));
+	console.log("MA: pollVote pollUpdate pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
+	io.sockets.emit('pollUpdate', { answers : pollAnswersString, statistics : pollStatisticsString });
+}
+
 var pollStatisticsArray = new Array();
 var pollAnswerArray = new Array();
 
@@ -37,20 +51,7 @@ console.log('in remote control');
 io.sockets.on('connection', function (socket) {
 		console.log('started socket');
 		
-		if (pollAnswerArray.length > 0) 
-		{
-			var pollStatisticsString = "";
-			var pollAnswersString = "";
-			for (i=0; i < pollStatisticsArray.length-1; i++) {
-				pollStatisticsString += pollStatisticsArray[i] + "\n"; //construct statistics string. TODO - proper JSON
-				pollAnswersString += pollAnswerArray[i] + "\n";
-			}
-			pollStatisticsString += pollStatisticsArray[i]; // the last element has no '\n"
-			pollAnswersString += pollAnswerArray[i]; // the last element has no '\n"
-			console.log("MA: connection pollAnswerArray: " + JSON.stringify(pollAnswersString));
-			console.log("MA: connection pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
-			socket.emit('pollUpdate', { answers : pollAnswersString, statistics : []});
-		}
+		if (pollAnswerArray.length > 0) pollUpdate();
 		
 		var imageCount = 1;
 		//var dirname = "/Users/mac/Documents/REMOTECONTROL3/BACKEND/UPLOADS";
@@ -132,11 +133,15 @@ io.sockets.on('connection', function (socket) {
 			pollStatisticsArray = new Array();
 			pollAnswerArray = new Array();
 			pollAnswerArray = data.answers.split("\n");
+			var pollStatisticsString = "";
+			var pollAnswersString = "";
 			for (i=0; i < pollAnswerArray.length; i++) {
 				pollStatisticsArray[i] = 0; //initialize statistics to 0
+				pollAnswersString += pollAnswerArray[i] + "\n";
 			}
 			console.log("MA: pollStarted pollAnswerArray: " + JSON.stringify(pollStatisticsArray));
 			console.log("MA: pollStarted pollStatisticsArray: " + JSON.stringify(pollAnswerArray));
+			io.sockets.emit('pollUpdate', { answers : pollAnswersString, statistics : pollStatisticsString });
 		});
 		
 		socket.on('pollVote', function (data) {
@@ -152,18 +157,7 @@ io.sockets.on('connection', function (socket) {
 				console.log("MA: pollVote pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
 			}
 			pollStatisticsArray[data.vote-1] += 1;
-			
-			var pollStatisticsString = "";
-			var pollAnswersString = "";
-			for (i=0; i < pollStatisticsArray.length-1; i++) {
-				pollStatisticsString += pollStatisticsArray[i] + "\n"; //construct statistics string. TODO - proper JSON
-				pollAnswersString += pollAnswerArray[i] + "\n";
-			}
-			pollStatisticsString += pollStatisticsArray[i]; // the last element has no '\n"
-			pollAnswersString += pollAnswerArray[i]; // the last element has no '\n"
-			console.log("MA: pollVote pollUpdate pollAnswerArray: " + JSON.stringify(pollAnswersString));
-			console.log("MA: pollVote pollUpdate pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
-			socket.emit('pollUpdate', { answers : pollAnswersString, statistics : pollStatisticsString});
+			pollUpdate();
 		});
 		
 		//socket.emit('news', { hello: 0 });
@@ -176,7 +170,7 @@ io.sockets.on('connection', function (socket) {
 			else{ 
 				toggle =2; 
 			}
-			socket.broadcast.emit('news',{ hello: data.my});
+			io.sockets.emit('news',{ hello: data.my});
 			//io.sockets.emit('news',clients);
 			socket.emit('news', { hello: 1 });
 
