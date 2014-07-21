@@ -11,12 +11,12 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		1E0FE4CB196E2564007D5C10 /* AcousticModelEnglish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E0FE4C7196E2564007D5C10 /* AcousticModelEnglish.bundle */; };
-		1E0FE4CC196E2564007D5C10 /* AcousticModelSpanish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E0FE4C8196E2564007D5C10 /* AcousticModelSpanish.bundle */; };
-		1E0FE4CD196E2564007D5C10 /* OpenEars.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E0FE4C9196E2564007D5C10 /* OpenEars.framework */; };
-		1E0FE4CE196E2565007D5C10 /* Slt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E0FE4CA196E2564007D5C10 /* Slt.framework */; };
 		1E0FE4D81972EC29007D5C10 /* SpeechRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0FE4D71972EC29007D5C10 /* SpeechRecognizer.m */; };
 		1E0FE4E01973BE58007D5C10 /* OpenEarsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0FE4DF1973BE58007D5C10 /* OpenEarsPlugin.m */; };
+		1EA05528197CC9F600C5FD1B /* AcousticModelEnglish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1EA05524197CC9F600C5FD1B /* AcousticModelEnglish.bundle */; };
+		1EA05529197CC9F600C5FD1B /* AcousticModelSpanish.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1EA05525197CC9F600C5FD1B /* AcousticModelSpanish.bundle */; };
+		1EA0552A197CC9F600C5FD1B /* OpenEars.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EA05526197CC9F600C5FD1B /* OpenEars.framework */; };
+		1EA0552B197CC9F600C5FD1B /* Slt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EA05527197CC9F600C5FD1B /* Slt.framework */; };
 		1F766FE113BBADB100FB74C0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F766FDC13BBADB100FB74C0 /* Localizable.strings */; };
 		1F766FE213BBADB100FB74C0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F766FDF13BBADB100FB74C0 /* Localizable.strings */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -78,14 +78,14 @@
 		1D3623250D0F684500981E51 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* RemoteControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RemoteControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		1E0FE4C7196E2564007D5C10 /* AcousticModelEnglish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelEnglish.bundle; sourceTree = "<group>"; };
-		1E0FE4C8196E2564007D5C10 /* AcousticModelSpanish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelSpanish.bundle; sourceTree = "<group>"; };
-		1E0FE4C9196E2564007D5C10 /* OpenEars.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEars.framework; sourceTree = "<group>"; };
-		1E0FE4CA196E2564007D5C10 /* Slt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Slt.framework; sourceTree = "<group>"; };
 		1E0FE4D61972EC29007D5C10 /* SpeechRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeechRecognizer.h; sourceTree = "<group>"; };
 		1E0FE4D71972EC29007D5C10 /* SpeechRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeechRecognizer.m; sourceTree = "<group>"; };
 		1E0FE4DE1973BE58007D5C10 /* OpenEarsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenEarsPlugin.h; path = Engines/OpenEarsPlugin.h; sourceTree = "<group>"; };
 		1E0FE4DF1973BE58007D5C10 /* OpenEarsPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenEarsPlugin.m; path = Engines/OpenEarsPlugin.m; sourceTree = "<group>"; };
+		1EA05524197CC9F600C5FD1B /* AcousticModelEnglish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelEnglish.bundle; sourceTree = "<group>"; };
+		1EA05525197CC9F600C5FD1B /* AcousticModelSpanish.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AcousticModelSpanish.bundle; sourceTree = "<group>"; };
+		1EA05526197CC9F600C5FD1B /* OpenEars.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OpenEars.framework; sourceTree = "<group>"; };
+		1EA05527197CC9F600C5FD1B /* Slt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Slt.framework; sourceTree = "<group>"; };
 		1F766FDD13BBADB100FB74C0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		1F766FE013BBADB100FB74C0 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Localizable.strings; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -141,15 +141,15 @@
 				5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */,
 				301BF552109A68D80062928A /* libCordova.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1EA0552A197CC9F600C5FD1B /* OpenEars.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
-				1E0FE4CD196E2564007D5C10 /* OpenEars.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				301BF5B5109A6A2B0062928A /* AddressBook.framework in Frameworks */,
 				301BF5B7109A6A2B0062928A /* AddressBookUI.framework in Frameworks */,
 				301BF5B9109A6A2B0062928A /* AudioToolbox.framework in Frameworks */,
 				301BF5BD109A6A2B0062928A /* CFNetwork.framework in Frameworks */,
 				301BF5C1109A6A2B0062928A /* MediaPlayer.framework in Frameworks */,
-				1E0FE4CE196E2565007D5C10 /* Slt.framework in Frameworks */,
+				1EA0552B197CC9F600C5FD1B /* Slt.framework in Frameworks */,
 				301BF5C3109A6A2B0062928A /* QuartzCore.framework in Frameworks */,
 				301BF5C5109A6A2B0062928A /* SystemConfiguration.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
@@ -182,18 +182,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1E0FE4C6196E2564007D5C10 /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-				1E0FE4C7196E2564007D5C10 /* AcousticModelEnglish.bundle */,
-				1E0FE4C8196E2564007D5C10 /* AcousticModelSpanish.bundle */,
-				1E0FE4C9196E2564007D5C10 /* OpenEars.framework */,
-				1E0FE4CA196E2564007D5C10 /* Slt.framework */,
-			);
-			name = Framework;
-			path = ../Downloads/OpenEarsDistribution/Framework;
-			sourceTree = "<group>";
-		};
 		1E0FE4DD1973BCF4007D5C10 /* Engines */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +189,18 @@
 				1E0FE4DF1973BE58007D5C10 /* OpenEarsPlugin.m */,
 			);
 			name = Engines;
+			sourceTree = "<group>";
+		};
+		1EA05523197CC9F600C5FD1B /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				1EA05524197CC9F600C5FD1B /* AcousticModelEnglish.bundle */,
+				1EA05525197CC9F600C5FD1B /* AcousticModelSpanish.bundle */,
+				1EA05526197CC9F600C5FD1B /* OpenEars.framework */,
+				1EA05527197CC9F600C5FD1B /* Slt.framework */,
+			);
+			name = Framework;
+			path = RemoteControl/Framework;
 			sourceTree = "<group>";
 		};
 		1F766FDB13BBADB100FB74C0 /* en.lproj */ = {
@@ -222,7 +222,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				1E0FE4C6196E2564007D5C10 /* Framework */,
+				1EA05523197CC9F600C5FD1B /* Framework */,
 				F840E1F0165FE0F500CFE078 /* config.xml */,
 				301BF56E109A69640062928A /* www */,
 				301BF52D109A57CC0062928A /* CordovaLib.xcodeproj */,
@@ -422,7 +422,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F840E1F1165FE0F500CFE078 /* config.xml in Resources */,
+				1EA05529197CC9F600C5FD1B /* AcousticModelSpanish.bundle in Resources */,
 				308D05371370CCF300D202BF /* icon-72.png in Resources */,
+				1EA05528197CC9F600C5FD1B /* AcousticModelEnglish.bundle in Resources */,
 				308D05381370CCF300D202BF /* icon.png in Resources */,
 				308D05391370CCF300D202BF /* icon@2x.png in Resources */,
 				3072F99713A8081B00425683 /* Capture.bundle in Resources */,
@@ -430,11 +432,9 @@
 				1F766FE213BBADB100FB74C0 /* Localizable.strings in Resources */,
 				302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */,
 				30A0434814DC770100060A13 /* Localizable.strings in Resources */,
-				1E0FE4CC196E2564007D5C10 /* AcousticModelSpanish.bundle in Resources */,
 				30A0434914DC770100060A13 /* Localizable.strings in Resources */,
 				3088BBBD154F3926009F9C59 /* Default-Landscape@2x~ipad.png in Resources */,
 				3088BBBE154F3926009F9C59 /* Default-Landscape~ipad.png in Resources */,
-				1E0FE4CB196E2564007D5C10 /* AcousticModelEnglish.bundle in Resources */,
 				3088BBBF154F3926009F9C59 /* Default-Portrait@2x~ipad.png in Resources */,
 				3088BBC0154F3926009F9C59 /* Default-Portrait~ipad.png in Resources */,
 				3088BBC1154F3926009F9C59 /* Default@2x~iphone.png in Resources */,
@@ -531,6 +531,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/marov/Downloads/OpenEarsDistribution/Framework,
+					"$(PROJECT_DIR)/RemoteControl/Framework",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -554,6 +555,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/marov/Downloads/OpenEarsDistribution/Framework,
+					"$(PROJECT_DIR)/RemoteControl/Framework",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RemoteControl/RemoteControl-Prefix.pch";
