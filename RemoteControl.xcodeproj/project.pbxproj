@@ -530,7 +530,6 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/marov/Downloads/OpenEarsDistribution/Framework,
 					"$(PROJECT_DIR)/RemoteControl/Framework",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -554,7 +553,6 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/marov/Downloads/OpenEarsDistribution/Framework,
 					"$(PROJECT_DIR)/RemoteControl/Framework",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
