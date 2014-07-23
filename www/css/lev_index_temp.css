@@ -1,0 +1,76 @@
+div#main {
+    position: relative;
+    border-style: solid;
+    border-width: 1px;
+    width: 37em;
+    height: 21em;
+}
+
+.UI {
+    border-style: solid;
+    border-width: 1px;
+    display: inline-block;
+    }
+
+.topRow {
+    height: 2.2em;
+    }
+
+.midRow {
+    height: 15em;
+    }
+
+.botRow {
+    height: 3.4em;
+    }
+    
+.leftCol {
+    width: 3em;
+}
+
+.midCol {
+    width: 24.8em;
+}
+
+.rightCol {
+    width: 8em;
+}
+
+#prev {
+    width: 8em;
+}
+
+#filler {
+    width: 3.5em;
+}
+
+#laser {
+    width: 4em;
+}
+
+#draw {
+    width: 4em;
+}
+
+#next {
+    width: 8em;
+}
+
+#laserButton {
+    color: black;
+}
+
+#drawButton {
+    color: black;
+}
+
+/*
+#currentSlide {
+  position: absolute;
+  width: auto;
+  height: auto;
+  border-style: solid;
+  border-width: 1px;
+  background-image:url('laser_test_slide.jpg');
+}
+*/

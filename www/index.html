@@ -5,28 +5,33 @@
 		<script src="http://localhost:1337/socket.io/socket.io.js"></script>
 		<!--<script src="http://localhost:1337/socket.io/socket.io.js"></script>-->
     <script src="./js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script src="./js/speechRecognizer.js"></script>
 		<script>
-		  //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
-		  var socket = io.connect('http://localhost:1337');
-		  function buttonClicked(numClicked){
-        //alert("clicked " + numClicked);
-        socket.emit('mymessage', { my: numClicked });
-		  }      
+            function printResult(resultObject){
+                //document.getElementById("result").innerHTML=resultObject;
+                console.log("MA printResult");
+                console.log(resultObject);
+                console.log(resultObject.indexOf("NEXT"));
+                if (resultObject.indexOf("NEXT") > -1)
+                    socket.emit('mymessage', { my: 101 });
+                else if (resultObject.indexOf("PREVIOUS") > -1)
+                    socket.emit('mymessage', { my: 102 });
+            }
+          //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+          var socket = io.connect('http://localhost:1337');
+          var speechRecognizer = new SpeechRecognizer();
+          function buttonClicked(numClicked){
+            console.log("MA numClicked");
+            if (numClicked == -10) speechRecognizer.initialize( function(r){printResult(r)}, function(e){printResult(e)} );
+            else socket.emit('mymessage', { my: numClicked });
+          }      
 		</script>
-  
-  <style>
-  	#laserPointer {
-      position: relative;
-		  left: 40px; 
-		  top: 50px; 
-		  width: 100%;
-		  max-width: 400px;
-		}
-  </style>
 	</head>
 <body>
+
 <div id="laserPointer">
-  <img id="testSlide" src="Weather_delivery.png">
+  <img id="testSlide" src="./img/laser_test_slide.jpg">
 </div>
 <!--<div id="log">this is the log</div> [Lev]: log for testing only, remove for the build-->
 <div id="remote-control">
@@ -58,7 +63,7 @@
 		developed by Bing Social
 	</h2>
 	<ul>
-		<li id="view"><a href="#" title="View full gallery"><span>View</span></a></li>
+		<li id="view"><a href="javascript:buttonClicked(-10)" title="Start Speech recognition"><span>Speech</span></a></li>
 		<li id="info"><a href="#" title="Info on gallery"><span>Info</span></a></li>
 		<li id="help"><a href="#" title="Help"><span>Help</span></a></li>
 		<li id="rewind"><a href="#" title="Go back to beginning"><span>Rewind</span></a></li>
