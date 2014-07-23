@@ -186,6 +186,20 @@ io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('moveLaser', data);
         });
         
+        socket.on('drawCoords', function(data) {
+            // console.log("draw coords received");
+            // console.log("X: " + data.x + ", " + "Y: " + data.y);
+            socket.broadcast.emit('drawCoords', data);
+        });
+        
+        socket.on('drawStart', function() {
+            socket.broadcast.emit('drawStart');
+        });
+
+        socket.on('drawStop', function() {
+            socket.broadcast.emit('drawStop');
+        });        
+        
         socket.on('mouseDown', function() {
             console.log("laser on");
             socket.broadcast.emit('laserOn');

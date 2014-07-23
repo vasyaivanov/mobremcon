@@ -1,4 +1,12 @@
-		#remote-control
+#laserPointer {
+  position: relative;
+  left: 40px; 
+  top: 50px; 
+  width: 100%;
+  max-width: 400px;
+}
+
+#remote-control
 {
 	position: relative;
 	background: url(../img/remote-back_microsoft.jpg) no-repeat 0px 0;
@@ -7,18 +15,18 @@
 }
 	
 #remote-control h2,
-	#remote-control span
+#remote-control span
 {
 	position: absolute;
 	left: -5000px;
-	}
+}
 	
 #remote-control ul
 {
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
-	}
+}
 	
 #home a,
 #sitemap a,
@@ -44,9 +52,9 @@
 #bottom a,
 #ok a
 {
-	position: absolute;
-	display: block;
-	}
+    position: absolute;
+    display: block;
+}
 	
 #remote-control li#home a
 {
@@ -55,14 +63,14 @@
 	width: 37px;
 	height: 37px;
 	background: url(../img/remote-home.jpg) no-repeat;
-	}
+}
 	
 #remote-control li#home a:hover
 {
 	background-image: url(../img/remote-home.jpg);
 	background-repeat: no-repeat;
 	background-position: 0 -37px;
-	}
+}
 	
 #remote-control li#sitemap a
 {

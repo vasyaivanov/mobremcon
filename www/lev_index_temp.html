@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <meta charset="utf-8">
+		<title>SENDER</title>
+		<link rel="stylesheet" type="text/css" href="./css/lev_index_temp.css">
+		<script src="http://localhost:1337/socket.io/socket.io.js"></script>
+		<!--<script src="http://localhost:1337/socket.io/socket.io.js"></script>-->
+    <script src="./js/jquery-1.8.3.js"></script>
+    <script> 
+      //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+      var socket = io.connect('http://localhost:1337');
+    </script>
+    <script defer src="./js/LASER_CONTROL.js"></script>
+    <script defer src="./js/navigation_control.js"></script>
+	</head>
+<body>
+  <div id="main">
+    <div class="UI topRow leftCol" id="menu">menu</div>
+    <div class="UI topRow midCol" id="URLBox">URL</div>
+    <div class="UI topRow rightCol" id="time">time</div>
+    <br>
+    <div class="UI midRow leftCol" id="notes">notes</div>
+    <div class="UI midRow midCol" id="currentSlide">current</div>
+    <div class="UI midRow rightCol" id="otherSlides">other</div>
+    <br>
+    <div class="UI botRow" id="prev"><input id="prevButton" type="button" value="Prev"/></div>
+    <div class="UI botRow" id="filler">&nbsp;</div>
+    <div class="UI botRow" id="laser"><input id="laserButton" type="button" value="Laser"/></div>
+    <div class="UI botRow" id="filler">&nbsp;</div>
+    <div class="UI botRow" id="draw"><input id="drawButton" type="button" value="Draw"/></div>
+    <div class="UI botRow" id="filler">&nbsp;</div>
+    <div class="UI botRow" id="next"><input id="nextButton" type="button" value="Next"/></div>
+  </div>
+</body>
+</html>

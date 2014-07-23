@@ -32,3 +32,28 @@ socket.on('moveLaser', function(data) {
     $( "#redDot" ).css({left:data.x, top:data.y});
 });
 
+// ================================= canvas =========================
+
+// <basic draw program> [Lev]
+
+var myCanvas = document.getElementById("myCanvas");
+var myContext = myCanvas.getContext('2d');
+
+socket.on('drawCoords', function(data) {
+    myContext.fillStyle = '#FF0000'; 
+    myContext.fillRect(data.x, data.y, 10, 10);
+});
+
+/* I don't think I'll need to start and stop drawing since
+ * the draw event should only fire when drawCoords are being
+ * transmitted
+socket.on('drawStart', function () {
+    drawMode = true;
+});
+
+socket.on('drawStop', function () {
+    drawMode = false;
+});
+*/  
+  
+// </basic draw program>
