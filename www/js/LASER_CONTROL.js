@@ -38,22 +38,24 @@ function moveLaser( event ) {
     }
 };
 
-$( '#currentSlide' ).touchstart(function() {
+
+$( '#currentSlide' ).mousedown(function() {
     console.log("mouse down"); 
-    $( "#currentSlide" ).on ("touchmove", moveLaser);
+    $( "#currentSlide" ).on ("mousemove", moveLaser);
     // Only turn on laser if we are in laser mode
     if(LASER === interactionType)
         socket.emit('mouseDown'); 
 });
 
-$( '#currentSlide' ).touchup(function() {
+$( '#currentSlide' ).mouseup(function() {
     console.log("mouse up"); 
-    $( "#currentSlide" ).off ("touchmove", moveLaser);
+    $( "#currentSlide" ).off ("mousemove", moveLaser);
     // Only turn on laser if we are in laser mode
     if(LASER === interactionType)
         socket.emit('mouseUp');
 });
 
+ 
 /* Image dragging was interfering with the laser pointer event listeners
  * So I am disabling image dragging since the presenter probably won't want
  * to drag the powerpoint slide anywhere from inside the remote control. 
