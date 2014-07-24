@@ -36,32 +36,19 @@ function moveLaser( event ) {
             break;
         }
     }
-    
-    /* delete this if the switch case above is working
-    if(1 == drawMode) {
-        console.log('drawing');
-        socket.emit('drawCoords', { x:event.pageX, y:event.pageY })
-    } else if () {
-        // Sends coordinates to the backend server
-        console.log('lasering');
-        socket.emit('laserCoords', { x:event.pageX, y:event.pageY })
-    }
-    */
 };
 
-// changed so mouseup/mousedown are now attached to body instead of currentSlide
-// not sure which way is better 
-$( "body" ).mousedown(function() { 
+$( '#currentSlide' ).touchstart(function() {
     console.log("mouse down"); 
-    $( "#currentSlide" ).on ("mousemove", moveLaser);
+    $( "#currentSlide" ).on ("touchmove", moveLaser);
     // Only turn on laser if we are in laser mode
     if(LASER === interactionType)
         socket.emit('mouseDown'); 
 });
 
-$( "body" ).mouseup(function() { 
+$( '#currentSlide' ).touchup(function() {
     console.log("mouse up"); 
-    $( "#currentSlide" ).off ("mousemove", moveLaser);
+    $( "#currentSlide" ).off ("touchmove", moveLaser);
     // Only turn on laser if we are in laser mode
     if(LASER === interactionType)
         socket.emit('mouseUp');
