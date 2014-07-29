@@ -12,25 +12,26 @@
       var socket = io.connect('http://localhost:1337');
     </script>
     <script defer src="./js/LASER_CONTROL.js"></script>
-    <script defer src="./js/navigation_control.js"></script>
+    
 	</head>
-<body>
+<body onload="startup()">
   <div id="main">
     <div class="UI topRow leftCol" id="menu">menu</div>
     <div class="UI topRow midCol" id="URLBox">URL</div>
     <div class="UI topRow rightCol" id="time">time</div>
     <br>
     <div class="UI midRow leftCol" id="notes">notes</div>
+    <!--<iframe src="RECIEVER_POWERPOINT_static.html"></iframe>-->
     <div class="UI midRow midCol" id="currentSlide">current</div>
     <div class="UI midRow rightCol" id="otherSlides">other</div>
     <br>
-    <div class="UI botRow" id="prev"><input id="prevButton" type="button" value="Prev"/></div>
+    <div class="UI botRow" id="prev">&nbsp;</div>
     <div class="UI botRow" id="filler">&nbsp;</div>
-    <div class="UI botRow" id="laser"><input id="laserButton" type="button" value="Laser"/></div>
+    <div class="UI botRow" id="laser">Laser</div>
     <div class="UI botRow" id="filler">&nbsp;</div>
-    <div class="UI botRow" id="draw"><input id="drawButton" type="button" value="Draw"/></div>
+    <div class="UI botRow" id="draw">Draw</div>
     <div class="UI botRow" id="filler">&nbsp;</div>
-    <div class="UI botRow" id="next"><input id="nextButton" type="button" value="Next"/></div>
+    <div class="UI botRow" id="next">&nbsp;</div>
   </div>
 </body>
 </html>

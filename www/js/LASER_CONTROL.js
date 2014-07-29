@@ -38,7 +38,36 @@ function moveLaser( event ) {
     }
 };
 
+// code from https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Touch_events
+/*
+function startup() {
+    var el = document.getElementById("currentSlide");
+    el.addEventListener("touchstart", handleStart, false);
+    el.addEventListener("touchend", handleEnd, false);
+    el.addEventListener("touchcancel", handleCancel, false);
+    el.addEventListener("touchleave", handleEnd, false);
+    el.addEventListener("touchmove", handleMove, false);
+}
 
+var ongoingTouches = new Array();
+
+function handleStart(evt) {
+    evt.preventDefault();
+    log("touchstart.");
+    var el = document.getElementsById("currentSlide");
+    var touches = evt.changedTouches;
+    
+    for (var i=0; i < touches.length; i++) {
+        log("touchstart:"+i+"...");
+        ongoingTouches.push(copyTouch(touches[i]));
+        log("touchstart:"+i+".");
+    }
+}
+*/
+
+// end mozilla code
+
+// commented out while I try a different approach.
 $( '#currentSlide' ).mousedown(function() {
     console.log("mouse down"); 
     $( "#currentSlide" ).on ("mousemove", moveLaser);
@@ -66,39 +95,43 @@ $( '#currentSlide' ).mouseup(function() {
 // disable image dragging for all images. 
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
-$('#prevButton').click(function() {
+$('#prev').click(function() {
     socket.emit('mymessage', { my:102 });
 });
 
-$('#nextButton').click(function() {
+$('#next').click(function() {
     console.log("next pressed");
     socket.emit('mymessage', { my:101 });
 });
 
-$('#laserButton').click(function() {
+$('#laser').click(function() {
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
-        $('#laserButton').css("color", "black");
+        $('#laser').css("color", "black");
         
     // otherwise turn laser on
     } else {
         interactionType = LASER;
-        $('#laserButton').css("color", "red");
-        $('#drawButton').css("color", "black");
+        $('#laser').css("color", "red");
+        $('#draw').css("color", "black");
     }
 });
 
-$('#drawButton').click(function() {
+$('#draw').click(function() {
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
-        $('#drawButton').css("color", "black");
+        $('#draw').css("color", "black");
         
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
-        $('#drawButton').css("color", "red");
-        $('#laserButton').css("color", "black");
+        $('#draw').css("color", "red");
+        $('#laser').css("color", "black");
     }
 });
+
+function startup () {
+    console.log("startup()");
+}

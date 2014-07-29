@@ -38,7 +38,27 @@ div#main {
 
 #prev {
     width: 7.45em;
-}
+    background-image: url('../img/buttonPrev.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    }
+    
+    #prev:active {
+        color: red;
+    }
+
+#next {
+    width: 7.45em;
+    background-image: url('../img/buttonNext.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    }
+    
+    #next:active {
+        color:red;
+    }
 
 #filler {
     width: 1.35em;
@@ -47,22 +67,13 @@ div#main {
 
 #laser {
     width: 4em;
-}
+    color: black;
+    }
 
 #draw {
     width: 4em;
-}
-
-#next {
-    width: 7.45em;
-}
-#laserButton {
     color: black;
-}
-
-#drawButton {
-    color: black;
-}
+    }
 
 /*
 #currentSlide {

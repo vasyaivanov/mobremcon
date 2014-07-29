@@ -44,6 +44,10 @@ socket.on('drawCoords', function(data) {
     myContext.fillRect(data.x, data.y, 10, 10);
 });
 
+function clearCanvas () {
+    myContext.clearRect(0,0,myCanvas.width, myCanvas.height);
+};
+
 /* I don't think I'll need to start and stop drawing since
  * the draw event should only fire when drawCoords are being
  * transmitted
