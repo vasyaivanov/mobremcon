@@ -77,8 +77,8 @@ io.sockets.on('connection', function (socket) {
         	var extention = event.file.name.split(".")[1];
 			var shortFileName = event.file.name.split(".")[0];
         	var fullFileName = uploader.dir + event.file.name;
-			//var shortFileName = "Weather_delivery";
-			//var fullFileName = uploader.dir + "Weather_delivery.pptx";
+			//var shortFileName = "SliteShow_PitchDeck";
+			//var fullFileName = uploader.dir + "SliteShow_PitchDeck.pptx";
         	
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
 		var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
