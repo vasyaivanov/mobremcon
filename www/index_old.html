@@ -2,7 +2,7 @@
 	<head>
 		<title>SENDER</title>
 		<link rel="stylesheet" type="text/css" href="./css/index1.css">
-		<script src="http://localhost:1337/socket.io/socket.io.js"></script>
+		<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
 		<!--<script src="http://localhost:1337/socket.io/socket.io.js"></script>-->
     <script src="./js/jquery-1.8.3.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
@@ -18,8 +18,8 @@
                 else if (resultObject.indexOf("PREVIOUS") > -1)
                     socket.emit('mymessage', { my: 102 });
             }
-          //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
-          var socket = io.connect('http://localhost:1337');
+          var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+          //var socket = io.connect('http://localhost:1337');
           var speechRecognizer = new SpeechRecognizer();
           function buttonClicked(numClicked){
             console.log("MA numClicked");
@@ -30,9 +30,6 @@
 	</head>
 <body>
 
-<div id="laserPointer">
-  <img id="testSlide" src="./img/laser_test_slide.jpg">
-</div>
 <!--<div id="log">this is the log</div> [Lev]: log for testing only, remove for the build-->
 <div id="remote-control">
 	<h2>
