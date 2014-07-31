@@ -11,7 +11,7 @@
       //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
       var socket = io.connect('http://localhost:1337');
     </script>
-    <script defer src="./js/LASER_CONTROL.js"></script>
+    <script defer src="./js/LASER_CONTROL_mobile.js"></script>
     
 	</head>
 <body onload="startup()">
@@ -22,11 +22,8 @@
     <br>
     <div class="UI midRow leftCol" id="notes">notes</div>
 
-    
-    
-
-    <div class="UI midRow midCol" id="currentSlide">
-	<iframe src="../BACKEND/TEST/MA/SliteShow_PitchDeck.pptx.html/SliteShow_PitchDeck.html" width='185' height='185' seamless></iframe>
+    <div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)">&nbsp;
+	  <!--<iframe class="frame" src="../BACKEND/TEST/MA/SliteShow_PitchDeck.pptx.html/SliteShow_PitchDeck.html" width='185' height='185' seamless></iframe>-->
 	</div>
 
     <div class="UI midRow rightCol" id="otherSlides">other</div>

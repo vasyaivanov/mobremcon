@@ -1,5 +1,4 @@
-//----------------------------------------------------------------------------80
-/* 
+/*
  * This script is for reading the X/Y coordinates of the user touching the
  * remote, so they can be sent to the receiver for displaying a laser pointer
  */
@@ -21,6 +20,7 @@ function moveLaser( event ) {
     // var laserCoordinates = "( " + event.pageX + ", " + event.pageY + " )";
     // $( "#log" ).text( laserCoordinates);
     
+    console.log("moveLaser is happening");
     switch(interactionType) {
         case LASER: {
             console.log('lasering');
@@ -67,21 +67,20 @@ function handleStart(evt) {
 
 // end mozilla code
 
-// commented out while I try a different approach.
 $( '#currentSlide' ).mousedown(function() {
     console.log("mouse down"); 
     $( "#currentSlide" ).on ("mousemove", moveLaser);
     // Only turn on laser if we are in laser mode
     if(LASER === interactionType)
-        socket.emit('mouseDown'); 
+        socket.emit('laserOn');
 });
 
 $( '#currentSlide' ).mouseup(function() {
     console.log("mouse up"); 
     $( "#currentSlide" ).off ("mousemove", moveLaser);
-    // Only turn on laser if we are in laser mode
+    // Only turn off laser if we are in laser mode
     if(LASER === interactionType)
-        socket.emit('mouseUp');
+        socket.emit('laserOff');
 });
 
  
@@ -100,7 +99,7 @@ $('#prev').click(function() {
 });
 
 $('#next').click(function() {
-    console.log("next pressed");
+    console.error("next pressed");
     socket.emit('mymessage', { my:101 });
 });
 

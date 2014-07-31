@@ -47,17 +47,5 @@ socket.on('drawCoords', function(data) {
 function clearCanvas () {
     myContext.clearRect(0,0,myCanvas.width, myCanvas.height);
 };
-
-/* I don't think I'll need to start and stop drawing since
- * the draw event should only fire when drawCoords are being
- * transmitted
-socket.on('drawStart', function () {
-    drawMode = true;
-});
-
-socket.on('drawStop', function () {
-    drawMode = false;
-});
-*/  
   
 // </basic draw program>

@@ -179,33 +179,25 @@ io.sockets.on('connection', function (socket) {
         // receive laser coordinates from the remote
         socket.on('laserCoords', function(data) {
             // 2 next lines are logs for testing
-             console.log("Laser Coordinates Received");
-             console.log("X: " + data.x + ", " + "Y: " + data.y);
+            console.log("Laser Coordinates Received");
+            console.log("X: " + data.x + ", " + "Y: " + data.y);
             
             // send coordinates on to the display (RECEIVER_POWERPOINT.html)
             socket.broadcast.emit('moveLaser', data);
         });
         
         socket.on('drawCoords', function(data) {
-             console.log("draw coords received");
-             console.log("X: " + data.x + ", " + "Y: " + data.y);
+            console.log("draw coords received");
+            console.log("X: " + data.x + ", " + "Y: " + data.y);
             socket.broadcast.emit('drawCoords', data);
         });
         
-        socket.on('drawStart', function() {
-            socket.broadcast.emit('drawStart');
-        });
-
-        socket.on('drawStop', function() {
-            socket.broadcast.emit('drawStop');
-        });        
-        
-        socket.on('mouseDown', function() {
+        socket.on('laserOn', function() {
             console.log("laser on");
             socket.broadcast.emit('laserOn');
         });
         
-        socket.on('mouseUp', function() {
+        socket.on('laserOff', function() {
             console.log("laser off");
             socket.broadcast.emit('laserOff');
         });

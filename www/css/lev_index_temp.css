@@ -75,13 +75,24 @@ div#main {
     color: black;
     }
 
-/*
-#currentSlide {
-  position: absolute;
-  width: auto;
-  height: auto;
-  border-style: solid;
-  border-width: 1px;
-  background-image:url('laser_test_slide.jpg');
+.wrap {
+    padding: 0;
+    overflow: hidden;
 }
-*/
+    
+.frame {
+    width: 1280px; height: 786px;
+    border: 0;
+    
+    -ms-transform: scale(0.3);
+    -moz-transform: scale(0.3);
+    -o-transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    transform: scale(0.3);
+    
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-tranform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
