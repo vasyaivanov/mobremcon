@@ -41,7 +41,7 @@ var myContext = myCanvas.getContext('2d');
 
 socket.on('drawCoords', function(data) {
     myContext.fillStyle = '#FF0000'; 
-    myContext.fillRect(data.x, data.y, 10, 10);
+    myContext.fillRect(data.x - 100, data.y - 50, 3, 3);
 });
 
 function clearCanvas () {

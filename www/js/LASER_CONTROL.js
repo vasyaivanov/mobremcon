@@ -91,7 +91,7 @@ $( '#currentSlide' ).mouseup(function() {
  * would turn the laser on/off instead of using mousedown events. 
  */
  
-// disable image dragging for all images. 
+// disable image dragging for all images
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
 $('#prev').click(function() {
@@ -107,13 +107,13 @@ $('#laser').click(function() {
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
-        $('#laser').css("color", "black");
+        $('#laser').css("border-color", "black");
         
     // otherwise turn laser on
     } else {
         interactionType = LASER;
-        $('#laser').css("color", "red");
-        $('#draw').css("color", "black");
+        $('#laser').css("border-color", "red");
+        $('#draw').css("border-color", "black");
     }
 });
 
@@ -121,13 +121,13 @@ $('#draw').click(function() {
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
-        $('#draw').css("color", "black");
+        $('#draw').css("border-color", "black");
         
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
-        $('#draw').css("color", "red");
-        $('#laser').css("color", "black");
+        $('#draw').css("border-color", "red");
+        $('#laser').css("border-color", "black");
     }
 });
 
