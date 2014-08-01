@@ -3,6 +3,57 @@
  * remote, so they can be sent to the receiver for displaying a laser pointer
  */
 
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady () {
+    alert("device ready");
+};
+    // Adding event handlers to the currentSlide div, the user
+    // touches this div to draw or move laser
+    var currentSlide = document.getElementById("currentSlide");
+    currentSlide.addEventListener("touchstart", touchStart, false);
+    currentSlide.addEventListener("touchmove", touchMove, false);
+    currentSlide.addEventListener("touchend", touchEnd, false);
+    /* currentSlide.addEventListener("touchcancel", touchCancel, false); */
+    
+    // disable image dragging for all images.
+    // Image dragging was interfering with the laser pointer event listeners
+    $('img').on('dragstart', function(event) { event.preventDefault(); });
+    
+    $('#prev').click(function() {
+        socket.emit('mymessage', { my:102 });
+    });
+    
+    $('#next').click(function() {
+        socket.emit('mymessage', { my:101 });
+    });
+    
+    $('#laser').click(function() {
+        // if laser is on, turn it off
+        if (LASER === interactionType) {
+            interactionType = NONE;
+            $('#laser').css("color", "black");
+        // otherwise turn laser on
+        } else {
+            interactionType = LASER;
+            $('#laser').css("color", "red");
+            $('#draw').css("color", "black");
+        }
+    });
+    
+    $('#draw').click(function() {
+        // if draw is on, turn it off
+        if (DRAW === interactionType) {
+            interactionType = NONE;
+            $('#draw').css("color", "black");
+        // otherwise turn draw on
+        } else {
+            interactionType = DRAW;
+            $('#draw').css("color", "red");
+            $('#laser').css("color", "black");
+        }
+    });
+
 
 // interactionType is a global variable for switching between
 // 'draw' and 'laser' mode
@@ -45,65 +96,9 @@ function touchMove(event) {
     }
 }
 
-// Adding event handlers to the currentSlide div, the user
-// touches this div to draw or move laser
-var currentSlide = document.getElementById("currentSlide");
-currentSlide.addEventListener("touchstart", touchStart, false);
-currentSlide.addEventListener("touchmove", touchMove, false);
-currentSlide.addEventListener("touchend", touchEnd, false);
-
-/*
-currentSlide.addEventListener("touchcancel", touchCancel, false);
-*/
-
-
-/* Image dragging was interfering with the laser pointer event listeners
- * So I am disabling image dragging since the presenter probably won't want
- * to drag the powerpoint slide anywhere from inside the remote control.
- * if we end up needing this one solution would be to make a button that
- * would turn the laser on/off instead of using mousedown events.
- */
-
-// disable image dragging for all images.
-$('img').on('dragstart', function(event) { event.preventDefault(); });
-
-$('#prev').click(function() {
-    socket.emit('mymessage', { my:102 });
-});
-
-$('#next').click(function() {
-    //alert("next pressed");
-    socket.emit('mymessage', { my:101 });
-});
-
-$('#laser').click(function() {
-    // if laser is on, turn it off
-    if (LASER === interactionType) {
-        interactionType = NONE;
-        $('#laser').css("color", "black");
-                  
-    // otherwise turn laser on
-    } else {
-        interactionType = LASER;
-        $('#laser').css("color", "red");
-        $('#draw').css("color", "black");
-    }
-});
-
-$('#draw').click(function() {
-    // if draw is on, turn it off
-    if (DRAW === interactionType) {
-        interactionType = NONE;
-        $('#draw').css("color", "black");
-                 
-    // otherwise turn draw on
-    } else {
-        interactionType = DRAW;
-        $('#draw').css("color", "red");
-        $('#laser').css("color", "black");
-    }
-});
-
+// so far I think onDeviceReady() has replaced the startupfunction
+// I don't think this is necessary but for now keeping it here as a
+// reminder to myself.
 function startup () {
     console.log("startup()");
 }

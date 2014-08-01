@@ -1,23 +1,23 @@
 /* This is the style sheet for the remote control
  * found under index.html */
 
-/* removes all margins and padding.  */
-* { margin: 0; padding: 0;}
+/* removes all margins and padding.  
+ * Font-size is set to 0 to remove borders between
+ * the UI elements caused by whitespace in the HTML. For more info see:
+http://robertnyman.com/2010/02/24/css-display-inline-block-why-it-rocks-and-why-it-sucks/ */ 
+* { margin: 0; padding: 0; font-size:0;}
 
 /*makes height be full screen */
 html, body {height: 100%; }
     
 /* previous width and height in em units commented  
- * in case there is a need to revert. 
- * Font-size is set to 0 to remove borders between
- * the UI elements caused by whitespace in the HTML. For more info see:
-http://robertnyman.com/2010/02/24/css-display-inline-block-why-it-rocks-and-why-it-sucks/ */
+ * in case there is a need to revert. */
+
 div#main {
     border: solid black 1px;
     position: relative;
     width: 100%; /* 29 em */
     height: 100%; /* 18em; */
-    font-size:0;
     /* margin-top:  1em; */
 }
 
@@ -27,7 +27,6 @@ div#main {
     border: solid black 1px;
     display: inline-block;
     vertical-align: top;
-    font-size: 12;
     }
 
 /* overlay element is intended to cover up the iframe to disable
@@ -68,7 +67,6 @@ div#main {
 
 #prev {
     width: 25.7%; /*7.45em;*/
-    
     background-image: url('../img/buttonPrev.png');
     background-repeat: no-repeat;
     background-size: contain;
