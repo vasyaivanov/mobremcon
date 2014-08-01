@@ -13,31 +13,31 @@ div#main {
     }
 
 .topRow {
-    height: 1em;
+    height: 5.55%; /* 1em */
     }
 
 .midRow {
-    height: 14em;
+    height: 77%em; /* 14em */
     }
 
 .botRow {
-    height: 2em;
+    height: auto; /* 2em? */
     }
     
 .leftCol {
-    width: 3em;
+    width: 10%;
 }
 
 .midCol {
-    width: 21em;
+    width: 73%;
 }
 
 .rightCol {
-    width: 4em;
+    width: auto;
 }
 
 #prev {
-    width: 7.45em;
+    width: 25.69%; /*7.45 em*/
     background-image: url('../img/buttonPrev.png');
     background-repeat: no-repeat;
     background-size: contain;
@@ -81,7 +81,7 @@ div#main {
 }
     
 .frame {
-    width: 1280px; height: 786px;
+    width: 5em; height: 5em;
     border: 0;
     
     -ms-transform: scale(0.3);
