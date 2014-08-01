@@ -1,94 +1,143 @@
+/* This is the style sheet for the remote control
+ * found under index.html */
+
+/* removes all margins and padding.  
+ * Font-size is set to 0 to remove borders between
+ * the UI elements caused by whitespace in the HTML. For more info see:
+http://robertnyman.com/2010/02/24/css-display-inline-block-why-it-rocks-and-why-it-sucks/ */ 
+* { margin: 0; padding: 0; font-size:0;}
+
+/*makes height be full screen */
+html, body {height: 100%; }
+    
+/* previous width and height in em units commented  
+ * in case there is a need to revert. */
+
 div#main {
-    border: solid white 1px;
+    border: solid black 1px;
     position: relative;
-    width: 29em;
-    height: 18em;
-    margin-top: 1em;
+    width: 100%; /* 29 em */
+    height: 100%; /* 18em; */
+    /* margin-top:  1em; */
 }
 
+/* all the UI elements (buttons, laser control, notes, etc)
+ * currently have a black border for ease of development */
 .UI {
-    border-style: solid;
-    border-width: 1px;
+    border: solid black 1px;
     display: inline-block;
+    vertical-align: top;
     }
 
+/* overlay element is intended to cover up the iframe to disable
+ * user interaction with the iframe. */ 
+#overlay {
+    position:absolute;
+    width: inherit; height: inherit;
+    border: solid green 1px;
+}    
+    
+#theIframe {
+    width: 99%; height: 99%;
+}
+    
 .topRow {
-    height: 5.55%; /* 1em */
+    height: 10%; /*1em;*/
     }
 
 .midRow {
-    height: 77%em; /* 14em */
+    height: 74%;/*14em;*/
     }
 
 .botRow {
-    height: auto; /* 2em? */
+    height: 15%;/*2em;*/
     }
     
 .leftCol {
-    width: 10%;
+    width: 10%;/*3em;*/
 }
 
 .midCol {
-    width: 73%;
+    width: 70%; /*21em;*/
 }
 
 .rightCol {
-    width: auto;
+    width: 18.75% /*4em;*/
 }
 
 #prev {
-    width: 25.69%; /*7.45 em*/
+    width: 25.7%; /*7.45em;*/
     background-image: url('../img/buttonPrev.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+    
     }
     
     #prev:active {
-        color: red;
+        border-color: red;
     }
 
 #next {
-    width: 7.45em;
+    width: 25.7%; /*7.45em;*/
+    
     background-image: url('../img/buttonNext.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+    
     }
     
     #next:active {
-        color:red;
+        border-color:red;
     }
 
+/* filler elements are for spacing the buttons on the
+ * bottom row. */
 #filler {
-    width: 1.35em;
+    width: 6.5%;
     border: white;
 }
 
 #laser {
-    width: 4em;
+    width: 13.8%; /*4em;*/
     color: black;
+    
+    background-image: url('../img/buttonLaser.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
     }
 
 #draw {
-    width: 4em;
+    width: 13.8%; /*4em;*/
     color: black;
+    
+    background-image: url('../img/buttonDraw.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
     }
-
+    
+/* wrap and frame classes are for resizing the content inside
+ * the iframe */    
+ /*
 .wrap {
     padding: 0;
     overflow: hidden;
 }
     
 .frame {
-    width: 5em; height: 5em;
+    width: auto; height: auto;
     border: 0;
     
-    -ms-transform: scale(0.3);
-    -moz-transform: scale(0.3);
-    -o-transform: scale(0.3);
-    -webkit-transform: scale(0.3);
-    transform: scale(0.3);
+    -ms-transform: scale(0.7);
+    -moz-transform: scale(0.7);
+    -o-transform: scale(0.7);
+    -webkit-transform: scale(0.7);
+    transform: scale(0.7);
     
     -ms-transform-origin: 0 0;
     -moz-transform-origin: 0 0;
@@ -96,3 +145,4 @@ div#main {
     -webkit-transform-origin: 0 0;
     transform-origin: 0 0;
 }
+*/
