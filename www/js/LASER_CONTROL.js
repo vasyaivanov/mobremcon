@@ -14,22 +14,28 @@ var LASER = 1;
 var DRAW  = 2;
 var interactionType = NONE; 
 
+// offset is used to calculate laser coords 
+var currentSlide = $("#currentSlide");
+var offset;
 
 function moveLaser( event ) {
     // These lines display the coordinates in the remote control, for testing only
     // var laserCoordinates = "( " + event.pageX + ", " + event.pageY + " )";
     // $( "#log" ).text( laserCoordinates);
     
+    var xOffset = offset.left;
+    var yOffset = offset.top;
+    
     console.log("moveLaser is happening");
     switch(interactionType) {
         case LASER: {
             console.log('lasering');
-            socket.emit('laserCoords', { x:event.pageX, y:event.pageY });
+            socket.emit('laserCoords', { x:event.pageX - xOffset, y:event.pageY - yOffset });
             break;
         }
         case DRAW: {
             console.log('drawing');
-            socket.emit('drawCoords', { x:event.pageX, y:event.pageY });
+            socket.emit('drawCoords', { x:event.pageX - xOffset, y:event.pageY - yOffset });
             break;
         }
         default: {
@@ -37,35 +43,6 @@ function moveLaser( event ) {
         }
     }
 };
-
-// code from https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Touch_events
-/*
-function startup() {
-    var el = document.getElementById("currentSlide");
-    el.addEventListener("touchstart", handleStart, false);
-    el.addEventListener("touchend", handleEnd, false);
-    el.addEventListener("touchcancel", handleCancel, false);
-    el.addEventListener("touchleave", handleEnd, false);
-    el.addEventListener("touchmove", handleMove, false);
-}
-
-var ongoingTouches = new Array();
-
-function handleStart(evt) {
-    evt.preventDefault();
-    log("touchstart.");
-    var el = document.getElementsById("currentSlide");
-    var touches = evt.changedTouches;
-    
-    for (var i=0; i < touches.length; i++) {
-        log("touchstart:"+i+"...");
-        ongoingTouches.push(copyTouch(touches[i]));
-        log("touchstart:"+i+".");
-    }
-}
-*/
-
-// end mozilla code
 
 $( '#currentSlide' ).mousedown(function() {
     console.log("mouse down"); 
@@ -83,7 +60,6 @@ $( '#currentSlide' ).mouseup(function() {
         socket.emit('laserOff');
 });
 
- 
 /* Image dragging was interfering with the laser pointer event listeners
  * So I am disabling image dragging since the presenter probably won't want
  * to drag the powerpoint slide anywhere from inside the remote control. 
@@ -104,6 +80,10 @@ $('#next').click(function() {
 });
 
 $('#laser').click(function() {
+    // calculate offset of interaction area in case window has been resized
+    // since the last time laser was used. 
+    offset = currentSlide.offset();
+    
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
@@ -118,6 +98,8 @@ $('#laser').click(function() {
 });
 
 $('#draw').click(function() {
+    offset = currentSlide.position();
+
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
