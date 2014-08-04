@@ -6,7 +6,8 @@
   "dependencies": {
     "socket.io": "~0.9.16",
     "cheerio": "0.17.0",
-    "socketio-file-upload": "0.2.7"
+    "socketio-file-upload": "0.2.7",
+    "wigwam": "^0.1.1"
   },
   "devDependencies": {},
   "scripts": {
