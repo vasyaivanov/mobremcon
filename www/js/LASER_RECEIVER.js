@@ -36,12 +36,20 @@ socket.on('moveLaser', function(data) {
 
 // <basic draw program> [Lev]
 
-var myCanvas = document.getElementById("myCanvas");
-var myContext = myCanvas.getContext('2d');
+// var myCanvas = document.getElementById("myCanvas");
+var myCanvas = $("#myCanvas");
+var myContext = myCanvas[0].getContext('2d');
+
+// get offset of slides to position canvas properly
+// console.log("setting slider variable");
+// var slider = $(".royalSlider").data('royalSlider');
+var slideOffset = slider.currSlide.current.holder.offset();
+
+myCanvas.offset({ top: 20, left: 30 });
 
 socket.on('drawCoords', function(data) {
     myContext.fillStyle = '#FF0000'; 
-    myContext.fillRect(data.x - 100, data.y - 50, 3, 3);
+    myContext.fillRect(data.x, data.y, 3, 3);
 });
 
 function clearCanvas () {

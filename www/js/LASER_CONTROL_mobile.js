@@ -3,11 +3,12 @@
  * remote, so they can be sent to the receiver for displaying a laser pointer
  */
 
-document.addEventListener("deviceready", onDeviceReady, false);
+function startup() {
+    document.addEventListener("deviceready", onDeviceReady, true);
+}
 
-function onDeviceReady () {
+function onDeviceReady() {
     alert("device ready");
-};
     // Adding event handlers to the currentSlide div, the user
     // touches this div to draw or move laser
     var currentSlide = document.getElementById("currentSlide");
@@ -53,7 +54,7 @@ function onDeviceReady () {
             $('#laser').css("color", "black");
         }
     });
-
+};
 
 // interactionType is a global variable for switching between
 // 'draw' and 'laser' mode
@@ -96,9 +97,4 @@ function touchMove(event) {
     }
 }
 
-// so far I think onDeviceReady() has replaced the startupfunction
-// I don't think this is necessary but for now keeping it here as a
-// reminder to myself.
-function startup () {
-    console.log("startup()");
-}
+

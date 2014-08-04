@@ -14,7 +14,8 @@ var LASER = 1;
 var DRAW  = 2;
 var interactionType = NONE; 
 
-// offset is used to calculate laser coords 
+// offset is used to calculate laser coords
+// it is recalculated upon the user pressing 'laser' or 'draw'
 var currentSlide = $("#currentSlide");
 var offset;
 
