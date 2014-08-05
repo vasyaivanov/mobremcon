@@ -40,12 +40,13 @@ socket.on('moveLaser', function(data) {
 var myCanvas = $("#myCanvas");
 var myContext = myCanvas[0].getContext('2d');
 
-// get offset of slides to position canvas properly
-// console.log("setting slider variable");
-// var slider = $(".royalSlider").data('royalSlider');
-var slideOffset = slider.currSlide.current.holder.offset();
-
-myCanvas.offset({ top: 20, left: 30 });
+$( window ).load(function() {
+    // get offset of slides to position canvas properly
+    // console.log("setting slider variable");
+    var slider = $(".royalSlider").data('royalSlider');
+    var slideOffset = slider.currSlide.content.offset();
+    myCanvas.offset({ top: slideOffset.top, left: slideOffset.left });
+});
 
 socket.on('drawCoords', function(data) {
     myContext.fillStyle = '#FF0000'; 
