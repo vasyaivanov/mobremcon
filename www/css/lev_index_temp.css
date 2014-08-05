@@ -38,7 +38,9 @@ div#main {
 }    
     
 #theIframe {
+    position: absolute;
     width: 99%; height: 99%;
+    z-index: -1;
 }
     
 .topRow {
@@ -51,6 +53,7 @@ div#main {
 
 .botRow {
     height: 15%;/*2em;*/
+    opacity:0.7;
     }
     
 .leftCol {
