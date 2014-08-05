@@ -54,7 +54,8 @@ socket.on('drawCoords', function(data) {
 });
 
 function clearCanvas () {
-    myContext.clearRect(0,0,myCanvas.width, myCanvas.height);
+    console.log("clearCanvas() called");
+    myContext.clearRect(0, 0, myCanvas[0].width, myCanvas[0].height);
 };
   
 // </basic draw program>

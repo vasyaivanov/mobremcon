@@ -8,7 +8,6 @@ function startup() {
 }
 
 function onDeviceReady() {
-    alert("device ready");
     // Adding event handlers to the currentSlide div, the user
     // touches this div to draw or move laser
     var currentSlide = document.getElementById("currentSlide");
@@ -22,14 +21,17 @@ function onDeviceReady() {
     $('img').on('dragstart', function(event) { event.preventDefault(); });
     
     $('#prev').click(function() {
+        event.preventDefault();             
         socket.emit('mymessage', { my:102 });
     });
     
     $('#next').click(function() {
+        event.preventDefault();
         socket.emit('mymessage', { my:101 });
     });
     
     $('#laser').click(function() {
+        event.preventDefault();
         // if laser is on, turn it off
         if (LASER === interactionType) {
             interactionType = NONE;
@@ -43,6 +45,7 @@ function onDeviceReady() {
     });
     
     $('#draw').click(function() {
+        event.preventDefault();
         // if draw is on, turn it off
         if (DRAW === interactionType) {
             interactionType = NONE;
@@ -68,6 +71,7 @@ var interactionType = NONE;
 // laser on, making the red dot appear on the presentation.
 // But only if we are in laser mode. 
 function touchStart() {
+    event.preventDefault();
     if(LASER === interactionType)
         socket.emit('laserOn');
 }
@@ -80,6 +84,7 @@ function touchEnd() {
 // this is the main function handling laser and draw control by sending
 // touch coordinates on to the server through socket.emit()
 function touchMove(event) {
+    event.preventDefault();
     switch(interactionType) {
         case LASER: {
             socket.emit('laserCoords', { x:event.touches[0].pageX,
