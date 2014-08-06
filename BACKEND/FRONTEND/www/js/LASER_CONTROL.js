@@ -71,6 +71,45 @@ $( '#currentSlide' ).mouseup(function() {
 // disable image dragging for all images
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
+// *********************
+// *    start timer    *
+// *********************
+var timeDisplay = document.getElementById("timeDisplay"),
+seconds = 0, minutes = 0, hours = 0, timerInit
+timerActive = false;
+
+$('#timeDisplay').click(function() {
+    if (timerActive) {
+        timerActive = false;
+        clearTimeout(timerInit);
+    }
+    else {
+        timerActive = true;
+        timer();
+    }
+});
+
+function incrementTime() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    timeDisplay.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    
+    timer();
+}
+
+function timer() {
+    timerInit = setTimeout(incrementTime, 1000);
+}
+
+// *** end timer ***
+
 $('#prev').click(function() {
     socket.emit('mymessage', { my:102 });
 });

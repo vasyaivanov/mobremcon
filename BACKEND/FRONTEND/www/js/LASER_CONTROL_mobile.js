@@ -5,11 +5,16 @@
 
 function startup() {
     document.addEventListener("deviceready", onDeviceReady, true);
-}
+};
 
 // variables to deal with offset
-var currentSlide = document.getElementById("URLBox"),
-    xOffset, yOffset;
+var currentSlide = document.getElementById("currentSlide"),
+    xOffset = currentSlide.offsetLeft,
+    yOffset = currentSlide.offsetTop,
+    slideWidth = currentSlide.offsetWidth,
+    slideHeight = currentSlide.offsetHeight;
+
+//alert("width: " + slideWidth);
 
 // variables to deal with timer
 var timeDisplay = document.getElementById("timeDisplay"),
@@ -17,9 +22,6 @@ var timeDisplay = document.getElementById("timeDisplay"),
     timerActive = false;
 
 function onDeviceReady() {
-    var yOffset = currentSlide.offsetTop;
-    var xOffset = currentSlide.offsetLeft;
-    
     // Adding event handlers to the currentSlide div, the user
     // touches this div to draw or move laser
     currentSlide.addEventListener("touchstart", touchStart, false);
@@ -33,13 +35,11 @@ function onDeviceReady() {
     
     $('#prev').click(function() {
         event.preventDefault();
-alert("yOffset: " + yOffset);
         socket.emit('mymessage', { my:102 });
     });
     
     $('#next').click(function() {
         event.preventDefault();
-alert("xOffset: " + xOffset);
         socket.emit('mymessage', { my:101 });
     });
     
@@ -96,12 +96,12 @@ function touchStart() {
     event.preventDefault();
     if(LASER === interactionType)
         socket.emit('laserOn');
-}
+};
 
 function touchEnd() {
     if(LASER === interactionType)
         socket.emit('laserOff');
-}
+};
 
 // this is the main function handling laser and draw control by sending
 // touch coordinates on to the server through socket.emit()
@@ -109,8 +109,12 @@ function touchMove(event) {
     event.preventDefault();
     switch(interactionType) {
         case LASER: {
-            socket.emit('laserCoords', { x:event.touches[0].pageX - xOffset,
-                                         y:event.touches[0].pageY - yOffset });
+            //alert(slideWidth);
+            socket.emit('laserCoords',
+                        { x:event.touches[0].pageX - xOffset,
+                          y:event.touches[0].pageY - yOffset,
+                          width:slideWidth,
+                          height:slideHeight});
             break;
         }
         case DRAW: {
@@ -122,7 +126,7 @@ function touchMove(event) {
             break;
         }
     }
-}
+};
 
 function incrementTime() {
     seconds++;
@@ -137,11 +141,11 @@ function incrementTime() {
     timeDisplay.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
     
     timer();
-}
+};
 
 function timer() {
     timerInit = setTimeout(incrementTime, 1000);
-}
+};
 
 
 

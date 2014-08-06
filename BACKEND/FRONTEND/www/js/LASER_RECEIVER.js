@@ -28,8 +28,14 @@ socket.on('laserOff', function() {
 socket.on('moveLaser', function(data) {
     // console.log("Laser Data received");
     // console.log("X: " + data.x + ", " + "Y: " + data.y);
-    
-    $( "#redDot" ).css({left:data.x, top:data.y});
+    var slider = $(".royalSlider").data('royalSlider');
+    var receiverHeight = slider.currSlide.content.height();
+    var receiverWidth = slider.currSlide.content.width();
+    var xScale = receiverHeight / data.height;
+    var yScale = receiverWidth / data.width;
+    var scaledX = data.x * xScale;
+    var scaledY = data.y * yScale;
+    $( "#redDot" ).css({left:scaledX, top:scaledY});
 });
 
 // ================================= canvas =========================
@@ -46,7 +52,16 @@ $( window ).load(function() {
     var slider = $(".royalSlider").data('royalSlider');
     var slideOffset = slider.currSlide.content.offset();
     myCanvas.offset({ top: slideOffset.top, left: slideOffset.left });
+    resizeCanvas();
 });
+
+function resizeCanvas() {
+    var slider = $(".royalSlider").data('royalSlider');
+    var newHeight = slider.currSlide.content.height();
+    var newWidth = slider.currSlide.content.width();
+    myCanvas.height(newHeight);
+    myCanvas.width(newWidth);
+};
 
 socket.on('drawCoords', function(data) {
     myContext.fillStyle = '#FF0000'; 
