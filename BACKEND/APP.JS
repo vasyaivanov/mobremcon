@@ -10,7 +10,7 @@ var app = require('http').createServer(handler)
   , SocketIOFileUploadServer = require("socketio-file-upload");
 
 
-wigwam = new Wigwam(http.createServer(),{path: "../www"}).listen(8080);
+wigwam = new Wigwam(http.createServer(),{path: "./FRONTEND/www"}).listen(8080);
 app.listen(1337);// change to port 80 for use with nodejitsu
 
 io.set('log level', 1);
