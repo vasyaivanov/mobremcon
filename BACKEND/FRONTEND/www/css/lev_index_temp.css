@@ -88,7 +88,7 @@ html, body {height: 100%; }
 /* filler elements are for spacing the buttons on the
  * bottom row. */
 #filler {
-    width: 4.0%;
+    width: 3.95%;
     border: white;
 }
 
