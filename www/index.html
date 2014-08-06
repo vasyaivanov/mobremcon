@@ -2,12 +2,12 @@
 <html>
 	<head>
     <meta charset="utf-8">
-		<title>SENDER</title>
-		<link rel="stylesheet" type="text/css" href="./css/lev_index_temp.css">
-		<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
+    <title>SENDER</title>
+    <link rel="stylesheet" type="text/css" href="./css/lev_index_temp.css">
+    <script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
 		<!--<script src="http://localhost:1337/socket.io/socket.io.js"></script>-->
-    <script src="./js/jquery-1.8.3.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
+    <script src="./js/jquery-1.8.3.js"></script>
     <script> 
       var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
       //var socket = io.connect('http://localhost:1337');
@@ -15,27 +15,25 @@
     <script defer src="./js/LASER_CONTROL_mobile.js"></script>
     
 	</head>
-<body onload="startup()">
-    <div class="UI topRow leftCol" id="menu">menu</div>
-    <div class="UI topRow midCol" id="URLBox">URL</div>
-    <div class="UI topRow rightCol" id="time">time</div>
-    <br>
-    <div class="UI midRow leftCol" id="notes">notes</div>
-
-    <div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)">
-      <div id="overlay"></div>
-      <iframe id="theIframe" class="frame" src="http://mobileremotecontrol.info/marov/A1/" seamless></iframe>
-    </div>
-
-    <div class="UI midRow rightCol" id="otherSlides">other</div>
-    <br>
-    <div class="UI botRow" id="prev">prev&nbsp;</div>
-    <div class="UI botRow" id="filler">&nbsp;</div>
-    <div class="UI botRow" id="laser">Laser</div>
-    <div class="UI botRow" id="filler">&nbsp;</div>
-    <div class="UI botRow" id="draw">Draw</div>
-    <div class="UI botRow" id="filler">&nbsp;</div>
-    <div class="UI botRow" id="next">next&nbsp;</div>
-</body>
+<body onload="startup()"
+    ><div class="UI topRow leftCol" id="menu">menu</div
+    ><div class="UI topRow midCol" id="URLBox">URL</div
+    ><div class="UI topRow rightCol" id="timeDisplay">00:00:00</div
+    ><br
+    ><div class="UI midRow leftCol" id="notes">notes</div
+    ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
+        ><div id="overlay"></div
+        ><iframe id="theIframe" class="frame" src="http://mobileremotecontrol.info/marov/A1/" seamless></iframe
+    ></div
+    ><div class="UI midRow rightCol" id="otherSlides">other</div
+    ><br
+    ><div class="UI botRow" id="prev">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="laser">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="draw">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="next">&nbsp;</div
+></body>
 </html>
 

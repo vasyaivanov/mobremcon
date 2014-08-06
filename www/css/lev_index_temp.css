@@ -1,11 +1,9 @@
 /* This is the style sheet for the remote control
  * found under index.html */
 
-/* removes all margins and padding.  
- * Font-size is set to 0 to remove borders between
- * the UI elements caused by whitespace in the HTML. */
+/* removes all margins and padding. */
 
-* { margin: 0; padding: 0; font-size:0;}
+* { margin: 0; padding: 0;}
 
 /*makes height be full screen */
 html, body {height: 100%; }

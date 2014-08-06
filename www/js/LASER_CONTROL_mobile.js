@@ -7,10 +7,21 @@ function startup() {
     document.addEventListener("deviceready", onDeviceReady, true);
 }
 
+// variables to deal with offset
+var currentSlide = document.getElementById("URLBox"),
+    xOffset, yOffset;
+
+// variables to deal with timer
+var timeDisplay = document.getElementById("timeDisplay"),
+    seconds = 0, minutes = 0, hours = 0, timerInit
+    timerActive = false;
+
 function onDeviceReady() {
+    var yOffset = currentSlide.offsetTop;
+    var xOffset = currentSlide.offsetLeft;
+    
     // Adding event handlers to the currentSlide div, the user
     // touches this div to draw or move laser
-    var currentSlide = document.getElementById("currentSlide");
     currentSlide.addEventListener("touchstart", touchStart, false);
     currentSlide.addEventListener("touchmove", touchMove, false);
     currentSlide.addEventListener("touchend", touchEnd, false);
@@ -21,12 +32,14 @@ function onDeviceReady() {
     $('img').on('dragstart', function(event) { event.preventDefault(); });
     
     $('#prev').click(function() {
-        event.preventDefault();             
+        event.preventDefault();
+alert("yOffset: " + yOffset);
         socket.emit('mymessage', { my:102 });
     });
     
     $('#next').click(function() {
         event.preventDefault();
+alert("xOffset: " + xOffset);
         socket.emit('mymessage', { my:101 });
     });
     
@@ -57,14 +70,23 @@ function onDeviceReady() {
             $('#laser').css("border-color", "black");
         }
     });
+    
+    $('#timeDisplay').click(function() {
+        event.preventDefault();
+        if (timerActive) {
+            timerActive = false;
+            clearTimeout(timerInit);
+        }
+        else {
+            timerActive = true;
+            timer();
+        }
+    });
 };
 
 // interactionType is a global variable for switching between
 // 'draw' and 'laser' mode
-
-var NONE  = 0;
-var LASER = 1;
-var DRAW  = 2;
+var NONE  = 0, LASER = 1, DRAW  = 2;
 var interactionType = NONE;
 
 // Touching the control area (the currentSlide div) will turn the
@@ -87,13 +109,13 @@ function touchMove(event) {
     event.preventDefault();
     switch(interactionType) {
         case LASER: {
-            socket.emit('laserCoords', { x:event.touches[0].pageX,
-                                         y:event.touches[0].pageY });
+            socket.emit('laserCoords', { x:event.touches[0].pageX - xOffset,
+                                         y:event.touches[0].pageY - yOffset });
             break;
         }
         case DRAW: {
-            socket.emit('drawCoords', { x:event.touches[0].pageX,
-                                        y:event.touches[0].pageY });
+            socket.emit('drawCoords', { x:event.touches[0].pageX - xOffset,
+                                        y:event.touches[0].pageY - yOffset });
             break;
         }
         default: {
@@ -101,5 +123,25 @@ function touchMove(event) {
         }
     }
 }
+
+function incrementTime() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    timeDisplay.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    
+    timer();
+}
+
+function timer() {
+    timerInit = setTimeout(incrementTime, 1000);
+}
+
 
 
