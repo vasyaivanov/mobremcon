@@ -8,7 +8,9 @@
         <!--<<s<script src="http://localhost:1337/socket.io/socket.io.js"></script>>-->
     <script type="text/javascript" src="cordova.js"></script>
     <script src="./js/jquery-1.8.3.js"></script>
-    <script> 
+    <script src="./js/speechRecognizer.js"></script>
+
+    <script>
       var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
       //var socket = io.connect('http://localhost:1337');
     </script>
@@ -32,6 +34,8 @@
     ><div class="UI botRow" id="laser">&nbsp;</div
     ><div class="UI botRow" id="filler">&nbsp;</div
     ><div class="UI botRow" id="draw">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="speech">&nbsp;</div
     ><div class="UI botRow" id="filler">&nbsp;</div
     ><div class="UI botRow" id="next">&nbsp;</div
 ></body>

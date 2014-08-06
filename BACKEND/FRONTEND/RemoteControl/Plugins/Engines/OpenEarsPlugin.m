@@ -19,6 +19,7 @@
 
 - (void)dealloc {
 	openEarsEventsObserver.delegate = nil;
+    [self.pocketsphinxController stopListening];
     [super dealloc];
 }
 
