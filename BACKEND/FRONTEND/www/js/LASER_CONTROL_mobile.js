@@ -4,6 +4,7 @@
  */
 
 function startup() {
+    speechRecognizer = new SpeechRecognizer();
     document.addEventListener("deviceready", onDeviceReady, true);
 };
 
@@ -20,6 +21,16 @@ var currentSlide = document.getElementById("currentSlide"),
 var timeDisplay = document.getElementById("timeDisplay"),
     seconds = 0, minutes = 0, hours = 0, timerInit
     timerActive = false;
+
+function printSpeechResult(resultObject){
+    console.log("MA printResult");
+    console.log(resultObject);
+    console.log(resultObject.indexOf("NEXT"));
+    if (resultObject.indexOf("NEXT") > -1)
+        socket.emit('mymessage', { my: 101 });
+    else if (resultObject.indexOf("PREVIOUS") > -1)
+        socket.emit('mymessage', { my: 102 });
+};
 
 function onDeviceReady() {
     // Adding event handlers to the currentSlide div, the user
@@ -82,11 +93,26 @@ function onDeviceReady() {
             timer();
         }
     });
+    
+    $('#speech').click(function() {
+       console.log("MA numClicked")
+       event.preventDefault();
+       if (SPEECH === interactionType) {
+           speechRecognizer.cleanup();
+           interactionType = NONE;
+           $('#speech').css("border-color", "black");
+       } else {
+           speechRecognizer.initialize( function(r){printSpeechResult(r)}, function(e){printSpeechResult(e)} );
+           interactionType = SPEECH;
+           $('#speech').css("border-color", "red");
+       }
+    });
+    
 };
 
 // interactionType is a global variable for switching between
 // 'draw' and 'laser' mode
-var NONE  = 0, LASER = 1, DRAW  = 2;
+var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
 var interactionType = NONE;
 
 // Touching the control area (the currentSlide div) will turn the

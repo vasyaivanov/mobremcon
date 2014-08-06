@@ -59,7 +59,7 @@ html, body {height: 100%; }
 }
 
 #prev {
-    width: 25.7%; /*7.45em;*/
+    width: 20.7%; /*7.45em;*/
     background-image: url('../img/buttonPrev.png');
     background-repeat: no-repeat;
     background-size: contain;
@@ -72,7 +72,7 @@ html, body {height: 100%; }
     }
 
 #next {
-    width: 25.7%; /*7.45em;*/
+    width: 20.7%; /*7.45em;*/
     
     background-image: url('../img/buttonNext.png');
     background-repeat: no-repeat;
@@ -88,7 +88,7 @@ html, body {height: 100%; }
 /* filler elements are for spacing the buttons on the
  * bottom row. */
 #filler {
-    width: 6.5%;
+    width: 4.0%;
     border: white;
 }
 
@@ -113,7 +113,19 @@ html, body {height: 100%; }
     background-position: center;
     
     }
+
+#speech {
+    width: 13.8%; /*4em;*/
+    color: black;
     
+    background-image: url('../img/buttonDraw.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    }
+
+
 /* wrap and frame classes are for resizing the content inside
  * the iframe */    
  /*

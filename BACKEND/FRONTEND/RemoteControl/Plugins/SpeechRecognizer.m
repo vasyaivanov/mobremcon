@@ -45,6 +45,9 @@
     
     NSLog(@"SpeechRecognizer.cleanup: Entered method.");
     
+    openEarsPlugin.delegate = nil;
+    [openEarsPlugin dealloc];
+    
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
