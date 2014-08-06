@@ -33,13 +33,13 @@ function onDeviceReady() {
     
     $('#prev').click(function() {
         event.preventDefault();
-alert("yOffset: " + yOffset);
+//alert("yOffset: " + yOffset);
         socket.emit('mymessage', { my:102 });
     });
     
     $('#next').click(function() {
         event.preventDefault();
-alert("xOffset: " + xOffset);
+//alert("xOffset: " + xOffset);
         socket.emit('mymessage', { my:101 });
     });
     
