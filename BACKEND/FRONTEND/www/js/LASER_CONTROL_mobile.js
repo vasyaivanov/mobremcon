@@ -8,7 +8,7 @@ function startup() {
 }
 
 // variables to deal with offset
-var currentSlide = document.getElementById("URLBox"),
+var currentSlide = document.getElementById("currentSlide"),
     xOffset, yOffset;
 
 // variables to deal with timer
@@ -17,8 +17,8 @@ var timeDisplay = document.getElementById("timeDisplay"),
     timerActive = false;
 
 function onDeviceReady() {
-    var yOffset = currentSlide.offsetTop;
-    var xOffset = currentSlide.offsetLeft;
+    yOffset = currentSlide.offsetTop;
+    xOffset = currentSlide.offsetLeft;
     
     // Adding event handlers to the currentSlide div, the user
     // touches this div to draw or move laser
