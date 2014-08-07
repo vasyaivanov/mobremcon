@@ -1,5 +1,9 @@
 {
   "name": "remotecontrol",
+  "domains": [
+    "mobileremotecontrol.info",
+    "www.mobileremotecontrol.info"
+  ],
   "version": "0.0.1-31",
   "description": "remote control graph app",
   "main": "APP.JS",
