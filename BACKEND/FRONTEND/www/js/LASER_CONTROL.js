@@ -27,11 +27,15 @@ function moveLaser( event ) {
     var xOffset = offset.left;
     var yOffset = offset.top;
     
+	var slideWidth = currentSlide.width();
+    var slideHeight = currentSlide.height();
+	
     console.log("moveLaser is happening");
     switch(interactionType) {
         case LASER: {
             console.log('lasering');
-            socket.emit('laserCoords', { x:event.pageX - xOffset, y:event.pageY - yOffset });
+            socket.emit('laserCoords', { x:event.pageX - xOffset, y:event.pageY - yOffset, width:slideWidth,
+                          height:slideHeight });
             break;
         }
         case DRAW: {
