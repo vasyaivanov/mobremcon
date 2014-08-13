@@ -9,7 +9,8 @@
     <script src="./js/jquery-ui-1.8.22.custom.min.js"></script>
     <script class="rs-file" src="./js/jquery.royalslider.min.js"></script>
     <script src="./js/jquery.infinitescroll.js"></script>
-    
+    <script src="./js/socket.io.js"></script>
+
     <!-- Lev: This script controls the laser dot -->
     <script defer src="./js/LASER_RECEIVER.js"></script>       
     
@@ -26,8 +27,7 @@
     <link class="rs-file" href="./css/royalslider.css" rel="stylesheet">
 	
 	<link rel="stylesheet" type="text/css" href="css/index1.css">
-	<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>
-	<!--<<s<script src="http://localhost:1337/socket.io/socket.io.js"></script>>-->
+
 	<script>
         
     var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
