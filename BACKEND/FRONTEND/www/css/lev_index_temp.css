@@ -29,7 +29,7 @@ html, body {height: 100%; }
     
 #theIframe {
     position: absolute;
-    width: 70%; height: 74%;
+    width: 233%; height: 246%;
     z-index: -1;
 }
     
@@ -128,7 +128,7 @@ html, body {height: 100%; }
 
 /* wrap and frame classes are for resizing the content inside
  * the iframe */    
- /*
+
 .wrap {
     padding: 0;
     overflow: hidden;
@@ -138,11 +138,11 @@ html, body {height: 100%; }
     width: auto; height: auto;
     border: 0;
     
-    -ms-transform: scale(0.7);
-    -moz-transform: scale(0.7);
-    -o-transform: scale(0.7);
-    -webkit-transform: scale(0.7);
-    transform: scale(0.7);
+    -ms-transform: scale(0.3);
+    -moz-transform: scale(0.3);
+    -o-transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    transform: scale(0.3);
     
     -ms-transform-origin: 0 0;
     -moz-transform-origin: 0 0;
@@ -150,4 +150,4 @@ html, body {height: 100%; }
     -webkit-transform-origin: 0 0;
     transform-origin: 0 0;
 }
-*/
+
