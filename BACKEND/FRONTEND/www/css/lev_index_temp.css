@@ -8,7 +8,11 @@
 /*makes height be full screen */
 html, body {height: 100%; }
 
-body {font-size: 100%;}
+body {
+    font-size: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent; /* For some Androids */
+}
 
 /* previous width and height in em units commented  
  * in case there is a need to revert. */
@@ -21,10 +25,21 @@ body {font-size: 100%;}
     vertical-align: top;
     }
 
+input[type=text] {
+    border: none;
+}
+
 #timeDisplay {
     font: bold 1.2em impact, sans-serif;
     text-align: center;
 }
+
+#notes {
+    position: relative;
+    overflow: scroll;
+    z-index: 1;
+}
+
 /* overlay element is intended to cover up the iframe to disable
  * user interaction with the iframe. */ 
 #overlay {
@@ -40,7 +55,7 @@ body {font-size: 100%;}
 }
     
 .topRow {
-    height: 8%; /*1em;*/
+    height: 7%; /*1em;*/
     }
 
 .midRow {
@@ -48,7 +63,7 @@ body {font-size: 100%;}
     }
 
 .botRow {
-    height: 15%;/*2em;*/
+    height: 14%;/*2em;*/
     opacity:0.7;
     }
     
@@ -124,7 +139,7 @@ body {font-size: 100%;}
     width: 13.8%; /*4em;*/
     color: black;
     
-    background-image: url('../img/buttonDraw.png');
+    background-image: url('../img/buttonSpeech.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
