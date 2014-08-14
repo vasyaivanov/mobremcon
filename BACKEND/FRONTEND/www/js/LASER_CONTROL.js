@@ -40,7 +40,8 @@ function moveLaser( event ) {
         }
         case DRAW: {
             console.log('drawing');
-            socket.emit('drawCoords', { x:event.pageX - xOffset, y:event.pageY - yOffset });
+            socket.emit('drawCoords', { x:event.pageX - xOffset, y:event.pageY - yOffset, width:slideWidth,
+                        height:slideHeight });
             break;
         }
         default: {

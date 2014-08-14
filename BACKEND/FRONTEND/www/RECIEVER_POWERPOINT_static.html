@@ -14,13 +14,13 @@
     <script defer src="./js/LASER_RECEIVER.js"></script>       
     
     <!-- this is for resizing the presentation when it appears in the iframe in the remote-->
-    <!--<script type="text/javascript" defer src="./js/squeezeFrame.js"></script> 
+    <!--<script type="text/javascript" defer src="./js/squeezeFrame.js"></script>
     <script type="text/javascript">
       myContainer="index.html";
-      myMax=0.70;
+      myMax=0.4;
       myRedraw="both";
-    </script>
-    -->
+    </script>-->
+
     
     <link href="./css/jquery-ui-1.8.22.custom.css" rel="stylesheet">
     <link class="rs-file" href="./css/royalslider.css" rel="stylesheet">
@@ -197,10 +197,15 @@
 		}
     
     #redDot {
+      /* the width is set to a small value so when the dot moves it will 
+         not create a horizontal scroll bar. */
+      width: 2%;
+      overflow: hidden;
       position: relative;
       left:0px;
       top:0px;
       z-index: 2;
+      border: solid blue 1px;
     }
     
     #myCanvas {

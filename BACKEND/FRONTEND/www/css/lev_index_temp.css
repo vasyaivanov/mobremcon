@@ -7,7 +7,9 @@
 
 /*makes height be full screen */
 html, body {height: 100%; }
-    
+
+body {font-size: 100%;}
+
 /* previous width and height in em units commented  
  * in case there is a need to revert. */
 
@@ -19,6 +21,10 @@ html, body {height: 100%; }
     vertical-align: top;
     }
 
+#timeDisplay {
+    font: bold 1.2em impact, sans-serif;
+    text-align: center;
+}
 /* overlay element is intended to cover up the iframe to disable
  * user interaction with the iframe. */ 
 #overlay {
@@ -34,11 +40,11 @@ html, body {height: 100%; }
 }
     
 .topRow {
-    height: 10%; /*1em;*/
+    height: 8%; /*1em;*/
     }
 
 .midRow {
-    height: 74%;/*14em;*/
+    height: 71%;/*14em;*/
     }
 
 .botRow {
@@ -127,7 +133,7 @@ html, body {height: 100%; }
 
 
 /* wrap and frame classes are for resizing the content inside
- * the iframe */    
+ * the iframe */
  /*
 .wrap {
     padding: 0;
