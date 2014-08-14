@@ -125,6 +125,7 @@ function touchStart() {
 };
 
 function touchEnd() {
+    event.preventDefault();
     if(LASER === interactionType)
         socket.emit('laserOff');
 };
