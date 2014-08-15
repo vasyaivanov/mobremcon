@@ -270,9 +270,10 @@
 						//var slide_html_path = data.filename;
 						var slide_html_path= "./PPT/SliteShow_PitchDeck.pptx";
 						if (slide == 1) slide_html_path += ".html/SliteShow_PitchDeck.html";
+                        else if (slide == 6) slide_html_path += ".html/img6.txt";       
 						else slide_html_path += ".html/img"+slide+".html";
 						var slide_html= "<div style='text-align:center' id=slide class='rsContent'>" 
-							+ "<iframe src='"+slide_html_path+"' width='850' height='850' seamless> </iframe>"   
+							+ "<iframe src='"+slide_html_path+"' width='100%' height='100%' seamless> </iframe>"
 							+ "<div class='rsTmb'>"
 							+ "<h5>SLIDE"+slide+"</h5>"
 							+ "     <span>Slide "+slide+" here</span>"
