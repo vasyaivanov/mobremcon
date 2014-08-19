@@ -83,11 +83,13 @@ function onDeviceReady() {
         if (LASER === interactionType) {
             interactionType = NONE;
             $('#laser').css("border-color", "black");
+            $('#theIframe').css("z-index", "1");
         // otherwise turn laser on
         } else {
             interactionType = LASER;
             $('#laser').css("border-color", "red");
             $('#draw').css("border-color", "black");
+            $('#theIframe').css("z-index", "-1");
         }
     });
     
@@ -97,11 +99,13 @@ function onDeviceReady() {
         if (DRAW === interactionType) {
             interactionType = NONE;
             $('#draw').css("border-color", "black");
+            $('#theIframe').css("z-index", "1");
         // otherwise turn draw on
         } else {
             interactionType = DRAW;
             $('#draw').css("border-color", "red");
             $('#laser').css("border-color", "black");
+            $('#theIframe').css("z-index", "-1");
         }
     });
     
