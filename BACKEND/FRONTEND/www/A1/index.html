@@ -5,14 +5,14 @@
 	
 	    <!-- slider JS files -->
     
-    <script src="./js/jquery-1.8.3.js"></script>
-    <script src="./js/jquery-ui-1.8.22.custom.min.js"></script>
-    <script class="rs-file" src="./js/jquery.royalslider.min.js"></script>
-    <script src="./js/jquery.infinitescroll.js"></script>
-    <script src="./js/socket.io.js"></script>
+    <script src="../js/jquery-1.8.3.js"></script>
+    <script src="../js/jquery-ui-1.8.22.custom.min.js"></script>
+    <script class="rs-file" src="../js/jquery.royalslider.min.js"></script>
+    <script src="../js/jquery.infinitescroll.js"></script>
+    <script src="../js/socket.io.js"></script>
     
     <!-- Lev: This script controls the laser dot -->
-    <script defer src="./js/LASER_RECEIVER.js"></script>       
+    <script defer src="../js/LASER_RECEIVER.js"></script>       
     
     <!-- this is for resizing the presentation when it appears in the iframe in the remote-->
     <!--<script type="text/javascript" defer src="./js/squeezeFrame.js"></script>
@@ -23,15 +23,15 @@
     </script>-->
 
     
-    <link href="./css/jquery-ui-1.8.22.custom.css" rel="stylesheet">
-    <link class="rs-file" href="./css/royalslider.css" rel="stylesheet">
+    <link href="../css/jquery-ui-1.8.22.custom.css" rel="stylesheet">
+    <link class="rs-file" href="../css/royalslider.css" rel="stylesheet">
 	
-	<link rel="stylesheet" type="text/css" href="css/index1.css">
+	<link rel="stylesheet" type="text/css" href="../css/index1.css">
 
 	<script>
         
-    var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
-    //var socket = io.connect('http://localhost:1337');
+    //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+    var socket = io.connect('http://localhost:1337');
     
     socket.on('news', function (data) {
 	  	
@@ -86,25 +86,30 @@
       }*/
       socket.emit('my other event', { my: 'data' });
     });
+
+	  
+	function showHideComments(){	  
+		$("#comments").slideToggle();
+	}
     
 	</script>
 	
     
     <!-- syntax highlighter -->
-    <script src="./js/highlight.pack.js"></script>
+    <script src="../js/highlight.pack.js"></script>
     <script> hljs.initHighlightingOnLoad();</script>
 
 
     
 
     <!-- preview-related stylesheets -->
-    <link href="./css/reset.css" rel="stylesheet">
-    <link href="./css/github.css" rel="stylesheet">
+    <link href="../css/reset.css" rel="stylesheet">
+    <link href="../css/github.css" rel="stylesheet">
 
     <!-- slider stylesheets -->
     
      
-    <link class="rs-file" href="./css/rs-default.css" rel="stylesheet">
+    <link class="rs-file" href="../css/rs-default.css" rel="stylesheet">
 	
 	
 	<style>
@@ -196,26 +201,50 @@
 		}
 		}
     
-    #redDot {
-      /* the width is set to a small value so when the dot moves it will 
-         not create a horizontal scroll bar. */
-      width: 2%;
-      overflow: hidden;
-      position: relative;
-      left:0px;
-      top:0px;
-      z-index: 2;
-      border: solid blue 1px;
-    }
-    
-    #myCanvas {
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      border: none;
-      z-index: 1;
-      pointer-events: none;
-    }
+	    #redDot {
+	      /* the width is set to a small value so when the dot moves it will 
+	         not create a horizontal scroll bar. */
+	      width: 2%;
+	      overflow: hidden;
+	      position: relative;
+	      left:0px;
+	      top:0px;
+	      z-index: 2;
+	      border: solid blue 1px;
+	    }
+	    
+	    #myCanvas {
+	      position: absolute;
+	      height: 100%;
+	      width: 100%;
+	      border: none;
+	      z-index: 1;
+	      pointer-events: none;
+	    }
+
+	    #comments{
+	    	position: absolute;
+	    	bottom: 0px;
+	    	width: 100%;
+	    	height: 300px;
+	    	display: none;
+	    }
+
+	    #commentsPanel{
+	    	position: fixed;
+	    	bottom: 0px;
+	    	width: 100%;
+	    	height: 10px;
+	    	 background-color: #444444;
+  			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+  			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
+	    }
+
+	    #HCB_comment_box{
+	    	height: 100%;
+	    	border-width: 1px;
+	    	border-style: dotted;
+	    }
 	
 	</style>
 
@@ -223,9 +252,22 @@
 
 <body onresize="resizeCanvas()">
     <canvas id="myCanvas" ></canvas>
-    <div id="redDot"><img src="./img/redDot.png" alt="Laser Pointer"></div>
+    <div id="redDot"><img src="../img/redDot.png" alt="Laser Pointer"></div>
   
-  <div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
+  	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
+
+	<div id="comments">
+		<!-- begin htmlcommentbox.com -->
+		 <div id="HCB_comment_box"><a href="http://www.htmlcommentbox.com">HTML Comment Box</a> is loading comments...</div>
+		 <link rel="stylesheet" type="text/css" href="http://www.htmlcommentbox.com/static/skins/default/skin.css" />
+		 <script type="text/javascript" language="javascript" id="hcb"> 
+		 /*<!--*/ if(!window.hcb_user){hcb_user={  };} (function(){s=document.createElement("script");s.setAttribute("type","text/javascript");s.setAttribute("src", "http://www.htmlcommentbox.com/jread?page="+escape((window.hcb_user && hcb_user.PAGE)||(""+window.location)).replace("+","%2B")+"&opts=470&num=10");if (typeof s!="undefined") document.getElementsByTagName("head")[0].appendChild(s);})(); /*-->*/ </script>
+		<!-- end htmlcommentbox.com -->
+	</div> 
+
+	<div id="commentsPanel"></div>
+
+
 	<script>		
 		jQuery(document).ready(function($) {
 				  $('#video-gallery').royalSlider({
@@ -268,7 +310,7 @@
 					for (var slide = 1; slide <= 16; ++slide) {	
 						//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\SliteShow_PitchDeck.pptx.html\\";
 						//var slide_html_path = data.filename;
-						var slide_html_path= "./PPT/SliteShow_PitchDeck.pptx";
+						var slide_html_path= "../PPT/SliteShow_PitchDeck.pptx";
 						if (slide == 1) slide_html_path += ".html/SliteShow_PitchDeck.html";
                         else if (slide == 6) slide_html_path += ".html/img6.txt";       
 						else slide_html_path += ".html/img"+slide+".html";
@@ -283,6 +325,11 @@
 						slider.appendSlide(slide_html);
 					}
 			});
+
+
+	$('#commentsPanel').click(function(){
+		showHideComments();
+	});
 
 	</script>
   
