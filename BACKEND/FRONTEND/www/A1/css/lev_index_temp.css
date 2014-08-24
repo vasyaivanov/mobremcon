@@ -1,0 +1,173 @@
+/* This is the style sheet for the remote control
+ * found under index.html */
+
+/* removes all margins and padding. */
+
+* { margin: 0; padding: 0;}
+
+/*makes height be full screen */
+html, body {height: 100%; }
+
+body {
+    font-size: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent; /* For some Androids */
+}
+
+/* previous width and height in em units commented  
+ * in case there is a need to revert. */
+
+/* all the UI elements (buttons, laser control, notes, etc)
+ * currently have a black border for ease of development */
+.UI {
+    border: solid black 1px;
+    display: inline-block;
+    vertical-align: top;
+    }
+
+input[type=text] {
+    border: none;
+}
+
+#timeDisplay {
+    font: bold 1.2em impact, sans-serif;
+    text-align: center;
+}
+
+#notes {
+    position: relative;
+    overflow: scroll;
+    z-index: 1;
+}
+
+/* overlay element is intended to cover up the iframe to disable
+ * user interaction with the iframe. */ 
+#overlay {
+    position:absolute;
+    width: inherit; height: inherit;
+    border: solid green 1px;
+}    
+    
+#theIframe {
+    position: absolute;
+    width: 233%; height: 239%;
+    z-index: 1;
+}
+    
+.topRow {
+    height: 7%; /*1em;*/
+    }
+
+.midRow {
+    height: 71%;/*14em;*/
+    }
+
+.botRow {
+    height: 14%;/*2em;*/
+    opacity:0.7;
+    }
+    
+.leftCol {
+    width: 10%;/*3em;*/
+}
+
+.midCol {
+    width: 70%; /*21em;*/
+}
+
+.rightCol {
+    width: 18.75% /*4em;*/
+}
+
+#prev {
+    width: 20.7%; /*7.45em;*/
+    background-image: url('../img/buttonPrev.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    }
+    
+    #prev:active {
+        border-color: red;
+    }
+
+#next {
+    width: 20.7%; /*7.45em;*/
+    
+    background-image: url('../img/buttonNext.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    }
+    
+    #next:active {
+        border-color:red;
+    }
+
+/* filler elements are for spacing the buttons on the
+ * bottom row. */
+#filler {
+    width: 3.95%;
+    border: white;
+}
+
+#laser {
+    width: 13.8%; /*4em;*/
+    color: black;
+    
+    background-image: url('../img/buttonLaser.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    }
+
+#draw {
+    width: 13.8%; /*4em;*/
+    color: black;
+    
+    background-image: url('../img/buttonDraw.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    }
+
+#speech {
+    width: 13.8%; /*4em;*/
+    color: black;
+    
+    background-image: url('../img/buttonSpeech.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    }
+
+
+/* wrap and frame classes are for resizing the content inside
+ * the iframe */
+
+.wrap {
+    padding: 0;
+    overflow: hidden;
+}
+    
+.frame {
+    width: auto; height: auto;
+    border: 0;
+    
+    -ms-transform: scale(0.3);
+    -moz-transform: scale(0.3);
+    -o-transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    transform: scale(0.3);
+    
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-tranform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
