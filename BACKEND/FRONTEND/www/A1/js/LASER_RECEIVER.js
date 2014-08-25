@@ -9,16 +9,16 @@
 console.log("LASER_RECEIVER script working");
 
 // initially the laser dot is hidden. 
-$( "#redDot" ).css("visibility", "hidden");
+$( "#redDot" ).css("display", "none");
 
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
 socket.on('laserOn', function() {
-    $( "#redDot" ).css("visibility", "visible");
+    $( "#redDot" ).css("display", "inline");
 });
 
 socket.on('laserOff', function() {
-    $( "#redDot" ).css("visibility", "hidden");
+    $( "#redDot" ).css("display", "none");
 });
  
 
