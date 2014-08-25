@@ -154,51 +154,60 @@
 
 
 		@media screen and (min-width: 0px) and (max-width: 600px) {
-		  .videoGallery .rsTmb {
-			padding: 6px 8px;
-		  }
-		  .videoGallery .rsTmb h5 {
-			font-size: 12px;
-			line-height: 17px;
-		  }
-		  .videoGallery .rsThumbs.rsThumbsVer {
-			width: 100px;
-			padding: 0;
-		  }
-		  .videoGallery .rsThumbs .rsThumb {
-			width: 100px;
-			height: 47px;
-		  }
-		  .videoGallery .rsTmb span {
-			display: none;
-		  }
-		  .videoGallery .rsOverflow,
-		  .royalSlider.videoGallery {
-			height: 300px !important;
-		  }
-		  .sampleBlock {
-			font-size: 14px;
-		  }
-		.royalSlider .rsSlide {
-			opacity: 0.45;
-			-webkit-transition: all 0.3s ease-out;
-			-moz-transition: all 0.3s ease-out;
-			transition: all 0.3s ease-out;
+			  .videoGallery .rsTmb {
+				padding: 6px 8px;
+			  }
+			  .videoGallery .rsTmb h5 {
+				font-size: 12px;
+				line-height: 17px;
+			  }
+			  .videoGallery .rsThumbs.rsThumbsVer {
+				width: 100px;
+				padding: 0;
+			  }
+			  .videoGallery .rsThumbs .rsThumb {
+				width: 100px;
+				height: 47px;
+			  }
+			  .videoGallery .rsTmb span {
+				display: none;
+			  }
+			  .videoGallery .rsOverflow,
+			  .royalSlider.videoGallery {
+				height: 300px !important;
+			  }
+			  .sampleBlock {
+				font-size: 14px;
+			  }
+			.royalSlider .rsSlide {
+				opacity: 0.45;
+				-webkit-transition: all 0.3s ease-out;
+				-moz-transition: all 0.3s ease-out;
+				transition: all 0.3s ease-out;
 
-			-webkit-transform: scale(0.9);  
-			-moz-transform: scale(0.9); 
-			-ms-transform: scale(0.9);
-			-o-transform: scale(0.9);
-			transform: scale(0.9);
+				-webkit-transform: scale(0.9);  
+				-moz-transform: scale(0.9); 
+				-ms-transform: scale(0.9);
+				-o-transform: scale(0.9);
+				transform: scale(0.9);
+			}
+			.royalSlider .rsActiveSlide {
+				opacity: 1;
+				-webkit-transform: scale(1);  
+				-moz-transform: scale(1); 
+				-ms-transform: scale(1);
+				-o-transform: scale(1);
+				transform: scale(1);
+			}
 		}
-		.royalSlider .rsActiveSlide {
-			opacity: 1;
-			-webkit-transform: scale(1);  
-			-moz-transform: scale(1); 
-			-ms-transform: scale(1);
-			-o-transform: scale(1);
-			transform: scale(1);
-		}
+
+		#sliteWatermak{
+			position: fixed;
+			right: 20px;
+			top: 0px;
+			opacity: 0.4;
+			filter: alpha(opacity=40);
+			z-index: 2;
 		}
     
 	    #redDot {
@@ -255,7 +264,11 @@
 </head>
 
 <body onresize="resizeCanvas()">
+
     <canvas id="myCanvas" ></canvas>
+    
+	<div id="sliteWatermak">Powered by SLITE.US</div>
+
     <div id="redDot"><img src="./img/redDot.png" alt="Laser Pointer"></div>
   
   	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
