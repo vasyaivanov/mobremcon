@@ -30,8 +30,8 @@
 
 	<script>
         
-    //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
-    var socket = io.connect('http://localhost:1337');
+    var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+    //var socket = io.connect('http://localhost:1337');
     
     socket.on('news', function (data) {
 	  	
@@ -219,7 +219,6 @@
 	      left:0px;
 	      top:0px;
 	      z-index: 2;
-	      border: solid blue 1px;
 	    }
 	    
 	    #myCanvas {
@@ -324,7 +323,7 @@
 						navigateByCenterClick: true
 					}
 				  });
-					for (var slide = 1; slide <= 16; ++slide) {	
+					for (var slide = 1; slide <= 17; ++slide) {	
 						//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\SliteShow_PitchDeck.pptx.html\\";
 						//var slide_html_path = data.filename;
 						var slide_html_path= "PPT/SliteShow_PitchDeck.pptx";
