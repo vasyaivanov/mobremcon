@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 4</title>
+  <link rel="stylesheet" type="text.css" href="./css/slide.css">
+  <script src="./js/jquery-1.8.3.js"></script>
+</head>
+<body>
+	<center>
+		<div class="title">LIVE DATA</div>
+
+	<table>
+		<tr>
+			<th scope="col">Public Healthcase expenditure today</th>
+			<th scope="col">Public Eduction expenditure today</th>
+		</tr>
+		<tr>
+			<td>$ <div id='health'><div></td>
+			<td>$ <div id='eduction'><div></td>
+		</tr>
+	</table>
+	</center>
+
+	<script>
+		var myVar = setInterval(function() {myTimer()},1000);
+		var healthCount = 4900123123;
+		function myTimer(){
+			healthCount++;
+			$("#health").html(healthCount);
+		}
+	</script>
+</body>
+</html>
