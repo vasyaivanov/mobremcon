@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text.css" href="./css/slide.css">
   <script language="JavaScript" src="../../js/global.js"></script>
   <script language="JavaScript" src="../../js/socket.io.js"></script>
+  <script language="JavaScript" src="../../js/jquery-2.0.3.min.js"></script>
   	<script>
 	  var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
 		//var socket = io.connect('http://localhost:1337');
@@ -28,103 +29,112 @@
 			updateQuickPollAnswers('answerDisplayTable', data.answers);
 			cyopDummyResults('answerDisplayTable', data.answers, data.statistics);
 		});
+
+
+      var isQuizMakerVisible = false;
+    function toggleQuizMaker(){
+      if(!isQuizMakerVisible){
+        $("#quizMaker").css('display','block');
+        isQuizMakerVisible = true;
+      }else{
+
+        $("#quizMaker").css('display','none');
+        isQuizMakerVisible = false;
+      }
+    }  
 	</script>
+
+  <style>
+    table{
+      line-height: 20px;
+    }
+      input[type='radio']{
+        padding: 10px;
+      }
+  </style>
   
 </head>
 
 <body>
 <center>
 <div class="title">DECISION MAKING</div>
- <table>
-   <tr>
-    <td colspan="3">
-     <div class="poll-box">
-       <div class="container">
-         <div class="box-940">
-           
-<table width="90%" border="0" align="center">
-  <tr>
-    <td valign="top">
-    <table width="50%" style="padding-top:25px;">
-    <tr>	
-    <td><span style="color:#062D54; font-size:30px; margin-left:4px;"><b>Enter poll question and list of answers</b></span></td>
-    </tr>
-	<tr>
-    <td width="50%">
-      <table width="100%" cellspacing="7">
-       <tr>
-         <td>
+ 
+  <div id='quizMaker' style='display:none'>         
+
+    <span style="color:#062D54; font-size:30px; margin-left:4px;"><b>Enter poll question and list of answers</b></span>
+    
            <textarea class="no_resize textareaBox" style="height:25px; padding: 8px 6px 0px 4px; width:342px;" id="questionTextID" name="questionText" onclick="if (this.value=='Would you like to setup polls on your website?')this.value='';"  onblur="if (this.value == '') this.value='Would you like to setup polls on your website?';document.getElementById('questionTextDisplayDiv').innerHTML=this.value;" onkeyup="document.getElementById('questionTextDisplayDiv').innerHTML=this.value;document.getElementById('pollQuestion').value=this.value;">WHAT BUSINESS MODEL SHOULD WE CHOOSE?</textarea>
-         </td>
-       </tr>
-       <tr>
-        <td>
+         
            <textarea class="no_resize textareaBox" style="height:55px; padding: 8px 6px 0px 4px; width:342px;" id="answerTextID" name="answers"   >
 FREEMEUM 
 B2B 
 BOTH </textarea>
-        </td>
-		       <tr>
-        <td align="center">
+        
 			<img class="handPointer" onmouseout="this.style.background='url(../../img/create-poll.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(../../img/create-poll-hover.png) 0px -50px no-repeat';" src="../../img/create-poll.png" onclick="socket.emit('pollStarted', { answers: document.getElementById('answerTextID').value });">
-		</td>
-       </tr>
-      </table>	
-    </td>
-  </tr>
+		
+</div>
+     
 
-    </table>
-    <td>
-     <table width="50%">	
+
+
+
+
+<table style='margin-top:100px'>	
      <tr>	 	
      <td valign="top" style="padding-left:30px;" rowspan="2">
-        <table width="304">
+        <table>
         <tr>
          <td valign="top">
-           <div id="questionTextDisplayDiv" style="width:230px;word-wrap:break-word; font-family:Tahoma;font-size:11pt; color:#4B4B4B;font-weight:bold; padding-left:15px;">
-	     WHAT BUSINESS MODEL SHOULD WE CHOOSE?
-	   </div>
-           <hr style="width:90%; border:1px solid ridge; _color:#EEEEEE; ">
+           <div id="questionTextDisplayDiv" style="font-size:35px; padding:20px">WHAT BUSINESS MODEL SHOULD WE CHOOSE?</div>
 
-	   <table id="answerDisplayTable" style="font-size:14pt; padding-left:15px;">
-             <TR>
-               <TD></TD> <TD></TD>
-             </TR>
-             
-             <TR>
-                    <TD><input checked type="radio" name="u_quickPoll" value="1" id="poll_1"></TD>
-                    <TD style="font-size:10.5pt;"><label for="1">FREEMEUM</label></TD>
-               </TR>
-                  
-             <TR>
-                    <TD><input type="radio" name="u_quickPoll" value="2" id="poll_2"></TD>
-                    <TD style="font-size:10.5pt;"><label for="2">B2B</label></TD>
-               </TR>
-              
-			  <TR>
-                    <TD><input type="radio" name="u_quickPoll" value="2" id="poll_3"></TD>
-                    <TD style="font-size:10.5pt;"><label for="2">BOTH</label></TD>
-               </TR> 
-              </table>
-<table width="100%">
-                <tr>
-                  <td width="100%" align="center" colspan="2">
-                   <table cellspacing="0" cellpadding="0" border="0" style="padding:0px;cursor:pointer;cursor:hand;">
-                   <tr>
-          <td align="center">
-           <img class="handPointer" id="voteButtonID" style="display: block; width: 128px ! important; height: 47px ! important; border: medium none ! important; background: url('../../img/White.png') no-repeat scroll 0px 0px transparent;" onmouseout="this.style.background='url(../../img/White.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(../../img/White.png) 0px -50px no-repeat';" src="../../img/img_trans.gif" onclick="votePoll('answerDisplayTable');">
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+<table>
   <tr>
-</tr>	
-  <tr><td><hr style="width:90%; border:1px solid ridge; _color:#EEEEEE;"></td></tr>
+    <td>
+  	   <table id="answerDisplayTable" style='width:180px; padding:0px; font-size:20px'>
+                <TR><td></td><td></td></tr>
+               
+               <tr style='height:50px'><td>&nbsp;</td><td>&nbsp;</td></tr>
 
-</table>
+               <TR style='margin-top:350px;'>
+                      <TD><label for="poll_1">FREEMEUM</label> </td>
+                      <td><input checked type="radio" name="u_quickPoll" value="1" id="poll_1"></TD>
+                 </TR>
+                    
+               <TR>
+                      <TD><label for="poll_2">B2B</label></td>
+                      <td><input type="radio" name="u_quickPoll" value="2" id="poll_2"></TD>
+                 </TR>
+                
+  			   <TR>
+                      <TD><label for="poll_3">BOTH</label></td>
+                      <td><input type="radio" name="u_quickPoll" value="2" id="poll_3"></TD>
+                 </TR> 
+      </table>
+</td>
+
+
+<tr>
+  <td>
+    <table >
+                    <tr>
+                      <td width="100%" align="center" colspan="2">
+                       <table cellspacing="0" cellpadding="0" border="0" style="padding:0px;cursor:pointer;cursor:hand;">
+                       <tr>
+              <td align="left">
+               <img class="handPointer" id="voteButtonID" style="display: block; width: 128px ! important; height: 47px ! important; border: medium none ! important; background: url('../../img/White.png') no-repeat scroll 0px 0px transparent;" onmouseout="this.style.background='url(../../img/White.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(../../img/White.png) 0px -50px no-repeat';" src="../../img/img_trans.gif" onclick="votePoll('answerDisplayTable');">
+              </td>
+            </tr>
+    </table>
+  </td>
+</tr>
+</table> 
 
 </center>
+
+<script>
+  $(".title").on('click', toggleQuizMaker);
+  
+</script>
 </body>
 </html>
 
