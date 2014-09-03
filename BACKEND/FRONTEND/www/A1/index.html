@@ -33,14 +33,16 @@
     var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
     //var socket = io.connect('http://localhost:1337');
     
-    socket.on('news', function (data) {
-	  	
+    socket.on('news', function (data) {	
+
       var button = data.hello-1;
 
       console.log(button);
       
       var slider = $(".royalSlider").data('royalSlider');
       
+	  slider.goTo(data.slide);
+
       switch(button)
       {
         case -102: {
@@ -273,7 +275,7 @@
   	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
 
 	<div id="comments">
-			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_54064fd131a80(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_54064fd131a80"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_54064fd131a80=document.createElement('script');fcs_54064fd131a80.type="text/javascript";fcs_54064fd131a80.src=ajaxpath_54064fd131a80("http://www.freecommentscript.com/GetComments2.php?p=54064fd131a80&s=&Size=10#!54064fd131a80");setTimeout("document.getElementById('fcs_div_54064fd131a80').appendChild(fcs_54064fd131a80)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
+			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5406565839eec(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5406565839eec"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5406565839eec=document.createElement('script');fcs_5406565839eec.type="text/javascript";fcs_5406565839eec.src=ajaxpath_5406565839eec("http://www.freecommentscript.com/GetComments2.php?p=5406565839eec&s=&Size=10#!5406565839eec");setTimeout("document.getElementById('fcs_div_5406565839eec').appendChild(fcs_5406565839eec)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
 	</div> 
 
 	<div id="commentsPanel"></div>

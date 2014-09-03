@@ -65,14 +65,14 @@ function onDeviceReady() {
     
     $('#prev').click(function() {
         event.preventDefault();
-        socket.emit('mymessage', { my:102 });
+        socket.emit('mymessage', { my:102, slide:currSlideNum });
         currSlideNum--;
         $("#notes").text(notesArray[currSlideNum]);
     });
     
     $('#next').click(function() {
         event.preventDefault();
-        socket.emit('mymessage', { my:101 });
+        socket.emit('mymessage', { my:101, slide:currSlideNum });
         currSlideNum++;
         $("#notes").text(notesArray[currSlideNum]);
     });
