@@ -1,5 +1,5 @@
   	.title{
-  		padding-top: 100px;
+  		padding-top: 50px;
   		text-shadow: 0.05em 0.05em #333;
   		font-weight: bold;
   		font-size: 48px;
@@ -25,6 +25,8 @@
     td{
       /*background-color:lightblue;*/
       padding: 1.5px;
+      padding-top: 2px;
+      padding-bottom: 2px;
       margin: 1px;
     }
     p{
