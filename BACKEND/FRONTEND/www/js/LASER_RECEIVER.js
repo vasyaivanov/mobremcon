@@ -1,5 +1,4 @@
-//----------------------------------------------------------------------------80
-/* 
+/*
  * This script is for moving the laser pointer on the presentation slide
  * based on what the presenter does on the remote control. It will receive
  * X/Y coordinates from the remote via the Backend APP.JS server, and then
@@ -66,6 +65,11 @@ function resizeCanvas() {
 socket.on('drawCoords', function(data) {
     myContext.fillStyle = '#FF0000'; 
     myContext.fillRect(data.x, data.y, 3, 3);
+});
+
+socket.on('shake', function() {
+    console.log("Shake gesture received");
+    clearCanvas();
 });
 
 function clearCanvas () {

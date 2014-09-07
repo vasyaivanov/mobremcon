@@ -205,6 +205,11 @@ io.sockets.on('connection', function (socket) {
             console.log("laser off");
             socket.broadcast.emit('laserOff');
         });
+        
+        socket.on('shake', function() {
+            console.log("shake message received");
+            socket.broadcast.emit('shake');
+        });
 /*
 	for(var i=0;i<5;i++){
 			

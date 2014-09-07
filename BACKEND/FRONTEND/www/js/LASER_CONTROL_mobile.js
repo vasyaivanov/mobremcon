@@ -51,13 +51,22 @@ function printSpeechResult(resultObject){
         socket.emit('mymessage', { my: 102 });
 };
 
+function clearDrawing() {
+    socket.emit('shake');
+};
+
 function onDeviceReady() {
     // Adding event handlers to the currentSlide div, the user
     // touches this div to draw or move laser
-    currentSlide.addEventListener("touchstart", touchStart, false);
-    currentSlide.addEventListener("touchmove", touchMove, false);
-    currentSlide.addEventListener("touchend", touchEnd, false);
+    currentSlide.addEventListener('touchstart', touchStart, false);
+    currentSlide.addEventListener('touchmove', touchMove, false);
+    currentSlide.addEventListener('touchend', touchEnd, false);
     /* currentSlide.addEventListener("touchcancel", touchCancel, false); */
+    document.addEventListener("volumedownbutton", function() {
+            alert("volume down");
+            }, false);
+    
+    document.addEventListener('volumeupbutton', nextSlide, false);
     
     // disable image dragging for all images.
     // Image dragging was interfering with the laser pointer event listeners
@@ -135,6 +144,18 @@ function onDeviceReady() {
        }
     });
     
+    // This starts watching for a shake gesture.
+    // clearDrawing() will be called on shake.
+    shake.startWatch(clearDrawing);
+
+};
+
+function prevSlide() {
+    alert("volume down pressed");
+};
+
+function nextSlide() {
+    alert("volume up pressed");
 };
 
 // interactionType is a global variable for switching between
