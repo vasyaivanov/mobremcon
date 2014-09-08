@@ -4,7 +4,7 @@
     "mobileremotecontrol.info",
     "www.mobileremotecontrol.info"
   ],
-  "version": "0.0.1-32",
+  "version": "0.0.1-37",
   "description": "remote control graph app",
   "main": "APP.JS",
   "dependencies": {
