@@ -49,12 +49,10 @@
 		30FC414916E50CA1004E6F35 /* icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 30FC414816E50CA1004E6F35 /* icon-72@2x.png */; };
 		5AA0E66D1729F45B000DC89A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA0E66C1729F45B000DC89A /* OpenAL.framework */; };
 		5AA0E66F1729F460000DC89A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA0E66E1729F460000DC89A /* ImageIO.framework */; };
+		5AEE5B35173C68D80009041E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AEE5B34173C68D80009041E /* CoreLocation.framework */; };
 		5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; };
 		CE25F73E198993620040A01B /* LASER_CONTROL_mobile.js in Sources */ = {isa = PBXBuildFile; fileRef = CE25F73D198993620040A01B /* LASER_CONTROL_mobile.js */; };
 		CEBDCEFD19BD066900F8C8F0 /* RBVolumeButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBDCEFC19BD066900F8C8F0 /* RBVolumeButtons.m */; };
-		CEBDCF0019BD346000F8C8F0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBDCEFF19BD346000F8C8F0 /* CoreAudio.framework */; };
-		CEBDCF0319BD44D600F8C8F0 /* VolumeButtonControl.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBDCF0219BD44D600F8C8F0 /* VolumeButtonControl.m */; };
-		CEBDCF0519BE374700F8C8F0 /* VolumeButtonControl.js in Sources */ = {isa = PBXBuildFile; fileRef = CEBDCF0419BE374700F8C8F0 /* VolumeButtonControl.js */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
 /* End PBXBuildFile section */
@@ -132,10 +130,6 @@
 		CE25F73D198993620040A01B /* LASER_CONTROL_mobile.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LASER_CONTROL_mobile.js; path = www/js/LASER_CONTROL_mobile.js; sourceTree = "<group>"; };
 		CEBDCEFB19BD064D00F8C8F0 /* RBVolumeButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBVolumeButtons.h; sourceTree = "<group>"; };
 		CEBDCEFC19BD066900F8C8F0 /* RBVolumeButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBVolumeButtons.m; sourceTree = "<group>"; };
-		CEBDCEFF19BD346000F8C8F0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		CEBDCF0119BD44C300F8C8F0 /* VolumeButtonControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeButtonControl.h; sourceTree = "<group>"; };
-		CEBDCF0219BD44D600F8C8F0 /* VolumeButtonControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumeButtonControl.m; sourceTree = "<group>"; };
-		CEBDCF0419BE374700F8C8F0 /* VolumeButtonControl.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = VolumeButtonControl.js; path = www/js/VolumeButtonControl.js; sourceTree = "<group>"; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = RemoteControl/config.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -145,7 +139,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEBDCF0019BD346000F8C8F0 /* CoreAudio.framework in Frameworks */,
 				301BF5BB109A6A2B0062928A /* AVFoundation.framework in Frameworks */,
 				301BF5BF109A6A2B0062928A /* CoreLocation.framework in Frameworks */,
 				5AA0E66F1729F460000DC89A /* ImageIO.framework in Frameworks */,
@@ -166,6 +159,7 @@
 				301BF5C5109A6A2B0062928A /* SystemConfiguration.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				30E5649213A7FCAF007403D8 /* CoreMedia.framework in Frameworks */,
+				5AEE5B35173C68D80009041E /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,7 +229,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				CEBDCF0419BE374700F8C8F0 /* VolumeButtonControl.js */,
 				CE25F73D198993620040A01B /* LASER_CONTROL_mobile.js */,
 				1EA05523197CC9F600C5FD1B /* Framework */,
 				F840E1F0165FE0F500CFE078 /* config.xml */,
@@ -280,7 +273,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				CEBDCEFF19BD346000F8C8F0 /* CoreAudio.framework */,
 				5AEE5B34173C68D80009041E /* CoreLocation.framework */,
 				5AA0E66E1729F460000DC89A /* ImageIO.framework */,
 				5AA0E66C1729F45B000DC89A /* OpenAL.framework */,
@@ -317,8 +309,6 @@
 				1E0FE4DD1973BCF4007D5C10 /* Engines */,
 				1E0FE4D61972EC29007D5C10 /* SpeechRecognizer.h */,
 				1E0FE4D71972EC29007D5C10 /* SpeechRecognizer.m */,
-				CEBDCF0119BD44C300F8C8F0 /* VolumeButtonControl.h */,
-				CEBDCF0219BD44D600F8C8F0 /* VolumeButtonControl.m */,
 			);
 			name = Plugins;
 			path = RemoteControl/Plugins;
@@ -492,11 +482,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E0FE4E01973BE58007D5C10 /* OpenEarsPlugin.m in Sources */,
-				CEBDCF0319BD44D600F8C8F0 /* VolumeButtonControl.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
-				CEBDCF0519BE374700F8C8F0 /* VolumeButtonControl.js in Sources */,
 				CEBDCEFD19BD066900F8C8F0 /* RBVolumeButtons.m in Sources */,
 				CE25F73E198993620040A01B /* LASER_CONTROL_mobile.js in Sources */,
 				1E0FE4D81972EC29007D5C10 /* SpeechRecognizer.m in Sources */,

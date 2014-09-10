@@ -5,7 +5,6 @@
 
 function startup() {
     speechRecognizer = new SpeechRecognizer();
-    volumeButtonControl = new VolumeButtonControl();
     document.addEventListener("deviceready", onDeviceReady, true);
 };
 
@@ -52,18 +51,6 @@ function printSpeechResult(resultObject){
         socket.emit('mymessage', { my: 102 });
 };
 
-function vbc(resultObject) {
-    console.log(resultObject);
-    socket.emit('mymessage', {my:resultObject});
-    if (resultObject == 101) {
-        currSlideNum++;
-        $("#notes").text(notesArray[currSlideNum]);
-    } else if (resultObject == 102) {
-        currSlideNum--;
-        $("#notes").text(notesArray[currSlideNum]);
-    }
-};
-
 function clearDrawing() {
     socket.emit('shake');
 };
@@ -75,6 +62,11 @@ function onDeviceReady() {
     currentSlide.addEventListener('touchmove', touchMove, false);
     currentSlide.addEventListener('touchend', touchEnd, false);
     /* currentSlide.addEventListener("touchcancel", touchCancel, false); */
+    document.addEventListener("volumedownbutton", function() {
+            alert("volume down");
+            }, false);
+    
+    document.addEventListener('volumeupbutton', nextSlide, false);
     
     // disable image dragging for all images.
     // Image dragging was interfering with the laser pointer event listeners
@@ -152,16 +144,22 @@ function onDeviceReady() {
        }
     });
     
-    volumeButtonControl.initialize(function(r){vbc(r)}, function(e){vbc(e)} );
-    
     // This starts watching for a shake gesture.
     // clearDrawing() will be called on shake.
     shake.startWatch(clearDrawing);
+
 };
 
+function prevSlide() {
+    alert("volume down pressed");
+};
 
+function nextSlide() {
+    alert("volume up pressed");
+};
 
-// interactionType is a global variable for switching between different modes
+// interactionType is a global variable for switching between
+// 'draw' and 'laser' mode
 var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
 var interactionType = NONE;
 
