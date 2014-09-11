@@ -12,7 +12,7 @@
     <script src="./js/shake.js"></script>
 
     <script>
-      var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
+      var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
       //var socket = io.connect('http://localhost:1337');
     </script>
     <script defer src="./js/LASER_CONTROL_mobile.js"></script>
@@ -21,13 +21,13 @@
 <body onload="startup()"
     ><br
     ><div class="UI topRow leftCol" id="menu">menu</div
-    ><div class="UI topRow midCol" id="URLBox">http://slite.us/<input type="text" value="A1"></div
+    ><div class="UI topRow midCol" id="URLBox">http://slite.us/<input type="text" value="A2"></div
     ><div class="UI topRow rightCol" id="timeDisplay">Start Timer</div
     ><br
     ><div class="UI midRow leftCol" id="notes">1: Beginning slide, or should I say 'slite'. Get ready to see powerpoint with all the powers of the web.</div
     ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
         ><div id="overlay"></div
-        ><iframe id="theIframe" class="frame" src="http://slite.us/A1" seamless></iframe
+        ><iframe id="theIframe" class="frame" src="http://slite.us/A2" seamless></iframe
     ></div
     ><div class="UI midRow rightCol" id="otherSlides">other</div
     ><br
