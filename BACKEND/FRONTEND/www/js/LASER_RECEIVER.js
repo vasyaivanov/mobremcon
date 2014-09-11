@@ -5,11 +5,6 @@
  * display the laser pointer in the appropriate place. 
  */
 
-console.log("LASER_RECEIVER script working");
-
-// initially the laser dot is hidden. 
-$( "#redDot" ).css("visibility", "hidden");
-
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
 socket.on('laserOn', function() {
@@ -36,10 +31,6 @@ socket.on('moveLaser', function(data) {
     var scaledY = data.y * yScale;
     $( "#redDot" ).css({left:scaledX, top:scaledY});
 });
-
-// ================================= canvas =========================
-
-// <basic draw program> [Lev]
 
 // var myCanvas = document.getElementById("myCanvas");
 var myCanvas = $("#myCanvas");
@@ -77,4 +68,3 @@ function clearCanvas () {
     myContext.clearRect(0, 0, myCanvas[0].width, myCanvas[0].height);
 };
   
-// </basic draw program>

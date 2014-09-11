@@ -114,6 +114,10 @@
     <feature name="SpeechRecognizer">
         <param name="ios-package" value="SpeechRecognizer"/>
     </feature>
+    <feature name="VolumeButtonControl">
+    <param name="ios-package"
+        value="VolumeButtonControl"/>
+    </feature>
     <!-- Deprecated plugins element. REmove in 3.0 -->
     <plugins>
     </plugins>

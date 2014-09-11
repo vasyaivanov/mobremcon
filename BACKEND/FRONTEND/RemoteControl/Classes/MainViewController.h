@@ -29,8 +29,10 @@
 #import <Cordova/CDVCommandDelegateImpl.h>
 #import <Cordova/CDVCommandQueue.h>
 
-@interface MainViewController : CDVViewController
+#import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 
+@interface MainViewController : CDVViewController
 @end
 
 @interface MainCommandDelegate : CDVCommandDelegateImpl
