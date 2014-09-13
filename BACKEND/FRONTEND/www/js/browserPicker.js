@@ -1,4 +1,4 @@
-/* this script is intended to detect whether or not
+/* This script is intended to detect whether or not
 the program is opened in a mobile browser, and load
 the correct .js file. */
 
