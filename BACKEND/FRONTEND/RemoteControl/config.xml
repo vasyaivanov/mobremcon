@@ -41,7 +41,7 @@
     <preference name="BackupWebStorage" value="cloud" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="EnableLocation" value="false" /><!-- DEPRECATED -->
-    <preference name="EnableViewportScale" value="false" />
+    <preference name="EnableViewportScale" value="true" />
     <preference name="FadeSplashScreen" value="true" />
     <preference name="FadeSplashScreenDuration" value=".25" />
     <preference name="HideKeyboardFormAccessoryBar" value="false" />

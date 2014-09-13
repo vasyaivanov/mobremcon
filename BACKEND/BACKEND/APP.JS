@@ -1,16 +1,12 @@
 var app = require('http').createServer(handler)
   , url = require('url')
-  , io = require('socket.io').listen(app, { log: false })
+  , io = require('socket.io').listen(app, { log: true })
   , fs = require('fs')
   , cheerio = require('cheerio')
   , exec = require('child_process').exec
   , http = require('http') 
-  , Wigwam = require('wigwam')
-  , wigwam
   , SocketIOFileUploadServer = require("socketio-file-upload");
 
-
-wigwam = new Wigwam(http.createServer(),{path: "./FRONTEND/www"}).listen(8080);
 app.listen(1337);// change to port 80 for use with nodejitsu
 
 io.set('log level', 1);

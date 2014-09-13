@@ -25,3 +25,5 @@ www/.DS_Store
 .DS_Store
 
 *.xcbkptlist
+
+BACKEND/FRONTEND/www/index.html
