@@ -207,9 +207,19 @@ io.sockets.on('connection', function (socket) {
         });
         
         socket.on('shake', function() {
-            console.log("shake message received");
             socket.broadcast.emit('shake');
         });
+        
+        socket.on('drawStart', function(data) {
+            console.log("drawstart");
+            socket.broadcast.emit('drawStart', data);
+        });
+        
+        socket.on('drawStop', function() {
+            console.log("drawstop");
+            socket.broadcast.emit('drawStop');
+        });
+            
 /*
 	for(var i=0;i<5;i++){
 			

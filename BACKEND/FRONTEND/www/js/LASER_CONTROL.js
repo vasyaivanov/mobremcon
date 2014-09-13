@@ -3,8 +3,6 @@
  * remote, so they can be sent to the receiver for displaying a laser pointer
  */
 
-console.log("LASER_CONTROL script is working");
-
 // global variable for controlling if 'draw' or 'laser' 
 // message is sent when the mouse is moved
 // 0 is no interaction, 1 is laser, 2 is draw.
@@ -75,16 +73,25 @@ $( '#currentSlide' ).mousedown(function() {
     console.log("mouse down"); 
     $( "#currentSlide" ).on ("mousemove", moveLaser);
     // Only turn on laser if we are in laser mode
-    if(LASER === interactionType)
+    if(LASER === interactionType) {
         socket.emit('laserOn');
+    } else if(DRAW === interactionType) {
+        var xOffset = offset.left;
+        var yOffset = offset.top;
+        socket.emit('drawStart',{x:event.pageX - xOffset,
+                                 y:event.pageY - yOffset});
+    }
 });
 
 $( '#currentSlide' ).mouseup(function() {
     console.log("mouse up"); 
     $( "#currentSlide" ).off ("mousemove", moveLaser);
     // Only turn off laser if we are in laser mode
-    if(LASER === interactionType)
+    if(LASER === interactionType) {
         socket.emit('laserOff');
+    } else if(DRAW === interactionType) {
+        socket.emit('drawStop');
+    }
 });
 
 /* Image dragging was interfering with the laser pointer event listeners
@@ -157,13 +164,15 @@ $('#laser').click(function() {
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
-        $('#laser').css("border-color", "black");
+        $('#laser').css("background-image", "url(./img/buttonLaser.png)");
+        $('#overlay').css("z-index", 0);
         
     // otherwise turn laser on
     } else {
         interactionType = LASER;
-        $('#laser').css("border-color", "red");
-        $('#draw').css("border-color", "black");
+        $('#laser').css("background-image", "url(./img/buttonLaser_inverse.png)");
+        $('#draw').css("background-image", "url(./img/buttonDraw.png)");
+        $('#overlay').css("z-index", 3);
     }
 });
 
@@ -173,13 +182,15 @@ $('#draw').click(function() {
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
-        $('#draw').css("border-color", "black");
+        $('#draw').css("background-image", "url(./img/buttonDraw.png)");
+        $('#overlay').css("z-index", 0);
         
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
-        $('#draw').css("border-color", "red");
-        $('#laser').css("border-color", "black");
+        $('#draw').css("background-image", "url(./img/buttonDraw_inverse.png)");
+        $('#laser').css("background-image", "url(./img/buttonLaser.png)");
+        $('#overlay').css("z-index", 3);
     }
 });
 

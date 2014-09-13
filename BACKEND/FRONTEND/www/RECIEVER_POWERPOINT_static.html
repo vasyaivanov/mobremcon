@@ -31,7 +31,7 @@
 	<script>
         
     //var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
-    var socket = io.connect('http://192.168.1.167:1337');
+    var socket = io.connect('http://192.168.1.18:1337');
     
     socket.on('news', function (data) {
 	  	
@@ -209,7 +209,7 @@
       visibility: hidden;
     }
     
-    #myCanvas {
+    #drawCanvas {
       position: absolute;
       height: 100%;
       width: 100%;
@@ -223,7 +223,7 @@
 </head>
 
 <body onresize="resizeCanvas()">
-    <canvas id="myCanvas" ></canvas>
+    <canvas id="drawCanvas" ></canvas>
     <div id="redDot"><img src="./img/redDot.png" alt="Laser Pointer"></div>
   
   <div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>

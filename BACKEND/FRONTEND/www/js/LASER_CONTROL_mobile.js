@@ -106,13 +106,13 @@ function onDeviceReady() {
         // if laser is on, turn it off
         if (LASER === interactionType) {
             interactionType = NONE;
-            $('#laser').css("border-color", "black");
+            $('#laser').css("background-image", "url(./img/buttonLaser.png)");
             $('#theIframe').css("z-index", "1");
         // otherwise turn laser on
         } else {
             interactionType = LASER;
-            $('#laser').css("border-color", "red");
-            $('#draw').css("border-color", "black");
+            $('#laser').css("background-image", "url(./img/buttonLaser_inverse.png)");
+            $('#draw').css("background-image", "url(./img/buttonDraw.png)");
             $('#theIframe').css("z-index", "-1");
         }
     });
@@ -122,13 +122,13 @@ function onDeviceReady() {
         // if draw is on, turn it off
         if (DRAW === interactionType) {
             interactionType = NONE;
-            $('#draw').css("border-color", "black");
+            $('#draw').css("background-image", "url(./img/buttonDraw.png)");
             $('#theIframe').css("z-index", "1");
         // otherwise turn draw on
         } else {
             interactionType = DRAW;
-            $('#draw').css("border-color", "red");
-            $('#laser').css("border-color", "black");
+            $('#draw').css("background-image", "url(./img/buttonDraw_inverse.png)");
+            $('#laser').css("background-image", "url(./img/buttonLaser.png)");
             $('#theIframe').css("z-index", "-1");
         }
     });
@@ -151,11 +151,11 @@ function onDeviceReady() {
        if (SPEECH === interactionType) {
            speechRecognizer.cleanup();
            interactionType = NONE;
-           $('#speech').css("border-color", "black");
+           $('#speech').css("background-image", "url(./img/buttonSpeech.png)");
        } else {
            speechRecognizer.initialize( function(r){printSpeechResult(r)}, function(e){printSpeechResult(e)} );
            interactionType = SPEECH;
-           $('#speech').css("border-color", "red");
+           $('#speech').css("background-image", "url(./img/buttonSpeech_inverse.png)");
        }
     });
     
@@ -176,14 +176,21 @@ var interactionType = NONE;
 // But only if we are in laser mode. 
 function touchStart() {
     event.preventDefault();
-    if(LASER === interactionType)
+    if(LASER === interactionType) {
         socket.emit('laserOn');
+    } else if (DRAW === interactionType) {
+        socket.emit('drawStart',{x:event.touches[0].pageX - xOffset,
+                                 y:event.touches[0].pageY - yOffset});
+    }
 };
 
 function touchEnd() {
     event.preventDefault();
-    if(LASER === interactionType)
+    if (LASER === interactionType) {
         socket.emit('laserOff');
+    } else if (DRAW === interactionType) {
+        socket.emit('drawStop');
+    }
 };
 
 // this is the main function handling laser and draw control by sending

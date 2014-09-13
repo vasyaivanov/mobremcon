@@ -5,6 +5,16 @@
  * display the laser pointer in the appropriate place. 
  */
 
+var canvas, ctx, flag = false,
+    prevX = 0,
+    currX = 0,
+    prevY = 0,
+    currY = 0,
+    dot_flag = false;
+
+var paintColor = "red",
+    lineThickness = 2;
+
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
 socket.on('laserOn', function() {
@@ -32,16 +42,15 @@ socket.on('moveLaser', function(data) {
     $( "#redDot" ).css({left:scaledX, top:scaledY});
 });
 
-// var myCanvas = document.getElementById("myCanvas");
-var myCanvas = $("#myCanvas");
-var myContext = myCanvas[0].getContext('2d');
+var canvas = $("#drawCanvas");
+var ctx = canvas[0].getContext('2d');
 
 $( window ).load(function() {
     // get offset of slides to position canvas properly
     // console.log("setting slider variable");
     var slider = $(".royalSlider").data('royalSlider');
     var slideOffset = slider.currSlide.content.offset();
-    myCanvas.offset({ top: slideOffset.top, left: slideOffset.left });
+    canvas.offset({ top: slideOffset.top, left: slideOffset.left });
     resizeCanvas();
 });
 
@@ -49,22 +58,71 @@ function resizeCanvas() {
     var slider = $(".royalSlider").data('royalSlider');
     var newHeight = slider.currSlide.content.height();
     var newWidth = slider.currSlide.content.width();
-    myCanvas.height(newHeight);
-    myCanvas.width(newWidth);
+    canvas.height(newHeight);
+    canvas.width(newWidth);
 };
 
+socket.on('drawStart', function(data) {
+    findxy('down', data.x, data.y);
+});
+
+socket.on('drawStop', function() {
+    findxy('up');
+});
+
 socket.on('drawCoords', function(data) {
-    myContext.fillStyle = '#FF0000'; 
-    myContext.fillRect(data.x, data.y, 3, 3);
+    findxy('move', data.x, data.y);
 });
 
 socket.on('shake', function() {
-    console.log("Shake gesture received");
     clearCanvas();
 });
 
 function clearCanvas () {
     console.log("clearCanvas() called");
-    myContext.clearRect(0, 0, myCanvas[0].width, myCanvas[0].height);
+    ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
 };
-  
+
+function draw() {
+    ctx.beginPath();
+    ctx.moveTo(prevX, prevY);
+    ctx.lineTo(currX, currY);
+    ctx.strokeStyle = paintColor;
+    ctx.lineWidth = lineThickness;
+    ctx.stroke();
+    ctx.closePath();
+};
+
+function findxy(res, x, y) {
+    if (res == 'down') {
+        prevX = currX;
+        prevY = currY;
+        currX = x - canvas[0].offsetLeft;
+        currY = y - canvas[0].offsetTop;
+        console.log("findxy down. prevX = " + prevX + " currX = " + currX);
+        
+        flag = true;
+        dot_flag = true;
+        if (dot_flag) {
+            ctx.beginPath();
+            ctx.fillStyle = paintColor;
+            ctx.fillRect(currX, currY, 2, 2);
+            ctx.closePath();
+            dot_flag = false;
+        }
+    }
+    if (res == 'up' || res == "out") {
+        flag = false;
+    }
+    if (res == 'move') {
+        if (flag) {
+            console.log("findxy move. prevX = " + prevX + " currX = " + currX);
+            prevX = currX;
+            prevY = currY;
+            currX = x - canvas[0].offsetLeft;
+            currY = y - canvas[0].offsetTop;
+            draw();
+        }
+    }
+};
+
