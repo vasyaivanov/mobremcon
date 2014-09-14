@@ -1,5 +1,5 @@
   	.title{
-  		padding-top: 50px;
+  		padding-top: 20px;
   		text-shadow: 0.05em 0.05em #333;
   		font-weight: bold;
   		font-size: 48px;
@@ -9,7 +9,7 @@
   	.slideBody{
   		vertical-align: left;
   		text-align: left;
-  		font-size: 40px;
+  		font-size: 35px;
   		padding-left: 200px;
   		padding-top: 50px;
   	}
