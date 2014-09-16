@@ -3,6 +3,8 @@
  * remote, so they can be sent to the receiver for displaying a laser pointer
  */
 
+console.log("LASER_CONTROL script is working");
+
 // global variable for controlling if 'draw' or 'laser' 
 // message is sent when the mouse is moved
 // 0 is no interaction, 1 is laser, 2 is draw.
@@ -12,10 +14,12 @@ var LASER = 1;
 var DRAW  = 2;
 var interactionType = NONE; 
 
-// offset is used to calculate laser coords
-// it is recalculated upon the user pressing 'laser' or 'draw'
-var currentSlide = $("#currentSlide");
-var offset;
+// variables to deal with offset
+var currentSlide = document.getElementById("currentSlide"),
+    xOffset = currentSlide.offsetLeft,
+    yOffset = currentSlide.offsetTop,
+    slideWidth = currentSlide.offsetWidth,
+    slideHeight = currentSlide.offsetHeight;
 
 // hardcoded "notes", to show that notes change when a slide changes
 var currSlideNum = 0;
@@ -42,12 +46,6 @@ function moveLaser( event ) {
     // These lines display the coordinates in the remote control, for testing only
     // var laserCoordinates = "( " + event.pageX + ", " + event.pageY + " )";
     // $( "#log" ).text( laserCoordinates);
-    
-    var xOffset = offset.left;
-    var yOffset = offset.top;
-    
-	var slideWidth = currentSlide.width();
-    var slideHeight = currentSlide.height();
 	
     console.log("moveLaser is happening");
     switch(interactionType) {
@@ -73,26 +71,30 @@ $( '#currentSlide' ).mousedown(function() {
     console.log("mouse down"); 
     $( "#currentSlide" ).on ("mousemove", moveLaser);
     // Only turn on laser if we are in laser mode
-    if(LASER === interactionType) {
+    if(LASER === interactionType)
         socket.emit('laserOn');
-    } else if(DRAW === interactionType) {
-        var xOffset = offset.left;
-        var yOffset = offset.top;
-        socket.emit('drawStart',{x:event.pageX - xOffset,
-                                 y:event.pageY - yOffset});
-    }
 });
 
 $( '#currentSlide' ).mouseup(function() {
     console.log("mouse up"); 
     $( "#currentSlide" ).off ("mousemove", moveLaser);
     // Only turn off laser if we are in laser mode
-    if(LASER === interactionType) {
+    if(LASER === interactionType)
         socket.emit('laserOff');
-    } else if(DRAW === interactionType) {
-        socket.emit('drawStop');
-    }
 });
+
+var elements    = document.querySelectorAll('#otherSlides button');
+// add event listener for each button exxample
+for (var i = 0, l = elements.length; i < l; i++) {
+    var element = elements[i];
+    element.setAttribute('slide_num', i);
+    // each event will be logged to the virtual console
+    element.addEventListener("mousedown", function(e) {
+                             var slide_num = parseInt(this.getAttribute('slide_num'));
+                             socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
+                             }, false);
+}
+
 
 /* Image dragging was interfering with the laser pointer event listeners
  * So I am disabling image dragging since the presenter probably won't want
@@ -164,15 +166,13 @@ $('#laser').click(function() {
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
-        $('#laser').css("background-image", "url(./img/buttonLaser.png)");
-        $('#overlay').css("z-index", 0);
+        $('#laser').css("border-color", "black");
         
     // otherwise turn laser on
     } else {
         interactionType = LASER;
-        $('#laser').css("background-image", "url(./img/buttonLaser_inverse.png)");
-        $('#draw').css("background-image", "url(./img/buttonDraw.png)");
-        $('#overlay').css("z-index", 3);
+        $('#laser').css("border-color", "red");
+        $('#draw').css("border-color", "black");
     }
 });
 
@@ -182,15 +182,13 @@ $('#draw').click(function() {
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
-        $('#draw').css("background-image", "url(./img/buttonDraw.png)");
-        $('#overlay').css("z-index", 0);
+        $('#draw').css("border-color", "black");
         
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
-        $('#draw').css("background-image", "url(./img/buttonDraw_inverse.png)");
-        $('#laser').css("background-image", "url(./img/buttonLaser.png)");
-        $('#overlay').css("z-index", 3);
+        $('#draw').css("border-color", "red");
+        $('#laser').css("border-color", "black");
     }
 });
 
