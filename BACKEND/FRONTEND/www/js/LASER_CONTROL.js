@@ -107,6 +107,15 @@ for (var i = 0, l = elements.length; i < l; i++) {
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
 // *********************
+// *    URL Box    *
+// *********************
+
+$('#URLBox').change(function() {
+	document.getElementById('theIframe').src = "http://slite.us/" + document.getElementById("URLSlides").value;
+	document.getElementById('theIframe').src += '';
+});
+
+// *********************
 // *    start timer    *
 // *********************
 var timeDisplay = document.getElementById("timeDisplay"),

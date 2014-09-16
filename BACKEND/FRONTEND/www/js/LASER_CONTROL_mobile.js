@@ -145,6 +145,11 @@ function onDeviceReady() {
         }
     });
     
+	$('#URLBox').change(function() {
+		document.getElementById('theIframe').src = "http://slite.us/" + document.getElementById("URLSlides").value;
+		document.getElementById('theIframe').src += '';
+	});
+	
     $('#timeDisplay').click(function() {
         event.preventDefault();
         if (timerActive) {
