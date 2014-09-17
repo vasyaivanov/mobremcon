@@ -42,6 +42,10 @@ var notesArray = [
 " 16: The end! Thank you for your time.",
 ];
 
+// *********************
+// *    Laser    *
+// *********************
+
 function moveLaser( event ) {
     // These lines display the coordinates in the remote control, for testing only
     // var laserCoordinates = "( " + event.pageX + ", " + event.pageY + " )";
@@ -83,18 +87,29 @@ $( '#currentSlide' ).mouseup(function() {
         socket.emit('laserOff');
 });
 
-var elements    = document.querySelectorAll('#otherSlides button');
-// add event listener for each button exxample
-for (var i = 0, l = elements.length; i < l; i++) {
-    var element = elements[i];
-    element.setAttribute('slide_num', i);
-    // each event will be logged to the virtual console
-    element.addEventListener("mousedown", function(e) {
-                             var slide_num = parseInt(this.getAttribute('slide_num'));
-                             socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
-                             }, false);
+// *********************
+// *    Thumbnails    *
+// *********************
+
+function thumbnails() {
+    var elements    = document.querySelectorAll('#otherSlides button');
+    // add event listener for each button
+    for (var i = 0, l = elements.length; i < l; i++) {
+        var element = elements[i];
+        element.setAttribute('slide_num', i);
+        var url = document.getElementById("URLSlides").value;
+        element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
+        // each event will be logged to the virtual console
+        element.addEventListener("mousedown", function(e) {
+                                 var slide_num = parseInt(this.getAttribute('slide_num'));
+                                 currSlideNum = slide_num;
+                                 $("#notes").text(notesArray[currSlideNum]);
+                                 socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
+                                 }, false);
+    }
 }
 
+thumbnails();
 
 /* Image dragging was interfering with the laser pointer event listeners
  * So I am disabling image dragging since the presenter probably won't want
@@ -113,6 +128,10 @@ $('img').on('dragstart', function(event) { event.preventDefault(); });
 $('#URLBox').change(function() {
 	document.getElementById('theIframe').src = "http://slite.us/" + document.getElementById("URLSlides").value;
 	document.getElementById('theIframe').src += '';
+    currSlideNum = 0;
+    $("#notes").text(notesArray[currSlideNum]);
+    socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
+    thumbnails(); // thumbnails have to match the slides
 });
 
 // *********************
