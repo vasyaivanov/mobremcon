@@ -154,6 +154,8 @@ function onDeviceReady() {
     
 	$('#URLBox').change(function() {
 		document.getElementById('theIframe').src = "http://slite.us/" + document.getElementById("URLSlides").value;
+		if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+		else socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
 		document.getElementById('theIframe').src += '';
         currSlideNum = 0;
         $("#notes").text(notesArray[currSlideNum]);
