@@ -152,6 +152,16 @@ input[type=text] {
     
     }
 
+button {
+    width: 100%; height: 15%;
+    color: black;
+    
+    background-image: url('../img/buttonSpeech.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    
+    }
 
 /* wrap and frame classes are for resizing the content inside
  * the iframe */

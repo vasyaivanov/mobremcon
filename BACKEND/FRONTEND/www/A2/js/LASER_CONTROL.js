@@ -83,6 +83,19 @@ $( '#currentSlide' ).mouseup(function() {
         socket.emit('laserOff');
 });
 
+var elements    = document.querySelectorAll('#otherSlides button');
+// add event listener for each button exxample
+for (var i = 0, l = elements.length; i < l; i++) {
+    var element = elements[i];
+    element.setAttribute('slide_num', i);
+    // each event will be logged to the virtual console
+    element.addEventListener("mousedown", function(e) {
+                             var slide_num = parseInt(this.getAttribute('slide_num'));
+                             socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
+                             }, false);
+}
+
+
 /* Image dragging was interfering with the laser pointer event listeners
  * So I am disabling image dragging since the presenter probably won't want
  * to drag the powerpoint slide anywhere from inside the remote control. 

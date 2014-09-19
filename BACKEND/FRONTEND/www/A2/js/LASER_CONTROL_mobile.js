@@ -5,6 +5,7 @@
 
 function startup() {
     speechRecognizer = new SpeechRecognizer();
+    volumeButtonControl = new VolumeButtonControl();
     document.addEventListener("deviceready", onDeviceReady, true);
 };
 
@@ -45,19 +46,58 @@ function printSpeechResult(resultObject){
     console.log("MA printResult");
     console.log(resultObject);
     console.log(resultObject.indexOf("NEXT"));
-    if (resultObject.indexOf("NEXT") > -1)
-        socket.emit('mymessage', { my: 101 });
-    else if (resultObject.indexOf("PREVIOUS") > -1)
-        socket.emit('mymessage', { my: 102 });
+    if (resultObject.indexOf("NEXT") > -1) {
+        nextSlide();
+    }
+    else if (resultObject.indexOf("PREVIOUS") > -1) {
+        prevSlide();
+    }
 };
+
+function volumeButtonCallback(resultObject) {
+    if (resultObject == 102) {
+        prevSlide();
+    } else if (resultObject == 101) {
+        nextSlide();
+    }
+};
+
+function clearDrawing() {
+    socket.emit('shake');
+};
+
+function prevSlide() {
+    socket.emit('mymessage', { my:102, slide:currSlideNum });
+    currSlideNum--;
+    $("#notes").text(notesArray[currSlideNum]);
+};
+
+function nextSlide() {
+    socket.emit('mymessage', { my:101, slide:currSlideNum });
+    currSlideNum++;
+    $("#notes").text(notesArray[currSlideNum]);
+};
+
 
 function onDeviceReady() {
     // Adding event handlers to the currentSlide div, the user
     // touches this div to draw or move laser
-    currentSlide.addEventListener("touchstart", touchStart, false);
-    currentSlide.addEventListener("touchmove", touchMove, false);
-    currentSlide.addEventListener("touchend", touchEnd, false);
+    currentSlide.addEventListener('touchstart', touchStart, false);
+    currentSlide.addEventListener('touchmove', touchMove, false);
+    currentSlide.addEventListener('touchend', touchEnd, false);
     /* currentSlide.addEventListener("touchcancel", touchCancel, false); */
+    
+    var elements    = document.querySelectorAll('#otherSlides button');
+    // add event listener for each button exxample
+    for (var i = 0, l = elements.length; i < l; i++) {
+        var element = elements[i];
+        element.setAttribute('slide_num', i);
+        // each event will be logged to the virtual console
+        element.addEventListener("mousedown", function(e) {
+                                 var slide_num = parseInt(this.getAttribute('slide_num'));
+                                 socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
+                                 }, false);
+    }
     
     // disable image dragging for all images.
     // Image dragging was interfering with the laser pointer event listeners
@@ -65,16 +105,12 @@ function onDeviceReady() {
     
     $('#prev').click(function() {
         event.preventDefault();
-        socket.emit('mymessage', { my:102 });
-        currSlideNum--;
-        $("#notes").text(notesArray[currSlideNum]);
+        prevSlide();
     });
     
     $('#next').click(function() {
         event.preventDefault();
-        socket.emit('mymessage', { my:101 });
-        currSlideNum++;
-        $("#notes").text(notesArray[currSlideNum]);
+        nextSlide()
     });
     
     $('#laser').click(function() {
@@ -82,13 +118,13 @@ function onDeviceReady() {
         // if laser is on, turn it off
         if (LASER === interactionType) {
             interactionType = NONE;
-            $('#laser').css("border-color", "black");
+            $('#laser').css("background-image", "url(./img/buttonLaser.png)");
             $('#theIframe').css("z-index", "1");
         // otherwise turn laser on
         } else {
             interactionType = LASER;
-            $('#laser').css("border-color", "red");
-            $('#draw').css("border-color", "black");
+            $('#laser').css("background-image", "url(./img/buttonLaser_inverse.png)");
+            $('#draw').css("background-image", "url(./img/buttonDraw.png)");
             $('#theIframe').css("z-index", "-1");
         }
     });
@@ -98,13 +134,13 @@ function onDeviceReady() {
         // if draw is on, turn it off
         if (DRAW === interactionType) {
             interactionType = NONE;
-            $('#draw').css("border-color", "black");
+            $('#draw').css("background-image", "url(./img/buttonDraw.png)");
             $('#theIframe').css("z-index", "1");
         // otherwise turn draw on
         } else {
             interactionType = DRAW;
-            $('#draw').css("border-color", "red");
-            $('#laser').css("border-color", "black");
+            $('#draw').css("background-image", "url(./img/buttonDraw_inverse.png)");
+            $('#laser').css("background-image", "url(./img/buttonLaser.png)");
             $('#theIframe').css("z-index", "-1");
         }
     });
@@ -127,18 +163,23 @@ function onDeviceReady() {
        if (SPEECH === interactionType) {
            speechRecognizer.cleanup();
            interactionType = NONE;
-           $('#speech').css("border-color", "black");
+           $('#speech').css("background-image", "url(./img/buttonSpeech.png)");
        } else {
            speechRecognizer.initialize( function(r){printSpeechResult(r)}, function(e){printSpeechResult(e)} );
            interactionType = SPEECH;
-           $('#speech').css("border-color", "red");
+           $('#speech').css("background-image", "url(./img/buttonSpeech_inverse.png)");
        }
     });
     
+    volumeButtonControl.initialize(function(r){volumeButtonCallback(r)}, function(e){volumeButtonCallback(e)} );
+    
+    // This starts watching for a shake gesture.
+    // clearDrawing() will be called on shake.
+    shake.startWatch(clearDrawing);
+
 };
 
-// interactionType is a global variable for switching between
-// 'draw' and 'laser' mode
+// interactionType is a global variable for switching between different modes
 var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
 var interactionType = NONE;
 
@@ -147,14 +188,21 @@ var interactionType = NONE;
 // But only if we are in laser mode. 
 function touchStart() {
     event.preventDefault();
-    if(LASER === interactionType)
+    if(LASER === interactionType) {
         socket.emit('laserOn');
+    } else if (DRAW === interactionType) {
+        socket.emit('drawStart',{x:event.touches[0].pageX - xOffset,
+                                 y:event.touches[0].pageY - yOffset});
+    }
 };
 
 function touchEnd() {
     event.preventDefault();
-    if(LASER === interactionType)
+    if (LASER === interactionType) {
         socket.emit('laserOff');
+    } else if (DRAW === interactionType) {
+        socket.emit('drawStop');
+    }
 };
 
 // this is the main function handling laser and draw control by sending

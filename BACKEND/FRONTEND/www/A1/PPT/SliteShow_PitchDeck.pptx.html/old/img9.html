@@ -3,61 +3,21 @@
 <html>
 <head>
   <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
-  <title>Slide 4</title>
+  <title>Slite: Live Data</title>
   <link rel="stylesheet" type="text.css" href="./css/slide.css">
-  <script language="JavaScript" src="../../js/jquery-2.0.3.min.js"></script>
-
-  <script language="JavaScript" src="../../js/infinite-scroll.js"></script>
-<style>
-td{padding:40px;
-border: 2px;
-font-size: 40px;
-}
-</style>
-
+  <style>
+    body, html, center {
+      margin: 0; padding: 0; height: 100%; overflow: hidden;
+    }
+  </style>
 </head>
-<body>
+<body style="margin: 0">
 <center>
-	<div class="title">INFINITE DATA</div>
-
-
-<table id='data' style='font-size:14px'>
-<tr><td>REMOTE CONTROL (mobile app)</td><td>✔</td></tr>
-<tr><td>Clicker</td><td>✔</td></tr>
-<tr><td>         next, previous slide</td><td>✔</td></tr>
-<tr><td>         +/- button switching slides</td><td>✔</td></tr>
-<tr><td>         swipe right/left</td><td>✔</td></tr>
-<tr><td>Laser Pointer</td><td>✔</td></tr>
-<tr><td>    Draw on slides</td><td>✔</td></tr>
-<tr><td>Voice commands</td><td>✔</td></tr>
-<tr><td>        next / previous</td><td>✔</td></tr>
-<tr><td>        voice queues (to go to a specific slide)</td><td>✔</td></tr>
-<tr><td>Next slide preview</td><td>✔</td></tr>
-<tr><td>Notes per slide</td><td>✔</td></tr>
-<tr><td>Timer of the presentation</td><td>✔</td></tr>
-<tr><td>Separate Remote/Website/Server</td><td>✔</td></tr>
-</table>
-
-
-
+  <div class="title">FEATURE: Live Data In Slide</div>
+  <div style="width: 700px; height: 1500px; overflow: hidden; margin-top: 150px;">
+    <iframe id='liveStats' src='http://www.worldometers.info' height = 300px; width = 700px scrolling = 'no'  style="position: relative; left: -10%; top: -10%"></iframe>
+  </div>
+  
 </center>
-<script type="text/javascript">
-	var features = ['<tr id="1"><td>PRESNTATION</td><td>✔</td></tr><tr><td>Subtitles</td><td>✔</td></tr><tr><td>Translation</td><td>✔</td></tr><tr><td>Social - ( Live Comments / After The Meeting )</td><td>✔</td></tr><tr><td>Sound (mobile conference)</td><td>✔</td></tr><tr><td>Meeting transcription (record/replay)</td><td>✔</td></tr><tr><td>Presets (animated, formats)</td><td>✔</td></tr><tr><td>Audio conference</td><td>✔</td></tr><tr><td>Video conference</td><td>✔</td></tr><tr><td>Offline presentation</td><td>✔</td></tr><tr><td></td><td>✔</td></tr><tr><td>SLIDE</td><td>✔</td></tr><tr><td>Video</td><td>✔</td></tr><tr><td>Polls</td><td>✔</td></tr><tr><td>Webpage inside slide</td><td>✔</td></tr><tr><td>Analyitcs (add graphs, charts)</td><td>✔</td></tr>',
-	'<tr id="2"><td>PORTAL</td><td>✔</td></tr><tr><td>Landing Page (slite.us)</td><td>✔</td></tr><tr><td>    Upload</td><td>✔</td></tr><tr><td>    About</td><td>✔</td></tr><tr><td>    Suggest/Complain feedback menu item</td><td>✔</td></tr><tr><td>    User (sign in/out, display name)</td><td>✔</td></tr><tr><td>    Search box (search presentations)</td><td>✔</td></tr><tr><td>    Favicon</td><td>✔</td></tr><tr><td>    Font</td><td>✔</td></tr><tr><td>Users</td><td>✔</td></tr><tr><td>Upload</td><td>✔</td></tr><tr><td>    PPT</td><td>✔</td></tr><tr><td>    PDF</td><td>✔</td></tr><tr><td>Mobile/Tables/Desktop formatting</td><td>✔</td></tr><tr><td>Privacy settings</td><td>✔</td></tr><tr><td>Collaborate on creating the presentation</td><td>✔</td></tr><tr><td>Social</td><td>✔</td></tr><tr><td>    sharing</td><td>✔</td></tr><tr><td>    liking</td><td>✔</td></tr><tr><td>Embed presentation into other websites</td><td>✔</td></tr><tr><td>Search in slides</td><td>✔</td></tr><tr><td>Enterprise level (security / features)</td><td>✔</td></tr><tr><td>Statistics tracking</td><td>✔</td></tr><tr><td></td><td>✔</td></tr>',
-	'<tr  id="3"><td>CREATE PRESENTATIONS</td><td>✔</td></tr><tr><td>Version Tracking</td><td>✔</td></tr><tr><td></td><td>✔</td></tr><tr><td>TECH DEBT</td><td>✔</td></tr><tr><td>Wigwam</td><td>✔</td></tr><tr><td>Deployment</td><td>✔</td></tr>'];
-
-	var scrollCount = 0;
-	var options = {
-	  distance: 50,
-	  callback: function(done) {
-	  	if(scrollCount < 4){
-	  		scrollCount++;
-			$("#data").append(features[scrollCount]);
-	  	}
-	    done();
-	  }
-	}
-	infiniteScroll(options);
-</script>
 </body>
 </html>
