@@ -9,7 +9,7 @@
 html, body {height: 100%; }
 
 body {
-    font-size: 100%;
+    font-size: 180%;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-tap-highlight-color: transparent; /* For some Androids */
 }
@@ -20,20 +20,20 @@ body {
 /* all the UI elements (buttons, laser control, notes, etc)
  * currently have a black border for ease of development */
 .UI {
-    font-size: 3.4vw;
+    font-size: 6.3vmin;
     border: 1px solid black;
     display: inline-block;
     vertical-align: top;
     }
 
 input[type=text] {
-    font-size: 3vw;
+    font-size: 5.4vmin;
     /*border: none;*/ /*turns off border on the URL element text box*/
     border-style: inset;
 }
 
 #timeDisplay {
-    font: bold 3.4vw impact, sans-serif;
+    font: bold 6.3vmin impact, sans-serif;
     text-align: center;
     overflow: hidden;
 }

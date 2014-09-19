@@ -6,17 +6,18 @@
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     <script src="./js/socket.io.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
-    <script src="./js/jquery-1.8.3.js"></script>
+    <script src="./js/jquery-2.0.3.min.js"></script>
     <script src="./js/speechRecognizer.js"></script>
     <script src="./js/volumeButtonControl.js"></script>
     <script src="./js/shake.js"></script>
-    <script src="./js/browserPicker.js"></script>
+    <script src="./js/notes.js"></script>
+    <script defer src="./js/timer.js"></script>
+    <script defer src="./js/slite.js"></script>
 
     <script>
-      var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-      //var socket = io.connect('http://localhost:1337');
+      //var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+      var socket = io.connect('http://192.168.1.105:1337');
     </script>
-    <!--<script defer src="./js/LASER_CONTROL.js"></script>-->
     
 	</head>
 <body onload="startup()"

@@ -30,8 +30,6 @@ socket.on('laserOff', function() {
 // This function receives the x/y coordinates from the APP.JS server 
 // and moves the laser dot by adjusting the dot's CSS. 
 socket.on('moveLaser', function(data) {
-    // console.log("Laser Data received");
-    // console.log("X: " + data.x + ", " + "Y: " + data.y);
     var slider = $(".royalSlider").data('royalSlider');
     var receiverHeight = slider.currSlide.content.height();
     var receiverWidth = slider.currSlide.content.width();
@@ -71,6 +69,16 @@ socket.on('drawStop', function() {
 });
 
 socket.on('drawCoords', function(data) {
+/*
+    var slider = $(".royalSlider").data('royalSlider');
+    var receiverHeight = slider.currSlide.content.height();
+    var receiverWidth = slider.currSlide.content.width();
+    var xScale = receiverHeight / data.height;
+    var yScale = receiverWidth / data.width;
+    var scaledX = data.x * xScale;
+    var scaledY = data.y * yScale;
+    console.log("normal: " + data.x + " scaled: " + scaledX);
+*/
     findxy('move', data.x, data.y);
 });
 
