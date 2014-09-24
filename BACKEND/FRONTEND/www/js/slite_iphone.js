@@ -41,6 +41,12 @@ function onDeviceReady() {
     currentSlide.addEventListener('touchend', touchEnd, false);
     /* currentSlide.addEventListener("touchcancel", touchCancel, false); */
     
+	thumbnails();
+	
+	$('#URLBox').change(function() {
+		changeURL();
+	});
+	
     $('#prev').click(function() {
         event.preventDefault();
         prevSlide();

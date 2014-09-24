@@ -26,6 +26,35 @@ function nextSlide() {
     $("#notes").text(notesArray[currSlideNum]);
 };
 
+function thumbnails() {
+    var elements    = document.querySelectorAll('#otherSlides button');
+    // add event listener for each button
+    for (var i = 0, l = elements.length; i < l; i++) {
+        var element = elements[i];
+        element.setAttribute('slide_num', i);
+        var url = document.getElementById("URLSlides").value;
+        element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
+        // each event will be logged to the virtual console
+        element.addEventListener("mousedown", function(e) {
+                                 var slide_num = parseInt(this.getAttribute('slide_num'));
+                                 currSlideNum = slide_num;
+                                 $("#notes").text(notesArray[currSlideNum]);
+                                 socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
+                                 }, false);
+    }
+}
+
+function changeURL() {
+	document.getElementById('theIframe').src = "http://slite.us/" + document.getElementById("URLSlides").value;
+	if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+	else socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
+	document.getElementById('theIframe').src += '';
+	currSlideNum = 0;
+	$("#notes").text(notesArray[currSlideNum]);
+	socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
+	thumbnails(); // thumbnails have to match the slides
+}
+
 // this is the main function handling laser and draw control by sending
 // touch coordinates on to the server through socket.emit()
 function touchMove(event) {

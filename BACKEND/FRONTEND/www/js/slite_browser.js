@@ -3,6 +3,12 @@
  * of the remote control.
  */
 
+thumbnails();
+
+$('#URLBox').change(function() {
+	changeURL();
+});
+
 $( '#currentSlide' ).mousedown(function(event) {
     console.log(event.pageX);
     $( "#currentSlide" ).on ("mousemove", touchMove);
