@@ -56,12 +56,21 @@ function resizeCanvas() {
     var slider = $(".royalSlider").data('royalSlider');
     var newHeight = slider.currSlide.content.height();
     var newWidth = slider.currSlide.content.width();
-    canvas.height(newHeight);
-    canvas.width(newWidth);
+    canvas[0].height = newHeight;
+    canvas[0].width = newWidth;
+};
+
+// Converts percent offset received from server into XY coords
+// (this mirrors calcOffset in slite.js)
+function calcCoords(percent, offset, dim) {
+    return (offset + (percent * dim));
 };
 
 socket.on('drawStart', function(data) {
-    findxy('down', data.x, data.y);
+    var canvOffset = canvas.offset();
+    var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
+    var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
+    findxy('down', x, y);
 });
 
 socket.on('drawStop', function() {
@@ -69,17 +78,10 @@ socket.on('drawStop', function() {
 });
 
 socket.on('drawCoords', function(data) {
-/*
-    var slider = $(".royalSlider").data('royalSlider');
-    var receiverHeight = slider.currSlide.content.height();
-    var receiverWidth = slider.currSlide.content.width();
-    var xScale = receiverHeight / data.height;
-    var yScale = receiverWidth / data.width;
-    var scaledX = data.x * xScale;
-    var scaledY = data.y * yScale;
-    console.log("normal: " + data.x + " scaled: " + scaledX);
-*/
-    findxy('move', data.x, data.y);
+    var canvOffset = canvas.offset();
+    var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
+    var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
+    findxy('move', x, y);
 });
 
 socket.on('shake', function() {
