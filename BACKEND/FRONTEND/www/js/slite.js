@@ -7,6 +7,15 @@ var currentSlide = document.getElementById("currentSlide"),
     slideWidth = currentSlide.offsetWidth,
     slideHeight = currentSlide.offsetHeight;
 
+// This function is for getting the offset given coordinate relative to document
+// It needs to be run once for X and once for Y
+// coord = coordinate of touch relative to document
+// offset = X or Y offset of the element inside the doc
+// dim = width or height of the element
+function calcOffset(coord, offset, dim) {
+    return ((coord - offset)/dim);
+};    
+
 // interactionType is a global variable for switching between different modes
 var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
 var interactionType = NONE;
@@ -71,6 +80,9 @@ function touchMove(event) {
         yTouch = event.pageY;
     }
     
+    var xPercent = calcOffset(xTouch, xOffset, slideWidth);
+    var yPercent = calcOffset(yTouch, yOffset, slideHeight);
+    
     switch(interactionType) {
         case LASER: {
             socket.emit('laserCoords',
@@ -82,10 +94,8 @@ function touchMove(event) {
         }
         case DRAW: {
             socket.emit('drawCoords',
-                        { x:xTouch - xOffset,
-                          y:yTouch - yOffset,
-                          width: slideWidth,
-                          height: slideHeight});
+                        { x:xPercent,
+                          y:yPercent});
             break;
         }
         default: {

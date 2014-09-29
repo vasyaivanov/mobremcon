@@ -10,16 +10,24 @@ $('#URLBox').change(function() {
 });
 
 $( '#currentSlide' ).mousedown(function(event) {
-    console.log(event.pageX);
+    //console.log("mousedown at x = " + event.pageX);
     $( "#currentSlide" ).on ("mousemove", touchMove);
+    console.log("touchmove bound (probably)");
     // Only turn on laser if we are in laser mode
     if(LASER === interactionType) {
         socket.emit('laserOn');
     } else if(DRAW === interactionType) {
-        var xOffset = currentSlide.offsetLeft;
-        var yOffset = currentSlide.offsetTop;
-        socket.emit('drawStart',{x:event.pageX - xOffset,
-                                 y:event.pageY - yOffset});
+        // recalculate offsets in case window size has changed
+        xOffset = currentSlide.offsetLeft;
+        yOffset = currentSlide.offsetTop;
+        slideWidth = currentSlide.offsetWidth,
+        slideHeight = currentSlide.offsetHeight;
+        var xPercent = calcOffset(event.pageX, xOffset, slideWidth);
+        var yPercent = calcOffset(event.pageY, yOffset, slideHeight);
+        //console.log("xPercent: " + xPercent);
+        //console.log("yPercent: " + yPercent);
+        socket.emit('drawStart',{x:xPercent,
+                                 y:yPercent});
     }
 });
 

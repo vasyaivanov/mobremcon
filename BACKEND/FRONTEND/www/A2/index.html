@@ -30,7 +30,7 @@
 
 	<script>
         
-    var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+    var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
     //var socket = io.connect('http://localhost:1337');
     
     socket.on('news', function (data) {	
@@ -221,9 +221,10 @@
 	      left:0px;
 	      top:0px;
 	      z-index: 2;
+          visibility: hidden;
 	    }
 	    
-	    #myCanvas {
+	    #drawCanvas {
 	      position: absolute;
 	      height: 100%;
 	      width: 100%;
@@ -266,7 +267,7 @@
 
 <body onresize="resizeCanvas()">
 
-    <canvas id="myCanvas" ></canvas>
+    <canvas id="drawCanvas" ></canvas>
     
 	<div id="sliteWatermak">Powered by SLITE.US</div>
 
