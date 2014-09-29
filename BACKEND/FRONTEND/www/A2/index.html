@@ -30,8 +30,8 @@
 
 	<script>
         
-    var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
-    //var socket = io.connect('http://localhost:1337');
+    //var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
+    var socket = io.connect('http://localhost:1337');
     
     socket.on('news', function (data) {	
 
@@ -226,9 +226,7 @@
 	    
 	    #drawCanvas {
 	      position: absolute;
-	      height: 100%;
-	      width: 100%;
-	      border: none;
+	      border: solid black 1px;
 	      z-index: 1;
 	      pointer-events: none;
 	    }
