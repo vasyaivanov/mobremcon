@@ -1247,12 +1247,18 @@ function synchronizeTextAreaToTable(tableID, data, c1HTML, c2HTML) {
         var ary = new Array();
         ary = data.split("\n");
         var aryLen = 0;
+        var pollSelectedAnswer = 0;
         
 		if (statisticsShown) 
 		{
 			answerTable.deleteRow(0);// remove statistics display, so that it is't drawn multiple times.
 			statisticsShown = false;
 		}
+		
+		for (i=0; i < (answerTable.rows.length); i++) {
+                var pollAnswer = document.getElementById("poll_"+(i+1));
+                if (pollAnswer && pollAnswer.checked) pollSelectedAnswer = i;
+        }
 		
         for (i=0; i < (answerTable.rows.length); i++) {
                 answerTable.deleteRow(i);
@@ -1277,7 +1283,7 @@ function synchronizeTextAreaToTable(tableID, data, c1HTML, c2HTML) {
                         column1HTML = column1HTML.replace(/\{row_index\}/g, rowIndex);
                         column2HTML = column2HTML.replace(/\{row_index\}/g, rowIndex);
                                 
-        				if (i==0) column1HTML = column1HTML.replace(/\{checked\}/g, "checked");
+        				if (i==pollSelectedAnswer) column1HTML = column1HTML.replace(/\{checked\}/g, "checked");
 						else column1HTML = column1HTML.replace(/\{checked\}/g, "");
 						
                         col1.innerHTML = column1HTML;
