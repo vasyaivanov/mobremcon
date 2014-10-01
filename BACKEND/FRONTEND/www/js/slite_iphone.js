@@ -118,8 +118,13 @@ function touchStart() {
     if(LASER === interactionType) {
         socket.emit('laserOn');
     } else if (DRAW === interactionType) {
-        socket.emit('drawStart',{x:event.touches[0].pageX - xOffset,
-                                 y:event.touches[0].pageY - yOffset});
+        var xPercent = calcOffset(event.touches[0].pageX,
+                                   xOffset, slideWidth);
+        var yPercent = calcOffset(event.touches[0].pageY,
+                                   yOffset, slideHeight);
+        //alert("X: " + xPercent + " Y: " + yPercent);
+        socket.emit('drawStart',{x:xPercent,
+                                 y:yPercent});
     }
 };
 
