@@ -1,0 +1,155 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 8, ../sass/screen.scss */
+body,
+html {
+  padding: 0;
+  margin: 0;
+  color: #fff;
+}
+
+/* line 14, ../sass/screen.scss */
+body {
+  font: 13px Helvetica, arial, freesans, clean, "sans-serif", "Segoe UI Emoji", "Segoe UI Symbol";
+  /* background-color: #010352; */
+  background-image: radial-gradient(at 50% top, rgba(84, 151, 182, 0.6) 0%, rgba(84, 151, 182, 0) 75%), radial-gradient(at right top, #060877 0%, rgba(84, 151, 182, 0) 57%);
+  background-image: -webkit-gradient(at 50% top, rgba(84, 151, 182, 0.6) 0%, rgba(84, 151, 182, 0) 75%), -webkit-gradient(at right top, #060877 0%, rgba(84, 151, 182, 0) 57%);
+  background-repeat: no-repeat;
+  background-size: 100% 1000px;
+}
+
+/* line 25, ../sass/screen.scss */
+.m-navbar {
+
+  /*
+  background-image: -moz-linear-gradient(#f9f9f9, #f3f3f3);
+  background-image: -webkit-linear-gradient(#f9f9f9, #f3f3f3);
+  background-image: linear-gradient(#f9f9f9, #f3f3f3);
+  border-radius: 0;
+  border-bottom: 1px solid #e5e5e5;
+  */
+}
+/* line 37, ../sass/screen.scss */
+.m-navbar .container-fluid .navbar-header .logo {
+  height: 48px;
+  display: inline-block;
+  margin-right: 15px;
+  padding: 0;
+  position: relative;
+  top: 3px;
+}
+/* line 48, ../sass/screen.scss */
+.m-navbar .container-fluid .link-signin a {
+  position: relative;
+  right: -15px;
+}
+
+/* line 56, ../sass/screen.scss */
+.uploadfile {
+  width: 400px;
+  height: 70px;
+  position: relative;
+  margin: 250px auto 0 auto;
+}
+/* line 62, ../sass/screen.scss */
+.uploadfile .btn-yellow {
+  width: inherit;
+  height: inherit;
+  display: block;
+  border-color: #e6a400;
+  background: #ffd772;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffd772), color-stop(50%, #ffd978), color-stop(52%, #ffce52), color-stop(100%, #ffc226));
+  background: -webkit-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
+  background: -o-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
+  background: -ms-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
+  background: linear-gradient(to bottom, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd772', endColorstr='#ffc226',GradientType=0 );
+  font-family: 'PT Sans', sans-serif;
+  font-size: 34px;
+}
+/* line 81, ../sass/screen.scss */
+.uploadfile input[type="file"] {
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0;
+  background: none;
+  border: none;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* line 95, ../sass/screen.scss */
+.overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1050;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+/* line 104, ../sass/screen.scss */
+.overlay .progress {
+  width: 300px;
+  position: relative;
+  top: 50%;
+  margin: 0 auto;
+}
+/* line 111, ../sass/screen.scss */
+.overlay .upload-text {
+  position: relative;
+  top: 40%;
+  font-size: 18px;
+  text-align: center;
+}
+
+/* line 121, ../sass/screen.scss */
+.middle a {
+  color: #ffd772;
+}
+/* line 126, ../sass/screen.scss */
+.middle .container-fluid h1 {
+  padding-bottom: 15px;
+  font-size: 28px;
+}
+/* line 131, ../sass/screen.scss */
+.middle .container-fluid p {
+  padding-bottom: 10px;
+}
+
+/* line 137, ../sass/screen.scss */
+.m-form-signin {
+  width: 350px;
+  margin: 0 auto;
+}
+/* line 141, ../sass/screen.scss */
+.m-form-signin h2 {
+  padding-bottom: 8px;
+  font-size: 18px;
+}
+/* line 147, ../sass/screen.scss */
+.m-form-signin .form-group label {
+  padding-bottom: 5px;
+}
+/* line 153, ../sass/screen.scss */
+.m-form-signin .checkbox label {
+  line-height: 20px;
+}
+
+/* line 159, ../sass/screen.scss */
+.b-list-presentation {
+  margin: 0;
+  display: none;
+}
+
+div.WordSection1 {
+	color: black;
+	font-weight: bold;
+}
