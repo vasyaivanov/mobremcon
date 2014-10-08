@@ -93,7 +93,7 @@ body {
   z-index: 1050;
   top: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
 }
 /* line 104, ../sass/screen.scss */
 .overlay .progress {
@@ -106,7 +106,7 @@ body {
 .overlay .upload-text {
   position: relative;
   top: 40%;
-  font-size: 18px;
+  font-size: 50px;
   text-align: center;
 }
 
