@@ -94,6 +94,10 @@
 		$("#comments").slideToggle();
 	}
     
+    function disableArrowKeys(event){
+		event.stopPropagation();
+	}
+
 	</script>
 	
     
@@ -263,7 +267,7 @@
 
 </head>
 
-<body onresize="resizeCanvas()">
+<body onresize="resizeCanvas()" onkeydown="disableArrowKeys(event)">
 
     <canvas id="drawCanvas" ></canvas>
     
