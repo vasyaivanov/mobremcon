@@ -15,6 +15,11 @@ var canvas, ctx, flag = false,
 var paintColor = "red",
     lineThickness = 2;
 
+slider.swiperight(function() {
+    slider.next();
+    clearCanvas();
+});
+
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
 socket.on('laserOn', function() {
@@ -93,6 +98,8 @@ function clearCanvas () {
     ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
 };
 
+// Draw code written by user1083202 on StackOverflow
+// http://stackoverflow.com/questions/2368784/draw-by-mouse-with-html5-canvas
 function draw() {
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);

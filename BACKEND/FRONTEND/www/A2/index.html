@@ -11,8 +11,12 @@
     <script src="./js/jquery.infinitescroll.js"></script>
     <script src="./js/socket.io.js"></script>
     
-    <!-- Lev: This script controls the laser dot -->
+    <!-- This script controls the laser dot -->
     <script defer src="./js/LASER_RECEIVER.js"></script>       
+    
+    <!-- this library resolves mobile and regular browser toch events.
+    created by Ben Major https://github.com/benmajor/jQuery-Mobile-Events -->
+    <script defer src="./js/jquery.mobile-events.min.js"></script>
     
     <!-- this is for resizing the presentation when it appears in the iframe in the remote-->
     <!--<script type="text/javascript" defer src="./js/squeezeFrame.js"></script>
@@ -262,13 +266,39 @@
 	    iframe * img{
 	    	width: 100%;
 	    }
-	
+    /*
+        #tester {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 50%;
+            background-color: #ccc;
+            text-align: center;
+            text-shadow: 0 1px 0 #fff;
+            font-weight: bold;
+            color: #666;
+        }
+         #console {
+            position: absolute;
+            top: 50%;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+    */
 	</style>
 
 </head>
 
 <body onresize="resizeCanvas()" onkeydown="disableArrowKeys(event)">
 
+    <!--<div id="tester">Action Area!</div>-->
+    
     <canvas id="drawCanvas" ></canvas>
     
 	<div id="sliteWatermak">Powered by SLITE.US</div>
