@@ -26,3 +26,5 @@ www/.DS_Store
 
 *.xcbkptlist
 
+
+*.xccheckout
