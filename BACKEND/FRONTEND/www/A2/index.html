@@ -34,7 +34,7 @@
 
 	<script>
         
-    var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
+    var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
     //var socket = io.connect('http://localhost:1337');
     
     socket.on('news', function (data) {	
@@ -97,11 +97,11 @@
 	function showHideComments(){	  
 		$("#comments").slideToggle();
 	}
-    
-    function disableArrowKeys(event){
-		event.stopPropagation();
+	
+	function showHideVideoChat(){		  
+		$("#videochat").slideToggle();
 	}
-
+    
 	</script>
 	
     
@@ -234,14 +234,45 @@
 	    
 	    #drawCanvas {
 	      position: absolute;
+	      height: 100%;
+	      width: 100%;
 	      border: none;
 	      z-index: 1;
 	      pointer-events: none;
 	    }
+				
+		#videochat{
+	    	position: absolute;
+	    	left: 0px;
+	    	width: 20%;
+	    	height: 100vh;
+	    	display: none;
+			margin-left: 10px;
+	    	background-color: #444444;
+  			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+  			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
+			opacity: 0.7;
+			font-size: 40px;
+			font-weight: bold;
+			color: white;
+			line-height: normal;
+			
+		}
+		
+		#videochatpanel{
+	    	position: fixed;
+	    	left: 0px;
+	    	width: 10px;
+	    	height: 100vh;
+	    	background-color: #444444;
+  			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+  			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */	
+		}
 
 	    #comments{
 	    	position: absolute;
 	    	bottom: 0px;
+			right: 0px
 	    	width: 100%;
 	    	height: 500px;
 	    	display: none;
@@ -251,7 +282,7 @@
 	    	position: fixed;
 	    	bottom: 0px;
 	    	width: 100%;
-	    	height: 10px;
+	    	height: 15px;
 	    	 background-color: #444444;
   			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
   			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
@@ -295,7 +326,7 @@
 
 </head>
 
-<body onresize="resizeCanvas()" onkeydown="disableArrowKeys(event)">
+<body onresize="resizeCanvas()">
 
     <!--<div id="tester">Action Area!</div>-->
     
@@ -308,11 +339,14 @@
   	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
 
 	<div id="comments">
-			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5406565839eec(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5406565839eec"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5406565839eec=document.createElement('script');fcs_5406565839eec.type="text/javascript";fcs_5406565839eec.src=ajaxpath_5406565839eec("http://www.freecommentscript.com/GetComments2.php?p=5406565839eec&s=&Size=10#!5406565839eec");setTimeout("document.getElementById('fcs_div_5406565839eec').appendChild(fcs_5406565839eec)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
+			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5434a641072d9(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5434a641072d9"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5434a641072d9=document.createElement('script');fcs_5434a641072d9.type="text/javascript";fcs_5434a641072d9.src=ajaxpath_5434a641072d9("http://www.freecommentscript.com/GetComments2.php?p=5434a641072d9&s=&Size=10#!5434a641072d9");setTimeout("document.getElementById('fcs_div_5434a641072d9').appendChild(fcs_5434a641072d9)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
 	</div> 
-
 	<div id="commentsPanel"></div>
-
+	
+	<div id="videochatpanel"></div> 
+	<div id="videochat">
+			In browser video chat is coming here!
+	</div>
 
 	<script>		
 		jQuery(document).ready(function($) {
@@ -369,11 +403,19 @@
 						var slider = $(".royalSlider").data('royalSlider');
 						slider.appendSlide(slide_html);
 					}
+
+
+					$("#video-gallery").css("height","100%");
+					$(".rsOverflow").css("height","100%");
 			});
 
+	
 
 	$('#commentsPanel').click(function(){
 		showHideComments();
+	});
+	$('#videochatpanel').click(function(){
+		showHideVideoChat();
 	});
 
 	</script>
