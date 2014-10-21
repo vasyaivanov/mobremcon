@@ -153,8 +153,8 @@ io.sockets.on('connection', function (socket) {
 				for (i=0; i < pollAnswerArray.length; i++) {
 					pollStatisticsArray[i] = 0; //initialize statistics to 0
 				}
-				console.log("MA: pollVote pollAnswerArray: " + JSON.stringify(pollAnswersString));
-				console.log("MA: pollVote pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
+				console.log("MA: pollVote pollAnswerArray: " + JSON.stringify(pollAnswerArray));
+				console.log("MA: pollVote pollStatisticsArray: " + JSON.stringify(pollStatisticsArray));
 			}
 			pollStatisticsArray[data.vote-1] += 1;
 			pollUpdate();
