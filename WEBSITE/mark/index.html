@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>SLITE USE CASES</title>
+  <meta name="viewport" content = "width = device-width, initial-scale = 1.0, minimum-scale = 1.0, maximum-scale = 1.0, user-scalable = no" />
+  
+  <link href="css/footable-0.1.css" rel="stylesheet" type="text/css" />
+  <link href="css/footable.sortable-0.1.css" rel="stylesheet" type="text/css" />
+  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+  <script src="js/footable-0.1.js" type="text/javascript"></script>
+  <script src="js/footable.sortable.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  // THIS IS FROM: http://themergency.com/footable-demo/demo-sorting.htm
+  // THIS IS CALLED: FOO-TABLE
+    $(function() {
+      $('table').footable();
+    });
+  </script>
+</head>
+  <body>
+    <table class="footable">
+      <thead>
+        <tr>
+		  <th data-type="numeric" data-sort-initial="true"  data-class="expand">Rank</th>
+          <th >
+			Use Case
+          </th>
+          <th data-hide="default" data-sort-ignore="true">
+            <span title="sorting disabled on this column">Calculations:</span>
+          </th>
+          <th>
+            Explanation
+          </th>
+          <th data-type="numeric" >
+            <span style="white-space: nowrap;">CAC / LVC</span>
+          </th>
+          <th data-type="numeric">
+            Friction
+          </th>
+        </tr>
+      </thead>
+		<tbody>
+		
+			<tr><td>1</td><td>STADIUM</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				we take existing customers of our partners (stadiums, sports leagues)
+				60K avg. stadium size
+				~ 50% of stadium size = 30K our clients
+				$100K per stadium annually
+				avg. 5 year contract: 100 * 5 = 500K
+				total: 500K + 20% support = 600K
+				
+				Customer Acquisition Cost:
+				90K to make it customisable
+				10K for additional infrastructure (servers …)
+				20K annual maintenance updates
+				total Customer Acquisition Cost: 5 * 20K + 10k + 90k = 100K
+				
+				RATIO: 600K / 100K
+				CLV/CAC ratio = 6.0
+				</pre>
+				</td>
+				<td>Disruptive: Synergy between those at the stadium and those watching on tv. Live fantasy sports! Adds participate in addition to view. Best crowdsourcing sport statistics ever.</td>
+			<td>6.0</td><td >4</td></tr>
+			
+			<tr><td>2</td><td>ONLINE+CLASSROOM EDUCATION</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				price per course $39 existing on Coursera
+				$5 our additional fee for live per course.
+				2.5K students per course 
+				400 courses on Coursera
+				2 year contract
+				Customer Lifetime Value: $5 * 2.5K * 400 * 2 years = 10M
+				
+				Customer Acquisition Cost: 
+				500K to make it customisable
+				300K for additional infrastructure (servers …)
+				400K annual maintenance updates
+				
+				total Customer Acquisition Cost: 500K * 300K + 400K*2 = 1.6 M
+				</pre>
+				</td>
+				<td>Disruptive: Synergy between live and online students! Constant engaging of students. Online can raise hand, vote, talk to teacher.</td>
+			<td>6.25</td><td>4</td></tr>
+			
+			<tr><td>3</td><td>CONFERENCES</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				16,6M conferences in US annually.
+				$1,000 per conference license fee
+				1 time, per conference contract
+
+				Customer Acquisition Cost: 
+				$500 per conference cost of marketing specialist to reach to conferences
+				$500 per convention infrastructure cost
+
+				RATIO: $1,000 / $1,000 
+				CLV/CAC ratio = 1.0
+				</pre>
+				</td>
+				<td>Present real time data. Engage large audience (not possible now). Allow to play with product.</td>
+			<td>1.0</td><td>5</td></tr>
+			
+			<tr><td>4</td><td>INSIDE SALES</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				18 million salespeople in the United States
+				$9.99 per month per person x 12 month = $120 (annually per individual).
+				10 year lifetime value
+				120 * 10 + 24 * 10 (maintenance) = $1,440
+
+				Customer Acquisition Cost: 
+				$1,000 avg. cost of marketing specialist to sell to an individual (person would actually sell to a company)
+				$100 in infrastructure allocated per salesmen
+				24 * 10 maintenance = 240
+
+				RATIO: 1,440 / 1,340
+				CLV/CAC ratio = 1.0
+				</pre>
+				</td>
+				<td>Allows salesmen to walk customer through scenrios. Live data. Live product demo/interaction. Allows customer to act real time.</td>
+			<td>1.0</td><td>6</td></tr>
+			
+			<tr><td>5</td><td>POWERPOINT REPLACEMENT</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				500 million users of Powerpoint currently
+				Below are calculations for 100,000 users and as a last step we divide by 100,000 to get per user data.
+				Assume 100,000 users first year with 25% growth and avg. lifetime user 10 years (931,322 customers at the end of 10 years)
+				Monthly plans are: free, $2.99, $29.99, $49.99
+				50% * free + 20% * 2.99 + 15% * 29.99 + 15% * $49.00 = (60,00 + 450,000 + 750,000 = 1,260,000)= (first year) + 10,000,000 (tenth year) / 2 = avg.  $5,630,000 annually
+				10 year lifetime
+				$5,630,00 * 10 = 56,630,000 + 20% maintenance = 67,956,000 
+				Per customer: 67,956,000 / 100,000 = $679
+
+				Customer Acquisition Cost: 
+				$500,000 infrasture to support 100,000 customers
+				$100,000 marketing annually * 10 years
+				$100,000 support
+				500,000  + 100,000*10 + 100,000 = 1,600,000 
+				Per customer 1,600,000 / 100,000 = $16
+
+				RATIO: $679 / $16
+				CLV/CAC ratio = 42.4
+				</pre>
+				</td>
+				<td>Engaging audience. Presenting real time data. No projector / conference room needed. Presentations on demand. Social aspect of presentation.</td>
+			<td>42.4</td><td>2</td></tr>
+			
+			<tr><td>6</td><td>ONLINE EDUCATION</td>
+				<td>
+				<pre>
+				Same as “Online + Classroom” scenario, except:
+				Value proposition is smaller
+				Number of customers currently is greater, but with our tool probably would become smaller
+
+				RATIO: 10M / 1.6M 
+				CLV/CAC ratio = 6.25
+				
+				</td>
+				<td>Game changer: live interaction with teacher. Live quizes/tests. Ability to "raise hand", "ask questions", even "draw what I mean". Tangible, constant feedback for the teacher.</td>
+				</pre>
+			<td>6.25</td><td>4</td></tr>
+			
+			<tr><td>7</td><td>CORPORATE DECISION MAKING TOOL</td>
+				<td>
+				<pre>				
+				Customer Lifetime Value:
+				18,204,679 businesses in US
+				$180,000 avg. license per business ($2 million for large companies, $1,000 for very small companies, other pricing is in between depends on the number of employees)
+				10 years lifetime = $1,800,000
+				+ 20% maintenance = $1,872,000
+
+				Customer Acquisition Cost: 
+				$100,000 marketing
+				$200,000 maintenance
+				$500,000 infrastructure 
+				total: $800,000
+
+				RATIO: $1,872,000 / $800,000
+				CLV/CAC ratio = 2.34
+				</pre>
+				</td>
+				<td>Powerpoint replacement (save $). Real time data + more input from employees (who otherwise would not speak up) increases likelihood of correct decision. Data is available for analysis and improvement.</td>
+			<td>2.34</td><td>6</td></tr>
+			
+			<tr><td>8</td><td>RESTAURANT LIVE MENU</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				number of U.S. restaurants is 616,008
+				$2,000 licensing fee per year
+				10 year lifetime = $20,000
+				+ 20% maintenance fee = $24,000
+
+				Customer Acquisition Cost: 
+				$10,000 marketing
+				$5,000 infrastructure
+				$5,000 support
+
+				RATIO: $24,000 / $20,000
+				CLV/CAC ratio = 1.2
+				</pre>
+				</td>
+				<td>Customer opens a unique url.It shows him/her live available items (what if they run out of something…) Can be synced with Yelp and Google Images to give more info. Customer orders by clickingCustomer can leave the comment. Restaurant does not need to purchase any hardware or software (only monthly charge on our portal) - easy for both customer and restaurant!</td>
+			<td>1.2</td><td>7</td></tr>
+			
+			<tr><td>9</td><td>CUSTOMER SUPPORT (1-1 education)</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				18,204,679 businesses in US
+				$100,000 avg. license per business ($2 million for large companies, $1,000 for very small companies, other pricing is in between depends on the number of employees)
+				10 years lifetime = $1,000,000
+				+ 20% maintenance = $1,200,000
+
+				Customer Acquisition Cost: 
+				$100,000 marketing
+				$200,000 maintenance
+				$500,000 infrastructure 
+				total: $800,000
+
+				RATIO: $1,200,000 / $800,000
+				CLV/CAC ratio = 1.5
+				</pre>
+				</td>
+				<td>Users gets a url from agent. User goes to that url and agent guides him/her through series of live web pages (where user can click) and also user draw and laser pointer capabilities. Much more efficient way to quickly resolve an issue</td>
+			<td>1.5</td><td>6</td></tr>
+			
+			<tr><td>10</td><td>SCIENCE CROWDSOURCING</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				$100 per experiment license
+				10 year lifetime
+				+ 20% support = $1200
+
+				Customer Acquisition Cost: 
+				$100 marketing
+				$1,000 infrastructure (large data)
+
+				RATIO: $1,200 / $1,100
+				CLV/CAC ratio = 1.1
+				</pre>
+				</td>
+				<td>Web page shows data from control group (assume very large data: asteroids, birds …). Users can vote when they see something. Users can comment = community = crowdsourcing problem</td>
+			<td>1.1</td><td>8</td></tr>
+			
+			<tr><td>11</td><td>JOB INTERVIEW</td>
+				<td>
+				<pre>				
+				Customer Lifetime Value:
+				18,204,679 businesses in US
+				$180,000 avg. license per business ($2 million for large companies, $1,000 for very small companies, other pricing is in between depends on the number of employees)
+				10 years lifetime = $1,800,000
+				+ 20% maintenance = $1,872,000
+
+				Customer Acquisition Cost: 
+				$100,000 marketing
+				$200,000 maintenance
+				$500,000 infrastructure 
+				total: $800,000
+
+				RATIO: $1,872,000 / $800,000
+				CLV/CAC ratio = 2.34
+				</pre>
+				</td>
+				<td>Remote interview. Multiple people/teams conduct interview sumulteniously. Ability to dynamically change questions. Recorded data. Statistics. Much more efficient!</td>
+			<td>2.34</td><td>4</td></tr>
+			
+			<tr><td>12</td><td>REMOTE FINANCIAL ADVISER</td>
+				<td>
+				<pre>				
+				Customer Lifetime Value:
+				Number of financial advisors 316,109
+				$49.99 per month per person x 12 month = $600 (annually per individual).
+				10 year lifetime value
+				600 * 10 + 120 * 10 (maintenance) = $7,200
+
+				Customer Acquisition Cost: 
+				$1,000 avg. cost of marketing specialist to sell to an individual (person would actually sell to a company)
+				$100 in infrastructure allocated per adviser
+				120 * 10 maintenance = 1,200
+
+				RATIO: $7,200 / $2,300
+				CLV/CAC ratio = 3.13
+				</pre>
+				</td>
+				<td>Sell stock to customers real time. Walk through scenarios with real time data. Allow customer to act on the data they are seeing. Cloud crowdsourcing!</td>
+			<td>3.13</td><td>6</td></tr>
+			
+	</tbody>	  
+    </table>
+    
+  </body>
+</html>
