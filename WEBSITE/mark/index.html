@@ -22,27 +22,58 @@
     <table class="footable">
       <thead>
         <tr>
-		  <th data-type="numeric" data-sort-initial="true"  data-class="expand">Rank</th>
+		  <th data-type="numeric" data-sort-initial="true" style="min-width: 50px;">
+			<span title="Rank according to value which we think this use case gives">Rank<span>
+		  </th>
           <th >
-			Use Case
+			<span title="Name of the Use Case.">Use Case<span>
           </th>
           <th data-hide="default" data-sort-ignore="true">
-            <span title="sorting disabled on this column">Calculations:</span>
+            <span title="Calculations for CAC / LVC ratio">CAC/LVC ratio calculations</span>
           </th>
           <th>
-            Explanation
+            <span title="More detailed explanation.">Use Case Explanation</span>
           </th>
-          <th data-type="numeric" >
-            <span style="white-space: nowrap;">CAC / LVC</span>
+          <th>
+            <span title="Value - is an explanation of Rank.">Value</span>
           </th>
-          <th data-type="numeric">
-            Friction
+          <th data-type="numeric"  data-class="expand" style="min-width: 90px;">
+            <span style="white-space: nowrap;" title="Ratio of Customer Aqcuisition Value / Lifetime Value of Customer. Click on + to see calculations.">CAC / LVC</span>
+          </th>
+          <th data-type="numeric" style="min-width: 70px;">
+            <span title="How hard is it to get into this industry. 10 - hard, 1 - easy.">Friction</span>
           </th>
         </tr>
       </thead>
 		<tbody>
 		
-			<tr><td>1</td><td>STADIUM</td>
+		<tr><td>1</td><td>ONLINE+CLASSROOM EDUCATION</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				price per course $39 existing on Coursera
+				$5 our additional fee for live per course.
+				2.5K students per course 
+				400 courses on Coursera
+				2 year contract
+				Customer Lifetime Value: $5 * 2.5K * 400 * 2 years = 10M
+				
+				Customer Acquisition Cost: 
+				500K to make it customisable
+				300K for additional infrastructure (servers …)
+				400K annual maintenance updates
+				
+				total Customer Acquisition Cost: 500K * 300K + 400K*2 = 1.6 M
+
+				RATIO: 10M / 1.6M 
+				CLV/CAC ratio = 6.25
+				</pre>
+				</td>
+				<td>Constant engaging of students. Online and offline students do same function: Online can raise hand, vote, talk to teacher. Crowdsourcing: "Did someone understand what he just said?". Statistics. Live sharing.</td>
+				<td>Disruptive. Synergy between live and online students! Hot growing industry. Value our product brings to the industry is tremendous. Allows us to use our partner’s already established channels for marketing and distribution.</td>
+			<td>6.25</td><td>5</td></tr>
+
+			<tr><td>2</td><td>STADIUM</td>
 				<td>
 				<pre>
 				Customer Lifetime Value:
@@ -63,30 +94,9 @@
 				CLV/CAC ratio = 6.0
 				</pre>
 				</td>
-				<td>Disruptive: Synergy between those at the stadium and those watching on tv. Live fantasy sports! Adds participate in addition to view. Best crowdsourcing sport statistics ever.</td>
-			<td>6.0</td><td >4</td></tr>
-			
-			<tr><td>2</td><td>ONLINE+CLASSROOM EDUCATION</td>
-				<td>
-				<pre>
-				Customer Lifetime Value:
-				price per course $39 existing on Coursera
-				$5 our additional fee for live per course.
-				2.5K students per course 
-				400 courses on Coursera
-				2 year contract
-				Customer Lifetime Value: $5 * 2.5K * 400 * 2 years = 10M
-				
-				Customer Acquisition Cost: 
-				500K to make it customisable
-				300K for additional infrastructure (servers …)
-				400K annual maintenance updates
-				
-				total Customer Acquisition Cost: 500K * 300K + 400K*2 = 1.6 M
-				</pre>
-				</td>
-				<td>Disruptive: Synergy between live and online students! Constant engaging of students. Online can raise hand, vote, talk to teacher.</td>
-			<td>6.25</td><td>4</td></tr>
+				<td>Allows both stadium and tv fans to have their voice heard (on scoreboard, reported to teams). Live fantasy sports! Allows to participate in addition to view. Best crowdsourcing sport statistics ever!</td>
+				<td>Disruptive. Synergy between those at the stadium and those watching on tv! We bring great value to industry. We enable new models in that industry. Very high visibility for our product.</td>
+			<td>6.0</td><td >7</td></tr>
 			
 			<tr><td>3</td><td>CONFERENCES</td>
 				<td>
@@ -104,7 +114,8 @@
 				CLV/CAC ratio = 1.0
 				</pre>
 				</td>
-				<td>Present real time data. Engage large audience (not possible now). Allow to play with product.</td>
+				<td>Present real time data. Engage large audience (not possible now). Allow to play with products on customer's mobile devices. Allow for remote participation in a conference.</td>
+				<td>We add great value for conference organizers, presenters and participants. Allows for viral distribution of our product. Natural access to conferences in Silicon Valley. Allows for very targeted access to our target users.</td>
 			<td>1.0</td><td>5</td></tr>
 			
 			<tr><td>4</td><td>INSIDE SALES</td>
@@ -125,7 +136,8 @@
 				CLV/CAC ratio = 1.0
 				</pre>
 				</td>
-				<td>Allows salesmen to walk customer through scenrios. Live data. Live product demo/interaction. Allows customer to act real time.</td>
+				<td>Allows salesmen to walk customer through scenarios. Live interaction of a customer with a product. Allows customer to act real time on a product(purchase, change).</td>
+				<td>Can measure value which our product adds, which leads to more sales. Sustainable, stable business model. Easier access to corporate customers than in other cases.</td>
 			<td>1.0</td><td>6</td></tr>
 			
 			<tr><td>5</td><td>POWERPOINT REPLACEMENT</td>
@@ -153,6 +165,7 @@
 				</pre>
 				</td>
 				<td>Engaging audience. Presenting real time data. No projector / conference room needed. Presentations on demand. Social aspect of presentation.</td>
+				<td>Makes our company a household name. By far the greatest margin. By far the least friction. The most natural use of our product.  Already have customers lined up to use it this way.</td>
 			<td>42.4</td><td>2</td></tr>
 			
 			<tr><td>6</td><td>ONLINE EDUCATION</td>
@@ -164,10 +177,10 @@
 
 				RATIO: 10M / 1.6M 
 				CLV/CAC ratio = 6.25
-				
+				</pre>
 				</td>
 				<td>Game changer: live interaction with teacher. Live quizes/tests. Ability to "raise hand", "ask questions", even "draw what I mean". Tangible, constant feedback for the teacher.</td>
-				</pre>
+				<td>Same as online + classroom, but easier to get into.</td>
 			<td>6.25</td><td>4</td></tr>
 			
 			<tr><td>7</td><td>CORPORATE DECISION MAKING TOOL</td>
@@ -189,7 +202,8 @@
 				CLV/CAC ratio = 2.34
 				</pre>
 				</td>
-				<td>Powerpoint replacement (save $). Real time data + more input from employees (who otherwise would not speak up) increases likelihood of correct decision. Data is available for analysis and improvement.</td>
+				<td>Employees act (vote, comment) during powerpoint presentations in the company, and follow up after. Data which is present is a real time data, thus allowing for a correct decision. Powerpoint replacement (save $). Real time data + more input from employees (who otherwise would not speak up) increases likelihood of correct decision. Data is available for analysis and improvement.</td>
+				<td>The biggest revenue should come from this use case. Leads to top-down marketing of our product (1 employer - to multiple employees). Saves corporate a lot of money in employee time and wrong decisions cost a lot.</td>
 			<td>2.34</td><td>6</td></tr>
 			
 			<tr><td>8</td><td>RESTAURANT LIVE MENU</td>
@@ -210,7 +224,8 @@
 				CLV/CAC ratio = 1.2
 				</pre>
 				</td>
-				<td>Customer opens a unique url.It shows him/her live available items (what if they run out of something…) Can be synced with Yelp and Google Images to give more info. Customer orders by clickingCustomer can leave the comment. Restaurant does not need to purchase any hardware or software (only monthly charge on our portal) - easy for both customer and restaurant!</td>
+				<td>Customer opens a unique url. It shows him/her live available items (what if they run out of something?) Can be synced with Yelp and Google Images to give more info. Customer orders by clicking. Customer can leave the comment. Restaurant does not need to purchase any hardware or software (only monthly charge on our portal) - easy for both customer and restaurant!</td>
+				<td>Great value for the industry and regular customer. Fun way of using the product. Adds another level to restaurant industry (statistics, crowdsourcing). Allows for synergy of this industry with other industries through our product.</td>
 			<td>1.2</td><td>7</td></tr>
 			
 			<tr><td>9</td><td>CUSTOMER SUPPORT (1-1 education)</td>
@@ -233,6 +248,7 @@
 				</pre>
 				</td>
 				<td>Users gets a url from agent. User goes to that url and agent guides him/her through series of live web pages (where user can click) and also user draw and laser pointer capabilities. Much more efficient way to quickly resolve an issue</td>
+				<td>Solves a very real pain point (frustration with customer support). Easy to adapt. 3 way win-win-win situation: customer, agent, Slite. Psychologically associates our product with easing the pain (allows for adaptation in other use cases)</td>
 			<td>1.5</td><td>6</td></tr>
 			
 			<tr><td>10</td><td>SCIENCE CROWDSOURCING</td>
@@ -252,6 +268,7 @@
 				</pre>
 				</td>
 				<td>Web page shows data from control group (assume very large data: asteroids, birds …). Users can vote when they see something. Users can comment = community = crowdsourcing problem</td>
+				<td>The greatest social value. “Save the world” scenario. Fun and interesting. The biggest potential: if some groundbreaking discovery is made using our system.</td>
 			<td>1.1</td><td>8</td></tr>
 			
 			<tr><td>11</td><td>JOB INTERVIEW</td>
@@ -274,6 +291,7 @@
 				</pre>
 				</td>
 				<td>Remote interview. Multiple people/teams conduct interview sumulteniously. Ability to dynamically change questions. Recorded data. Statistics. Much more efficient!</td>
+				<td>Solves a pain point. Clear, measurable value from our product. Very common scenario - large number of users.</td>
 			<td>2.34</td><td>4</td></tr>
 			
 			<tr><td>12</td><td>REMOTE FINANCIAL ADVISER</td>
@@ -295,6 +313,7 @@
 				</pre>
 				</td>
 				<td>Sell stock to customers real time. Walk through scenarios with real time data. Allow customer to act on the data they are seeing. Cloud crowdsourcing!</td>
+				<td>Potentially can bring the biggest value to the customer. Easy to adapt.</td>
 			<td>3.13</td><td>6</td></tr>
 			
 	</tbody>	  
