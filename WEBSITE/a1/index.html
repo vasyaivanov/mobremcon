@@ -101,13 +101,22 @@
 		$("#comments").slideToggle();
 	}
 	
+	var isVideoOn = false;
 	function showHideVideoChat(){	
-		if ( $( "#join-button" ).length ) { 
-			$( "#join-button" ).trigger( "click" ); 
-		}else{				
-			$( "#setup-new-room" ).trigger( "click" );
-		}	
+		if(!isVideoOn)
+		{
+			if ( $( "#join-button" ).length ) { 
+				$( "#join-button" ).trigger( "click" ); 
+			}else{				
+				$( "#setup-new-room" ).trigger( "click" );
+			}	
+			isVideoOn = true;
+		}
 		$("#videochat").slideToggle();
+		/*
+		$("#videochat").css('overflow-x','hidden');
+		$("#videochat").css('overflow-y','scroll');
+		*/
 	}
     
 	</script>
@@ -264,7 +273,8 @@
 			font-weight: bold;
 			color: white;
 			line-height: normal;
-			
+			overflow-x: hidden;
+			overflow-y: scroll;
 		}
 		
 		#videochatpanel{
@@ -409,7 +419,7 @@
 	<div id="commentsPanel"></div>
 	
 	<div id="videochatpanel"></div> 
-	<div id="videochat">
+	<div id="videochat" style="overflow-x: hidden; overflow-y: scroll;">
 	
 	<h1>Video Chat</h1>
 	
