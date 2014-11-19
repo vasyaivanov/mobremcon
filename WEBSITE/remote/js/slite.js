@@ -115,11 +115,11 @@ $(window).resize(function() {
 // the program is opened in a mobile browser, and load
 // the correct .js file.
 var scriptSrc = './js/slite_browser.js';
-if (/mobile/i.test(navigator.userAgent)) {
+/* if (/mobile/i.test(navigator.userAgent)) {
     scriptSrc = './js/slite_iphone.js';
 } else {
     scriptSrc = './js/slite_browser.js';
-}
+} */
 var script = document.createElement('script');
 script.src = scriptSrc;
 var head = document.getElementsByTagName('head')[0];

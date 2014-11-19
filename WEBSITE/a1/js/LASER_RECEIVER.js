@@ -1,5 +1,4 @@
-//----------------------------------------------------------------------------80
-/* 
+/*
  * This script is for moving the laser pointer on the presentation slide
  * based on what the presenter does on the remote control. It will receive
  * X/Y coordinates from the remote via the Backend APP.JS server, and then
@@ -12,7 +11,7 @@ var canvas, ctx, flag = false,
     prevY = 0,
     currY = 0,
     dot_flag = false;
-    
+
 var paintColor = "red",
     lineThickness = 2;
 
@@ -31,8 +30,6 @@ socket.on('laserOff', function() {
 // This function receives the x/y coordinates from the APP.JS server 
 // and moves the laser dot by adjusting the dot's CSS. 
 socket.on('moveLaser', function(data) {
-    // console.log("Laser Data received");
-    // console.log("X: " + data.x + ", " + "Y: " + data.y);
     var slider = $(".royalSlider").data('royalSlider');
     var receiverHeight = slider.currSlide.content.height();
     var receiverWidth = slider.currSlide.content.width();
@@ -43,7 +40,7 @@ socket.on('moveLaser', function(data) {
     $( "#redDot" ).css({left:scaledX, top:scaledY});
 });
 
-var canvas = $("#myCanvas");
+var canvas = $("#drawCanvas");
 var ctx = canvas[0].getContext('2d');
 
 $( window ).load(function() {
@@ -96,9 +93,6 @@ function clearCanvas () {
     ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
 };
 
-// Draw code written by user1083202 on StackOverflow
-// http://stackoverflow.com/questions/2368784/draw-by-mouse-with-html5-canvas
-  
 function draw() {
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);
@@ -107,7 +101,7 @@ function draw() {
     ctx.lineWidth = lineThickness;
     ctx.stroke();
     ctx.closePath();
-};  
+};
 
 function findxy(res, x, y) {
     if (res == 'down') {
