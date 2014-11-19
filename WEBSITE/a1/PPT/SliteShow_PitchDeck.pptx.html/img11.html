@@ -3,68 +3,27 @@
 <html>
 <head>
   <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
-  <title>Slite: Infinite Data</title>
+  <title>Slite: Other features</title>
   <link rel="stylesheet" type="text.css" href="./css/slide.css">
-  <script language="JavaScript" src="../../js/jquery-2.0.3.min.js"></script>
-
-  <script language="JavaScript" src="../../js/infinite-scroll.js"></script>
-<style>
-td{padding:40px;
-border: 2px;
-font-size: 40px;
-}
-</style>
-
 </head>
 <body>
 <center>
-	<div class="title">FEATURE: INFINITE DATA</div>
-
-
-<table id='data' style='font-size:14px'>
-<tr><td>REMOTE CONTROL (mobile app)</td></tr>
-<tr><td>Clicker</td></tr>
-<tr><td>         next, previous slide</td></tr>
-<tr><td>         +/- button switching slides</td></tr>
-<tr><td>         swipe right/left</td></tr>
-<tr><td>Laser Pointer</td></tr>
-<tr><td>    Draw on slides</td></tr>
-<tr><td>Voice commands</td></tr>
-<tr><td>        next / previous</td></tr>
-<tr><td>        voice queues (to go to a specific slide)</td></tr>
-<tr><td>Next slide preview</td></tr>
-<tr><td>Notes per slide</td></tr>
-<tr><td>Timer of the presentation</td></tr>
-<tr><td>Separate Remote/Website/Server</td></tr>
-</table>
-
-
-
+	<div class="title">OTHER FEATURES</div>
+	<div class="slideBody" style='font-size:45px; line-height:55px;'>
+		<ul>
+			<li>Video Conferencing</li>
+			<li>Social: like, comment, share</li>
+			<li>Close Captioning</li>
+			<li>Live translation into any language</li>
+			<li>Free remote control iPhone app</li>
+				<ul>
+					<li>laser pointer</li>
+					<li>drawing</li>
+					<li>clicker</li>
+					<li>voice control</li>
+				</ul>
+		</ul>
+	</div>
 </center>
-<script type="text/javascript">
-	var features = [
-	'<tr id="1"><td>PRESNTATION</td></tr><tr><td>Subtitles</td></tr><tr><td>Translation</td></tr><tr><td>Social - ( Live Comments / After The Meeting )</td></tr><tr><td>Sound (mobile conference)</td></tr><tr><td>Meeting transcription (record/replay)</td></tr><tr><td>Presets (animated, formats)</td></tr><tr><td>Audio conference</td></tr><tr><td>Video conference</td></tr><tr><td>Offline presentation</td></tr><tr><td></td></tr><tr><td>SLIDE</td></tr><tr><td>Video</td></tr><tr><td>Polls</td></tr><tr><td>Webpage inside slide</td></tr><tr><td>Analyitcs (add graphs, charts)</td></tr>',
-	'<tr id="2"><td>PORTAL</td></tr><tr><td>Landing Page (slite.us)</td></tr><tr><td>    Upload</td></tr><tr><td>    About</td></tr><tr><td>    Suggest/Complain feedback menu item</td></tr><tr><td>    User (sign in/out, display name)</td></tr><tr><td>    Search box (search presentations)</td></tr><tr><td>    Favicon</td></tr><tr><td>    Font</td></tr><tr><td>Users</td></tr><tr><td>Upload</td></tr><tr><td>    PPT</td></tr><tr><td>    PDF</td></tr><tr><td>Mobile/Tables/Desktop formatting</td></tr><tr><td>Privacy settings</td></tr><tr><td>Collaborate on creating the presentation</td></tr><tr><td>Social</td></tr><tr><td>    sharing</td></tr><tr><td>    liking</td></tr><tr><td>Embed presentation into other websites</td></tr><tr><td>Search in slides</td></tr><tr><td>Enterprise level (security / features)</td></tr><tr><td>Statistics tracking</td></tr><tr><td></td></tr>',	
-	'<tr id="1"><td>PRESNTATION</td></tr><tr><td>Subtitles</td></tr><tr><td>Translation</td></tr><tr><td>Social - ( Live Comments / After The Meeting )</td></tr><tr><td>Sound (mobile conference)</td></tr><tr><td>Meeting transcription (record/replay)</td></tr><tr><td>Presets (animated, formats)</td></tr><tr><td>Audio conference</td></tr><tr><td>Video conference</td></tr><tr><td>Offline presentation</td></tr><tr><td></td></tr><tr><td>SLIDE</td></tr><tr><td>Video</td></tr><tr><td>Polls</td></tr><tr><td>Webpage inside slide</td></tr><tr><td>Analyitcs (add graphs, charts)</td></tr>',
-	'<tr id="2"><td>PORTAL</td></tr><tr><td>Landing Page (slite.us)</td></tr><tr><td>    Upload</td></tr><tr><td>    About</td></tr><tr><td>    Suggest/Complain feedback menu item</td></tr><tr><td>    User (sign in/out, display name)</td></tr><tr><td>    Search box (search presentations)</td></tr><tr><td>    Favicon</td></tr><tr><td>    Font</td></tr><tr><td>Users</td></tr><tr><td>Upload</td></tr><tr><td>    PPT</td></tr><tr><td>    PDF</td></tr><tr><td>Mobile/Tables/Desktop formatting</td></tr><tr><td>Privacy settings</td></tr><tr><td>Collaborate on creating the presentation</td></tr><tr><td>Social</td></tr><tr><td>    sharing</td></tr><tr><td>    liking</td></tr><tr><td>Embed presentation into other websites</td></tr><tr><td>Search in slides</td></tr><tr><td>Enterprise level (security / features)</td></tr><tr><td>Statistics tracking</td></tr><tr><td></td></tr>',
-	'<tr id="1"><td>PRESNTATION</td></tr><tr><td>Subtitles</td></tr><tr><td>Translation</td></tr><tr><td>Social - ( Live Comments / After The Meeting )</td></tr><tr><td>Sound (mobile conference)</td></tr><tr><td>Meeting transcription (record/replay)</td></tr><tr><td>Presets (animated, formats)</td></tr><tr><td>Audio conference</td></tr><tr><td>Video conference</td></tr><tr><td>Offline presentation</td></tr><tr><td></td></tr><tr><td>SLIDE</td></tr><tr><td>Video</td></tr><tr><td>Polls</td></tr><tr><td>Webpage inside slide</td></tr><tr><td>Analyitcs (add graphs, charts)</td></tr>',
-	'<tr id="2"><td>PORTAL</td></tr><tr><td>Landing Page (slite.us)</td></tr><tr><td>    Upload</td></tr><tr><td>    About</td></tr><tr><td>    Suggest/Complain feedback menu item</td></tr><tr><td>    User (sign in/out, display name)</td></tr><tr><td>    Search box (search presentations)</td></tr><tr><td>    Favicon</td></tr><tr><td>    Font</td></tr><tr><td>Users</td></tr><tr><td>Upload</td></tr><tr><td>    PPT</td></tr><tr><td>    PDF</td></tr><tr><td>Mobile/Tables/Desktop formatting</td></tr><tr><td>Privacy settings</td></tr><tr><td>Collaborate on creating the presentation</td></tr><tr><td>Social</td></tr><tr><td>    sharing</td></tr><tr><td>    liking</td></tr><tr><td>Embed presentation into other websites</td></tr><tr><td>Search in slides</td></tr><tr><td>Enterprise level (security / features)</td></tr><tr><td>Statistics tracking</td></tr><tr><td></td></tr>',
-	'<tr id="1"><td>PRESNTATION</td></tr><tr><td>Subtitles</td></tr><tr><td>Translation</td></tr><tr><td>Social - ( Live Comments / After The Meeting )</td></tr><tr><td>Sound (mobile conference)</td></tr><tr><td>Meeting transcription (record/replay)</td></tr><tr><td>Presets (animated, formats)</td></tr><tr><td>Audio conference</td></tr><tr><td>Video conference</td></tr><tr><td>Offline presentation</td></tr><tr><td></td></tr><tr><td>SLIDE</td></tr><tr><td>Video</td></tr><tr><td>Polls</td></tr><tr><td>Webpage inside slide</td></tr><tr><td>Analyitcs (add graphs, charts)</td></tr>',
-	'<tr id="2"><td>PORTAL</td></tr><tr><td>Landing Page (slite.us)</td></tr><tr><td>    Upload</td></tr><tr><td>    About</td></tr><tr><td>    Suggest/Complain feedback menu item</td></tr><tr><td>    User (sign in/out, display name)</td></tr><tr><td>    Search box (search presentations)</td></tr><tr><td>    Favicon</td></tr><tr><td>    Font</td></tr><tr><td>Users</td></tr><tr><td>Upload</td></tr><tr><td>    PPT</td></tr><tr><td>    PDF</td></tr><tr><td>Mobile/Tables/Desktop formatting</td></tr><tr><td>Privacy settings</td></tr><tr><td>Collaborate on creating the presentation</td></tr><tr><td>Social</td></tr><tr><td>    sharing</td></tr><tr><td>    liking</td></tr><tr><td>Embed presentation into other websites</td></tr><tr><td>Search in slides</td></tr><tr><td>Enterprise level (security / features)</td></tr><tr><td>Statistics tracking</td></tr><tr><td></td></tr>',
-	];
-
-	var scrollCount = 0;
-	var options = {
-	  distance: 50,
-	  callback: function(done) {
-	  	if(scrollCount < 4){
-	  		scrollCount++;
-			$("#data").append(features[scrollCount]);
-	  	}
-	    done();
-	  }
-	}
-	infiniteScroll(options);
-</script>
 </body>
 </html>

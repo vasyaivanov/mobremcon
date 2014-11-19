@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
-  <title>Slite: Embedded Website 2</title>
+  <title>Slite: Live Data</title>
   <link rel="stylesheet" type="text.css" href="./css/slide.css">
   <style>
     body, html, center {
@@ -11,7 +11,13 @@
     }
   </style>
 </head>
-<body>
- <iframe style="overflow:hidden" height="100%" width="100%" src="http://www.frys.com/product/8242236"></iframe>
+<body style="margin: 0">
+<center>
+  <div class="title">FEATURE: Live Data In Slide</div>
+  <div style="width: 700px; height: 1500px; overflow: hidden; margin-top: 150px;">
+    <iframe id='liveStats' src='http://www.worldometers.info' height = 400px; width = 650px scrolling = 'no'  style="position: relative; left: -30%; top: -18%"></iframe>
+  </div>
+  
+</center>
 </body>
 </html>
