@@ -175,6 +175,16 @@ io.sockets.on('connection', function (socket) {
 			//socket.emit('news', { hello: 1 });
 
 		});
+
+		//socket.emit('cc', { hello: 0 });
+		socket.on('cc', function (data) {
+			console.log("-------------- JD: received CLOSED CAPTIONING: "+data);
+			console.log(data.my);
+			io.sockets.emit('ccBroadcast',{ hello: data.my});
+			//io.sockets.emit('news',clients);
+			//socket.emit('news', { hello: 1 });
+
+		});
         
         // receive laser coordinates from the remote
         socket.on('laserCoords', function(data) {

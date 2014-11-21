@@ -12,6 +12,7 @@ function startup() {
 function printSpeechResult(resultObject){
     console.log("MA printResult");
     console.log(resultObject);
+	closedCaptioning(resultObject);
     console.log(resultObject.indexOf("NEXT"));
     if (resultObject.indexOf("NEXT") > -1) {
         nextSlide();

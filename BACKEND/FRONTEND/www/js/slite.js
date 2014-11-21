@@ -35,6 +35,11 @@ function nextSlide() {
     $("#notes").text(notesArray[currSlideNum]);
 };
 
+function closedCaptioning(ccText){
+    socket.emit('cc', { my:ccText});
+	//alert("JD: ccText="+ccText);
+}
+
 function thumbnails() {
     var elements    = document.querySelectorAll('#otherSlides button');
     // add event listener for each button
