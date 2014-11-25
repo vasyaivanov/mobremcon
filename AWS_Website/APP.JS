@@ -2,37 +2,64 @@ var flash = require('connect-flash')
   , express = require('express3')
   , passport = require('passport')
   , util = require('util')
-  , LocalStrategy = require('passport-local').Strategy;
-  
+  , LocalStrategy = require('passport-local').Strategy
+  , mongodb = require('mongodb')
+  , mongoose = require('mongoose')
+  , bcrypt = require('bcrypt')
+  , SALT_WORK_FACTOR = 10;
 
-var users = [
-    { id: 1, username: 'ehehey', password: 'secret', email: 'ehehey@gmail.com' }
-  , { id: 2, username: 'djwizard', password: 'secret', email: 'wizard_files@yahoo.com' }
-];
+mongoose.connect('localhost', 'test');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback() {
+  console.log('Connected to DB');
+});
+
+// User Schema
+var userSchema = mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true},
+});
+
+// Bcrypt middleware
+userSchema.pre('save', function(next) {
+  var user = this;
+
+  if(!user.isModified('password')) return next();
+
+  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    if(err) return next(err);
+
+    bcrypt.hash(user.password, salt, function(err, hash) {
+      if(err) return next(err);
+      user.password = hash;
+      next();
+    });
+  });
+});
+
+// Password verification
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
+  bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+    if(err) return cb(err);
+    cb(null, isMatch);
+  });
+};
+
+var User = mongoose.model('User', userSchema);
 
 function addUser(username, password, email) {
 	console.log("MA: new user2: " + username + " " + password + " " + email);
-	users.push( {id: users.length, username: username, password: password, email: email} );
-	console.log("MA: new user3: " + users);
-}
-
-function findById(id, fn) {
-  var idx = id - 1;
-  if (users[idx]) {
-    fn(null, users[idx]);
-  } else {
-    fn(new Error('User ' + id + ' does not exist'));
-  }
-}
-
-function findByUsername(username, fn) {
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
-    if (user.username === username) {
-      return fn(null, user);
+  // Seed a user
+  var user = new User({ username: username, email: email, password: password });
+  user.save(function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log('user: ' + user.username + " saved.");
     }
-  }
-  return fn(null, null);
+  });
 }
 
 passport.serializeUser(function(user, done) {
@@ -40,24 +67,25 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  findById(id, function (err, user) {
+  User.findById(id, function (err, user) {
     done(err, user);
   });
 });
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      findByUsername(username, function(err, user) {
-        if (err) { return done(err); }
-        if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
-        if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
+passport.use(new LocalStrategy(function(username, password, done) {
+  User.findOne({ username: username }, function(err, user) {
+    if (err) { return done(err); }
+    if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+    user.comparePassword(password, function(err, isMatch) {
+      if (err) return done(err);
+      if(isMatch) {
         return done(null, user);
-      })
+      } else {
+        return done(null, false, { message: 'Invalid password' });
+      }
     });
-  }
-));
+  });
+}));
 
 var app = express();
 
