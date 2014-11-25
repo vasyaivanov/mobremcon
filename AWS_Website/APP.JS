@@ -91,7 +91,7 @@ var app = express();
 
 // configure Express
 app.configure(function() {
-  app.set('views', __dirname);
+  app.set('views', '/home/ec2-user/www');
   app.set('view engine', 'ejs');
   app.engine('.html', require('ejs').renderFile);
   app.set("view options", {layout: false});
@@ -106,7 +106,7 @@ app.configure(function() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(express.static(__dirname));
+  app.use(express.static('/home/ec2-user/www'));
 });
 
 

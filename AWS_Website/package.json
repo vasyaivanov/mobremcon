@@ -6,7 +6,10 @@
     "ejs": ">= 0.0.0",
     "passport": ">= 0.0.0",
     "passport-local": ">= 0.0.0",
-    "connect-flash": "~0.1.0"
+    "connect-flash": "~0.1.0",
+    "mongodb": ">= 0.0.0",
+    "mongoose": ">= 0.0.0",
+    "bcrypt": ">= 0.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
