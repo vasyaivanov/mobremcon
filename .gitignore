@@ -28,3 +28,5 @@ www/.DS_Store
 
 
 *.xccheckout
+
+passport.socketio/

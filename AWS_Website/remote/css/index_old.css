@@ -1,0 +1,315 @@
+#remote-control
+{
+	position: relative;
+	background: url(remote-back2.jpg) no-repeat;
+	width: 224px;
+	height: 507px;
+}
+	
+#remote-control h2,
+	#remote-control span
+{
+	position: absolute;
+	left: -5000px;
+	}
+	
+#remote-control ul
+{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	}
+	
+#home a,
+#sitemap a,
+#button1 a,
+#button2 a,
+#button3 a,
+#button4 a,
+#button5 a,
+#button6 a,
+#button7 a,
+#button8 a,
+#button9 a,
+#button10 a,
+#button11 a,
+#button12 a,
+#view a,
+#info a,
+#help a,
+#rewind a,
+#back a,
+#forward a,
+#top a,
+#bottom a,
+#ok a
+{
+	position: absolute;
+	display: block;
+	}
+	
+#remote-control li#home a
+{
+	left: 33px;
+	top: 29px;
+	width: 37px;
+	height: 37px;
+	background: url(remote-home.jpg) no-repeat;
+	}
+	
+#remote-control li#home a:hover
+{
+	background-image: url(remote-home.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 -37px;
+	}
+	
+#remote-control li#sitemap a
+{
+	left: 154px;
+	top: 29px;
+	width: 37px;
+	height: 37px;
+	background: url(remote-sitemap.jpg) no-repeat;
+	}
+	
+#remote-control li#sitemap a:hover
+{
+	background-image: url(remote-sitemap.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 -37px;
+	}
+	
+#remote-control li#button1 a,
+#remote-control li#button2 a,
+#remote-control li#button3 a,
+#remote-control li#button4 a,
+#remote-control li#button5 a,
+#remote-control li#button6 a,
+#remote-control li#button7 a,
+#remote-control li#button8 a,
+#remote-control li#button9 a,
+#remote-control li#button10 a,
+#remote-control li#button11 a,
+#remote-control li#button12 a
+{
+	width: 41px;
+	height: 21px;
+	background: url(remote-button.jpg) no-repeat;
+	}
+	
+#remote-control li#button1 a
+{
+	left: 38px;
+	top: 114px;
+	}
+	
+#remote-control li#button2 a
+{
+	left: 91px;
+	top: 114px;
+	}
+	
+#remote-control li#button3 a
+{
+	left: 145px;
+	top: 114px;
+	}
+	
+#remote-control li#button4 a
+{
+	left: 38px;
+	top: 155px;
+	}
+	
+#remote-control li#button5 a
+{
+	left: 91px;
+	top: 155px;
+	}
+	
+#remote-control li#button6 a
+{
+	left: 145px;
+	top: 155px;
+	}
+	
+#remote-control li#button7 a
+{
+	left: 38px;
+	top: 196px;
+	}
+	
+#remote-control li#button8 a
+{
+	left: 91px;
+	top: 196px;
+	}
+	
+#remote-control li#button9 a
+{
+	left: 145px;
+	top: 196px;
+	}
+	
+#remote-control li#button10 a
+{
+	left: 38px;
+	top: 237px;
+	}
+	
+#remote-control li#button11 a
+{
+	left: 91px;
+	top: 237px;
+	}
+	
+#remote-control li#button12 a
+{
+	left: 145px;
+	top: 237px;
+	}
+	
+#remote-control li#button1 a:hover,
+#remote-control li#button2 a:hover,
+#remote-control li#button3 a:hover,
+#remote-control li#button4 a:hover,
+#remote-control li#button5 a:hover,
+#remote-control li#button6 a:hover,
+#remote-control li#button7 a:hover,
+#remote-control li#button8 a:hover,
+#remote-control li#button9 a:hover,
+#remote-control li#button10 a:hover,
+#remote-control li#button11 a:hover,
+#remote-control li#button12 a:hover
+{
+	background-image: url(remote-button.jpg);
+	background-repeat: no-repeat;
+	background-position: 0 -21px;
+	}
+	
+#remote-control li#view a
+{
+	width: 29px;
+	height: 30px;
+	left: 41px;
+	top: 331px;
+	background: url(remote-circle3.jpg) no-repeat 0 -19px;
+	}
+	
+#remote-control li#info a
+{
+	width: 33px;
+	height: 23px;
+	left: 74px;
+	top: 312px;
+	background: url(remote-circle3.jpg) no-repeat -33px 0px;
+}
+	
+#remote-control li#help a
+{
+	width: 33px;
+	height: 23px;
+	left: 116px;
+	top: 312px;
+	background: url(remote-circle3.jpg) no-repeat -75px 0;
+}
+	
+#remote-control li#rewind a
+{
+	width: 29px;
+	height: 30px;
+	left: 154px;
+	top: 332px;
+	background: url(remote-circle3.jpg) no-repeat -113px -20px;
+}
+	
+#remote-control li#back a
+{
+	width: 25px;
+	height: 59px;
+	left: 58px;
+	top: 365px;
+	background: url(remote-circle3.jpg) no-repeat -17px -53px;
+}
+	
+#remote-control li#forward a
+{
+	width: 23px;
+	height: 59px;
+	left: 139px;
+	top: 365px;
+	background: url(remote-circle3.jpg) no-repeat -98px -53px;
+}
+	
+#remote-control li#top a
+{
+	width: 62px;
+	height: 23px;
+	left: 80px;
+	top: 342px;
+	background: url(remote-circle3.jpg) no-repeat -39px -30px;
+}
+	
+#remote-control li#bottom a
+{
+	width: 61px;
+	height: 22px;
+	left: 80px;
+	top: 424px;
+	background: url(remote-circle3.jpg) no-repeat -39px -112px;
+}
+	
+#remote-control li#ok a
+{
+	width: 44px;
+	height: 46px;
+	left: 89px;
+	top: 371px;
+	background: url(remote-circle3.jpg) no-repeat -48px -59px;
+}
+	
+#remote-control li#view a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat 0 -157px;
+
+}
+#remote-control li#info a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -33px -138px;
+}
+
+#remote-control li#help a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -75px -138px;
+}
+
+#remote-control li#rewind a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -113px -158px;
+}
+
+#remote-control li#back a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -17px -191px;
+}
+
+#remote-control li#forward a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -98px -191px;
+}
+
+#remote-control li#top a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -39px -168px;
+}
+
+#remote-control li#bottom a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -39px -250px;
+}
+
+#remote-control li#ok a:hover
+{
+	background: url(remote-circle3.jpg) no-repeat -48px -197px;
+}

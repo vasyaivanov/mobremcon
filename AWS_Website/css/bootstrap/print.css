@@ -1,0 +1,106 @@
+@media print {
+  /* line 8, ../../sass/bootstrap/print.scss */
+  * {
+    text-shadow: none !important;
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* line 16, ../../sass/bootstrap/print.scss */
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  /* line 20, ../../sass/bootstrap/print.scss */
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  /* line 24, ../../sass/bootstrap/print.scss */
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  /* line 30, ../../sass/bootstrap/print.scss */
+  a[href^="javascript:"]:after,
+  a[href^="#"]:after {
+    content: "";
+  }
+
+  /* line 35, ../../sass/bootstrap/print.scss */
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  /* line 40, ../../sass/bootstrap/print.scss */
+  thead {
+    display: table-header-group;
+  }
+
+  /* line 45, ../../sass/bootstrap/print.scss */
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  /* line 49, ../../sass/bootstrap/print.scss */
+  img {
+    max-width: 100% !important;
+  }
+
+  /* line 55, ../../sass/bootstrap/print.scss */
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* line 61, ../../sass/bootstrap/print.scss */
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  /* line 67, ../../sass/bootstrap/print.scss */
+  select {
+    background: #fff !important;
+  }
+
+  /* line 72, ../../sass/bootstrap/print.scss */
+  .navbar {
+    display: none;
+  }
+
+  /* line 77, ../../sass/bootstrap/print.scss */
+  .table td,
+  .table th {
+    background-color: #fff !important;
+  }
+
+  /* line 83, ../../sass/bootstrap/print.scss */
+  .btn > .caret,
+  .dropup > .btn > .caret {
+    border-top-color: #000 !important;
+  }
+
+  /* line 87, ../../sass/bootstrap/print.scss */
+  .label {
+    border: 1px solid #000;
+  }
+
+  /* line 91, ../../sass/bootstrap/print.scss */
+  .table {
+    border-collapse: collapse !important;
+  }
+
+  /* line 96, ../../sass/bootstrap/print.scss */
+  .table-bordered th,
+  .table-bordered td {
+    border: 1px solid #ddd !important;
+  }
+}

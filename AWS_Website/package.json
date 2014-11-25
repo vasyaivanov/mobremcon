@@ -1,0 +1,15 @@
+{
+  "name": "AWS-Website",
+  "version": "0.0.0",
+  "dependencies": {
+    "express3": ">= 0.0.0",
+    "ejs": ">= 0.0.0",
+    "passport": ">= 0.0.0",
+    "passport-local": ">= 0.0.0",
+    "connect-flash": "~0.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./APP.JS"
+  }
+}
