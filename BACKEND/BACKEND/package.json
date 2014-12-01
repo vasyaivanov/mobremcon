@@ -4,9 +4,11 @@
   "description": "remote control graph app",
   "main": "APP.JS",
   "dependencies": {
-    "socket.io": "~0.9.16",
+    "socket.io": "~1.0",
     "cheerio": "0.17.0",
-    "socketio-file-upload": "0.2.7"
+    "socketio-file-upload": "0.2.7",
+    "mongodb": ">= 0.0.0",
+    "cacheman-mongo": ">= 0.0.0"
   },
   "devDependencies": {},
   "scripts": {

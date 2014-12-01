@@ -1,11 +1,16 @@
 var app = require('http').createServer(handler)
   , url = require('url')
   , io = require('socket.io').listen(app, { log: true })
+
   , fs = require('fs')
   , cheerio = require('cheerio')
   , exec = require('child_process').exec
   , http = require('http') 
-  , SocketIOFileUploadServer = require("socketio-file-upload");
+  , SocketIOFileUploadServer = require("socketio-file-upload")
+  , hash = require('./hash.js'); 
+
+//hash.cache.clear();
+//hash.cacheHash();
 
 app.listen(1337);// change to port 80 for use with nodejitsu
 
@@ -61,7 +66,7 @@ io.sockets.on('connection', function (socket) {
 
     	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
     	//uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
-		uploader.dir = "./TEST/MA/";
+		uploader.dir = "../TEST/MA/";
     	
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + event.file);
@@ -81,8 +86,8 @@ io.sockets.on('connection', function (socket) {
 			//var fullFileName = uploader.dir + "SliteShow_PitchDeck.pptx";
         	
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
-		var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
-		//var unoconv_cmd = "python ../unoconv-master/unoconv";
+		//var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
+		var unoconv_cmd = "python ../FRONTEND/unoconv-master/unoconv";
 		console.log(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName);	
         	
         exec(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName, 
@@ -98,7 +103,8 @@ io.sockets.on('connection', function (socket) {
 			  // The second link in this HTML file is to the last slide image, 
 			  // like this: <a href="img14.html">
 			  // characters 3-5 of "img14.html" is "14", the number of slides
-			  socket.broadcast.emit('fileConverted', { dir: uploader.dir, filename: fullFileName, num_slides: $('a').next().attr('href').slice(3,5) });
+			  io.sockets.emit('fileConverted', { dir: uploader.dir, filename: fullFileName, num_slides: $('a').next().attr('href').slice(3,5) });
+			  hash.cacheHash();			  
 			});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
@@ -110,6 +116,11 @@ io.sockets.on('connection', function (socket) {
         		imageCount++;
         	}); */
     	});
+
+		socket.on('hash', function (data) {
+			console.log("MA APP.JS received hash: " + JSON.stringify(data));
+
+		});
 
 		var toggle = 2;
 
