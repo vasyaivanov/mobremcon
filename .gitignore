@@ -30,3 +30,5 @@ www/.DS_Store
 *.xccheckout
 
 passport.socketio/
+
+BACKEND/BACKEND/node_modules/*.*
