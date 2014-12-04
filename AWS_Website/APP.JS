@@ -91,7 +91,8 @@ var app = express();
 
 // configure Express
 app.configure(function() {
-  app.set('views', '/home/ec2-user/www');
+  //app.set('views', '/home/ec2-user/www');
+  app.set('views', __dirname);
   app.set('view engine', 'ejs');
   app.engine('.html', require('ejs').renderFile);
   app.set("view options", {layout: false});
@@ -106,21 +107,28 @@ app.configure(function() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(express.static('/home/ec2-user/www'));
+  //app.use(express.static('/home/ec2-user/www'));
+  app.use(express.static(__dirname));
 });
 
 
 app.get('/', function(req, res){
-  res.render('index.html');
+  //if( !req.user ) res.redirect('/');
+  console.log("MA: logout error2: " + req.user);
+  res.render('index.html', { user: req.user });
 });
 
-app.post('/account', function(req, res){
+app.get('/account', ensureAuthenticated, function(req, res){
+  res.render('account.html', { user: req.user });
+});
+
+app.post('/signup', function(req, res){
   console.log("MA: new user: " + req.body.username + " " + req.body.password + " " + req.body.email);
   if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html');
   else
   {
 	addUser(req.body.username, req.body.password, req.body.email);
-	res.redirect('/logout');
+	res.redirect('/login');
   }
 });
 
@@ -131,13 +139,23 @@ app.get('/login', function(req, res){
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/signin.html', failureFlash: true }),
   function(req, res) {
-	console.log("MA: login2: " + req.user.username + " " + req.user.password + " " + req.user.email);
+	  console.log("MA: login2: " + req.user.username + " " + req.user.password + " " + req.user.email);
     res.redirect('/');
   });
 
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  req.session.destroy(function (err) {
+    if (err) {
+      console.log("MA: logout error: " + err);
+      res.redirect('/logout'); 
+    }
+    // The response should indicate that the user is no longer authenticated.
+    //req.session.user = null;
+    res.clearCookie('connect.sid', { path: '/' });
+    console.log("MA: logout success ");
+    res.redirect('/');
+  });
 });
 
 app.listen(8081);

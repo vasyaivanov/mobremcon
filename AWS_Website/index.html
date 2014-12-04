@@ -32,7 +32,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                       </button>
-                      <a href="http://slite.us" class="logo"><img src="img/logo.png"></a>
+                      <a href="/" class="logo"><img src="img/logo.png"></a>
                     </div>
 
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -58,10 +58,18 @@
 
                       <ul class="nav navbar-nav navbar-right">
                         <li class="link-signin">
-                          <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
+                          <% if (!user) { %>
+                            <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
+                          <% } else { %>
+                            <a href="/account"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+                          <% } %> 
                         </li>
-						<li class="link-signin active">
-                            <a href="logout"><span class="glyphicon glyphicon-user"></span> Sign out</a>
+						            <li class="link-signin">
+                          <% if (!user) { %>
+                            <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+                          <% } else { %>
+                            <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
+                          <% } %> 
                         </li>
                       </ul>
                     </div><!-- /.navbar-collapse -->
