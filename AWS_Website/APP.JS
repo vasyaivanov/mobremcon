@@ -113,8 +113,9 @@ app.configure(function() {
 
 
 app.get('/', function(req, res){
-  //if( !req.user ) res.redirect('/');
-  console.log("MA: logout error2: " + req.user);
+  res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.header("Pragma", "no-cache");
+  res.header("Expires", 0);
   res.render('index.html', { user: req.user });
 });
 
