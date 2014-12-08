@@ -9,7 +9,12 @@
     "connect-flash": "~0.1.0",
     "mongodb": ">= 0.0.0",
     "mongoose": ">= 0.0.0",
-    "bcrypt": ">= 0.0.0"
+    "bcrypt": ">= 0.0.0",
+    "socket.io": "~1.0",
+    "socket.io-client": "~1.2.1",
+    "cheerio": "0.17.0",
+    "socketio-file-upload": "0.2.7",
+    "cacheman-mongo": ">= 0.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

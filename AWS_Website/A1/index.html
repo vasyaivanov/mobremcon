@@ -16,7 +16,7 @@
     <script src="./js/jquery-ui-1.8.22.custom.min.js"></script>
     <script class="rs-file" src="./js/jquery.royalslider.min.js"></script>
     <script src="./js/jquery.infinitescroll.js"></script>
-    <script src="./js/socket.io.js"></script>
+    <script src="http://localhost:1337/socket.io/socket.io.js"></script>
     
     <!-- Lev: This script controls the laser dot -->
     <script defer src="./js/LASER_RECEIVER.js"></script>       
@@ -37,8 +37,8 @@
 
 	<script>
         
-    var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-    //var socket = io.connect('http://localhost:1337');
+    //var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+    var socket = io.connect('http://localhost:1337');
 
     socket.on('ccBroadcast', function (data) {	
     		//alert("JD: ccBroadcast text="+data.hello);

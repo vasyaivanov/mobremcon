@@ -32,3 +32,9 @@ www/.DS_Store
 passport.socketio/
 
 BACKEND/BACKEND/node_modules/*.*
+
+**/node_modules/**
+
+AWS_Website/UPLOAD/**
+
+BACKEND/TEST/MA/**
