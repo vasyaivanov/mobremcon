@@ -47,10 +47,10 @@ var num_slides = 0;
 function renameSliteDir()
 {
 	console.log("MA found hash " + dir + " " + filename + " " + num_slides);
-	fs.rename(dir, "../" + hashValue, function (err){
-		fs.rename("../" + hashValue + "/" + filename , "../" + hashValue + "/index.html", function (err){
-			socket.emit('slitePrepared', { dir: "../" + hashValue, hash: hashValue, num_slides: num_slides });
-			console.log("MA: renamed");
+	fs.rename(dir, "/home/ec2-user/www/" + hashValue, function (err){
+		fs.rename("/home/ec2-user/www/" + hashValue + "/" + filename , "/home/ec2-user/www/" + hashValue + "/index.html", function (err){
+			socket.emit('slitePrepared', { dir: "/home/ec2-user/www/" + hashValue, hash: hashValue, num_slides: num_slides });
+			console.log("MA: renamed to " + "/home/ec2-user/www/" + hashValue + "/index.html");
 		});
 	});
 
@@ -68,8 +68,8 @@ cacheHash: function cacheHash(){
 	//return (  hashValue == true && count < maxNumTries); 
 		
 	count++;
-	//hashValue = getHash();
-	hashValue = 'abcd';
+	hashValue = getHash();
+	//hashValue = 'abcd';
 	console.log("JD: first generated hash="+hashValue);
 	// get the value
 	cache.get(hashValue, function (error, value) {
@@ -80,14 +80,15 @@ cacheHash: function cacheHash(){
 				console.log("JD: set my hash to " + hashValue);
 				freeHashValueFound = true;
 			});
-		}else{
-			cacheHash();
-		}	
+		}
+		cacheHash();	
 	});
 
 }
 
 prepare_slite: function prepare_slite(dir_input, filename_input, num_slides_input){
+    count = 0;
+    freeHashValueFound = false;
 	console.log("MA: prepare_slite: " + dir + " " + filename + " " + num_slides);
     dir = dir_input; filename = filename_input; num_slides = num_slides_input;
     console.log("MA: prepare_slite set: " + dir + " " + filename + " " + num_slides);

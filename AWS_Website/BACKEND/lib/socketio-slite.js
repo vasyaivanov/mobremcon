@@ -50,7 +50,7 @@ io.sockets.on('connection', function (socket) {
 
     	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
     	//uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
-		uploader.dir = "../UPLOAD/";
+		uploader.dir = "/home/ec2-user/UPLOAD/";
     	
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + event.file);

@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-		var socket = io.connect('http://localhost:1337');
+		var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
 
 		// Initialize instances:
 		var siofu = new SocketIOFileUpload(socket);
@@ -17,6 +17,7 @@ $(document).ready(function(){
 			console.log(event.success);
 			console.log(event.file);
 			socket.emit('fileStarted', { myStart: "start=" });
+			$('body').append('<div class="overlay"><div class="upload-text">Uploading...<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
 		});
 
 		// Do something when a file is uploaded:
@@ -35,11 +36,11 @@ $(document).ready(function(){
 
 		socket.on('fileConverted', function (data) {
 			console.log("MA fileConverted: " + JSON.stringify(data));
-			window.location = "http://localhost:8081/" + data.hash;
+			window.location = "http://www.slite.us/" + data.hash;
 	  	});
 		
 		$('#createPresentation').click(function(){
-				window.location = "http://slite.us/editor";
+				window.location = "http://www.slite.us/editor";
 		});
 
 		if(navigator.userAgent.match(/(iPhone|iPad)/i)) {

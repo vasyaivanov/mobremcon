@@ -38,3 +38,4 @@ BACKEND/BACKEND/node_modules/*.*
 AWS_Website/UPLOAD/**
 
 BACKEND/TEST/MA/**
+*.zip
