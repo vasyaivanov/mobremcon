@@ -141,12 +141,6 @@ io.sockets.on('connection', function (socket) {
 		socket.on('mymessage', function (data) {
 			console.log("JD received data: "+data);
 			console.log(data.my);
-			if(toggle == 2) { 
-				toggle = 1; 
-			} 
-			else{ 
-				toggle =2; 
-			}
 			io.sockets.emit('news',{ hello: data.my, slide: data.slide});
 			//io.sockets.emit('news',clients);
 			//socket.emit('news', { hello: 1 });
