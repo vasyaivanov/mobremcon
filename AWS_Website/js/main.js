@@ -34,7 +34,7 @@ $(document).ready(function(){
 			socket.emit('newSlides', { myComplete: "complete", myFile: event.file});
 		});
 
-		socket.on('fileConverted', function (data) {
+		socket.on('slitePrepared', function (data) {
 			console.log("MA fileConverted: " + JSON.stringify(data));
 			window.location = "http://www.slite.us/" + data.hash;
 	  	});
