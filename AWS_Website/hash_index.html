@@ -667,9 +667,9 @@
 					for (var slide = 0; slide <= NUM_SLIDES; ++slide) {
 						//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\SliteShow_PitchDeck.pptx.html\\";
 						//var slide_html_path = data.filename;
-						var slide_html_path = "img"+slide+".html" + "?ts=" +  (new Date().getTime()); //slide url with added time stamp to stop caching
+						var slide_html_path = "img"+slide+".jpg" + "?ts=" +  (new Date().getTime()); //slide url with added time stamp to stop caching
 						var slide_html= "<div style='text-align:center' id=slide class='rsContent'>"
-							+ "<iframe src='"+slide_html_path+"' width='100%' height='100%' seamless> </iframe>"
+							+ "<img src='"+slide_html_path+"'>"
 							+ "<div class='rsTmb'>"
 							+ "<h5>SLIDE"+slide+"</h5>"
 							+ "     <span>Slide "+slide+" here</span>"
