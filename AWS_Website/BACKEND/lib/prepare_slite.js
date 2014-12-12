@@ -1,9 +1,7 @@
 var CachemanMongo = require('cacheman-mongo');
-//var mongodb = require('mongodb');
-var io = require('socket.io-client');
 var fs = require('fs');
 
-var options = { 
+var options = {
 
   port: 27017,
   host: '127.0.0.1',
@@ -13,23 +11,13 @@ var options = {
 
 var cache = new CachemanMongo(options);
 
-var socket = io.connect('http://localhost:1337');
-
-socket.on('connect', function(){
-	console.log("MA connected in hash.js");
-});
-
-socket.on('error', function(err){
-	console.log("MA: error: " + JSON.stringify(err));
-});
-
 function getHash()
 {
-	
+
 	var time = process.hrtime() // get unique number
 	, salt = Math.floor(Math.random() * Math.pow(4, Math.random()*4)) // get variable length prefix
 	, hash = salt.toString(36) + time[0].toString(36)// + time[1].toString(36) // construct unique id
-	; 
+	;
 
 
 	return hash;
@@ -48,9 +36,17 @@ function renameSliteDir()
 {
 	console.log("MA found hash " + dir + " " + filename + " " + num_slides);
 	fs.rename(dir, "/home/ec2-user/www/" + hashValue, function (err){
-		fs.rename("/home/ec2-user/www/" + hashValue + "/" + filename , "/home/ec2-user/www/" + hashValue + "/index.html", function (err){
-			socket.emit('slitePrepared', { dir: "/home/ec2-user/www/" + hashValue, hash: hashValue, num_slides: num_slides });
-			console.log("MA: renamed to " + "/home/ec2-user/www/" + hashValue + "/index.html");
+		fs.rename("/home/ec2-user/www/" + hashValue + "/" + filename , "/home/ec2-user/www/" + hashValue + "/img0.html", function (err){
+      fs.readFile("/home/ec2-user/www/hash_index.html", "utf8", function(err, data) {
+        if (err) throw err;
+        var data_replaced = data.replace("NUM_SLIDES", num_slides);
+        fs.writeFile("/home/ec2-user/www/" + hashValue + "/index.html", data_replaced, function(err) {
+          if (err) throw err;
+          module.parent.exports.socket.emit("slitePrepared", { dir: "/home/ec2-user/www/" + hashValue, hash: hashValue, num_slides: num_slides });
+    			console.log("MA: renamed to " + "/home/ec2-user/www/" + hashValue + "/index.html");
+          console.log("success!");
+        });
+      });
 		});
 	});
 
@@ -58,15 +54,15 @@ function renameSliteDir()
 }
 
 cacheHash: function cacheHash(){
-    
+
 	if (freeHashValueFound || count > maxNumTries) {
 		console.log("MA found hash " + hashValue);
 		renameSliteDir();
-		return; 
+		return;
 	}
-	console.log("JD: hashValue="+hashValue+" count="+count); 
-	//return (  hashValue == true && count < maxNumTries); 
-		
+	console.log("JD: hashValue="+hashValue+" count="+count);
+	//return (  hashValue == true && count < maxNumTries);
+
 	count++;
 	hashValue = getHash();
 	//hashValue = 'abcd';
@@ -81,7 +77,7 @@ cacheHash: function cacheHash(){
 				freeHashValueFound = true;
 			});
 		}
-		cacheHash();	
+		cacheHash();
 	});
 
 }
@@ -105,5 +101,3 @@ module.exports.prepare_slite = prepare_slite;
     console.log("JD: -------- FINAL RESULTS HASH=" + hashValue);
     process.exit(1);
 });*/
-
-
