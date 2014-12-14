@@ -137,7 +137,7 @@ app.get('/login', function(req, res){
   res.render('signin.html', { user: req.user, message: req.flash('error') });
 });
 
-app.post('/login', 
+app.post('/login',
   passport.authenticate('local', { failureRedirect: '/signin.html', failureFlash: true }),
   function(req, res) {
 	  console.log("MA: login2: " + req.user.username + " " + req.user.password + " " + req.user.email);
@@ -149,7 +149,7 @@ app.get('/logout', function(req, res){
   req.session.destroy(function (err) {
     if (err) {
       console.log("MA: logout error: " + err);
-      res.redirect('/logout'); 
+      res.redirect('/logout');
     }
     // The response should indicate that the user is no longer authenticated.
     //req.session.user = null;

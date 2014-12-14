@@ -1,36 +1,36 @@
 <html>
 <head>
 	<title>RECEIVER POWER POINT</title>
-	
+
 	    <!-- slider JS files -->
-    
+
     <script src="./js/jquery-1.8.3.js"></script>
     <script src="./js/jquery-ui-1.8.22.custom.min.js"></script>
     <script class="rs-file" src="./js/jquery.royalslider.min.js"></script>
 	<script src="./js/jquery.infinitescroll.js"></script>
     <link href="./css/jquery-ui-1.8.22.custom.css" rel="stylesheet">
     <link class="rs-file" href="./css/royalslider.css" rel="stylesheet">
-	
+
 	<link rel="stylesheet" type="text/css" href="./css/index1.css">
 	<script src="http://localhost:1337/socket.io/socket.io.js"></script>
 	<!--<script src="http://remotecontrol.nodejitsu.com:80/socket.io/socket.io.js"></script>-->
 	<script>
 	  	//var socket = io.connect('http://remotecontrol.nodejitsu.com:80');
 	  	var socket = io.connect('http://localhost:1337');
-		
+
 	  	socket.on('fileConverted', function (data) {
 			//console.log("JD: received from remote this data: " + JSON.stringify(data));
-			for (var slide = 1; slide <= data.num_slides; ++slide) {	
+			for (var slide = 1; slide <= data.num_slides; ++slide) {
 				//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\Weather_delivery.pptx.html\\";
 				var slide_html_path = data.filename;
 				//var slide_html_path= "./Weather_delivery.pptx.html/";
 				var slide_html= "<div style='text-align:center' id=slide class='rsContent'>" 
-					+ "<iframe src='"+slide_html_path+".html/img"+slide+".html' width='850' height='850' seamless> </iframe>"   
+					+ "<iframe src='"+slide_html_path+".html/img"+slide+".html' width='850' height='850' seamless> </iframe>"
 					+ "<div class='rsTmb'>"
 					+ "<h5>SLIDE"+slide+"</h5>"
 					+ "     <span>Slide "+slide+" here</span>"
 					+ "</div> </div>";
-				
+
 				var slider = $(".royalSlider").data('royalSlider');
 				slider.appendSlide(slide_html);
 			}
@@ -40,9 +40,9 @@
 	  	var button = data.hello-1;
 
 		console.log(button);
-		
+
 		var slider = $(".royalSlider").data('royalSlider');
-		
+
 		switch(button)
 		{
 			case -102: {
@@ -68,19 +68,19 @@
 				slider.goTo(button);
 				slider.playVideo();
 			}
-		
-		
+
+
 		}
-		
+
 		/*if(button == -1){
 			slider.toggleVideo();
 		}else{
-		
+
 			slider.stopVideo();
 			slider.goTo(button);
 			slider.playVideo();
 		}*/
-		
+
 		/*if(data && (data.hello % 2 == 0)){
 			document.body.style.background = "red";
 		}else{
@@ -89,32 +89,32 @@
 		socket.emit('my other event', { my: 'data' });
 	  });
 	</script>
-	
-    
+
+
     <!-- syntax highlighter -->
     <script src="highlight.pack.js"></script>
     <script> hljs.initHighlightingOnLoad();</script>
 
 
-    
+
 
     <!-- preview-related stylesheets -->
     <link href="./css/reset.css" rel="stylesheet">
     <link href="./css/github.css" rel="stylesheet">
 
     <!-- slider stylesheets -->
-    
-     
+
+
     <link class="rs-file" href="./css/rs-default.css" rel="stylesheet">
-	
-	
+
+
 	<style>
-	
-	
+
+
 		body{
 			background-color:rgba(0,0,255,0.3);
 		}
-	
+
 		#video-gallery {
 		  width: 100%;
 		}
@@ -140,8 +140,8 @@
 		}
 
 		.sampleBlock {
-		  left: 3%; 
-		  top: 1%; 
+		  left: 3%;
+		  top: 1%;
 		  width: 100%;
 		  max-width: 400px;
 		}
@@ -179,22 +179,22 @@
 			-moz-transition: all 0.3s ease-out;
 			transition: all 0.3s ease-out;
 
-			-webkit-transform: scale(0.9);  
-			-moz-transform: scale(0.9); 
+			-webkit-transform: scale(0.9);
+			-moz-transform: scale(0.9);
 			-ms-transform: scale(0.9);
 			-o-transform: scale(0.9);
 			transform: scale(0.9);
 		}
 		.royalSlider .rsActiveSlide {
 			opacity: 1;
-			-webkit-transform: scale(1);  
-			-moz-transform: scale(1); 
+			-webkit-transform: scale(1);
+			-moz-transform: scale(1);
 			-ms-transform: scale(1);
 			-o-transform: scale(1);
 			transform: scale(1);
 		}
 		}
-	
+
 	</style>
 
 </head>
@@ -202,7 +202,7 @@
 <body>
 	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
 	<script>
-		
+
 		jQuery(document).ready(function($) {
 				  $('#video-gallery').royalSlider({
 					arrowsNav: false,
@@ -228,9 +228,9 @@
 					  autoHideArrows:true,
 					  autoHideControlNav:false,
 					  autoHideBlocks: true
-					}, 
-					autoScaleSlider: true, 
-					autoScaleSliderWidth: 200,     
+					},
+					autoScaleSlider: true,
+					autoScaleSliderWidth: 200,
 					autoScaleSliderHeight: 100,
 					visibleNearby: {
 						enabled: false,
