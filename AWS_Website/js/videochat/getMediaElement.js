@@ -6,7 +6,7 @@
 
 // Demo          - www.WebRTC-Experiment.com/getMediaElement
 
-document.write('<link rel="stylesheet" href="./css/videochat/getMediaElement.css">');
+document.write('<link rel="stylesheet" href="../css/videochat/getMediaElement.css">');
 
 // __________________
 // getMediaElement.js
