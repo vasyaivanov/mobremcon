@@ -5,8 +5,10 @@
 
 thumbnails();
 
-$('#URLBox').change(function() {
-	changeURL();
+$('#URLBox').keypress(function(e) {
+	if(e.which == 13) {	
+		changeURL();
+	}
 });
 
 // Adding event handlers to the currentSlide div, the user

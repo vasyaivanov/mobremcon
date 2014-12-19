@@ -669,8 +669,8 @@
 						//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\SliteShow_PitchDeck.pptx.html\\";
 						//var slide_html_path = data.filename;
 						var slide_html_path = "img"+slide+".jpg" + "?ts=" +  (new Date().getTime()); //slide url with added time stamp to stop caching
-						var slide_html= "<div style='text-align:center' id=slide class='rsContent'>"
-							+ "<img src='"+slide_html_path+"' width='100%' height='100%'>"
+						var slide_html= "<div style='text-align:center;overflow:scroll' id=slide class='rsContent'>"
+							+ "<img src='"+slide_html_path+"' height='100%'>"
 							+ "<div class='rsTmb'>"
 							+ "<h5>SLIDE"+slide+"</h5>"
 							+ "     <span>Slide "+slide+" here</span>"
