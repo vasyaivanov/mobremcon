@@ -95,7 +95,7 @@ var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'});
 // find path www_dir to index.html							// OL
 var indexHtml = 'index.html';								// OL
 var awsDir = '/home/ec2-user/www/';							// OL
-var localDir = __dirname + "/../";							// OL
+var localDir = __dirname + "/www/";							// OL
 var www_dir;												// OL
 if (fs.existsSync(localDir + indexHtml)) {					// OL
   www_dir = localDir;										// OL
@@ -131,12 +131,6 @@ app.get('/', function(req, res){
   res.render(indexHtml, { user: req.user });				// OL
 });
 
-// hash redirection											// OL
-var presDir = 'pres';										// OL
-app.get(/^\/[0-9a-zA-z-_]{4}\/?$/, function(req, res) {		// OL
-  res.redirect(presDir + req.path);							// OL
-});
-
 app.get('/account', ensureAuthenticated, function(req, res){
   res.render('account.html', { user: req.user });
 });
@@ -155,7 +149,7 @@ app.get('/login', function(req, res){
   res.render('signin.html', { user: req.user, message: req.flash('error') });
 });
 
-app.post('/login', 
+app.post('/login',
   passport.authenticate('local', { failureRedirect: '/signin.html', failureFlash: true }),
   function(req, res) {
 	  console.log("MA: login2: " + req.user.username + " " + req.user.password + " " + req.user.email);
@@ -167,7 +161,7 @@ app.get('/logout', function(req, res){
   req.session.destroy(function (err) {
     if (err) {
       console.log("MA: logout error: " + err);
-      res.redirect('/logout'); 
+      res.redirect('/logout');
     }
     // The response should indicate that the user is no longer authenticated.
     //req.session.user = null;
@@ -175,6 +169,12 @@ app.get('/logout', function(req, res){
     console.log("MA: logout success ");
     res.redirect('/');
   });
+});
+
+// hash redirection											// OL
+var presDir = "slites";										// OL
+app.get(/^\/[0-9a-zA-z-_]{5}\/?$/, function(req, res) {		// OL
+  res.redirect(presDir + req.path);							// OL
 });
 
 app.listen(8081);

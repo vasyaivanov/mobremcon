@@ -32,18 +32,30 @@ var dir = null;
 var filename = null;
 var num_slides = 0;
 
+// find path www_dir to index.html							// OL
+var indexHtml = 'index.html';								// OL
+var awsDir = '/home/ec2-user/www/';							// OL
+var localDir = __dirname + "/www/";							// OL
+
+var www_dir;												// OL
+if (fs.existsSync(localDir + indexHtml)) {					// OL
+  www_dir = localDir;										// OL
+} else {													// OL
+  www_dir = awsDir;											// OL
+}															// OL
+
 function renameSliteDir()
 {
 	console.log("MA found hash " + dir + " " + filename + " " + num_slides);
-	fs.rename(dir, "/home/ec2-user/www/" + hashValue, function (err){
-		fs.rename("/home/ec2-user/www/" + hashValue + "/" + filename , "/home/ec2-user/www/" + hashValue + "/img0.html", function (err){
-      fs.readFile("/home/ec2-user/www/hash_index.html", "utf8", function(err, data) {
+	fs.rename(dir, www_dir + "slites/" + hashValue, function (err){
+		fs.rename(www_dir + "slites/" + hashValue + "/" + filename , www_dir + "slites/" + hashValue + "/img0.html", function (err){
+      fs.readFile(www_dir + "hash_index.html", "utf8", function(err, data) {
         if (err) throw err;
         var data_replaced = data.replace("NUM_SLIDES", num_slides);
-        fs.writeFile("/home/ec2-user/www/" + hashValue + "/index.html", data_replaced, function(err) {
+        fs.writeFile(www_dir + "slites/" + hashValue + "/index.html", data_replaced, function(err) {
           if (err) throw err;
-          module.parent.exports.socket.emit("slitePrepared", { dir: "/home/ec2-user/www/" + hashValue, hash: hashValue, num_slides: num_slides });
-    			console.log("MA: renamed to " + "/home/ec2-user/www/" + hashValue + "/index.html");
+          module.parent.exports.socket.emit("slitePrepared", { dir: www_dir + "slites/" + hashValue, hash: hashValue, num_slides: num_slides });
+    			console.log("MA: renamed to " + www_dir + hashValue + "/index.html");
           console.log("success!");
         });
       });
