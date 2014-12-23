@@ -92,9 +92,18 @@ var app = express();
 
 var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'}); //use {flags: 'w'} to open in write mode
 
+// find path www_dir to index.html							// OL
+var indexHtml = 'index.html';								// OL
+var awsDir = '/home/ec2-user/www/';							// OL
+var localDir = __dirname + "/../";							// OL
+var www_dir;												// OL
+if (fs.existsSync(localDir + indexHtml)) {					// OL
+  www_dir = localDir;										// OL
+} else {													// OL
+  www_dir = awsDir;											// OL
+}															// OL
+
 // configure Express
-var www_dir = '/home/ec2-user/www';
-//var www_dir = __dirname + "/../";
 app.configure(function() {
   app.set('views', www_dir);
   app.set('view engine', 'ejs');
@@ -119,7 +128,13 @@ app.get('/', function(req, res){
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
-  res.render('index.html', { user: req.user });
+  res.render(indexHtml, { user: req.user });				// OL
+});
+
+// hash redirection											// OL
+var presDir = 'pres';										// OL
+app.get(/^\/[0-9a-zA-z-_]{4}\/?$/, function(req, res) {		// OL
+  res.redirect(presDir + req.path);							// OL
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
@@ -140,7 +155,7 @@ app.get('/login', function(req, res){
   res.render('signin.html', { user: req.user, message: req.flash('error') });
 });
 
-app.post('/login',
+app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/signin.html', failureFlash: true }),
   function(req, res) {
 	  console.log("MA: login2: " + req.user.username + " " + req.user.password + " " + req.user.email);
@@ -152,7 +167,7 @@ app.get('/logout', function(req, res){
   req.session.destroy(function (err) {
     if (err) {
       console.log("MA: logout error: " + err);
-      res.redirect('/logout');
+      res.redirect('/logout'); 
     }
     // The response should indicate that the user is no longer authenticated.
     //req.session.user = null;
