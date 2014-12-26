@@ -11,6 +11,11 @@ var options = {
 
 var cache = new CachemanMongo(options);
 
+var www_dir;																	
+module.exports.setDir = function (www_dir){										
+	this.www_dir = www_dir;														
+}																				
+
 function getHash()
 {
 
@@ -31,18 +36,6 @@ var hashValue = null;
 var dir = null;
 var filename = null;
 var num_slides = 0;
-
-// find path www_dir to index.html							// OL
-var indexHtml = 'index.html';								// OL
-var awsDir = '/home/ec2-user/www/';							// OL
-var localDir = __dirname + "/www/";							// OL
-
-var www_dir;												// OL
-if (fs.existsSync(localDir + indexHtml)) {					// OL
-  www_dir = localDir;										// OL
-} else {													// OL
-  www_dir = awsDir;											// OL
-}															// OL
 
 function renameSliteDir()
 {

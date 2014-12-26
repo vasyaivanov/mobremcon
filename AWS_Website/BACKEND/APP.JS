@@ -92,16 +92,16 @@ var app = express();
 
 var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'}); //use {flags: 'w'} to open in write mode
 
-// find path www_dir to index.html							// OL
-var indexHtml = 'index.html';								// OL
-var awsDir = '/home/ec2-user/www/';							// OL
-var localDir = __dirname + "/www/";							// OL
-var www_dir;												// OL
-if (fs.existsSync(localDir + indexHtml)) {					// OL
-  www_dir = localDir;										// OL
-} else {													// OL
-  www_dir = awsDir;											// OL
-}															// OL
+// find path www_dir to index.html							
+var indexHtml = 'index.html';								
+var awsDir = '/home/ec2-user/www/';							
+var localDir = __dirname + "/../";							
+var www_dir;												
+if (fs.existsSync(localDir + indexHtml)) {					
+  www_dir = localDir;										
+} else {													
+  www_dir = awsDir;											
+}															
 
 // configure Express
 app.configure(function() {
@@ -128,7 +128,7 @@ app.get('/', function(req, res){
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
-  res.render(indexHtml, { user: req.user });				// OL
+  res.render(indexHtml, { user: req.user });				
 });
 
 app.get('/account', ensureAuthenticated, function(req, res){
@@ -171,17 +171,17 @@ app.get('/logout', function(req, res){
   });
 });
 
-// hash redirection											// OL
-var presDir = "slites";										// OL
-app.get(/^\/[0-9a-zA-z-_]{5}\/?$/, function(req, res) {		// OL
-  res.redirect(presDir + req.path);							// OL
+// hash redirection											
+var slitesDir = "slites";									
+app.get(/^\/[0-9a-zA-z-_]{5}\/?$/, function(req, res) {		
+  res.redirect(slitesDir + req.path);						
 });
 
 app.listen(8081);
 
 module.exports.app = app;
 
-require("./lib/socketio-slite.js");
+require("./lib/socketio-slite.js").setDir(www_dir);
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

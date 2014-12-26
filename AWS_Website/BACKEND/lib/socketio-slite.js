@@ -9,6 +9,12 @@ var app = require('http').createServer(module.parent.exports.app)
   , SocketIOFileUploadServer = require("socketio-file-upload")
   , prepare_slite = require('./prepare_slite.js');
 
+var www_dir;																	
+module.exports.setDir = function (www_dir){										
+	this.www_dir = www_dir;														
+	prepare_slite.setDir(www_dir);												
+}																				
+  
 //hash.cache.clear();
 //hash.cacheHash();
 
@@ -52,17 +58,6 @@ io.sockets.on('connection', function (socket) {
 
     	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
     	//uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
-
-      // find path www_dir to index.html							// OL
-      var indexHtml = 'index.html';								// OL
-      var awsDir = '/home/ec2-user/www/';							// OL
-      var localDir = __dirname + "/www/";							// OL
-      var www_dir;												// OL
-      if (fs.existsSync(localDir + indexHtml)) {					// OL
-        www_dir = localDir;										// OL
-      } else {													// OL
-        www_dir = awsDir;											// OL
-      }															// OL
 
 		uploader.dir = www_dir + "UPLOAD/";
 
