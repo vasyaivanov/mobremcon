@@ -107,7 +107,13 @@ io.sockets.on('connection', function (socket) {
 			  console.log('unoconv stderr: ', stderr);
 			}
 		  });
-
+        
+        // delete presentation in UPLOAD dir
+        fs.unlink(fullFileName, function (err) {
+            if (err) {
+                console.log('error deleting : ' + fullFileName);
+            }
+        });
         	/*fs.rename(dirname + "/" + event.file.name , dirname + "/" + imageCount + "." + extention, function (err){
         		console.log("JD: renamed");
         		imageCount++;

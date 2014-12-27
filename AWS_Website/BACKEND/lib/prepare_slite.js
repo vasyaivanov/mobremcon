@@ -1,6 +1,5 @@
 var CachemanMongo = require('cacheman-mongo');
 var fs = require('fs');
-var debug = require('debug');
 
 var options = {
 
@@ -39,8 +38,6 @@ var hashValue = null;
 var dir = null;
 var filename = null;
 var num_slides = 0;
-
-debug('listening');
 
 function renameSliteDir()
 {
