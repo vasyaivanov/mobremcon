@@ -10,8 +10,8 @@ var app = require('http').createServer(module.parent.exports.app)
   , prepare_slite = require('./prepare_slite.js');
 
 var www_dir;																	
-module.exports.setDir = function (www_dir){										
-	this.www_dir = www_dir;														
+module.exports.setDir = function (new_dir){										
+	www_dir = new_dir;														
 	prepare_slite.setDir(www_dir);												
 }																				
   
@@ -44,8 +44,6 @@ var clients = [];
 console.log('in remote control');
 
 io.sockets.on('connection', function (socket) {
-		console.log('started socket');
-
 		module.exports.socket = socket;
 
 		if (pollAnswerArray.length > 0) pollUpdate();
@@ -62,12 +60,17 @@ io.sockets.on('connection', function (socket) {
 		uploader.dir = www_dir + "UPLOAD/";
 
     	uploader.on("start", function(event){
-        	//console.log("JD: started file: " + event.file);
+        	//console.log("JD: started file: " + JSON.stringify(event.file));
     	});
 
     	uploader.on("progress", function(event){
         	//console.log("JD: progress: " + JSON.stringify(event));
     	});
+    
+        uploader.on("error", function (event) {
+            //console.log("JD: error: " + event.path);
+        });
+
 
 		uploader.on("complete", function(event){
 			console.log("JD: complete: " + JSON.stringify(event));
@@ -80,7 +83,7 @@ io.sockets.on('connection', function (socket) {
 
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
 		//var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
-		var unoconv_cmd = "python ./lib/unoconv";
+		var unoconv_cmd = "python " + www_dir + "BACKEND/lib/unoconv";
 		console.log(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName);
 
         exec(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName,

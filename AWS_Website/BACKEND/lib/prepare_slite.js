@@ -1,5 +1,6 @@
 var CachemanMongo = require('cacheman-mongo');
 var fs = require('fs');
+var debug = require('debug');
 
 var options = {
 
@@ -12,18 +13,20 @@ var options = {
 var cache = new CachemanMongo(options);
 
 var www_dir;																	
-module.exports.setDir = function (www_dir){										
-	this.www_dir = www_dir;														
+module.exports.setDir = function (new_dir){										
+	www_dir = new_dir;														
 }																				
 
 function getHash()
 {
-
-	var time = process.hrtime() // get unique number
-	, salt = Math.floor(Math.random() * Math.pow(4, Math.random()*4)) // get variable length prefix
-	, hash = salt.toString(36) + time[0].toString(36)// + time[1].toString(36) // construct unique id
-	;
-
+    var time = process.hrtime()[0]// get unique number
+	, salt = Math.floor(Math.random() * Math.pow(4, Math.random() * 4)) % 36// get variable length prefix
+	, hash = '';
+    for (var i = 0; i < 4; i++) {
+        hash = (time % 36).toString(36) + hash;
+        time = Math.floor(time / 36);
+    }
+    hash = salt.toString(36) + hash
 
 	return hash;
 }
@@ -36,6 +39,8 @@ var hashValue = null;
 var dir = null;
 var filename = null;
 var num_slides = 0;
+
+debug('listening');
 
 function renameSliteDir()
 {

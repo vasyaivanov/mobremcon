@@ -1,6 +1,13 @@
 $(document).ready(function(){
 
-		var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
+		var url;
+		if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1'){
+			url = 'http://localhost';
+		} else {
+			url = 'http://slite-dev.elasticbeanstalk.com';
+		}
+		url += ':1337';
+		var socket = io.connect(url);
 
 		// Initialize instances:
 		var siofu = new SocketIOFileUpload(socket);
@@ -11,7 +18,7 @@ $(document).ready(function(){
 		siofu.listenOnInput(document.getElementById("uploadPresentation"));
 		//siofu.listenOnDrop(document.getElementById("file_drop"));
 
-
+		
 		// Do something when a file is uploaded:
 		siofu.addEventListener("start", function(event){
 			console.log(event.success);
@@ -36,11 +43,13 @@ $(document).ready(function(){
 
 		socket.on('slitePrepared', function (data) {
 			console.log("MA fileConverted: " + JSON.stringify(data));
-			window.location = "http://www.slite.us/" + data.hash;
+			//window.location = "http://www.slite.us/" + data.hash;
+			window.location = window.location + data.hash;
 	  	});
 		
 		$('#createPresentation').click(function(){
-				window.location = "http://www.slite.us/editor";
+				//window.location = "http://www.slite.us/editor";
+				window.location = window.location + "editor";
 		});
 
 		if(navigator.userAgent.match(/(iPhone|iPad)/i)) {
