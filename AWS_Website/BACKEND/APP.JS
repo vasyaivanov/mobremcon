@@ -7,6 +7,7 @@ var flash = require('connect-flash')
   , mongodb = require('mongodb')
   , mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
+  , path = require('path')
   , SALT_WORK_FACTOR = 10;
 
 mongoose.connect('localhost', 'test');
@@ -97,11 +98,12 @@ var indexHtml = 'index.html';
 var awsDir = '/home/ec2-user/www/';							
 var localDir = __dirname + "/../";							
 var www_dir;												
-if (fs.existsSync(localDir + indexHtml)) {					
+if (fs.existsSync(path.join(localDir, indexHtml))) {					
   www_dir = localDir;										
 } else {													
   www_dir = awsDir;											
-}															
+}
+www_dir = path.normalize(www_dir);								
 
 // configure Express
 app.configure(function() {
@@ -173,7 +175,7 @@ app.get('/logout', function(req, res){
 
 // hash redirection											
 var slitesDir = "slites";									
-app.get(/^\/[0-9a-zA-z-_]{5}\/?$/, function(req, res) {		
+app.get(/^\/[0-9a-zA-Z]{5}\/?$/, function(req, res) {		
   res.redirect(slitesDir + req.path);						
 });
 

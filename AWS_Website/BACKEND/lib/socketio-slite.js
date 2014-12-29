@@ -7,10 +7,11 @@ var app = require('http').createServer(module.parent.exports.app)
   , exec = require('child_process').exec
   , http = require('http')
   , SocketIOFileUploadServer = require("socketio-file-upload")
-  , prepare_slite = require('./prepare_slite.js');
+  , prepare_slite = require('./prepare_slite.js')
+  , path = require('path');
 
 var www_dir;																	
-module.exports.setDir = function (new_dir){										
+exports.setDir = function (new_dir){										
 	www_dir = new_dir;														
 	prepare_slite.setDir(www_dir);												
 }																				
@@ -52,12 +53,10 @@ io.sockets.on('connection', function (socket) {
 		//var dirname = "/Users/mac/Documents/REMOTECONTROL3/BACKEND/UPLOADS";
 
 		var uploader = new SocketIOFileUploadServer();
-    	uploader.listen(socket);
-
     	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
     	//uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
-
-		uploader.dir = www_dir + "UPLOAD/";
+		uploader.dir = path.join(www_dir, "UPLOAD/");
+    	uploader.listen(socket);
 
     	uploader.on("start", function(event){
         	//console.log("JD: started file: " + JSON.stringify(event.file));
@@ -68,29 +67,31 @@ io.sockets.on('connection', function (socket) {
     	});
     
         uploader.on("error", function (event) {
-            //console.log("JD: error: " + event.path);
+            console.log("JD: error: " + event.path);
         });
 
 
 		uploader.on("complete", function(event){
-			console.log("JD: complete: " + JSON.stringify(event));
-        	console.log("JD: saved: " + event.file.name + " file extension=" + event.file.name.split(".")[1]);
         	var extention = event.file.name.split(".")[1];
 			var shortFileName = event.file.name.split(".")[0];
-        	var fullFileName = uploader.dir + event.file.name;
+        	var fullFileName = path.join(uploader.dir, event.file.name);
+			console.log("JD: complete: " + JSON.stringify(event));
+        	console.log("JD: saved: " + event.file.name + " file extension=" + extention);
 			//var shortFileName = "SliteShow_PitchDeck";
 			//var fullFileName = uploader.dir + "SliteShow_PitchDeck.pptx";
 
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
-		//var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
-		var unoconv_cmd = "python " + www_dir + "BACKEND/lib/unoconv";
-		console.log(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName);
+        //var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
+        var fullFileNameHtml = path.normalize(fullFileName + '.html'),
+            unoconv_cmd = "python " + path.join(www_dir, "BACKEND/lib/unoconv") + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
+		console.log(unoconv_cmd);
 
-        exec(unoconv_cmd + ' -f html -o ' + fullFileName + '.html ' + fullFileName,
+        exec(unoconv_cmd,
 		  function( error, stdout, stderr) {
 			//console.log('unoconv stdout: ', stdout);
-			console.log('Converted presentation: ', fullFileName + '.html/' + shortFileName + '.html');
-			fs.readFile(fullFileName + '.html/' + shortFileName + '.html', 'utf8', function (err, data) {
+            console.log('Converted presentation: ', fullFileNameHtml);
+            var convertedHtml = path.join(fullFileNameHtml, shortFileName + '.html');
+			fs.readFile(convertedHtml, 'utf8', function (err, data) {
 			  if (err) throw err;
 			  //console.log(data);
 			  //console.log('\n\n');
@@ -101,19 +102,19 @@ io.sockets.on('connection', function (socket) {
 			  // characters 3-5 of "img14.html" is "14", the number of slides
 			  var num_slides = $('a').next().attr('href').slice(3,5);
         		  console.log($('center').first());
-			  prepare_slite.prepare_slite( fullFileName + '.html', shortFileName + '.html', $('a').next().attr('href').slice(3,5) );
+			  prepare_slite.prepare_slite(fullFileNameHtml, shortFileName + '.html', $('a').next().attr('href').slice(3,5) );
 			});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
 			}
+            // delete presentation in UPLOAD dir
+            fs.unlink(fullFileName, function (err) {
+                if (err) {
+                    console.log('error deleting : ' + fullFileName);
+                }
+            });
 		  });
         
-        // delete presentation in UPLOAD dir
-        fs.unlink(fullFileName, function (err) {
-            if (err) {
-                console.log('error deleting : ' + fullFileName);
-            }
-        });
         	/*fs.rename(dirname + "/" + event.file.name , dirname + "/" + imageCount + "." + extention, function (err){
         		console.log("JD: renamed");
         		imageCount++;
