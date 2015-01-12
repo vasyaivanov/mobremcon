@@ -1,7 +1,6 @@
 var app = require('http').createServer(module.parent.exports.app)
   , url = require('url')
   , io = require('socket.io').listen(app, { log: true })
-
   , fs = require('fs')
   , cheerio = require('cheerio')
   , exec = require('child_process').exec
@@ -10,10 +9,12 @@ var app = require('http').createServer(module.parent.exports.app)
   , prepare_slite = require('./prepare_slite.js')
   , path = require('path');
 
-var www_dir;																	
-exports.setDir = function (new_dir){										
-	www_dir = new_dir;														
-	prepare_slite.setDir(www_dir);												
+var www_dir, slitesDir, slitesReg;																	
+exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
+    www_dir = new_dir;
+    slitesDir = newSlitesDir;
+    slitesReg = newSlitesReg;												
+	prepare_slite.setDir(www_dir, slitesDir, slitesReg);												
 }																				
   
 //hash.cache.clear();
@@ -55,19 +56,21 @@ io.sockets.on('connection', function (socket) {
 		var uploader = new SocketIOFileUploadServer();
     	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
     	//uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
-		uploader.dir = path.join(www_dir, "UPLOAD/");
+        uploader.dir = path.join(www_dir, "UPLOAD/");
+        console.log('Connection established on ', new Date(), ', uploader Dir: ' + uploader.dir);
     	uploader.listen(socket);
 
     	uploader.on("start", function(event){
-        	//console.log("JD: started file: " + JSON.stringify(event.file));
+        	console.log("JD: started file: " + JSON.stringify(event.file));
     	});
 
     	uploader.on("progress", function(event){
         	//console.log("JD: progress: " + JSON.stringify(event));
+            console.log("JD: progress: ");
     	});
     
         uploader.on("error", function (event) {
-            console.log("JD: error: " + event.path);
+            console.log("JD: error: " + JSON.stringify(event));
         });
 
 
@@ -82,8 +85,10 @@ io.sockets.on('connection', function (socket) {
 
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
         //var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
+        var appDir = path.dirname(require.main.filename);
         var fullFileNameHtml = path.normalize(fullFileName + '.html'),
-            unoconv_cmd = "python " + path.join(www_dir, "BACKEND/lib/unoconv") + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
+            unoconvPathname = path.join(__dirname, 'unoconv'),
+            unoconv_cmd = "python " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
 		console.log(unoconv_cmd);
 
         exec(unoconv_cmd,
@@ -106,7 +111,7 @@ io.sockets.on('connection', function (socket) {
 			});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
-			}
+            }
             // delete presentation in UPLOAD dir
             fs.unlink(fullFileName, function (err) {
                 if (err) {

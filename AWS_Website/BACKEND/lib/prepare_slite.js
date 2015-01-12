@@ -3,18 +3,58 @@ var fs = require('fs');
 var path = require('path');
 
 var options = {
-
   port: 27017,
   host: '127.0.0.1',
-  db: 'test',
-  collection: 'my-collection'
+  db: 'slite-cache',
+  collection: 'hash'
 };
 
 var cache = new CachemanMongo(options);
+var cacheReady = false;
 
-var www_dir;																	
-exports.setDir = function (new_dir){										
-	www_dir = new_dir;														
+var www_dir, slitesDir, slitesReg;
+																	
+function onCacheReady(){
+    cacheReady = true;
+    console.log('Cache ready');
+}
+
+function initCache() {
+    cacheReady = false;
+    cache.clear(function (err) {
+        if (err) throw err;
+    });
+    
+    var findFileReg = new RegExp('^' + slitesReg + '$');
+    var slitesFullPath = path.join(www_dir, slitesDir);
+    var todo, done = 0;
+
+    fs.readdir(slitesFullPath, function (err, files) {
+        if (err) throw err;
+        todo = files.length;
+        if (todo === 0) {
+            onCacheReady();
+        }
+        for (var f in files) {
+            if (findFileReg.test(files[f])) {
+                 cache.set(f, true, function (err, value) {
+                    if (err) throw err;
+                    done++;
+                    if (todo !== undefined && done >= todo) {
+                        onCacheReady();
+                    }
+                });
+            }
+        }
+    });
+};
+
+
+exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
+    www_dir = new_dir;
+    slitesDir = newSlitesDir;
+    slitesReg = newSlitesReg;
+    initCache();													
 }																				
 
 function getHash()
@@ -41,10 +81,12 @@ var num_slides = 0;
 
 function renameSliteDir(){
     var wwwSlitesHash = path.join(www_dir, "slites/", hashValue);
-    console.log("MA found hash " + dir + " " + filename + " " + num_slides);
+    console.log("MA found hash, dir: '" + dir + "' filename: '" + filename + "' Slides: " + num_slides + " wwwSlitesHash: '" + wwwSlitesHash + "'");
     
-	fs.rename(dir, wwwSlitesHash, function (err){
-		fs.rename(path.join(wwwSlitesHash, filename), path.join(wwwSlitesHash, "img0.html"), function (err){
+    fs.rename(dir, wwwSlitesHash, function (err){
+        if (err) throw err;
+        fs.rename(path.join(wwwSlitesHash, filename), path.join(wwwSlitesHash, "img0.html"), function (err){
+            if (err) throw err;
             fs.readFile(path.join(www_dir, "hash_index.html"), "utf8", function(err, data) {
                 if (err) throw err;
                 var data_replaced = data.replace("NUM_SLIDES", num_slides);
@@ -80,11 +122,13 @@ cacheHash: function cacheHash(){
 }
 
 prepare_slite: function prepare_slite(dir_input, filename_input, num_slides_input){
+    if (!cacheReady) { return false; }
     count = 0;
 	console.log("MA: prepare_slite: " + dir + " " + filename + " " + num_slides);
     dir = dir_input; filename = filename_input; num_slides = num_slides_input;
     console.log("MA: prepare_slite set: " + dir + " " + filename + " " + num_slides);
     cacheHash();
+    return true;
 }
 
 //cache.clear();

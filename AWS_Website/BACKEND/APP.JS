@@ -174,8 +174,11 @@ app.get('/logout', function(req, res){
 });
 
 // hash redirection											
-var slitesDir = "slites";									
-app.get(/^\/[0-9a-zA-Z]{5}\/?$/, function(req, res) {		
+var slitesDir = "slites";
+//var slitesReg = /^\/[0-9a-zA-Z]{5}\/?$/;
+var slitesReg = "[0-9a-zA-Z]{5}";
+var getSlitesReg = new RegExp('^\\/' + slitesReg + '\\/?$');
+app.get(getSlitesReg, function(req, res) {		
   res.redirect(slitesDir + req.path);						
 });
 
@@ -183,7 +186,7 @@ app.listen(8081);
 
 module.exports.app = app;
 
-require("./lib/socketio-slite.js").setDir(www_dir);
+require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, slitesReg);
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

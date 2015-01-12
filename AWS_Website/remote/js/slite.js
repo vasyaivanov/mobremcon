@@ -14,7 +14,7 @@ var currentSlide = document.getElementById("currentSlide"),
 // dim = width or height of the element
 function calcOffset(coord, offset, dim) {
     return ((coord - offset)/dim);
-};    
+};
 
 // interactionType is a global variable for switching between different modes
 var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
@@ -69,7 +69,7 @@ function changeURL() {
 function touchMove(event) {
     event.preventDefault();
     console.log("touchMove called");
-    
+
     // This code is needed because the touch event is different on mobile vs browser
     var xTouch, yTouch;
     if (/mobile/i.test(navigator.userAgent)) {
@@ -79,10 +79,10 @@ function touchMove(event) {
         xTouch = event.pageX;
         yTouch = event.pageY;
     }
-    
+
     var xPercent = calcOffset(xTouch, xOffset, slideWidth);
     var yPercent = calcOffset(yTouch, yOffset, slideHeight);
-    
+
     switch(interactionType) {
         case LASER: {
             socket.emit('laserCoords',
