@@ -85,7 +85,7 @@ io.sockets.on('connection', function (socket) {
 
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
         //var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
-        var appDir = path.dirname(require.main.filename);
+        //var appDir = path.dirname(require.main.filename);
         var fullFileNameHtml = path.normalize(fullFileName + '.html'),
             unoconvPathname = path.join(__dirname, 'unoconv'),
             unoconv_cmd = "python " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
@@ -104,10 +104,17 @@ io.sockets.on('connection', function (socket) {
 			  //console.log($('a').next().attr('href').slice(3,5));
 			  // The second link in this HTML file is to the last slide image,
 			  // like this: <a href="img14.html">
-			  // characters 3-5 of "img14.html" is "14", the number of slides
-			  var num_slides = $('a').next().attr('href').slice(3,5);
-        		  //console.log($('center').first());
-			  prepare_slite.prepare_slite(fullFileNameHtml, shortFileName + '.html', $('a').next().attr('href').slice(3,5) );
+              // characters 3-5 of "img14.html" is "14", the number of slides
+              var lastSliteFile = $('a').next().attr('href');
+              var numRegExp = /\d+\./;
+              var lastFileName = numRegExp.exec(lastSliteFile);
+              var numSlites = parseInt(lastFileName, 10);
+              if (isNaN(numSlites)) throw new Error("Number of Slites not determined!");
+              //console.log('lastSliteFile=' + lastSliteFile + ' lastFileName=' + lastFileName + ' Number=' + numSlites);
+              //var num_slites = $('a').next().attr('href').slice(3, 5);
+              //console.log($('center').first());
+              
+			  prepare_slite.prepare_slite(fullFileNameHtml, shortFileName + '.html', numSlites );
 			});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
