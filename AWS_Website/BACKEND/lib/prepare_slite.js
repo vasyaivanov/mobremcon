@@ -5,7 +5,7 @@ var path = require('path');
 var options = {
   port: 27017,
   host: '127.0.0.1',
-  db: 'slite-cache',
+  db: 'slite_cache',
   collection: 'hash'
 };
 
@@ -14,9 +14,9 @@ var cacheReady = false;
 
 var www_dir, slitesDir, slitesReg;
 																	
-function onCacheReady(){
+function onCacheReady(addedFiles){
     cacheReady = true;
-    console.log('Cache ready');
+    console.log('Cache ready, number of entries=' + addedFiles);
 }
 
 function initCache() {
@@ -27,25 +27,32 @@ function initCache() {
     
     var findFileReg = new RegExp('^' + slitesReg + '$');
     var slitesFullPath = path.join(www_dir, slitesDir);
-    var todo, done = 0;
-
+    var todo = 0, done = 0;
+    
+    console.log('Scanning "' + slitesFullPath + '" for hash cache');
     fs.readdir(slitesFullPath, function (err, files) {
         if (err) throw err;
-        todo = files.length;
-        if (todo === 0) {
-            onCacheReady();
+        console.log(files.length + ' files to scan for hash cache');
+        //console.log(files);
+        if (files.length === 0) {
+            onCacheReady(0);
         }
+        var scanned = false;
         for (var f in files) {
             if (findFileReg.test(files[f])) {
-                 cache.set(f, true, function (err, value) {
+                todo++;
+                //console.log('Hash #' + todo + ' found: "' + files[f] + '"');
+                cache.set(files[f], true, function (err, value) {
                     if (err) throw err;
                     done++;
-                    if (todo !== undefined && done >= todo) {
-                        onCacheReady();
+                    //console.log('Hash #' + done + ' set to: ' + value);
+                    if (scanned && done >= todo) {
+                        onCacheReady(todo);
                     }
                 });
             }
         }
+        scanned = true;
     });
 };
 
@@ -122,7 +129,10 @@ cacheHash: function cacheHash(){
 }
 
 prepare_slite: function prepare_slite(dir_input, filename_input, num_slides_input){
-    if (!cacheReady) { return false; }
+    if (!cacheReady) {
+        console.log('Cache not ready');
+        return false;
+    }
     count = 0;
 	console.log("MA: prepare_slite: " + dir + " " + filename + " " + num_slides);
     dir = dir_input; filename = filename_input; num_slides = num_slides_input;

@@ -106,7 +106,7 @@ io.sockets.on('connection', function (socket) {
 			  // like this: <a href="img14.html">
 			  // characters 3-5 of "img14.html" is "14", the number of slides
 			  var num_slides = $('a').next().attr('href').slice(3,5);
-        		  console.log($('center').first());
+        		  //console.log($('center').first());
 			  prepare_slite.prepare_slite(fullFileNameHtml, shortFileName + '.html', $('a').next().attr('href').slice(3,5) );
 			});
 			if (error !== null) {
