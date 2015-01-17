@@ -42,7 +42,9 @@ function thumbnails() {
         var element = elements[i];
         element.setAttribute('slide_num', i);
         var url = document.getElementById("URLSlides").value;
-        element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
+        //element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
+        element.style.backgroundImage = "url(../slites/" + url + "/thumbnails/img" + (i+1) + ".png)";
+
         // each event will be logged to the virtual console
         element.addEventListener("mousedown", function(e) {
                                  var slide_num = parseInt(this.getAttribute('slide_num'));
@@ -54,10 +56,17 @@ function thumbnails() {
 }
 
 function changeURL() {
-	document.getElementById('theIframe').src = "http://www.slite.us/" + document.getElementById("URLSlides").value;
-	if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-	else socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
-	document.getElementById('theIframe').src += '';
+    var url;
+    if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1') {
+        url = 'http://localhost';
+    } else {
+        url = 'http://slite-dev.elasticbeanstalk.com';
+    }
+	//if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+    //else socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+    socket = io.connect(url + ':1337');
+    var iFrameUrl = url + ':8081/slites/' + document.getElementById("URLSlides").value;
+    document.getElementById('theIframe').src = iFrameUrl;
 	currSlideNum = 0;
 	$("#notes").text(notesArray[currSlideNum]);
 	socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });

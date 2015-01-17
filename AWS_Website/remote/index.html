@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 	<head>
     <meta charset="utf-8" content="user-scalable=yes">
@@ -15,10 +15,19 @@
     <script src="./js/thumbs.0.6.0.min.js"></script>
 
     <script>
-      var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
-      //var socket = io.connect('http://localhost:1337');
+			var url;
+			if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1'){
+				url = 'http://localhost';
+			} else {
+				url = 'http://slite-dev.elasticbeanstalk.com';
+			}
+			var socket = io.connect(url + ':1337');
+			function startup() {
+			    var iFrameUrl = url + ":8081/slites/A1";
+			    document.getElementById('theIframe').src = iFrameUrl;
+			}
     </script>
-    
+
 	</head>
 <body onload="startup()"
     ><br
@@ -28,9 +37,9 @@
     ><br
     ><div class="UI midRow leftCol" id="notes">1: Beginning slide, or should I say 'slite'. Get ready to see powerpoint with all the powers of the web.</div
     ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
-        ><div id="overlay"></div
-        ><iframe id="theIframe" class="frame" src="http://www.slite.us/A1" seamless></iframe
-    ></div
+        ><div id="overlay"></div>
+          <iframe id="theIframe" class="frame" seamless></iframe>
+		</div
     ><div class="UI midRow rightCol" id="otherSlides">
         <button></button>
         <button></button>
@@ -51,4 +60,3 @@
     ><div class="UI botRow" id="next">&nbsp;</div
 ></body>
 </html>
-

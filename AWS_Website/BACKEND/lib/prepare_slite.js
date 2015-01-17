@@ -53,6 +53,9 @@ function initCache() {
             }
         }
         scanned = true;
+        if (todo === 0) {
+            onCacheReady(todo);
+        }
     });
 };
 
