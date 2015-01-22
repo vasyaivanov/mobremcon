@@ -17,8 +17,10 @@ var paintColor = "red",
 
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
-socket.on('laserOn', function() {
-    $( "#redDot" ).css("visibility", "visible");
+socket.on('laserOn', function(data) {
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
+    	$( "#redDot" ).css("visibility", "visible");
+    }
 });
 
 socket.on('laserOff', function() {
@@ -30,14 +32,19 @@ socket.on('laserOff', function() {
 // This function receives the x/y coordinates from the APP.JS server 
 // and moves the laser dot by adjusting the dot's CSS. 
 socket.on('moveLaser', function(data) {
-    var slider = $(".royalSlider").data('royalSlider');
-    var receiverHeight = slider.currSlide.content.height();
-    var receiverWidth = slider.currSlide.content.width();
-    var xScale = receiverHeight / data.height;
-    var yScale = receiverWidth / data.width;
-    var scaledX = data.x * xScale;
-    var scaledY = data.y * yScale;
-    $( "#redDot" ).css({left:scaledX, top:scaledY});
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
+	    var slider = $(".royalSlider").data('royalSlider');
+	    var receiverHeight = slider.currSlide.content.height();
+	    var receiverWidth = slider.currSlide.content.width();
+	    var xScale = receiverHeight / data.height;
+ 	   var yScale = receiverWidth / data.width;
+	    var scaledX = data.x * xScale;
+	    var scaledY = data.y * yScale;
+	    $( "#redDot" ).css({left:scaledX, top:scaledY});
+    }
+    else {
+	   // $( "#redDot" ).css("visibility", "hidden");
+    }
 });
 
 var canvas = $("#drawCanvas");
@@ -70,18 +77,23 @@ socket.on('drawStart', function(data) {
     var canvOffset = canvas.offset();
     var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
     var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
-    findxy('down', x, y);
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
+    	findxy('down', x, y);
+    }
 });
 
 socket.on('drawStop', function() {
-    findxy('up');
+    	findxy('up');
 });
 
 socket.on('drawCoords', function(data) {
     var canvOffset = canvas.offset();
     var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
     var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
-    findxy('move', x, y);
+
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
+	    findxy('move', x, y);
+    }
 });
 
 socket.on('shake', function() {

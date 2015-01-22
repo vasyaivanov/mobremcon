@@ -23,7 +23,7 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 function touchStart() {
     event.preventDefault();
     if(LASER === interactionType) {
-        socket.emit('laserOn');
+        socket.emit('laserOn', {slideID: $('#URLSlides').val()});
     } else if (DRAW === interactionType) {
         // recalculate offsets in case window size has changed
         xOffset = currentSlide.offsetLeft;
@@ -35,7 +35,7 @@ function touchStart() {
         //console.log("xPercent: " + xPercent);
         //console.log("yPercent: " + yPercent);
         socket.emit('drawStart',{x:xPercent,
-                                 y:yPercent});
+                                 y:yPercent , slideID: $('#URLSlides').val()});
     }
 };
 

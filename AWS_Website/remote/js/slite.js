@@ -67,10 +67,10 @@ function changeURL() {
     socket = io.connect(url + ':1337');
     var iFrameUrl = url + ':8081/slites/' + document.getElementById("URLSlides").value;
     document.getElementById('theIframe').src = iFrameUrl;
-	currSlideNum = 0;
-	$("#notes").text(notesArray[currSlideNum]);
-	socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
-	thumbnails(); // thumbnails have to match the slides
+    currSlideNum = 0;
+    $("#notes").text(notesArray[currSlideNum]);
+    socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
+    thumbnails(); // thumbnails have to match the slides
 }
 
 // this is the main function handling laser and draw control by sending
@@ -98,13 +98,13 @@ function touchMove(event) {
                         { x:xTouch - xOffset,
                           y:yTouch - yOffset,
                           width:slideWidth,
-                          height:slideHeight });
+                          height:slideHeight , slideID: $('#URLSlides').val() });
             break;
         }
         case DRAW: {
             socket.emit('drawCoords',
                         { x:xPercent,
-                          y:yPercent});
+                          y:yPercent , slideID: $('#URLSlides').val()});
             break;
         }
         default: {

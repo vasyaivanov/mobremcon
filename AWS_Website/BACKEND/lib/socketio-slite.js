@@ -202,9 +202,9 @@ io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('drawCoords', data);
         });
 
-        socket.on('laserOn', function() {
+        socket.on('laserOn', function(data) {
             console.log("laser on");
-            socket.broadcast.emit('laserOn');
+            socket.broadcast.emit('laserOn',data);
         });
 
         socket.on('laserOff', function() {
