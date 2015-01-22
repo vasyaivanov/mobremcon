@@ -1,4 +1,4 @@
-/*
+/* 
  * This script is for controlling browser specific functions 
  * of the remote control.
  */

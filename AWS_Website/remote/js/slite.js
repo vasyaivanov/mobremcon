@@ -1,4 +1,4 @@
-/* This is the main JS file for index.html, our remote control app */
+/*  This is the main JS file for index.html, our remote control app */
 
 // variables to deal with offset
 var currentSlide = document.getElementById("currentSlide"),

@@ -1,4 +1,4 @@
-/*
+/* 
  * This script is for moving the laser pointer on the presentation slide
  * based on what the presenter does on the remote control. It will receive
  * X/Y coordinates from the remote via the Backend APP.JS server, and then

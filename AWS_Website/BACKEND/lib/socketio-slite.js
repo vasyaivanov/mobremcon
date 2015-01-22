@@ -16,7 +16,7 @@ exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
     slitesReg = newSlitesReg;												
 	prepare_slite.setDir(www_dir, slitesDir, slitesReg);												
 }																				
-  
+   
 //hash.cache.clear();
 //hash.cacheHash();
 
