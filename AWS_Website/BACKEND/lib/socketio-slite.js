@@ -9,14 +9,14 @@ var app = require('http').createServer(module.parent.exports.app)
   , prepare_slite = require('./prepare_slite.js')
   , path = require('path');
 
-var www_dir, slitesDir, slitesReg;																	
+var www_dir, slitesDir, slitesReg;
 exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
-    slitesReg = newSlitesReg;												
-	prepare_slite.setDir(www_dir, slitesDir, slitesReg);												
-}																				
-   
+    slitesReg = newSlitesReg;
+	prepare_slite.setDir(www_dir, slitesDir, slitesReg);
+}
+
 //hash.cache.clear();
 //hash.cacheHash();
 
@@ -68,7 +68,7 @@ io.sockets.on('connection', function (socket) {
         	//console.log("JD: progress: " + JSON.stringify(event));
             console.log("JD: progress: ");
     	});
-    
+
         uploader.on("error", function (event) {
             console.log("JD: error: " + JSON.stringify(event));
         });
@@ -113,7 +113,7 @@ io.sockets.on('connection', function (socket) {
               //console.log('lastSliteFile=' + lastSliteFile + ' lastFileName=' + lastFileName + ' Number=' + numSlites);
               //var num_slites = $('a').next().attr('href').slice(3, 5);
               //console.log($('center').first());
-              
+
 			  prepare_slite.prepare_slite(fullFileNameHtml, shortFileName + '.html', numSlites );
 			});
 			if (error !== null) {
@@ -125,8 +125,9 @@ io.sockets.on('connection', function (socket) {
                     console.log('error deleting : ' + fullFileName);
                 }
             });
+            socket.emit("sliteConversionError");
 		  });
-        
+
         	/*fs.rename(dirname + "/" + event.file.name , dirname + "/" + imageCount + "." + extention, function (err){
         		console.log("JD: renamed");
         		imageCount++;

@@ -122,6 +122,14 @@
         <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>-->
         <script src="js/bootstrap.js"></script>
         <!--<script src="js/holder.js"></script>-->
+        <input type="hidden" id="refreshed" value="no">
+        <script type="text/javascript">
+          onload=function(){
+            var e=document.getElementById("refreshed");
+            if(e.value=="no")e.value="yes";
+            else{e.value="no";location.reload();}
+            }
+        </script>
         <script src="http://slite-dev.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
         <script src="js/client.js"></script>
         <script src="js/main.js"></script>
