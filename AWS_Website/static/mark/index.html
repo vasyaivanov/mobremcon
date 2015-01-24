@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>SLITE USE CASES</title>
+  <meta name="viewport" content = "width = device-width, initial-scale = 1.0, minimum-scale = 1.0, maximum-scale = 1.0, user-scalable = no" />
+  
+  <link href="css/footable-0.1.css" rel="stylesheet" type="text/css" />
+  <link href="css/footable.sortable-0.1.css" rel="stylesheet" type="text/css" />
+  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+  <script src="js/footable-0.1.js" type="text/javascript"></script>
+  <script src="js/footable.sortable.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  // THIS IS FROM: http://themergency.com/footable-demo/demo-sorting.htm
+  // THIS IS CALLED: FOO-TABLE
+    $(function() {
+      $('table').footable();
+    });
+  </script>
+</head>
+  <body>
+    <table class="footable">
+      <thead>
+        <tr>
+		  <th data-type="numeric" data-sort-initial="true" data-class="expand"  style="min-width: 50px;">
+			<span title="Rank according to value which we think this use case gives">Rank<span>
+		  </th>
+          <th >
+			<span title="Name of the Use Case.">Use Case<span>
+          </th>
+          <th data-hide="default" data-sort-ignore="true">
+            <span title="Calculations for CAC / LVC ratio">CAC/LVC ratio calculations</span>
+          </th>
+          <th>
+            <span title="More detailed explanation.">Use Case Explanation</span>
+          </th>
+          <th>
+            <span title="Value for the user" style="min-width: 120px;">Value for User</span>
+          </th>
+          <th>
+            <span title="Value for our company." style="min-width: 120px;">Value for our company</span>
+          </th>
+          <th data-type="numeric" style="min-width: 110px;">
+            <span title="Go To Market process">GTM Process</span>
+          </th>
+          <th data-type="numeric" style="min-width: 120px;">
+            <span title="Impact on the industry">Industry Impact</span>
+          </th>
+          <th data-type="numeric"  style="min-width: 90px;">
+            <span style="white-space: nowrap;" title="Ratio of Customer Aqcuisition Value / Lifetime Value of Customer. Click on + to see calculations.">CAC / LVC</span>
+          </th>
+          <th data-type="numeric" style="min-width: 70px;">
+            <span title="How hard is it to get into this industry. 10 - hard, 1 - easy.">Friction</span>
+          </th>
+          <th data-type="numeric"  style="min-width: 130px;">
+            <span style="white-space: nowrap;" title="Ratio of Customer Aqcuisition Value / Lifetime Value of Customer. Click on + to see calculations.">(LCV/(FR.*CAC))</span>
+          </th>
+        </tr>
+      </thead>
+		<tbody>
+		
+		<tr><td>2</td><td>ONLINE+CLASSROOM EDUCATION</td>
+				<td>
+				<pre>
+				
+				Customer Lifetime Value
+				price per course $39 existing on Coursera
+				$5 our additional fee for live per course.
+				2.5K students per course 
+				800 courses on Coursera
+				2 year contract
+				Customer Lifetime Value: $5 * 2.5K * 400 * 2 years = 20M
+
+				Customer Acquisition Cost: 
+				500K to make it customisable
+				300K for additional infrastructure (servers …)
+				400K annual maintenance updates
+
+				total Customer Acquisition Cost: 500K * 300K + 400K*2 = 1.6 M
+
+
+				RATIO: 20M / 1.6M 
+				CLV/CAC ratio = 12.5
+
+				</pre>
+				</td>
+				<td>Disruptive. Online students can do same thing classroom students can. Our product allows for constant engaging of students. As professor goes through lesson slides (or draws/writes) classroom and online students can see/record this data and interact with it. Great for quizes. Online and offline students do same function: Online can raise hand, vote, talk to teacher. Crowdsourcing: "Did someone understand what he just said?". Statistics. Live sharing.</td>
+				<td>Allows for live online education. Blur differences between online and offline. Allows online students to do same as classroom (raise hand, ask questions, live quiz). Teacher constantly engages students. Allows for constant feedback.  Automatic notes of professor said. Social aspect of the class.</td>
+				<td>Disruptive. Synergy between live and online students! Hot growing industry. Value our product brings to the industry is tremendous. Allows us to use our partner’s already established channels for marketing and distribution. "Help the world" scenario for poor countries allowing for distance live learning.</td>
+				<td>channel<br>(partnership with online educators like Coursera, ITunes U)</td>
+			<td>9</td><td>12.5</td><td>2</td><td>6.25</td></tr>
+
+			<tr><td>4</td><td>STADIUM</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				we take existing customers of our partners (stadiums, sports leagues)
+				60K avg. stadium size
+				~ 50% of stadium size = 30K our clients
+				$100K per stadium annually
+				avg. 5 year contract: 100 * 5 = 500K
+				total: 500K + 20% support = 600K
+				
+				Customer Acquisition Cost:
+				90K to make it customizable
+				10K for additional infrastructure (servers …)
+				20K annual maintenance updates
+				total Customer Acquisition Cost: 5 * 20K + 10k + 90k = 100K
+				
+				RATIO: 600K / 100K
+				CLV/CAC ratio = 6.0
+				</pre>
+				</td>
+				<td>Disruptive. Stadium scorboard (shows same url as nfl.com) goes through series of slides (controlled by an operator / or automatic). Each slide can show polls, user comments, live statistics. Allows both stadium and tv fans to have their voice heard (on scoreboard, reported to teams). Live fantasy sports! Allows to participate in addition to view. Best crowdsourcing sport statistics ever!</td>
+				<td>For stadium it adds revenue and involvement from people physically not inside stadium. Allows for virtual purchases of those inside stadium also. For fans it allows for live fans feedback. (and have that feedback seen by teams and referees).  Synergy between those at the stadium and those watching tv. Both groups can vote on what happens next, on their favorite player, request something Synergy between socreboard / nfl.com / public forum thus driving more traffic to nfl. Statistics data has enormous value for sales popularity, for teams.: probably the most accurate customer data ever in sports. Statistics by ip (very important for marketing). Allows for live fantasy sports! Helps with Close Captioning federal requirement.</td>
+				<td>Disruptive. Synergy between those at the stadium and those watching on tv! We bring great value to industry. We enable new models in that industry. Very high visibility for our product.</td>
+				<td>channel<br>(partnership with individual stadiums and leagues)</td>
+			<td>9</td><td>6.0</td><td >3</td><td>2.0</td></tr>
+			
+			<tr><td>5</td><td>CONFERENCES</td>
+				<td>
+				<pre>
+
+				Customer Lifetime Value:
+				16,6M conferences in US annually.
+				$1.500 per conference license fee
+				1 time, per conference contract
+
+				Customer Acquisition Cost: 
+				$500 per conference cost of marketing specialist to reach to conferences
+				$500 per convention infrastructure cost
+
+				RATIO: $1.500 / $1,000 
+				CLV/CAC ratio = 1.5
+				
+				</pre>
+				</td>
+				<td>Conference presenters use our product instead of powerpoint and increase value for presenter, audience and conference organizers. Engage large audience (not possible now). Present real time data. Allow to play with products on customer's mobile devices. Allow for remote participation in a conference.</td>
+				<td>We add great value for conference organizers, presenters and participants. Allows for viral distribution of our product. Natural access to conferences in Silicon Valley. Allows for very targeted access to our target users.</td>
+				<td>Allows for remote participation in conferences (additional revenue for organizers, enabler for those who cannot attend). Allows for engaging audience with presentation (not possible for large audience now). Allows for live data in presentations (important in many fields such as finance, science, business). </td>
+				<td>inside sales<br>(reaching out to individual conferences. Viral marketing from here on because of logo in each presentation)</td>
+			<td>8</td><td>1.5</td><td>3</td><td>0.5</td></tr>
+			
+			<tr><td>8</td><td>INSIDE SALES</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				18 million salespeople in the United States
+				$9.99 per month per person x 12 month = $120 (annually per individual).
+				10 year lifetime value
+				120 * 10 + 24 * 10 (maintenance) = $1,440
+
+				Customer Acquisition Cost: 
+				$1,000 avg. cost of marketing specialist to sell to an individual (person would actually sell to a company)
+				$100 in infrastructure allocated per salesmen
+				24 * 10 maintenance = 240
+
+				RATIO: 1,440 / 1,340
+				CLV/CAC ratio = 1.0
+				</pre>
+				</td>
+				<td>Allows salesmen to walk customer through scenarios. Live interaction of a customer with a product. Allows customer to act real time on a product(purchase, change).</td>
+				<td>Gives inside salesman capabilities of a field salesman: show how product works, allow customer to play with product. Allow customer to purchase product during the session.  Allows for statistics to analyze sale and improve on it.</td>
+				<td>Can measure value which our product adds, which leads to more sales. Sustainable, stable business model. Easier access to corporate customers than in other cases.</td>
+				<td>inside sales<br>(reaching out to corporations)</td>
+			<td>6</td><td>1.0</td><td>4</td><td>0.25</td></tr>
+			
+			<tr><td>1</td><td>POWERPOINT REPLACEMENT</td>
+				<td>
+				<pre>
+
+				Customer Lifetime Value:
+				500 million users of Powerpoint currently
+				Below are calculations for 100,000 users and as a last step we divide by 100,000 to get per user data.
+				Assume 100,000 users first year with 25% growth and avg. lifetime user 10 years (931,322 customers at the end of 10 years)
+				Monthly plans are: free, $2.99, $29.99, $49.99
+				50% * free + 20% * 2.99 + 15% * 29.99 + 15% * $49.00 = (60,00 + 450,000 + 750,000 = 1,260,000)= (first year) + 10,000,000 (tenth year) / 2 = avg.  $5,630,000 annually
+				10 year lifetime
+				$5,630,00 * 10 = 56,630,000 + 20% maintenance = 67,956,000 
+				Per customer: 67,956,000 / 100,000 = $679
+
+				Customer Acquisition Cost: 
+				$500,000 infrasture to support 100,000 customers
+				$100,000 marketing annually * 10 years
+				$100,000 support
+				500,000  + 100,000*10 + 100,000 = 1,600,000 
+				Per customer 1,600,000 / 100,000 = $16
+
+				RATIO: $679 / $16
+				CLV/CAC ratio = 42.4
+				
+				</pre>
+				</td>
+				<td>Engaging audience. Presenting real time data. No projector / conference room needed. Presentations on demand. Social aspect of presentations.</td>
+				<td>Slides with real time data. Ability to engage audience.  All web 2.0 features in slides. Infinite amount of data per slide. No need to rent projector or conference room. Saves time. Allows for remote presentation. Ease of use and ease of access (no installation or login required).</td>
+				<td>Makes our company a household name. By far the greatest margin. By far the least friction. The most natural use of our product.  Already have customers lined up to use it this way.</td>
+				<td>web<br>(selling through web, free usage giveaways, influential blogs articles, virality because of embedded logo in each presentation)</td>
+			<td>6</td><td>42.4</td><td>2</td><td>21.2</td></tr>
+			
+			<tr><td>3</td><td>ONLINE EDUCATION</td>
+				<td>
+				<pre>
+
+				Same as “Online + Classroom” scenario, except:
+				Value proposition is smaller
+				Number of customers currently is greater, but with our tool probably would become smaller
+
+				RATIO: 20M / 1.6M 
+				CLV/CAC ratio = 12.5
+				
+				</pre>
+				</td>
+				<td>Game changer: live interaction with teacher. Live quizes/tests. Ability to "raise hand", "ask questions", even "draw what I mean". Tangible, constant feedback for the teacher.</td>
+				<td>Same as online + classroom minus classroom.</td>
+				<td>Same as online + classroom, but easier to get into.</td>
+				<td>channel<br>(partnership with online educators like Coursera, ITunes U)</td>
+			<td>5</td><td>12.5</td><td>2</td><td>6.25</td></tr>
+			
+			<tr><td>6</td><td>CORPORATE DECISION MAKING TOOL</td>
+				<td>
+				<pre>				
+				Customer Lifetime Value:
+				18,204,679 businesses in US
+				$180,000 avg. license per business ($2 million for large companies, $1,000 for very small companies, other pricing is in between depends on the number of employees)
+				10 years lifetime = $1,800,000
+				+ 20% maintenance = $1,872,000
+
+				Customer Acquisition Cost: 
+				$100,000 marketing
+				$200,000 maintenance
+				$500,000 infrastructure 
+				total: $800,000
+
+				RATIO: $1,872,000 / $800,000
+				CLV/CAC ratio = 2.34
+				</pre>
+				</td>
+				<td>Employees act (vote, comment) during powerpoint presentations in the company, and follow up after. Data which is present is a real time data, thus allowing for a correct decision. Powerpoint replacement (save $). Real time data + more input from employees (who otherwise would not speak up) increases likelihood of correct decision. Data is available for analysis and improvement.</td>
+				<td>Gives measurable improvement to decision making process, resulting in measurable savings (could be millions per decision). Allows for bottom up communication which is hard to implement in corporations otherwise. Saves around 10% of employees man-hours per company because of not wasting time on projector and software setup.</td>
+				<td>The biggest revenue should come from this use case. Leads to top-down marketing of our product (1 employer - to multiple employees). Saves corporate a lot of money in employee time and wrong decisions cost a lot.</td>
+				<td>inside sales<br>(reaching out to businesses)</td>
+			<td>5</td><td>2.34</td><td>7</td><td>0.33</td></tr>
+			
+			<tr><td>10</td><td>RESTAURANT LIVE MENU</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				number of U.S. restaurants is 616,008
+				$2,000 licensing fee per year
+				10 year lifetime = $20,000
+				+ 20% maintenance fee = $24,000
+
+				Customer Acquisition Cost: 
+				$10,000 marketing
+				$5,000 infrastructure
+				$5,000 support
+
+				RATIO: $24,000 / $20,000
+				CLV/CAC ratio = 1.2
+				</pre>
+				</td>
+				<td>Customer opens a unique url. It shows him/her live available items (what if they run out of something?) which he can browse (like a presentation). Menu items are synced with Yelp Reviews and Google Images to give more info. Customer orders by clicking. Customer can leave the comment. Restaurant does not need to purchase any hardware or software (only monthly charge on our portal) - easy for both customer and restaurant!</td>
+				<td>Restaurant would be able to offer dynamic menu and dynamic pricing. Restaurant would have statistics which will allow for better provision purchasing thus saving money. Gives get much better experience: no “we run out of it”, ability to see photos of foods they don’t know, ability to see reviews live.Customers would favor restaurants which provide that capability increasing restaurant’s revenue.</td>
+				<td>Great value for the industry and regular customer. Fun way of using the product. Adds another level to restaurant industry (statistics, crowdsourcing). Allows for synergy of this industry with other industries through our product.</td>
+				<td>inside sales<br>(reaching out to restaurants, articles in influential blogs, virality because every menu item displays our logo)</td>
+			<td>6</td><td>1.2</td><td>5</td><td>0.24</td></tr>
+			
+			<tr><td>7</td><td>CUSTOMER SUPPORT (1-1 education)</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				18,204,679 businesses in US
+				$100,000 avg. license per business ($2 million for large companies, $1,000 for very small companies, other pricing is in between depends on the number of employees)
+				10 years lifetime = $1,000,000
+				+ 20% maintenance = $1,200,000
+
+				Customer Acquisition Cost: 
+				$100,000 marketing
+				$200,000 maintenance
+				$500,000 infrastructure 
+				total: $800,000
+
+				RATIO: $1,200,000 / $800,000
+				CLV/CAC ratio = 1.5
+				</pre>
+				</td>
+				<td>Users gets a url from agent. User goes to that url and agent guides him/her through series of live web pages (where user can click) and also user draw and laser pointer capabilities. Much more efficient way to quickly resolve an issue</td>
+				<td>Solves problem of frustrated customers who could not understand how to walk through a scenario. That leads to customer satisfaction which impacts bottom line of the company.  Allows for reducing man-hours of customer support agent. Allows for great statistics gathering.</td>
+				<td>Solves a very real pain point (frustration with customer support). Easy to adapt. 3 way win-win-win situation: customer, agent, Slite. Psychologically associates our product with easing the pain (allows for adaptation in other use cases)</td>
+				<td>inside sales<br>(reaching out to businesses)</td>
+			<td>4</td><td>1.5</td><td>5</td><td>0.3</td></tr>
+			
+			<tr><td>11</td><td>SCIENCE CROWDSOURCING</td>
+				<td>
+				<pre>
+				Customer Lifetime Value:
+				$100 per experiment license
+				10 year lifetime
+				+ 20% support = $1200
+
+				Customer Acquisition Cost: 
+				$100 marketing
+				$1,000 infrastructure (large data)
+
+				RATIO: $1,200 / $1,100
+				CLV/CAC ratio = 1.1
+				</pre>
+				</td>
+				<td>Web page shows data from control group (assume very large data: asteroids, birds …). Users can vote when they see something. Users can comment = community = crowdsourcing problem</td>
+				<td>Solves the problem of resources for solving a large data set. (most science problems are large data sets) Allows for targeted collaboration. Cross-countries, so may solve issue of experiment which is illegal in one country, but legal in another. </td>
+				<td>The greatest social value. “Save the world” scenario. Fun and interesting. The biggest potential: if some groundbreaking discovery is made using our system.</td>
+				<td>web<br>(selling through web, to universities and science enthusiasts)</td>
+			<td>3</td><td>1.1</td><td>5</td><td>0.21</td></tr>
+			
+			<tr><td>12</td><td>JOB INTERVIEW</td>
+				<td>
+				<pre>				
+				Customer Lifetime Value:
+				18,204,679 businesses in US
+				$50,000 avg. license per business ($1 million for large companies, $500 for very small companies, other pricing is in between depends on the number of employees)
+				10 years lifetime = $500,000
+				+ 20% maintenance = $600,000
+
+				Customer Acquisition Cost: 
+				$100,000 marketing
+				$200,000 maintenance
+				$300,000 infrastructure 
+				total: $800,000
+
+				RATIO: $600,000 / $600,000
+				CLV/CAC ratio = 1.0
+
+				</pre>
+				</td>
+				<td>Remote interview. Multiple people/teams conduct interview sumulteniously. Ability to dynamically change questions. Recorded data. Statistics. Much more efficient!</td>
+				<td>Allows for more accurate candidate screening - thus increasing quality of employees. Allows to save man-hours of the interviewers. Allows for great statistics.</td>
+				<td>Solves a pain point. Clear, measurable value from our product. Very common scenario - large number of users.</td>
+				<td>inside sales<br>(reaching out to corporations)</td>
+			<td>2</td><td>1.0</td><td>7</td><td>0.13</td></tr>
+			
+			<tr><td>9</td><td>REMOTE FINANCIAL ADVISER</td>
+				<td>
+				<pre>				
+				
+				Customer Lifetime Value:
+				Number of financial advisors 316,109
+				$24.99 per month per person x 12 month = $600 (annually per individual).
+				10 year lifetime value
+				300 * 10 + 60 * 10 (maintenance) = $3,600
+
+				Customer Acquisition Cost: 
+				$1,000 avg. cost of marketing specialist to sell to an individual (person would actually sell to a company)
+				$100 in infrastructure allocated per adviser
+				120 * 10 maintenance = 1,200
+
+				RATIO: $3,600 / $2,300
+				CLV/CAC ratio = 1.5
+				
+				</pre>
+				</td>
+				<td>Sell stock to customers real time. Walk through scenarios with real time data. Allow customer to act on the data they are seeing. Cloud crowdsourcing!</td>
+				<td>Crowdsourcing of the market analysis (very important). Making advise on real-time data. Allowing customer to take real time actions. Statistics helping understand customer and market.</td>
+				<td>Potentially can bring the biggest value to the customer. Easy to adapt.</td>
+				<td>inside sales<br>(reaching out to corporations)</td>
+			<td>2</td><td>1.5</td><td>8</td><td>0.25</td></tr>
+			
+	</tbody>	  
+    </table>
+    
+  </body>
+</html>

@@ -103,10 +103,14 @@ if (fs.existsSync(path.join(localDir, indexHtml))) {
 } else {													
   www_dir = awsDir;											
 }
-www_dir = path.normalize(www_dir);								
+www_dir = path.normalize(www_dir);
+					
+// hash redirection											
+var slitesDir = "slites";
+var slitesReg = "[0-9a-zA-Z]{4}";
 
 // configure Express
-app.configure(function() {
+app.configure(function () {
   app.set('views', www_dir);
   app.set('view engine', 'ejs');
   app.engine('.html', require('ejs').renderFile);
@@ -121,10 +125,43 @@ app.configure(function() {
   app.use(flash());
   app.use(passport.initialize());
   app.use(passport.session());
+
+   // middleware do retrieve slites files from /slites folders
+    var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
+    app.use(function (req, res, next) {
+        var match = req.url.match(slitesRegMW);
+        if (match) {
+            //console.log('URL: url=' + req.url);
+            req.url = '/' + slitesDir + req.url;
+            //console.log('REPLACED WITH: ' + req.url + '\n');
+        }
+        next();
+    });
+
   app.use(app.router);
   app.use(express.static(www_dir));
-});
+  //app.use(express.static(path.join(www_dir, 'static/')));
 
+  // custom 404 page
+  app.use(function (req, res) {
+        console.log('404: ' + req.url);
+        res.type('text/html');
+        res.status(404);
+        res.send('<h1>404 - Not Found</h1>');
+  });
+  // custom 500 page
+  app.use(function (err, req, res, next) {
+        console.error(err.stack);
+        res.type('text/html');
+        res.status(500);
+        res.send('<h1>500 - Server Error</h1>');
+  });
+});
+ 
+// remote
+//app.get('/remote/:slite_path?', function (req, res) {
+//    console.log('remote: ' + req.params.slite_path);
+//});
 
 app.get('/', function(req, res){
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -171,15 +208,6 @@ app.get('/logout', function(req, res){
     console.log("MA: logout success ");
     res.redirect('/');
   });
-});
-
-// hash redirection											
-var slitesDir = "slites";
-//var slitesReg = /^\/[0-9a-zA-Z]{5}\/?$/;
-var slitesReg = "[0-9a-zA-Z]{5}";
-var getSlitesReg = new RegExp('^\\/' + slitesReg + '\\/?$');
-app.get(getSlitesReg, function(req, res) {		
-  res.redirect(slitesDir + req.path);						
 });
 
 app.listen(8081);

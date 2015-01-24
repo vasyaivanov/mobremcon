@@ -69,10 +69,11 @@ exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
 
 function getHash()
 {
-    var time = process.hrtime()[0]// get unique number
-	, salt = Math.floor(Math.random() * Math.pow(4, Math.random() * 4)) % 36// get variable length prefix
+    var hashLen = 4;
+    var time = process.hrtime()[0] // get unique number
+	, salt = Math.floor(Math.random() * Math.pow(hashLen - 1, Math.random() * (hashLen - 1))) % 36// get variable length prefix
 	, hash = '';
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < hashLen - 1; i++) {
         hash = (time % 36).toString(36) + hash;
         time = Math.floor(time / 36);
     }

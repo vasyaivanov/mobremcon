@@ -673,10 +673,11 @@
 						navigateByCenterClick: true
 					}
 				  });
+				    var slitesPath = window.location + '..\\slites\\' + window.location.pathname;
 					for (var slide = 0; slide <= NUM_SLIDES; ++slide) {
 						//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\SliteShow_PitchDeck.pptx.html\\";
 						//var slide_html_path = data.filename;
-						var slide_html_path = "img"+slide+".jpg" + "?ts=" +  (new Date().getTime()); //slide url with added time stamp to stop caching
+					    var slide_html_path = /*slitesPath + */"img" + slide + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
 						var slide_html= "<div style='text-align:center;overflow:scroll' id=slide class='rsContent'>"
 							+ "<img src='"+slide_html_path+"' height='100%'>"
 							+ "<div class='rsTmb'>"

@@ -39,3 +39,7 @@ AWS_Website/UPLOAD/**
 
 BACKEND/TEST/MA/**
 *.zip
+
+AWS_Website/slites
+expressLogFile.log
+BACKEND/UPLOADS/
