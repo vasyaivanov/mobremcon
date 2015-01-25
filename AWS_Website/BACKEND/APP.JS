@@ -163,7 +163,9 @@ app.configure(function () {
 //    console.log('remote: ' + req.params.slite_path);
 //});
 
-app.get('/', function(req, res){
+var rootRegExp = new RegExp('^/($|index(\.html)?$)');
+app.get(rootRegExp, function (req, res){
+  //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);

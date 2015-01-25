@@ -113,7 +113,6 @@ function renameSliteDir(){
 }
 
 cacheHash: function cacheHash(){
-
     count++;
     hashValue = getHash();
 	console.log("JD: hashValue="+hashValue+" count="+count);

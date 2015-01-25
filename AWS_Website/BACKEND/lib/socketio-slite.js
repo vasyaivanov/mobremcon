@@ -51,11 +51,7 @@ io.sockets.on('connection', function (socket) {
 		if (pollAnswerArray.length > 0) pollUpdate();
 
 		var imageCount = 1;
-		//var dirname = "/Users/mac/Documents/REMOTECONTROL3/BACKEND/UPLOADS";
-
 		var uploader = new SocketIOFileUploadServer();
-    	//uploader.dir = "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\";
-    	//uploader.dir = "/Users/marov/mobremcon/BACKEND/TEST/MA/";
         uploader.dir = path.join(www_dir, "UPLOAD/");
         console.log('Connection established on ', new Date(), ', uploader Dir: ' + uploader.dir);
     	uploader.listen(socket);
@@ -80,12 +76,8 @@ io.sockets.on('connection', function (socket) {
         	var fullFileName = path.join(uploader.dir, event.file.name);
 			console.log("JD: complete: " + JSON.stringify(event));
         	console.log("JD: saved: " + event.file.name + " file extension=" + extention);
-			//var shortFileName = "SliteShow_PitchDeck";
-			//var fullFileName = uploader.dir + "SliteShow_PitchDeck.pptx";
-
+	
 		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
-        //var unoconv_cmd = "C:\\Python27\\python.exe C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\unoconv-master\\unoconv";
-        //var appDir = path.dirname(require.main.filename);
         var fullFileNameHtml = path.normalize(fullFileName + '.html'),
             unoconvPathname = path.join(__dirname, 'unoconv'),
             unoconv_cmd = "python " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
@@ -127,11 +119,6 @@ io.sockets.on('connection', function (socket) {
             });
             socket.emit("sliteConversionError");
 		  });
-
-        	/*fs.rename(dirname + "/" + event.file.name , dirname + "/" + imageCount + "." + extention, function (err){
-        		console.log("JD: renamed");
-        		imageCount++;
-        	}); */
     	});
 
 
