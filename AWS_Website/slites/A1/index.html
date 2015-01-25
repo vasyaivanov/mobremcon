@@ -377,7 +377,6 @@
 				line-height: 40px;
 			}
 			
-			
 			.closevideo{
 				float:right;
 				margin-top:5px;
@@ -397,6 +396,33 @@
 
 			.closevideo:before {
 				content: "×";
+			}
+			
+			.startTemporaryPopup{			
+				position: fixed;
+				font-size: 36px;
+				color: blue;
+				background-color: rgb(232, 223, 223);
+				border: 2px solid;
+				border-radius: 25px;
+				padding: 10px;
+			}
+			
+			#videoChatExplanator{
+				top: 300px;
+				left: 20px;
+			}
+			
+			#wallChatExplanator{
+				transform: rotate(45deg);
+				bottom: 200px;
+				left: 400px;
+			}
+			
+			#menuExplanator{
+				transform: rotate(-60deg);
+				right: 5px;
+				top: 180px;
 			}
 
 	</style>
@@ -439,7 +465,7 @@
 
     <canvas id="drawCanvas" ></canvas>
 
-	<div id="sliteWatermak">Powered by SLITE.US</div>
+	<div id="sliteWatermak">Powered by SLITE.US <span id="mainMenu">☰</span></div>
 
     <div id="redDot"><img src="./img/redDot.png" alt="Laser Pointer"></div>
 
@@ -459,205 +485,209 @@
 	<h1>Video Chat <div class="closevideo" id="closevideo"></div></h1>
 	
 
-	<article id="videochatMainContainer">
+		<article id="videochatMainContainer">
 
-		<!-- just copy this <section> and next script -->
-		<section class="experiment">
-			<section id="chatTop">
-				<span>
-					Private ?? <a href="/video-conferencing/" target="_blank" title="Open this link in new tab. Then your conference room will be private!"><code><strong id="unique-token">#123456789</strong></code></a>
-				</span>
+			<!-- just copy this <section> and next script -->
+			<section class="experiment">
+				<section id="chatTop">
+					<span>
+						Private ?? <a href="/video-conferencing/" target="_blank" title="Open this link in new tab. Then your conference room will be private!"><code><strong id="unique-token">#123456789</strong></code></a>
+					</span>
 
-				<input type="text" id="conference-name">
-				<button id="setup-new-room" class="setup">Setup New Conference</button>
+					<input type="text" id="conference-name">
+					<button id="setup-new-room" class="setup">Setup New Conference</button>
+				</section>
+
+				<!-- list of all available conferencing rooms -->
+				<table style="width: 100%;" id="rooms-list"></table>
+
+				<!-- local/remote videos container -->
+				<div id="videos-container"></div>
 			</section>
 
-			<!-- list of all available conferencing rooms -->
-			<table style="width: 100%;" id="rooms-list"></table>
+			<script>
+				// Muaz Khan     - https://github.com/muaz-khan
+				// MIT License   - https://www.webrtc-experiment.com/licence/
+				// Documentation - https://github.com/muaz-khan/WebRTC-Experiment/tree/master/video-conferencing
 
-			<!-- local/remote videos container -->
-			<div id="videos-container"></div>
-		</section>
-
-		<script>
-			// Muaz Khan     - https://github.com/muaz-khan
-			// MIT License   - https://www.webrtc-experiment.com/licence/
-			// Documentation - https://github.com/muaz-khan/WebRTC-Experiment/tree/master/video-conferencing
-
-			var _channelHash = "9WDXH6OH-6K73NMI";
-			var config = {
-				openSocket: function(config) {
-					var channel = config.channel || location.href.replace( /\/|:|#|%|\.|\[|\]/g , '');
-					channel += _channelHash;
-					var socket = new Firebase('https://chat.firebaseIO.com/' + channel);
-					socket.channel = channel;
-					socket.on("child_added", function(data) {
-						config.onmessage && config.onmessage(data.val());
-					});
-					socket.send = function(data) {
-						this.push(data);
-					};
-					config.onopen && setTimeout(config.onopen, 1);
-					socket.onDisconnect().remove();
-					return socket;
-				},
-				onRemoteStream: function(media) {
-					var mediaElement = getMediaElement(media.video, {
-						width: (videosContainer.clientWidth / 2) - 50,
-						buttons: ['mute-audio', 'mute-video', 'full-screen', 'volume-slider']
-					});
-					mediaElement.id = media.streamid;
-					videosContainer.insertBefore(mediaElement, videosContainer.firstChild);
-				},
-				onRemoteStreamEnded: function(stream, video) {
-					if (video.parentNode && video.parentNode.parentNode && video.parentNode.parentNode.parentNode) {
-						video.parentNode.parentNode.parentNode.removeChild(video.parentNode.parentNode);
-					}
-				},
-				onRoomFound: function(room) {
-					var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
-					if (alreadyExist) {
-						return;
-					}
-
-					if (typeof roomsList === 'undefined') roomsList = document.body;
-
-					var tr = document.createElement('tr');
-					tr.innerHTML = '<td><strong>' + room.roomName + '</strong> shared a conferencing room with you!</td>' +
-						'<td><button id="join-button" class="join">Join</button></td>';
-					roomsList.insertBefore(tr, roomsList.firstChild);
-
-					var joinRoomButton = tr.querySelector('.join');
-					joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
-					joinRoomButton.setAttribute('data-roomToken', room.roomToken);
-					joinRoomButton.onclick = function() {
-						this.disabled = true;
-
-						var broadcaster = this.getAttribute('data-broadcaster');
-						var roomToken = this.getAttribute('data-roomToken');
-						captureUserMedia(function() {
-							conferenceUI.joinRoom({
-								roomToken: roomToken,
-								joinUser: broadcaster
-							});
-						}, function() {
-							joinRoomButton.disabled = false;
+				var _channelHash = "9WDXH6OH-6K73NMI";
+				var config = {
+					openSocket: function(config) {
+						var channel = config.channel || location.href.replace( /\/|:|#|%|\.|\[|\]/g , '');
+						channel += _channelHash;
+						var socket = new Firebase('https://chat.firebaseIO.com/' + channel);
+						socket.channel = channel;
+						socket.on("child_added", function(data) {
+							config.onmessage && config.onmessage(data.val());
 						});
-					};
-				},
-				onRoomClosed: function(room) {
-					var joinButton = document.querySelector('button[data-roomToken="' + room.roomToken + '"]');
-					if (joinButton) {
-						// joinButton.parentNode === <li>
-						// joinButton.parentNode.parentNode === <td>
-						// joinButton.parentNode.parentNode.parentNode === <tr>
-						// joinButton.parentNode.parentNode.parentNode.parentNode === <table>
-						joinButton.parentNode.parentNode.parentNode.parentNode.removeChild(joinButton.parentNode.parentNode.parentNode);
-					}
-				}
-			};
-
-			function setupNewRoomButtonClickHandler() {
-				btnSetupNewRoom.disabled = true;
-				document.getElementById('conference-name').disabled = true;
-				captureUserMedia(function() {
-					conferenceUI.createRoom({
-						roomName: (document.getElementById('conference-name') || { }).value || 'Anonymous'
-					});
-				}, function() {
-					btnSetupNewRoom.disabled = document.getElementById('conference-name').disabled = false;
-				});
-			}
-
-			function captureUserMedia(callback, failure_callback) {
-				var video = document.createElement('video');
-
-				getUserMedia({
-					video: video,
-					onsuccess: function(stream) {
-						config.attachStream = stream;
-						callback && callback();
-
-						video.setAttribute('muted', true);
-
-						var mediaElement = getMediaElement(video, {
+						socket.send = function(data) {
+							this.push(data);
+						};
+						config.onopen && setTimeout(config.onopen, 1);
+						socket.onDisconnect().remove();
+						return socket;
+					},
+					onRemoteStream: function(media) {
+						var mediaElement = getMediaElement(media.video, {
 							width: (videosContainer.clientWidth / 2) - 50,
 							buttons: ['mute-audio', 'mute-video', 'full-screen', 'volume-slider']
 						});
-						mediaElement.toggle('mute-audio');
+						mediaElement.id = media.streamid;
 						videosContainer.insertBefore(mediaElement, videosContainer.firstChild);
 					},
-					onerror: function() {
-						alert('unable to get access to your webcam');
-						callback && callback();
+					onRemoteStreamEnded: function(stream, video) {
+						if (video.parentNode && video.parentNode.parentNode && video.parentNode.parentNode.parentNode) {
+							video.parentNode.parentNode.parentNode.removeChild(video.parentNode.parentNode);
+						}
+					},
+					onRoomFound: function(room) {
+						var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
+						if (alreadyExist) {
+							return;
+						}
+
+						if (typeof roomsList === 'undefined') roomsList = document.body;
+
+						var tr = document.createElement('tr');
+						tr.innerHTML = '<td><strong>' + room.roomName + '</strong> shared a conferencing room with you!</td>' +
+							'<td><button id="join-button" class="join">Join</button></td>';
+						roomsList.insertBefore(tr, roomsList.firstChild);
+
+						var joinRoomButton = tr.querySelector('.join');
+						joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
+						joinRoomButton.setAttribute('data-roomToken', room.roomToken);
+						joinRoomButton.onclick = function() {
+							this.disabled = true;
+
+							var broadcaster = this.getAttribute('data-broadcaster');
+							var roomToken = this.getAttribute('data-roomToken');
+							captureUserMedia(function() {
+								conferenceUI.joinRoom({
+									roomToken: roomToken,
+									joinUser: broadcaster
+								});
+							}, function() {
+								joinRoomButton.disabled = false;
+							});
+						};
+					},
+					onRoomClosed: function(room) {
+						var joinButton = document.querySelector('button[data-roomToken="' + room.roomToken + '"]');
+						if (joinButton) {
+							// joinButton.parentNode === <li>
+							// joinButton.parentNode.parentNode === <td>
+							// joinButton.parentNode.parentNode.parentNode === <tr>
+							// joinButton.parentNode.parentNode.parentNode.parentNode === <table>
+							joinButton.parentNode.parentNode.parentNode.parentNode.removeChild(joinButton.parentNode.parentNode.parentNode);
+						}
 					}
-				});
-			}
+				};
 
-			var conferenceUI = conference(config);
+				function setupNewRoomButtonClickHandler() {
+					btnSetupNewRoom.disabled = true;
+					document.getElementById('conference-name').disabled = true;
+					captureUserMedia(function() {
+						conferenceUI.createRoom({
+							roomName: (document.getElementById('conference-name') || { }).value || 'Anonymous'
+						});
+					}, function() {
+						btnSetupNewRoom.disabled = document.getElementById('conference-name').disabled = false;
+					});
+				}
 
-			/* UI specific */
-			var videosContainer = document.getElementById('videos-container') || document.body;
-			var btnSetupNewRoom = document.getElementById('setup-new-room');
-			var roomsList = document.getElementById('rooms-list');
+				function captureUserMedia(callback, failure_callback) {
+					var video = document.createElement('video');
 
-			if (btnSetupNewRoom) btnSetupNewRoom.onclick = setupNewRoomButtonClickHandler;
+					getUserMedia({
+						video: video,
+						onsuccess: function(stream) {
+							config.attachStream = stream;
+							callback && callback();
 
-			function rotateVideo(video) {
-				video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
-				setTimeout(function() {
-					video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(360deg)';
-				}, 1000);
-			}
+							video.setAttribute('muted', true);
 
-			(function() {
-				var uniqueToken = document.getElementById('unique-token');
-				if (uniqueToken)
-					//if (location.hash.length > 2)
-					uniqueToken.parentNode.parentNode.parentNode.innerHTML = '<h2 style="text-align:center;"><a href="' + location.href + "#" + _channelHash + '" target="_blank">Share this link</a></h2>';
-					//else uniqueToken.innerHTML = uniqueToken.parentNode.parentNode.href = '#' + (Math.random() * new Date().getTime()).toString(36).toUpperCase().replace( /\./g , '-');
-			})();
+							var mediaElement = getMediaElement(video, {
+								width: (videosContainer.clientWidth / 2) - 50,
+								buttons: ['mute-audio', 'mute-video', 'full-screen', 'volume-slider']
+							});
+							mediaElement.toggle('mute-audio');
+							videosContainer.insertBefore(mediaElement, videosContainer.firstChild);
+						},
+						onerror: function() {
+							alert('unable to get access to your webcam');
+							callback && callback();
+						}
+					});
+				}
 
-			function scaleVideos() {
-				var videos = document.querySelectorAll('video'),
-					length = videos.length, video;
+				var conferenceUI = conference(config);
 
-				var minus = 130;
-				var windowHeight = 700;
-				var windowWidth = 600;
-				var windowAspectRatio = windowWidth / windowHeight;
-				var videoAspectRatio = 4 / 3;
-				var blockAspectRatio;
-				var tempVideoWidth = 0;
-				var maxVideoWidth = 0;
+				/* UI specific */
+				var videosContainer = document.getElementById('videos-container') || document.body;
+				var btnSetupNewRoom = document.getElementById('setup-new-room');
+				var roomsList = document.getElementById('rooms-list');
 
-				for (var i = length; i > 0; i--) {
-					blockAspectRatio = i * videoAspectRatio / Math.ceil(length / i);
-					if (blockAspectRatio <= windowAspectRatio) {
-						tempVideoWidth = videoAspectRatio * windowHeight / Math.ceil(length / i);
-					} else {
-						tempVideoWidth = windowWidth / i;
+				if (btnSetupNewRoom) btnSetupNewRoom.onclick = setupNewRoomButtonClickHandler;
+
+				function rotateVideo(video) {
+					video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
+					setTimeout(function() {
+						video.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(360deg)';
+					}, 1000);
+				}
+
+				(function() {
+					var uniqueToken = document.getElementById('unique-token');
+					if (uniqueToken)
+						//if (location.hash.length > 2)
+						uniqueToken.parentNode.parentNode.parentNode.innerHTML = '<h2 style="text-align:center;"><a href="' + location.href + "#" + _channelHash + '" target="_blank">Share this link</a></h2>';
+						//else uniqueToken.innerHTML = uniqueToken.parentNode.parentNode.href = '#' + (Math.random() * new Date().getTime()).toString(36).toUpperCase().replace( /\./g , '-');
+				})();
+
+				function scaleVideos() {
+					var videos = document.querySelectorAll('video'),
+						length = videos.length, video;
+
+					var minus = 130;
+					var windowHeight = 700;
+					var windowWidth = 600;
+					var windowAspectRatio = windowWidth / windowHeight;
+					var videoAspectRatio = 4 / 3;
+					var blockAspectRatio;
+					var tempVideoWidth = 0;
+					var maxVideoWidth = 0;
+
+					for (var i = length; i > 0; i--) {
+						blockAspectRatio = i * videoAspectRatio / Math.ceil(length / i);
+						if (blockAspectRatio <= windowAspectRatio) {
+							tempVideoWidth = videoAspectRatio * windowHeight / Math.ceil(length / i);
+						} else {
+							tempVideoWidth = windowWidth / i;
+						}
+						if (tempVideoWidth > maxVideoWidth)
+							maxVideoWidth = tempVideoWidth;
 					}
-					if (tempVideoWidth > maxVideoWidth)
-						maxVideoWidth = tempVideoWidth;
+					for (var i = 0; i < length; i++) {
+						video = videos[i];
+						if (video)
+							video.width = maxVideoWidth - minus;
+					}
 				}
-				for (var i = 0; i < length; i++) {
-					video = videos[i];
-					if (video)
-						video.width = maxVideoWidth - minus;
-				}
-			}
 
-			window.onresize = scaleVideos;
+				window.onresize = scaleVideos;
 
-		</script>
+			</script>
 
 
 
-	</article>
+		</article>
 
 	</div>
-
+	
+	<div class="startTemporaryPopup" id="videoChatExplanator">&#8592; click grey bar to open Video Chat</div>
+	<div class="startTemporaryPopup" id="wallChatExplanator">click grey bar to open Wall/Chat &#8594;</div>
+	<div class="startTemporaryPopup" id="menuExplanator">click ☰ to open Menu &#8594;</div>
+	
 	<script>
 		jQuery(document).ready(function($) {
 				  $('#video-gallery').royalSlider({
@@ -729,7 +759,8 @@
 	});
 	$('#closevideo').click(function(){
 		showHideVideoChat();
-	});
+	});	
+	$('.startTemporaryPopup').delay( 4000 ).fadeOut( 400 );
 
 	</script>
 
