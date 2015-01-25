@@ -101,8 +101,18 @@
 			}else{
 				$( "#setup-new-room" ).trigger( "click" );
 			}
-			isVideoOn = true;
-		}
+			isVideoOn = true;			
+			
+			//reduce main window
+			$(".rsContainer").animate({"width":"80%"},300);
+			$(".rsContainer").css("float","right");
+		}else{
+			//put main window back to full size	
+			$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
+			//$(".rsContainer").css({"width":"100%", "clear":"both"});
+			isVideoOn = false;
+		}	
+		
 		$("#videochat").slideToggle();
 		/*
 		$("#videochat").css('overflow-x','hidden');
@@ -366,6 +376,28 @@
 				font-size: 40px;
 				line-height: 40px;
 			}
+			
+			
+			.closevideo{
+				float:right;
+				margin-top:5px;
+				margin-right:3px;
+				cursor:pointer;
+				color: #fff;
+				border: 1px solid #AEAEAE;
+				border-radius: 30px;
+				background: #605F61;
+				font-size: 31px;
+				display: inline-block;
+				line-height: 0px;
+				padding: 11px 3px; 
+				text-decoration: none;	
+				opacity: 0.6
+			}
+
+			.closevideo:before {
+				content: "×";
+			}
 
 	</style>
 
@@ -424,7 +456,8 @@
 	<div id="videochatpanel"></div>
 	<div id="videochat" style="overflow-x: hidden; overflow-y: scroll;">
 
-	<h1>Video Chat</h1>
+	<h1>Video Chat <div class="closevideo" id="closevideo"></div></h1>
+	
 
 	<article id="videochatMainContainer">
 
@@ -692,6 +725,9 @@
 		showHideComments();
 	});
 	$('#videochatpanel').click(function(){
+		showHideVideoChat();
+	});
+	$('#closevideo').click(function(){
 		showHideVideoChat();
 	});
 
