@@ -95,10 +95,10 @@
 	var isMenuOn = false;
 	function showHideMenu(){
 		if(!isMenuOn){
-			$('.menuSubmenu').css("display","block");
+			$('.menuSubmenu').slideDown( "slow");
 			isMenuOn = true;
 		}else{
-			$('.menuSubmenu').css("display","none");
+			$('.menuSubmenu').slideUp("medium");
 			isMenuOn = false;
 		}
 	}
