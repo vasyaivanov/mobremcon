@@ -101,7 +101,10 @@ io.sockets.on('connection', function (socket) {
               var numRegExp = /\d+\./;
               var lastFileName = numRegExp.exec(lastSliteFile);
               var numSlites = parseInt(lastFileName, 10);
-              if (isNaN(numSlites)) throw new Error("Number of Slites not determined!");
+              if (isNaN(numSlites)) {
+                console.log("Number of Slites not determined!");
+                numSlites = 1;
+              }
               //console.log('lastSliteFile=' + lastSliteFile + ' lastFileName=' + lastFileName + ' Number=' + numSlites);
               //var num_slites = $('a').next().attr('href').slice(3, 5);
               //console.log($('center').first());
