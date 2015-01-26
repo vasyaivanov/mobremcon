@@ -91,6 +91,29 @@
 	function showHideComments(){
 		$("#comments").slideToggle();
 	}
+	
+	var isMenuOn = false;
+	function showHideMenu(){
+		if(!isMenuOn){
+			$('.menuSubmenu').slideDown( "slow");
+			isMenuOn = true;
+		}else{
+			$('.menuSubmenu').slideUp("medium");
+			isMenuOn = false;
+		}
+	}
+	
+	var explanatorsTurnedOn = false;
+	function showHideExplanators(){
+		if(!explanatorsTurnedOn){
+			$('.startTemporaryPopup').delay( 3000 ).fadeOut( 400 );
+			explanatorsTurnedOn = true;
+		}else{		
+			$('.startTemporaryPopup').fadeIn( 400 );
+			$('.startTemporaryPopup').delay( 5000 ).fadeOut( 400 );
+			explanatorsTurnedOn = false;
+		}
+	}
 
 	var isVideoOn = false;
 	function showHideVideoChat(){
@@ -146,7 +169,82 @@
 		body{
 			/* background-color:rgba(0,0,255,0.3); */
 		}
+		
+		
+		/* MENU */
+		#primary_nav_wrap
+		{
+			position: fixed;
+			right: 20px;
+			top: 0px;
+			z-index: 2;
+		}
 
+		#primary_nav_wrap ul
+		{
+			list-style:none;
+			position:relative;
+			float:right;
+			margin:0;
+			padding:0
+		}
+
+		#primary_nav_wrap ul a
+		{
+
+			display:block;
+			color:#333;
+			text-decoration:none;
+		}
+
+		#primary_nav_wrap ul li
+		{
+			position:relative;
+			float:left;
+			margin:0;
+			padding:0;
+			border: 0px;
+		}
+
+		#primary_nav_wrap ul li.current-menu-item
+		{
+			background:#ddd
+		}
+
+		#primary_nav_wrap ul ul
+		{
+			display:none;
+			position: fixed;
+			top: 20px;
+			right: 0px;
+			background:#fff;
+			padding:0
+		}
+
+		#primary_nav_wrap ul ul li
+		{
+			float:none;
+			width:200px
+		}
+
+		#primary_nav_wrap ul ul a
+		{
+			line-height:120%;
+			padding:10px 15px;
+			border: 1px;
+			border-color: rgb(236, 232, 232);
+			border-style: solid;
+		}
+
+		#primary_nav_wrap ul ul ul
+		{
+			top:0;
+			left:100%
+		}
+		/* END MENU */
+
+
+		
 		#video-gallery {
       position: absolute;
       z-index: 0;
@@ -236,6 +334,7 @@
 			opacity: 0.4;
 			filter: alpha(opacity=40);
 			z-index: 2;
+			cursor: pointer;
 		}
 
 	    #redDot {
@@ -688,6 +787,19 @@
 	<div class="startTemporaryPopup" id="wallChatExplanator">click grey bar to open Wall/Chat &#8594;</div>
 	<div class="startTemporaryPopup" id="menuExplanator">click ☰ to open Menu &#8594;</div>
 	
+	<nav id="primary_nav_wrap">
+		<ul>
+			<li><a href="#"></a>
+				<ul class="menuSubmenu">
+				  <li><a href="http://www.slite.us">&#8962; Home</a></li>
+				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; Open Wall/Chat</a></li>
+				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; Open Video Chat</a></li>
+				  <li><a href="javascript:showHideExplanators()" id="menuOpenVideoChat">? Help</a></li>
+				</ul>
+			</li>
+		</ul>
+	</nav>
+	
 	<script>
 		jQuery(document).ready(function($) {
 				  $('#video-gallery').royalSlider({
@@ -760,7 +872,10 @@
 	$('#closevideo').click(function(){
 		showHideVideoChat();
 	});	
-	$('.startTemporaryPopup').delay( 4000 ).fadeOut( 400 );
+	$('#sliteWatermak').click(function(){
+		showHideMenu();
+	});
+	showHideExplanators();
 
 	</script>
 
