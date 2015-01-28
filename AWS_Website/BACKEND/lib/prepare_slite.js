@@ -67,7 +67,7 @@ exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
     initCache();													
 }																				
 
-var Slite = function (dir, filename, num_slides) {
+var Slite = function (dir, filename, num_slides, socket) {
     this.maxNumTries = 10;
     this.count = 0;
     this.hashValue = null;
@@ -75,6 +75,8 @@ var Slite = function (dir, filename, num_slides) {
     this.dir = dir;
     this.filename = filename;
     this.num_slides = num_slides;
+    
+    this.socket = socket;
     
     if (!cacheReady) {
         console.log('Cache not ready');
@@ -115,7 +117,7 @@ Slite.prototype.renameSliteDir = function () {
                 var data_replaced = data.replace("NUM_SLIDES", self.num_slides);
                 fs.writeFile(path.join(wwwSlitesHash, 'index.html'), data_replaced, function (err) {
                     if (err) throw err;
-                    module.parent.exports.socket.emit("slitePrepared", { dir: wwwSlitesHash, hash: self.hashValue, num_slides: self.num_slides, fileName: self.filename });
+                    self.socket.emit("slitePrepared", { dir: wwwSlitesHash, hash: self.hashValue, num_slides: self.num_slides, fileName: self.filename });
                     console.log("RENAMED to " + path.join(www_dir, self.hashValue, "index.html"));
                     console.log("SUCCESS!");
                 });

@@ -46,7 +46,7 @@ var clients = [];
 console.log('in remote control');
 
 io.sockets.on('connection', function (socket) {
-		module.exports.socket = socket;
+		//module.exports.socket = socket;
 
 		if (pollAnswerArray.length > 0) pollUpdate();
 
@@ -78,7 +78,7 @@ io.sockets.on('connection', function (socket) {
 		//console.log("UPLOAD dir: " + uploader.dir + " fullFileName: " + fullFileName);
         var fullFileNameHtml = path.normalize(fullFileName + '.html'),
             unoconvPathname = path.join(__dirname, 'unoconv'),
-            unoconv_cmd = "PYTHON " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
+            unoconv_cmd = "python " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
 		console.log(unoconv_cmd);
 
         exec(unoconv_cmd,
@@ -103,7 +103,7 @@ io.sockets.on('connection', function (socket) {
                 console.log("Number of Slites not determined!");
                 numSlites = 1;
               }
-              var slite = new prepare_slite.Slite(fullFileNameHtml, shortFileName + '.html', numSlites);
+              var slite = new prepare_slite.Slite(fullFileNameHtml, shortFileName + '.html', numSlites, socket);
 			});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
