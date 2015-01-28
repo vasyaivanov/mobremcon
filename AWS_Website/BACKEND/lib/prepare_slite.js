@@ -67,12 +67,31 @@ exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
     initCache();													
 }																				
 
-function getHash()
+var Slite = function (dir, filename, num_slides) {
+    this.maxNumTries = 10;
+    this.count = 0;
+    this.hashValue = null;
+    
+    this.dir = dir;
+    this.filename = filename;
+    this.num_slides = num_slides;
+    
+    if (!cacheReady) {
+        console.log('Cache not ready');
+        return false;
+    }
+    
+    console.log("MA: prepare_slite: " + this.dir + " " + this.filename + " " + this.num_slides);
+    
+    this.cacheHash();
+}
+
+Slite.prototype.getHash = function ()
 {
     var hashLen = 4;
     var time = process.hrtime()[0] // get unique number
-	, salt = Math.floor(Math.random() * Math.pow(hashLen - 1, Math.random() * (hashLen - 1))) % 36// get variable length prefix
-	, hash = '';
+	  , salt = Math.floor(Math.random() * Math.pow(hashLen - 1, Math.random() * (hashLen - 1))) % 36// get variable length prefix
+	  , hash = '';
     for (var i = 0; i < hashLen - 1; i++) {
         hash = (time % 36).toString(36) + hash;
         time = Math.floor(time / 36);
@@ -82,75 +101,48 @@ function getHash()
 	return hash;
 }
 
-var maxNumTries = 10;
-var count = 0;
-var hashValue = null;
-
-var dir = null;
-var filename = null;
-var num_slides = 0;
-
-function renameSliteDir(){
-    var wwwSlitesHash = path.join(www_dir, "slites/", hashValue);
-    console.log("MA found hash, dir: '" + dir + "' filename: '" + filename + "' Slides: " + num_slides + " wwwSlitesHash: '" + wwwSlitesHash + "'");
+Slite.prototype.renameSliteDir = function () {
+    var self = this;
+    var wwwSlitesHash = path.join(www_dir, "slites/", self.hashValue);
+    console.log("MA found hash, dir: '" + self.dir + "' filename: '" + self.filename + "' Slides: " + self.num_slides + " wwwSlitesHash: '" + wwwSlitesHash + "'");
     
-    fs.rename(dir, wwwSlitesHash, function (err){
+    fs.rename(self.dir, wwwSlitesHash, function (err) {
         if (err) throw err;
-        fs.rename(path.join(wwwSlitesHash, filename), path.join(wwwSlitesHash, "img0.html"), function (err){
+        fs.rename(path.join(wwwSlitesHash, self.filename), path.join(wwwSlitesHash, "img0.html"), function (err) {
             if (err) throw err;
-            fs.readFile(path.join(www_dir, "hash_index.html"), "utf8", function(err, data) {
+            fs.readFile(path.join(www_dir, "hash_index.html"), "utf8", function (err, data) {
                 if (err) throw err;
-                var data_replaced = data.replace("NUM_SLIDES", num_slides);
-                fs.writeFile(path.join(wwwSlitesHash, 'index.html'), data_replaced, function(err) {
+                var data_replaced = data.replace("NUM_SLIDES", self.num_slides);
+                fs.writeFile(path.join(wwwSlitesHash, 'index.html'), data_replaced, function (err) {
                     if (err) throw err;
-                    module.parent.exports.socket.emit("slitePrepared", { dir: wwwSlitesHash, hash: hashValue, num_slides: num_slides });
-    			    console.log("MA: renamed to " + path.join(www_dir, hashValue, "index.html"));
+                    module.parent.exports.socket.emit("slitePrepared", { dir: wwwSlitesHash, hash: self.hashValue, num_slides: self.num_slides });
+                    console.log("MA: renamed to " + path.join(www_dir, self.hashValue, "index.html"));
                     console.log("success!");
                 });
             });
-		});
-	});
+        });
+    });
 }
 
-cacheHash: function cacheHash(){
-    count++;
-    hashValue = getHash();
-	console.log("JD: hashValue="+hashValue+" count="+count);
- 	// get the value
-	cache.get(hashValue, function (error, value) {
-		console.log("JD: error="+error+" hashValue="+value);
+Slite.prototype.cacheHash = function cacheHash() {
+    var self = this;
+    self.count++;
+    self.hashValue = self.getHash();
+    console.log("JD: hashValue=" + self.hashValue + " count=" + self.count);
+    // get the value
+    cache.get(self.hashValue, function (error, value) {
+        console.log("JD: error=" + error + " hashValue=" + value);
         if (value != true || count > maxNumTries) {
             console.log("MA: found value is " + value);
-            cache.set(hashValue, true , 60000, function (error) {
-                console.log("JD: set my hash to " + hashValue);
-                renameSliteDir();
+            cache.set(self.hashValue, true , 60000, function (error) {
+                console.log("JD: set my hash to " + self.hashValue);
+                self.renameSliteDir();
             });
         } else {
-            cacheHash();
+            self.cacheHash();
         }
-	});
+    });
 }
-
-prepare_slite: function prepare_slite(dir_input, filename_input, num_slides_input){
-    if (!cacheReady) {
-        console.log('Cache not ready');
-        return false;
-    }
-    count = 0;
-	console.log("MA: prepare_slite: " + dir + " " + filename + " " + num_slides);
-    dir = dir_input; filename = filename_input; num_slides = num_slides_input;
-    console.log("MA: prepare_slite set: " + dir + " " + filename + " " + num_slides);
-    cacheHash();
-    return true;
-}
-
-//cache.clear();
 
 module.exports.cache = cache;
-module.exports.prepare_slite = prepare_slite;
-/*async.series([
-    cacheHash,
-], function (err, results) {
-    console.log("JD: -------- FINAL RESULTS HASH=" + hashValue);
-    process.exit(1);
-});*/
+module.exports.Slite = Slite;

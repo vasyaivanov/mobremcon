@@ -109,10 +109,11 @@ io.sockets.on('connection', function (socket) {
               //var num_slites = $('a').next().attr('href').slice(3, 5);
               //console.log($('center').first());
 
-			  prepare_slite.prepare_slite(fullFileNameHtml, shortFileName + '.html', numSlites );
+              var slite = new prepare_slite.Slite(fullFileNameHtml, shortFileName + '.html', numSlites);
 			});
 			if (error !== null) {
 			  console.log('unoconv stderr: ', stderr);
+              socket.emit("sliteConversionError");
             }
             // delete presentation in UPLOAD dir
             fs.unlink(fullFileName, function (err) {
@@ -120,7 +121,6 @@ io.sockets.on('connection', function (socket) {
                     console.log('error deleting : ' + fullFileName);
                 }
             });
-            socket.emit("sliteConversionError");
 		  });
     	});
 
