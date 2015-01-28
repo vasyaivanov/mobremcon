@@ -44,7 +44,8 @@ $(document).ready(function(){
 		});
 
 		socket.on('slitePrepared', function (data) {
-			console.log("MA fileConverted: " + JSON.stringify(data));
+            console.log("MA fileConverted: " + JSON.stringify(data));
+            //alert('fileConverted: ' + data.dir + ' FileName: ' + data.fileName);
 			//window.location = "http://www.slite.us/" + data.hash;
 			$(".overlay").remove();
 			$('body').append('<div class="overlay"><div class="upload-text">Converted successfully!<br>YOU WILL BE FORWARDED TO THE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');

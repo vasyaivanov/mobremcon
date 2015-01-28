@@ -53,20 +53,19 @@ io.sockets.on('connection', function (socket) {
 		var imageCount = 1;
 		var uploader = new SocketIOFileUploadServer();
         uploader.dir = path.join(www_dir, "UPLOAD/");
-        console.log('Connection established on ', new Date(), ', uploader Dir: ' + uploader.dir);
+        console.log('CONNECTION on ', new Date());
     	uploader.listen(socket);
 
     	uploader.on("start", function(event){
-        	console.log("JD: started file: " + JSON.stringify(event.file));
+        	console.log("UPLOAD started  file: " + event.file.name);
     	});
 
     	uploader.on("progress", function(event){
-        	//console.log("JD: progress: " + JSON.stringify(event));
-            console.log("JD: progress: ");
+           console.log("UPLOAD progress file: " + event.file.name);
     	});
 
         uploader.on("error", function (event) {
-            console.log("JD: error: " + JSON.stringify(event));
+            console.log("UPLOAD error: " + JSON.stringify(event));
         });
 
 
@@ -74,19 +73,18 @@ io.sockets.on('connection', function (socket) {
         	var extention = event.file.name.split(".")[1];
 			var shortFileName = event.file.name.split(".")[0];
         	var fullFileName = path.join(uploader.dir, event.file.name);
-			console.log("JD: complete: " + JSON.stringify(event));
-        	console.log("JD: saved: " + event.file.name + " file extension=" + extention);
+			console.log("UPLOAD complete file: " + event.file.name);
 	
-		console.log("MA: uploader.dir: " + uploader.dir + " fullFileName: " + fullFileName);
+		//console.log("UPLOAD dir: " + uploader.dir + " fullFileName: " + fullFileName);
         var fullFileNameHtml = path.normalize(fullFileName + '.html'),
             unoconvPathname = path.join(__dirname, 'unoconv'),
-            unoconv_cmd = "python " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
+            unoconv_cmd = "PYTHON " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
 		console.log(unoconv_cmd);
 
         exec(unoconv_cmd,
 		  function( error, stdout, stderr) {
 			//console.log('unoconv stdout: ', stdout);
-            console.log('Converted presentation: ', fullFileNameHtml);
+            console.log('CONVERTED presentation: ', fullFileNameHtml);
             var convertedHtml = path.join(fullFileNameHtml, shortFileName + '.html');
 			fs.readFile(convertedHtml, 'utf8', function (err, data) {
 			  if (err) throw err;
@@ -105,10 +103,6 @@ io.sockets.on('connection', function (socket) {
                 console.log("Number of Slites not determined!");
                 numSlites = 1;
               }
-              //console.log('lastSliteFile=' + lastSliteFile + ' lastFileName=' + lastFileName + ' Number=' + numSlites);
-              //var num_slites = $('a').next().attr('href').slice(3, 5);
-              //console.log($('center').first());
-
               var slite = new prepare_slite.Slite(fullFileNameHtml, shortFileName + '.html', numSlites);
 			});
 			if (error !== null) {
@@ -159,7 +153,7 @@ io.sockets.on('connection', function (socket) {
 
 		//socket.emit('news', { hello: 0 });
 		socket.on('mymessage', function (data) {
-			console.log("JD received data: "+data);
+			console.log("JD received data: " + data);
 			console.log(data.my);
 			io.sockets.emit('news',{ hello: data.my, slide: data.slide, slideID: data.slideID});
 			//io.sockets.emit('news',clients);
