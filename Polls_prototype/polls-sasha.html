@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Slite: polls</title>
+	<!--<link rel="stylesheet" type="text/css" href="../../../.assets/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../../../.assets/css/bootstrap-combined.min.css">
+	<link rel="stylesheet" type="text/css" href="../../../.assets/css/bootstrap-responsive.css">
+	<link rel="stylesheet" type="text/css" href="../../../.assets/css/bootstrap-theme.min.css"> -->
+
+	<!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+  <script language="JavaScript" src="./js/jquery-2.0.3.min.js"></script>
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+
+  	<script>
+//	  var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+//		//var socket = io.connect('http://localhost:1337');
+		
+		document.addEventListener("DOMContentLoaded", function(){
+			var answerTable = document.getElementById('answerTextID').value;
+			var answerArray = new Array();
+			answerArray = answerTable.split("\n");
+			window.pollStatistics = "";
+			for (i=0; i < answerArray.length; i++) {
+				window.pollStatistics +="0\n"; //initialize statistics to 0
+			}
+			//updateQuickPollAnswers('answerDisplayTable', 'A\n B\n C\n');
+			//socket.emit('pollStarted', { answers: answerTable });
+		}, false);
+				
+//	  	socket.on('pollUpdate', function (data) {
+//			//if (data.statistics.length == 0) statisticsShown = false;
+//			updateQuickPollAnswers('answerDisplayTable', data.answers);
+//			cyopDummyResults('answerDisplayTable', data.answers, data.statistics);
+//		});
+
+window.oncontextmenu = function ()
+{				      
+//    showCustomMenu();
+    toggleQuizMaker();
+    return false;     // cancel default menu
+}
+
+      var isQuizMakerVisible = false;
+    function toggleQuizMaker(){
+      if(!isQuizMakerVisible){
+        $("#quizMaker").css('display','block');
+        isQuizMakerVisible = true;
+      }else{
+
+        $("#quizMaker").css('display','none');
+        isQuizMakerVisible = false;
+      }
+    }  
+	</script>
+
+
+	<script type="text/javascript">
+	  function init() {
+	  loBkg(document.getElementById("SLITE_button"));
+	  loBkg(document.getElementById("SLIDEROCKET_button"));
+	  loBkg(document.getElementById("PREZI_button"));
+	  }
+	</script>
+
+  <style>
+    table{
+      line-height: 20px;
+    }
+      input[type='radio']{
+        padding: 10px;
+      }
+
+.mybutton {
+  /*  width: 140px; */
+  height: 50px;
+  font-size: xx-large;
+
+  /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+  -webkit-border-radius: 10px; 
+
+  /* Firefox 1-3.6 */
+  -moz-border-radius: 10px; 
+  
+  /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+  border-radius: 10px; 
+
+  //background: -webkit-linear-gradient(top, lightskyblue, white); /* For Safari 5.1 to 6.0 */
+  //background: -o-linear-gradient(top, lightskyblue, white); /* For Opera 11.1 to 12.0 */
+  //background: -moz-linear-gradient(top, lightskyblue, white); /* For Firefox 3.6 to 15 */
+  //background: linear-gradient(top, lightskyblue, white); /* Standard syntax (must be last) */
+
+  /*background-image: url("img/loBkg.jpg");*/
+  /*background-repeat: no-repeat;*/
+}
+
+
+
+  </style>
+
+</head>
+
+
+<body onload=init()>
+
+  <div id='quizMaker' style='display:none'>         
+
+    <span style="color:#062D54; font-size:30px; margin-left:4px;"><b>Enter poll question and list of answers</b></span>
+    
+           <textarea class="no_resize textareaBox" style="height:25px; padding: 8px 6px 0px 4px; width:342px;" id="questionTextID" name="questionText" onclick="if (this.value=='Would you like to setup polls on your website?')this.value='';"  onblur="if (this.value == '') this.value='Would you like to setup polls on your website?';document.getElementById('questionTextDisplayDiv').innerHTML=this.value;" onkeyup="document.getElementById('questionTextDisplayDiv').innerHTML=this.value;document.getElementById('pollQuestion').value=this.value;">WHICH PROJECT TO FINANCE?</textarea>
+         
+           <textarea class="no_resize textareaBox" style="height:55px; padding: 8px 6px 0px 4px; width:342px;" id="answerTextID" name="answers"   >
+SLITE 
+SLIDEROCKET
+PREZI </textarea>
+        
+			<img class="handPointer" onmouseout="this.style.background='url(img/create-poll.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(img/create-poll-hover.png) 0px -50px no-repeat';" src="img/create-poll.png" onclick="socket.emit('pollStarted', { answers: document.getElementById('answerTextID').value });">
+		
+</div>
+     
+<div id="wrap">
+
+<div class="container">
+
+<!-- row 1 -->
+    <header class="row">
+      <div class="col-lg-7 col-md-8 col-sm-7">
+        <div class="header-description">
+         <h1>FEATURE: DECISION MAKING</h1>
+        </div>
+      </div>
+    </header>
+
+
+    <!-- row 2 -->
+	<div class="jumbotron">
+		<h2>WHICH PROJECT TO FINANCE?</h2>
+
+		<div id='quizMaker' style='display:none'>
+
+           <span style="color:#062D54; font-size:30px; margin-left:4px;"><b>Enter poll question and list of answers</b></span>
+
+           <textarea class="no_resize textareaBox" style="height:25px; padding: 8px 6px 0px 4px; width:342px;" id="questionTextID" name="questionText" onclick="if (this.value=='Would you like to setup polls on your website?')this.value='';"  onblur="if (this.value == '') this.value='Would you like to setup polls on your website?';document.getElementById('questionTextDisplayDiv').innerHTML=this.value;" onkeyup="document.getElementById('questionTextDisplayDiv').innerHTML=this.value;document.getElementById('pollQuestion').value=this.value;">WHICH PROJECT TO FINANCE?</textarea>
+
+
+           <textarea class="no_resize textareaBox" style="height:55px; padding: 8px 6px 0px 4px; width:342px;" id="answerTextID" name="answers"   >
+SLITE
+SLIDEROCKET
+PREZI </textarea>
+
+		<img class="handPointer" onmouseout="this.style.background='url(../../img/create-poll.png) 0px 0px no-repeat';" onmouseover="this.style.background='url(../../img/create-poll-hover.png) 0px -50px no-repeat';" src="../../img/create-poll.png" onclick="socket.emit('pollStarted', { answers: document.getElementById('answerTextID').value });" alt="">
+
+        </div>
+
+		<table width="100%">
+		  <tr height="30">
+		    <td width="25%"><button type="button" onmouseover="hiBkg(this)" onmouseout="loBkg(this)" class="mybutton" value="SLITE" onClick="doPolls(this);" id="SLITE_button">SLITE</button></td>
+		    <td width="51%" style="background-color:#DC143C;font-size:x-large;text-align:center" id="SLITE_plus">51 (51%)</td>
+		    <td width="*"  style="background-color:#eee;" id="SLITE_minus">&nbsp;</td>
+		  </tr>
+		</table>
+		
+		<br><br>
+
+		<table width="100%">
+		  <tr height="30">
+		    <td width="25%"><button type="button" onmouseover="hiBkg(this)" onmouseout="loBkg(this)" class="mybutton" value="SLIDEROCKET" onClick="doPolls(this);" id="SLIDEROCKET_button">SLIDEROCKET</button></td>
+		    <td width="32%" style="background-color:#428bca;font-size:x-large;text-align:center" id="SLIDEROCKET_plus">32 (32%)</td>
+		    <td width="*" style="background-color:#eee;" id="SLIDEROCKET_minus">&nbsp;</td> 
+		  </tr>
+		</table>
+
+		<br><br>
+		
+		<table width="100%">
+		  <tr height="30">
+		    <td width="25%"><button type="button" onmouseover="hiBkg(this)" onmouseout="loBkg(this)" class="mybutton" value="PREZI" onClick="doPolls(this);" id="PREZI_button">PREZI</button></td>
+		    <td width="17%" style="background-color:#2E8B57;font-size:x-large;text-align:center" id="PREZI_plus">17 (17%)</td>
+		    <td width="*" style="background-color:#eee;" id="PREZI_minus">&nbsp;</td>
+		  </tr>
+		</table>
+		
+		<input type="hidden" id="SLITE_votes" name="SLITE_votes" value="51">
+		<input type="hidden" id="SLIDEROCKET_votes" name="SLIDEROCKET_votes" value="32">
+		<input type="hidden" id="PREZI_votes" name="PREZI_votes" value="17">
+		<input type="hidden" id="SLITE_percent" name="SLITE_percent" value="51">
+		<input type="hidden" id="SLIDEROCKET_percent" name="SLIDEROCKET_percent" value="32">
+		<input type="hidden" id="PREZI_percent" name="PREZI_percent" value="17">
+
+	    </div> <!--end jumbotron-->
+
+
+			<!--row 3-->
+
+			<!-- center>
+			<table><tr><td>
+			      <select id="eklmn1" style="height:80px;width:300px;font-size:xx-large">
+				<option selected value="Nothing">Select a project:</option>
+				<option value="SLITE">SLITE</option>
+				<option value="SLIDEROCKET">SLIDEROCKET</option>
+				<option value="PREZI">PREZI</option>
+			      </select>
+			    </td><td>
+			     &nbsp;&nbsp;
+			     &nbsp;&nbsp;
+			     &nbsp;&nbsp;
+			     &nbsp;&nbsp;
+			     &nbsp;&nbsp;
+			    </td><td>
+			    <button type="button" style="border-radius:12px;-webkit-border-radius:12px;-moz-border-radius:12px;height:100px;width:300px;font-size:xx-large" onClick="doPolls('eklmn1')">Vote</button>  
+			</td></tr>
+			  <tr><td colspan="2">
+			      <div id="msg" style="color:red;font-size:xx-large"></div>
+			</td></tr></table>
+
+			</center -->
+
+			<!-- div class="btn-group-vertical center-block" role="group" aria-label="..." id="answerDisplayTable2">
+			  <p><button type="button" class="btn btn-primary btn-group-justified" value="SLITE" onClick="doPolls(this);">SLITE</button></p>
+			  <p><button type="button" class="btn btn-primary btn-group-justified" value="SLIDEROCKET" onClick="doPolls(this);">SLIDEROCKET</button></p>
+			  <p><button type="button" class="btn btn-primary btn-group-justified" value="PREZI" onClick="doPolls(this);">PREZI</button></p>
+			</div -->
+
+			<!-- table>
+			  <tr><td style="padding:10px"><button type="button" onmouseover="hiBkg(this)" onmouseout="loBkg(this)" class="mybutton" value="SLITE" onClick="doPolls(this);" id="SLITE_button">SLITE</button></td><td id="SLITE_stats" style="font-size:xx-large;">51 (51%)</td></tr>
+			  <tr><td style="padding:10px"><button type="button" onmouseover="hiBkg(this)" onmouseout="loBkg(this)" class="mybutton" value="SLIDEROCKET" onClick="doPolls(this);" id="SLIDEROCKET_button">SLIDEROCKET</button></td><td id="SLIDEROCKET_stats" style="font-size:xx-large;">32 (32%)</td></tr>
+			  <tr><td style="padding:10px"><button type="button" onmouseover="hiBkg(this)" onmouseout="loBkg(this)" class="mybutton" value="PREZI" onClick="doPolls(this);" id="PREZI_button">PREZI</button></td><td id="PREZI_stats" style="font-size:xx-large;">17 (17%)</td></tr>
+			</table -->
+
+<script language="javascript">
+        function hiBkg(btnObj) {
+	    //btnObj.style.background = "url('img/hiBkg.jpg')";
+	    var bgc = document.getElementById(btnObj.value+"_plus").style.backgroundColor;
+	btnObj.style.background = "-webkit-linear-gradient(top, "+bgc+", white)"; /* For Safari 5.1 to 6.0 */
+	btnObj.style.background = "-o-linear-gradient(top, "+bgc+", white)"; /* For Opera 11.1 to 12.0 */
+	btnObj.style.background = "-moz-linear-gradient(top, "+bgc+", white)"; /* For Firefox 3.6 to 15 */
+	btnObj.style.background = "linear-gradient(top, "+bgc+", white)"; /* Standard syntax (must be last) */
+        }
+        function loBkg(btnObj) {
+	    //btnObj.style.background = "url('img/loBkg.jpg')";
+	    var bgc = document.getElementById(btnObj.value+"_plus").style.backgroundColor;
+	btnObj.style.background = "-webkit-linear-gradient(top, white, "+bgc+")"; /* For Safari 5.1 to 6.0 */
+	btnObj.style.background = "-o-linear-gradient(top, white, "+bgc+")"; /* For Opera 11.1 to 12.0 */
+	btnObj.style.background = "-moz-linear-gradient(top, white, "+bgc+")"; /* For Firefox 3.6 to 15 */
+	btnObj.style.background = "linear-gradient(top, white, "+bgc+")"; /* Standard syntax (must be last) */   
+     }
+	function doPolls(btnObj)
+	{
+
+	        //document.getElementById("msg").innerHTML = "";
+	        //var selIndex = document.getElementById(objId).selectedIndex;
+	        //if (selIndex==0) {
+	        //    document.getElementById("msg").innerHTML = "Please, select a project!";
+                //} else {
+	        //var p = document.getElementById(objId).options[selIndex].value;
+	        var p = btnObj.value;
+                $('#'+p+'_votes').val(parseInt($('#'+p+'_votes').val())+1);
+		var total_votes = parseInt($('#SLITE_votes').val()) + parseInt($('#SLIDEROCKET_votes').val()) + parseInt($('#PREZI_votes').val());
+		var p1=Math.round(100*parseInt($('#SLITE_votes').val())/parseInt(total_votes));
+		var p2=Math.round(100*parseInt($('#SLIDEROCKET_votes').val())/parseInt(total_votes));
+		var p3=Math.round(100*parseInt($('#PREZI_votes').val())/parseInt(total_votes));
+		$('#SLITE_percent').val(p1);
+		$('#SLIDEROCKET_percent').val(p2);
+		$('#PREZI_percent').val(p3);
+
+	        document.getElementById("SLITE_plus").innerHTML = parseInt($('#SLITE_votes').val()) + " (" + p1 + "%)";
+	        document.getElementById("SLIDEROCKET_plus").innerHTML = parseInt($('#SLIDEROCKET_votes').val()) + " (" + p2 + "%)";
+	        document.getElementById("PREZI_plus").innerHTML = parseInt($('#PREZI_votes').val()) + " (" + p3 + "%)";
+
+		$('#SLITE_plus').width(p1+'%');
+		$('#SLIDEROCKET_plus').width(p2+'%');
+		$('#PREZI_plus').width(p3+'%');
+		$('#SLITE_minus').width(100-p1+'%');
+		$('#SLIDEROCKET_minus').width(100-p2+'%');
+		$('#PREZI_minus').width(100-p3+'%');
+                //} 
+	}
+</script>
+
+
+	</div> <!--end container-->
+		</div> <!--end wrap-->
+
+        <!-- row 4 -->
+        <div id="footer" class="row">
+        	<div id="container">
+           		<p>&COPY; Slite.US 2014</p>
+           	</div>
+	    </div>
+
+</body>
+</html>
