@@ -103,16 +103,42 @@
 		}
 	}
 	
-	var explanatorsTurnedOn = false;
+	function deleteAllCookies() {
+		var cookies = document.cookie.split(";");
+
+		for (var i = 0; i < cookies.length; i++) {
+			var cookie = cookies[i];
+			var eqPos = cookie.indexOf("=");
+			var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+			document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+		}
+	}
+	
+	function getCookie(name) {
+		function escape(s) { return s.replace(/([.*+?\^${}()|\[\]\/\\])/g, '\\$1'); };
+		var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
+		return match ? match[1] : null;
+	}
+	
+	function needToShowExplanators(){			
+		var helpShownCookie = getCookie("isHelpAlreadyShown");
+		return (helpShownCookie != "true");
+	}
+	
+	var explanatorsTurnedOn = true;
 	function showHideExplanators(){
 		if(!explanatorsTurnedOn){
-			$('.startTemporaryPopup').delay( 3000 ).fadeOut( 400 );
+			$('.startTemporaryPopup').fadeOut( 400 );
 			explanatorsTurnedOn = true;
-		}else{		
+		}else{			
+			document.cookie="isHelpAlreadyShown=true;";
 			$('.startTemporaryPopup').fadeIn( 400 );
-			$('.startTemporaryPopup').delay( 5000 ).fadeOut( 400 );
 			explanatorsTurnedOn = false;
 		}
+	}
+	
+	function hideClickAllow(delay){
+		$('#clickallow').delay( 3000 ).fadeOut( 600 );
 	}
 
 	var isVideoOn = false;
@@ -129,6 +155,7 @@
 			//reduce main window
 			$(".rsContainer").animate({"width":"80%"},300);
 			$(".rsContainer").css("float","right");
+			hideClickAllow();
 		}else{
 			//put main window back to full size	
 			$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
@@ -497,7 +524,8 @@
 				content: "×";
 			}
 			
-			.startTemporaryPopup{			
+			.startTemporaryPopup{
+				display: none;
 				position: fixed;
 				font-size: 36px;
 				color: blue;
@@ -505,6 +533,16 @@
 				border: 2px solid;
 				border-radius: 25px;
 				padding: 10px;
+			}
+			
+			#closeExplanator{
+				position: absolute;
+				left: 50%;
+				right: 50%;
+				width: 200px;
+				line-height: 40px;
+				text-align: center;
+				cursor: pointer;
 			}
 			
 			#videoChatExplanator{
@@ -581,7 +619,8 @@
 	<div id="videochatpanel"></div>
 	<div id="videochat" style="overflow-x: hidden; overflow-y: scroll;">
 
-	<h1>Video Chat <div class="closevideo" id="closevideo"></div></h1>
+		<h1>Video Chat <div class="closevideo" id="closevideo"></div></h1>
+		<div id="clickallow" style='font-size:24px;padding-top:0px;'>click "Allow" above<b sty;e='font-size:38'> &#8599;</b></div>
 	
 
 		<article id="videochatMainContainer">
@@ -786,6 +825,7 @@
 	<div class="startTemporaryPopup" id="videoChatExplanator">&#8592; click grey bar to open Video Chat</div>
 	<div class="startTemporaryPopup" id="wallChatExplanator">click grey bar to open Wall/Chat &#8594;</div>
 	<div class="startTemporaryPopup" id="menuExplanator">click ☰ to open Menu &#8594;</div>
+	<div class="startTemporaryPopup" id="closeExplanator"><div id="closeExplanatorText">Click Here To Close Help</div></div>
 	
 	<nav id="primary_nav_wrap">
 		<ul>
@@ -794,7 +834,7 @@
 				  <li><a href="http://www.slite.us">&#8962; Home</a></li>
 				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; Open Wall/Chat</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; Open Video Chat</a></li>
-				  <li><a href="javascript:showHideExplanators()" id="menuOpenVideoChat">? Help</a></li>
+				  <li><a href="javascript:showHideExplanators()" id="menuOpenMenu">? Help</a></li>
 				</ul>
 			</li>
 		</ul>
@@ -875,7 +915,12 @@
 	$('#sliteWatermak').click(function(){
 		showHideMenu();
 	});
-	showHideExplanators();
+	$('#closeExplanator').click(function(){
+		showHideExplanators();
+	});	
+	if(needToShowExplanators()){
+		showHideExplanators();
+	}
 
 	</script>
 
