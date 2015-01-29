@@ -1,0 +1,50 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+    <meta charset="utf-8">
+    <title>Slite</title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <script src="http://slite-dev.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
+    <script src="./js/jquery-2.0.3.min.js"></script>
+    <script src="./js/speechRecognizer.js"></script>
+    <script src="./js/volumeButtonControl.js"></script>
+    <script src="./js/shake.js"></script>
+    <script src="./js/notes.js"></script>
+    <script defer src="./js/timer.js"></script>
+    <script defer src="./js/slite.js"></script>
+    <script src="./js/thumbs.0.6.0.min.js"></script>
+
+    <script>
+      var socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
+      //var socket = io.connect('http://localhost:1337');
+    </script>
+    
+	</head>
+<body onload="startup()">
+
+<script>
+window.scrollTo(0,1);
+</script>
+
+<div class="UI topRow leftCol" id="menu" style="display: none">&nbsp;</div>
+<div class="UI topRow midCol" id="URLBox" style="display: none">http://www.slite.us/<input type="hidden" id="URLSlides" value="nasas"></div>
+<div class="UI topRow rightCol" id="timeDisplay" style="display: none">Start Timer</div>
+
+<div id="currentSlide" onclick="void(0)" style="z-index: 90; height: 100%; width: 100%"><div id="overlay"></div>
+
+<iframe id="theIframe" class="frame" src="http://www.slite.us/nasas" seamless></iframe>
+
+</div>
+
+<div class="buttons_div">
+	<div class="buttons" id="prev">&nbsp;</div>
+	<div class="buttons" id="laser">&nbsp;</div>
+	<div class="buttons" id="draw">&nbsp;</div >
+	<div class="buttons" id="next">&nbsp;</div>
+</div>
+
+</body>
+</html>
+
