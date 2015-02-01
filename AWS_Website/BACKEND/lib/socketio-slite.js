@@ -48,12 +48,16 @@ console.log('in remote control');
 io.sockets.on('connection', function (socket) {
 		//module.exports.socket = socket;
 
+    console.log('CONNECTION on ' + new Date() + ' from socket ' + socket.id );
+
 		if (pollAnswerArray.length > 0) pollUpdate();
 
 		var imageCount = 1;
-		var uploader = new SocketIOFileUploadServer();
-        uploader.dir = path.join(www_dir, "UPLOAD/");
-        console.log('CONNECTION on ', new Date());
+
+    var uploader = new SocketIOFileUploadServer();
+
+      uploader.dir = path.join(www_dir, "UPLOAD/");
+
     	uploader.listen(socket);
 
     	uploader.on("start", function(event){
@@ -64,58 +68,58 @@ io.sockets.on('connection', function (socket) {
            console.log("UPLOAD progress file: " + event.file.name);
     	});
 
-        uploader.on("error", function (event) {
-            console.log("UPLOAD error: " + JSON.stringify(event));
-        });
+      uploader.on("error", function (event) {
+          console.log("UPLOAD error: " + JSON.stringify(event));
+      });
 
+  		uploader.on("complete", function(event){
 
-		uploader.on("complete", function(event){
-        	var extention = event.file.name.split(".")[1];
-			var shortFileName = event.file.name.split(".")[0];
-        	var fullFileName = path.join(uploader.dir, event.file.name);
-			console.log("UPLOAD complete file: " + event.file.name);
-	
-		//console.log("UPLOAD dir: " + uploader.dir + " fullFileName: " + fullFileName);
-        var fullFileNameHtml = path.normalize(fullFileName + '.html'),
+          try {
+
+            var extention = event.file.name.split(".")[1];
+    			  var shortFileName = event.file.name.split(".")[0];
+            var fullFileName = path.join(uploader.dir, event.file.name);
+    			  console.log("UPLOAD complete file: " + event.file.name);
+
+            var fullFileNameHtml = path.normalize(fullFileName + '.html'),
+
             unoconvPathname = path.join(__dirname, 'unoconv'),
             unoconv_cmd = "python " + unoconvPathname + ' -f html -o ' + fullFileNameHtml + ' ' + fullFileName;
-		console.log(unoconv_cmd);
+  		      console.log(unoconv_cmd);
 
-        exec(unoconv_cmd,
-		  function( error, stdout, stderr) {
-			//console.log('unoconv stdout: ', stdout);
-            console.log('CONVERTED presentation: ', fullFileNameHtml);
-            var convertedHtml = path.join(fullFileNameHtml, shortFileName + '.html');
-			fs.readFile(convertedHtml, 'utf8', function (err, data) {
-			  if (err) throw err;
-			  //console.log(data);
-			  //console.log('\n\n');
-			  $ = cheerio.load(data); // parse the converted presentation HTML header in order to find out how many slides there is
-			  //console.log($('a').next().attr('href').slice(3,5));
-			  // The second link in this HTML file is to the last slide image,
-			  // like this: <a href="img14.html">
-              // characters 3-5 of "img14.html" is "14", the number of slides
-              var lastSliteFile = $('a').next().attr('href');
-              var numRegExp = /\d+\./;
-              var lastFileName = numRegExp.exec(lastSliteFile);
-              var numSlites = parseInt(lastFileName, 10);
-              if (isNaN(numSlites)) {
-                console.log("Number of Slites not determined!");
-                numSlites = 1;
-              }
-              var slite = new prepare_slite.Slite(fullFileNameHtml, shortFileName + '.html', numSlites, socket);
-			});
-			if (error !== null) {
-			  console.log('unoconv stderr: ', stderr);
-              socket.emit("sliteConversionError");
-            }
-            // delete presentation in UPLOAD dir
-            fs.unlink(fullFileName, function (err) {
-                if (err) {
-                    console.log('error deleting : ' + fullFileName);
-                }
-            });
-		  });
+            exec(unoconv_cmd, function( error, stdout, stderr) {
+
+                console.log('CONVERTED presentation: ', fullFileNameHtml);
+
+                var convertedHtml = path.join(fullFileNameHtml, shortFileName + '.html');
+
+          			fs.readFile(convertedHtml, 'utf8', function (err, data) {
+          			  if (err) throw err;
+          			  //console.log(data);
+          			  //console.log('\n\n');
+          			  $ = cheerio.load(data); // parse the converted presentation HTML header in order to find out how many slides there is
+          			  //console.log($('a').next().attr('href').slice(3,5));
+          			  // The second link in this HTML file is to the last slide image,
+          			  // like this: <a href="img14.html">
+                        // characters 3-5 of "img14.html" is "14", the number of slides
+                        var lastSliteFile = $('a').next().attr('href');
+                        var numRegExp = /\d+\./;
+                        var lastFileName = numRegExp.exec(lastSliteFile);
+                        var numSlites = parseInt(lastFileName, 10);
+                        if (isNaN(numSlites)) {
+                          console.log("Number of Slites not determined!");
+                          numSlites = 1;
+                        }
+                        var slite = new prepare_slite.Slite(fullFileNameHtml, shortFileName + '.html', numSlites, socket);
+          			});
+
+          	});
+
+          }
+          catch(err) {
+            console.log('unoconv stderr: ', stderr);
+            socket.emit("sliteConversionError");
+          }
     	});
 
 

@@ -13,7 +13,7 @@ var cache = new CachemanMongo(options);
 var cacheReady = false;
 
 var www_dir, slitesDir, slitesReg;
-																	
+
 function onCacheReady(addedFiles){
     cacheReady = true;
     console.log('Cache ready, number of entries=' + addedFiles);
@@ -24,11 +24,11 @@ function initCache() {
     cache.clear(function (err) {
         if (err) throw err;
     });
-    
+
     var findFileReg = new RegExp('^' + slitesReg + '$');
     var slitesFullPath = path.join(www_dir, slitesDir);
     var todo = 0, done = 0;
-    
+
     console.log('Scanning "' + slitesFullPath + '" for hash cache');
     fs.readdir(slitesFullPath, function (err, files) {
         if (err) throw err;
@@ -64,27 +64,27 @@ exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
     slitesReg = newSlitesReg;
-    initCache();													
-}																				
+    initCache();
+}
 
 var Slite = function (dir, filename, num_slides, socket) {
     this.maxNumTries = 10;
     this.count = 0;
     this.hashValue = null;
-    
+
     this.dir = dir;
     this.filename = filename;
     this.num_slides = num_slides;
-    
+
     this.socket = socket;
-    
+
     if (!cacheReady) {
         console.log('Cache not ready');
         return false;
     }
-    
+
     console.log("SLITE created: " + this.dir + " " + this.filename + " " + this.num_slides);
-    
+
     this.cacheHash();
 }
 
@@ -107,7 +107,7 @@ Slite.prototype.renameSliteDir = function () {
     var self = this;
     var wwwSlitesHash = path.join(www_dir, "slites/", self.hashValue);
     console.log("HASH found: " + self.hashValue + ", dir: '" + self.dir + "' filename: '" + self.filename + "' Slides: " + self.num_slides + " wwwSlitesHash: '" + wwwSlitesHash + "'");
-    
+
     fs.rename(self.dir, wwwSlitesHash, function (err) {
         if (err) throw err;
         fs.rename(path.join(wwwSlitesHash, self.filename), path.join(wwwSlitesHash, "img0.html"), function (err) {
