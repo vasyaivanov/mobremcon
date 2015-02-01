@@ -54,42 +54,45 @@ socket.on('ccBroadcast', function (data) {
 
 socket.on('news', function (data) {
 
-	var button = data.hello-1;
+	if (document.location.pathname == "/slites/"+ data.slideID +"/") {
+		var button = data.hello-1;
 
-	console.log(button);
+		console.log(button);
 
-	var slider = $(".royalSlider").data('royalSlider');
+		var slider = $(".royalSlider").data('royalSlider');
 
-	slider.goTo(data.slide);
+		slider.goTo(data.slide);
 
-	switch(button)
-	{
-		case -102: {
-			slider.goTo(0);
-			break;
+		switch(button)
+		{
+			case -102: {
+				slider.goTo(0);
+				break;
+			}
+			case -1: {
+				slider.toggleVideo();
+				break;
+			}
+			case 100: {
+				slider.next();
+				clearCanvas();
+				break;
+			}
+			case 101: {
+				slider.prev();
+				clearCanvas();
+				break;
+			}
+			default: {
+				slider.stopVideo();
+				slider.goTo(button);
+				slider.playVideo();
+			}
 		}
-		case -1: {
-			slider.toggleVideo();
-			break;
-		}
-		case 100: {
-			slider.next();
-			clearCanvas();
-			break;
-		}
-		case 101: {
-			slider.prev();
-			clearCanvas();
-			break;
-		}
-		default: {
-			slider.stopVideo();
-			slider.goTo(button);
-			slider.playVideo();
-		}
+
+		socket.emit('my other event', { my: 'data' });
 	}
-
-	socket.emit('my other event', { my: 'data' });
+	
 });
 
 var isMenuOn = false;
