@@ -46,7 +46,7 @@ io.sockets.on('connection', function (socket) {
     if (pollAnswerArray.length > 0) {
         pollUpdate();
     }
-    console.log('CONNECTION on', new Date().toLocaleTimeString() + ' from: ' + socket.handshake.address.address);
+    console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.address.address +' Socket ' + socket.id);
     var uploader = new SocketIOFileUploadServer();
     uploader.dir = path.join(www_dir, "UPLOAD/");
     uploader.listen(socket);  
@@ -84,40 +84,47 @@ io.sockets.on('connection', function (socket) {
                         unoconv_cmd = "python " + unoconvPathname + ' -e PageRange=1-2' + ' -f html -o ' + hashDir + ' ' + uploadFullFileName;
                     console.log(unoconv_cmd);
                     
-                    exec(unoconv_cmd, function (error, stdout, stderr) {
-                        console.log('CONVERTED presentation: ', slite.hashValue);
-                        var convertedHtml = path.join(hashDir, uploadFileTitle + '.html');
-                        fs.readFile(convertedHtml, 'utf8', function (err, data) {
-                            if (err) {
-                                console.error('Error reading file: ' + err);
+                    try {
+                        exec(unoconv_cmd, function (error, stdout, stderr) {
+                            console.log('CONVERTED presentation: ', slite.hashValue);
+                            var convertedHtml = path.join(hashDir, uploadFileTitle + '.html');
+                            fs.readFile(convertedHtml, 'utf8', function (err, data) {
+                                if (err) {
+                                    console.error('Error reading file: ' + err);
+                                }
+                                $ = cheerio.load(data); // parse the converted presentation HTML header in order to find out how many slides there is
+                                // The second link in this HTML file is to the last slide image,
+                                // like this: <a href="img14.html">
+                                // characters 3-5 of "img14.html" is "14", the number of slides
+                                var lastSliteFile = $('a').next().attr('href');
+                                var numRegExp = /\d+\./;
+                                var lastFileName = numRegExp.exec(lastSliteFile);
+                                var numSlites = parseInt(lastFileName, 10);
+                                if (isNaN(numSlites)) {
+                                    console.log("Number of Slites not determined!");
+                                    numSlites = 1;
+                                }
+                                slite.setFilename(hashDir, uploadFileTitle + '.html', numSlites);
+                                slite.generateHtml();
+                            }); // fs.readFile ...
+                            if (error !== null) {
+                                console.error('unoconv stderr: ', stderr);
+                                socket.emit("sliteConversionError");
                             }
-                             $ = cheerio.load(data); // parse the converted presentation HTML header in order to find out how many slides there is
-                             // The second link in this HTML file is to the last slide image,
-                            // like this: <a href="img14.html">
-                            // characters 3-5 of "img14.html" is "14", the number of slides
-                            var lastSliteFile = $('a').next().attr('href');
-                            var numRegExp = /\d+\./;
-                            var lastFileName = numRegExp.exec(lastSliteFile);
-                            var numSlites = parseInt(lastFileName, 10);
-                            if (isNaN(numSlites)) {
-                                console.log("Number of Slites not determined!");
-                                numSlites = 1;
-                            }
-                            slite.setFilename(hashDir, uploadFileTitle + '.html', numSlites);
-                            slite.generateHtml();
-                        }); // fs.readFile ...
-                        if (error !== null) {
-                            console.error('unoconv stderr: ', stderr);
-                            socket.emit("sliteConversionError");
-                        }
-                        // delete presentation in UPLOAD dir
-                        fs.unlink(uploadFullFileName, function (err) {
-                            console.log('DELETED presentation: ' + uploadFullFileName);
-                            if (err) {
-                                console.error('error deleting : ' + fullFileName);
-                            }
-                        });
-                    }); // exec ...
+                            // delete presentation in UPLOAD dir
+                            fs.unlink(uploadFullFileName, function (err) {
+                                console.log('DELETED presentation: ' + uploadFullFileName);
+                                if (err) {
+                                    console.error('error deleting : ' + fullFileName);
+                                }
+                            });
+                        }); // exec ...
+                    } // try {
+                    catch (err) {
+                        console.log('unoconv stderr: ', stderr + 'error: ' + err);
+                        socket.emit("sliteConversionError");
+                        slite.deleteHash(true);
+                    }
                 } // if (err) ... else ...
             }); // fs.rename ...
         }); // slite = new ... 
@@ -172,7 +179,6 @@ io.sockets.on('connection', function (socket) {
             io.sockets.emit('ccBroadcast', { hello: data.my });
 		    //io.sockets.emit('news',clients);
 		    //socket.emit('news', { hello: 1 });
-
         });
         
         // receive laser coordinates from the remote

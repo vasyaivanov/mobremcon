@@ -14,7 +14,7 @@ var cacheReady = false;
 var cacheTimeout = 60000;
 
 var www_dir, slitesDir, slitesReg;
-																	
+
 function onCacheReady(addedFiles){
     cacheReady = true;
     console.log('Cache ready, number of entries=' + addedFiles);
@@ -27,11 +27,11 @@ function initCache() {
             console.error('Error clearing cache: ' + err);
         }
     });
-    
+
     var findFileReg = new RegExp('^' + slitesReg + '$');
     var slitesFullPath = path.join(www_dir, slitesDir);
     var todo = 0, done = 0;
-    
+
     console.log('Scanning "' + slitesFullPath + '" for hash cache');
     fs.readdir(slitesFullPath, function (err, files) {
         if (err) {
@@ -72,8 +72,8 @@ exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
     slitesReg = newSlitesReg;
-    initCache();													
-}																				
+    initCache();
+}
 
 var Slite = function (socket, onHashReady) {
     var self = this;
@@ -81,9 +81,8 @@ var Slite = function (socket, onHashReady) {
     this.maxNumTries = 10;
     this.count = 0;
     this.hashValue = null;
-    
     this.socket = socket;
-    
+
     if (!cacheReady) {
         console.log('Cache not ready');
         return false;
