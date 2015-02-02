@@ -41,5 +41,6 @@ BACKEND/TEST/MA/**
 *.zip
 
 AWS_Website/slites
+AWS_Website/old_slites
 expressLogFile.log
 BACKEND/UPLOADS/
