@@ -216,7 +216,7 @@ app.listen(8081);
 
 module.exports.app = app;
 
-require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, slitesReg);
+require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, slitesReg, function () { });
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

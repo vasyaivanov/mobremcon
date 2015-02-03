@@ -10,11 +10,11 @@ var app = require('http').createServer(module.parent.exports.app)
   , path = require('path');
 
 var www_dir, slitesDir, slitesReg;
-exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
+exports.setDir = function (new_dir, newSlitesDir, newSlitesReg, callback){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
     slitesReg = newSlitesReg;
-	prepare_slite.setDir(www_dir, slitesDir, slitesReg);
+	prepare_slite.setDir(www_dir, slitesDir, slitesReg, callback);
 }
 
 app.listen(1337);
@@ -51,6 +51,17 @@ io.sockets.on('connection', function (socket) {
     uploader.dir = path.join(www_dir, "UPLOAD/");
     uploader.listen(socket);  
     var imageCount = 1;
+    var slite;
+    
+    sliteError = function (err){
+        console.error('ERROR WHILE UPLOADING/CONVERTING slite: ' + err);
+        if (typeof slite !== 'undefined') {
+            slite.deleteHash(true, function () {
+                console.log('Deleted folder and hash due to an error');
+            });
+        }
+        socket.emit("sliteConversionError");
+    }
     
     uploader.on("start", function (event) {
         console.log("UPLOAD started  file: " + event.file.name);
@@ -62,22 +73,39 @@ io.sockets.on('connection', function (socket) {
         
     uploader.on("error", function (event) {
         console.error("UPLOAD error: " + JSON.stringify(event));
+        sliteError();
      });
         
     uploader.on("complete", function (event) {
-         console.log("UPLOAD complete file: " + event.file.pathName);
-         var slite = new prepare_slite.Slite(socket, function () {
-            var extention = path.extname(event.file.pathName);
-            var fullFileName = event.file.pathName;
+        console.log("UPLOAD complete file: " + event.file.pathName);
+        var extention = path.extname(event.file.pathName);
+        var fullFileName = event.file.pathName;
+
+        slite = new prepare_slite.Slite(socket, function (err) {
+            if (err) {
+                sliteError(err);
+                fs.unlink(fullFileName, function (err) {
+                    if (err) {
+                        console.error('Error deleting: ' + fullFileName + err);
+                    }
+                });
+                return;
+            }
             var uploadFileTitle = 'img0';
             var uploadFileName = uploadFileTitle + extention;
             var hashDir = path.join(www_dir, slitesDir, slite.hashValue);
             var uploadFullFileName = path.join(hashDir, uploadFileName);
-            
+           
             fs.rename(fullFileName, uploadFullFileName, function (err) {
-                if (err) {
+               if (err) {
                     console.error('Error renaming file: ' + err);
-                    slite.deleteHash(true);
+                    sliteError(err);
+                    fs.unlink(fullFileName, function (err) {
+                        if (err) {
+                            console.error('Error deleting: ' + fullFileName + err);
+                        }
+                    });
+                    return;
                 } else {
                     console.log('RENAMED file: ' + fullFileName + ' to:' + uploadFullFileName);
                     var unoconvPathname = path.join(__dirname, 'unoconv'),
@@ -85,12 +113,19 @@ io.sockets.on('connection', function (socket) {
                     console.log(unoconv_cmd);
                     
                     try {
-                        exec(unoconv_cmd, function (error, stdout, stderr) {
+                        exec(unoconv_cmd, function (err, stdout, stderr) {
+                           if (err !== null) {
+                                console.error('unoconv stderr: ', stderr);
+                                sliteError(err);
+                                return;
+                            }
                             console.log('CONVERTED presentation: ', slite.hashValue);
                             var convertedHtml = path.join(hashDir, uploadFileTitle + '.html');
                             fs.readFile(convertedHtml, 'utf8', function (err, data) {
                                 if (err) {
                                     console.error('Error reading file: ' + err);
+                                    sliteError(err);
+                                    return;
                                 }
                                 $ = cheerio.load(data); // parse the converted presentation HTML header in order to find out how many slides there is
                                 // The second link in this HTML file is to the last slide image,
@@ -105,25 +140,28 @@ io.sockets.on('connection', function (socket) {
                                     numSlites = 1;
                                 }
                                 slite.setFilename(hashDir, uploadFileTitle + '.html', numSlites);
-                                slite.generateHtml();
+                                slite.generateHtml(function (err) {
+                                    if (err) {
+                                        sliteError(err);
+                                        return;
+                                    }
+                                    socket.emit("slitePrepared", { dir: slite.dir, hash: slite.hashValue, num_slides: slite.num_slides, fileName: slite.filename });
+                                });
                             }); // fs.readFile ...
-                            if (error !== null) {
-                                console.error('unoconv stderr: ', stderr);
-                                socket.emit("sliteConversionError");
-                            }
                             // delete presentation in UPLOAD dir
                             fs.unlink(uploadFullFileName, function (err) {
                                 console.log('DELETED presentation: ' + uploadFullFileName);
                                 if (err) {
-                                    console.error('error deleting : ' + fullFileName);
+                                    console.error('Error deleting : ' + fullFileName);
                                 }
                             });
                         }); // exec ...
                     } // try {
                     catch (err) {
-                        console.log('unoconv stderr: ', stderr + 'error: ' + err);
-                        socket.emit("sliteConversionError");
-                        slite.deleteHash(true);
+                        console.error(err);
+                        console.error('Stack: ' + err.stack);
+                        console.error('JSON.stringify: ' + JSON.stringify(err, null, 2));
+                        sliteError(err);
                     }
                 } // if (err) ... else ...
             }); // fs.rename ...

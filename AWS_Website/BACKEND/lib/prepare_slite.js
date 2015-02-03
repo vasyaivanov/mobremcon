@@ -20,62 +20,68 @@ function onCacheReady(addedFiles){
     console.log('Cache ready, number of entries=' + addedFiles);
 }
 
-function initCache() {
+function initCache(callback) {
     cacheReady = false;
     cache.clear(function (err) {
         if (err) {
             console.error('Error clearing cache: ' + err);
-        }
-    });
-
-    var findFileReg = new RegExp('^' + slitesReg + '$');
-    var slitesFullPath = path.join(www_dir, slitesDir);
-    var todo = 0, done = 0;
-
-    console.log('Scanning "' + slitesFullPath + '" for hash cache');
-    fs.readdir(slitesFullPath, function (err, files) {
-        if (err) {
-            console.error('Error scanning hash folder: ' + err);
-        }
-        console.log(files.length + ' files to scan for hash cache');
-        //console.log(files);
-        if (files.length === 0) {
-            onCacheReady(0);
-            return;
-        }
-        var scanned = false;
-        for (var f in files) {
-            if (findFileReg.test(files[f])) {
-                todo++;
-                //console.log('Hash #' + todo + ' found: "' + files[f] + '"');
-                cache.set(files[f], true, function (err, value) {
-                    if (err) {
-                        console.error('Error setting cache: ' + err);
+            callback(err);
+        } else {
+            var findFileReg = new RegExp('^' + slitesReg + '$');
+            var slitesFullPath = path.join(www_dir, slitesDir);
+            var todo = 0, done = 0;
+            
+            console.log('Scanning "' + slitesFullPath + '" for hash cache');
+            fs.readdir(slitesFullPath, function (err, files) {
+                if (err) {
+                    console.error('Error scanning hash folder: ' + err);
+                    callback(err);
+                    return;
+                }
+                console.log(files.length + ' files to scan for hash cache');
+                //console.log(files);
+                if (files.length === 0) {
+                    onCacheReady(0);
+                    callback(null);
+                    return;
+                }
+                var scanned = false;
+                for (var f in files) {
+                    if (findFileReg.test(files[f])) {
+                        todo++;
+                        //console.log('Hash #' + todo + ' found: "' + files[f] + '"');
+                        cache.set(files[f], true, function (err, value) {
+                            if (err) {
+                                console.error('Error setting cache: ' + err);
+                            }
+                            done++;
+                            //console.log('Hash #' + done + ' set to: ' + value);
+                            if (scanned && done >= todo) {
+                                onCacheReady(todo);
+                                callback(null);
+                            }
+                        });
                     }
-                    done++;
-                    //console.log('Hash #' + done + ' set to: ' + value);
-                    if (scanned && done >= todo) {
-                        onCacheReady(todo);
-                    }
-                });
-            }
-        }
-        scanned = true;
-        if (todo === 0) {
-            onCacheReady(todo);
-        }
-    });
+                } // for (var f ...
+                scanned = true;
+                if (todo === 0) {
+                    onCacheReady(todo);
+                    callback(null);
+                }
+            }); // fs.readdir ...
+        } // if (err) {...}else {...
+    }); // cache.clear(...
 };
 
 
-exports.setDir = function (new_dir, newSlitesDir, newSlitesReg){
+exports.setDir = function (new_dir, newSlitesDir, newSlitesReg, callback){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
     slitesReg = newSlitesReg;
-    initCache();
+    initCache(callback);
 }
 
-var Slite = function (socket, onHashReady) {
+var Slite = function (socket, callback) {
     var self = this;
 
     this.maxNumTries = 10;
@@ -84,24 +90,26 @@ var Slite = function (socket, onHashReady) {
     this.socket = socket;
 
     if (!cacheReady) {
-        console.log('Cache not ready');
-        return false;
+        var msg = 'Cache not ready';
+        console.log(msg);
+        callback(msg);
+        throw msg;
     }
     
-    this.reserveHash(function () {
-        console.log('SLITE created, found hash: ' + self.hashValue);
-        fs.mkdir(path.join(www_dir, slitesDir, self.hashValue), function (err) {
-            if (err) {
-                console.error("Error creating hash folder: " + self.hashValue);
-                self.deleteHash(true);
-            } else {
-                onHashReady();
-            }
-       });
+    this.reserveHash(function (err) {
+        if (err) {
+            callback(err);
+        } else {
+            console.log('SLITE created, found hash: ' + self.hashValue);
+            fs.mkdir(path.join(www_dir, slitesDir, self.hashValue), function (err) {
+                if (err) {
+                    console.error("Error creating hash folder: " + self.hashValue);
+                }
+                callback(err);
+            });
+        } // } else {
     });
-    
-    return true;
-}
+  }
 
 Slite.prototype.setFilename = function (dir, filename, num_slides) {
     this.dir = dir;
@@ -125,76 +133,80 @@ Slite.prototype.getHash = function ()
 	return hash;
 }
 
-Slite.prototype.generateHtml = function () {
+Slite.prototype.generateHtml = function (callback) {
     var self = this;
     fs.readFile(path.join(www_dir, "hash_index.html"), "utf8", function (err, data) {
         if (err) {
             console.error('Error reading hash_index.html' + err);
-            this.deleteHash(true);
+            callback(err);
         } else {
             var indexHtml = 'index.html';
             var data_replaced = data.replace("NUM_SLIDES", self.num_slides);
             fs.writeFile(path.join(self.dir, indexHtml), data_replaced, function (err) {
                 if (err) {
                     console.error('Error writing ' + indexHtml + ' '  + err);
-                    this.deleteHash(true);
                 } else {
-                    self.socket.emit("slitePrepared", { dir: self.dir, hash: self.hashValue, num_slides: self.num_slides, fileName: self.filename });
                     console.log("INDEX generated: " + path.join(www_dir, self.hashValue, indexHtml));
                     console.log("SUCCESS!");
                 }
+                callback(err);
             });
         }
     });
 };
 
-Slite.prototype.reserveHash = function (action) {
+Slite.prototype.reserveHash = function (callback) {
     var self = this;
     self.count++;
     self.hashValue = self.getHash();
     //console.log("JD: hashValue=" + self.hashValue + " count=" + self.count);
     // get the value
     cache.get(self.hashValue, function (err, value) {
-        if (err) {
+        if (self.count > self.maxNumTries) {
+            var msg = 'Get Hash maximum tries reached';
+            console.error(msg);
+            callback(msg);
+        } else if (err) {
             console.error('Error while getting hash cache: ' + err);
-        }
-        if (value != true || count > maxNumTries) {
+            callback(err);
+        } else if (value != true) {
             //console.log("MA: found value is " + value);
             cache.set(self.hashValue, true , cacheTimeout, function (err) {
                 if (err) {
                     console.error('Error storing hash cache: ' + err);
-                    deleteHash(false);
-                }
-                else {
-                    //console.log("JD: set my hash to " + self.hashValue);
-                    //console.log('Found hash: ' + self.hashValue);
-                    action();
-                }
+                 }
+                //console.log("JD: set my hash to " + self.hashValue);
+                //console.log('Found hash: ' + self.hashValue);
+                callback(err);
             });
         } else {
-            self.reserveHash(action);
+            self.reserveHash(callback);
         }
     });
 }
 
-Slite.prototype.deleteHash = function (deleteFolder) {
-    return;
+Slite.prototype.deleteHash = function (deleteFolder, callback) {
     var self = this;
     var oldHashValue = self.hashValue;
-    if (self.hashValue) {
-        if (typeof deleteFolder !== "undefined" && deleteFolder) {
-            fs.remove(path.join(www_dir, slitesDir, oldHashValue), function (err) {
-                console.log('Deleted hash folder: ' + oldHashValue);
-                if (err) {
-                    console.error('Error deleting : ' + oldHashValue + ' hash folder ' + err);
-                }
-            });
-        }
+    if (!self.hashValue) {
+        callback(null);
+    } else {
         cache.set(oldHashValue, false , cacheTimeout, function (err) {
             console.log('Deleted hash cache: ' + oldHashValue);
             self.hashValue = null;      // mark hash as deleted
             if (err) {
                 console.error('Error Deleting hash cache: ' + err);
+            }
+            if (typeof deleteFolder !== "undefined" && deleteFolder) {
+                fs.remove(path.join(www_dir, slitesDir, oldHashValue), function (err) {
+                    console.log('Deleted hash folder: ' + oldHashValue);
+                    if (err) {
+                        console.error('Error deleting : ' + oldHashValue + ' hash folder ' + err);
+                    }
+                    callback(err);
+                });
+            } else {
+                callback(err);
             }
         });
     }
