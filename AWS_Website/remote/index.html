@@ -22,17 +22,13 @@
 				url = 'http://slite-dev.elasticbeanstalk.com';
 			}
 			var socket = io.connect(url + ':1337');
-			function startup() {
-			    var iFrameUrl = url + ":8081/slites/A1";
-			    document.getElementById('theIframe').src = iFrameUrl;
-			}
     </script>
 
 	</head>
 <body onload="startup()"
     ><br
     ><div class="UI topRow leftCol" id="menu">&nbsp;</div
-    ><div class="UI topRow midCol" id="URLBox">http://www.slite.us/<input type="text" id="URLSlides" value="A1"></div
+    ><div class="UI topRow midCol" id="URLBox">http://www.slite.us/<input type="text" id="URLSlides" placeholder="Enter code here"></div
     ><div class="UI topRow rightCol" id="timeDisplay">Start Timer</div
     ><br
     ><div class="UI midRow leftCol" id="notes">1: Beginning slide, or should I say 'slite'. Get ready to see powerpoint with all the powers of the web.</div

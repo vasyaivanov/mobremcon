@@ -7,22 +7,22 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<link rel="stylesheet" href="./css/videochat/videochat-style.css">
+		<link rel="stylesheet" href="../css/videochat/videochat-style.css">
 
 
 	    <!-- slider JS files -->
 
-    <script src="./js/jquery-1.8.3.js"></script>
-    <script src="./js/jquery-ui-1.8.22.custom.min.js"></script>
-    <script class="rs-file" src="./js/jquery.royalslider.min.js"></script>
-    <script src="./js/jquery.infinitescroll.js"></script>
+    <script src="../js/jquery-1.8.3.js"></script>
+    <script src="../js/jquery-ui-1.8.22.custom.min.js"></script>
+    <script class="rs-file" src="../js/jquery.royalslider.min.js"></script>
+    <script src="../js/jquery.infinitescroll.js"></script>
     <script src="http://slite-dev.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
 
     <!-- Lev: This script controls the laser dot -->
-    <script defer src="./js/LASER_RECEIVER.js"></script>
+    <script defer src="../js/LASER_RECEIVER.js"></script>
 
     <!-- this is for resizing the presentation when it appears in the iframe in the remote-->
-    <!--<script type="text/javascript" defer src="./js/squeezeFrame.js"></script>
+    <!--<script type="text/javascript" defer src="../js/squeezeFrame.js"></script>
     <script type="text/javascript">
       myContainer="index.html";
       myMax=0.4;
@@ -30,10 +30,10 @@
     </script>-->
 
 
-    <link href="./css/jquery-ui-1.8.22.custom.css" rel="stylesheet">
-    <link class="rs-file" href="./css/royalslider.css" rel="stylesheet">
+    <link href="../css/jquery-ui-1.8.22.custom.css" rel="stylesheet">
+    <link class="rs-file" href="../css/royalslider.css" rel="stylesheet">
 
-	<link rel="stylesheet" type="text/css" href="./css/index1.css">
+	<link rel="stylesheet" type="text/css" href="../css/index1.css">
 
 	<script>
 
@@ -49,42 +49,44 @@
 
     socket.on('news', function (data) {
 
-      var button = data.hello-1;
+	if (document.location.pathname == "/"+ data.slideID +"/") {
+		var button = data.hello-1;
 
-      console.log(button);
+		console.log(button);
 
-      var slider = $(".royalSlider").data('royalSlider');
+		var slider = $(".royalSlider").data('royalSlider');
 
-      slider.goTo(data.slide);
+		slider.goTo(data.slide);
 
-      switch(button)
-      {
-        case -102: {
-          slider.goTo(0);
-          break;
-        }
-        case -1: {
-          slider.toggleVideo();
-          break;
-        }
-        case 100: {
-          slider.next();
-          clearCanvas();
-          break;
-        }
-        case 101: {
-          slider.prev();
-          clearCanvas();
-          break;
-        }
-        default: {
-          slider.stopVideo();
-          slider.goTo(button);
-          slider.playVideo();
-        }
-      }
+		switch(button)
+		{
+			case -102: {
+				slider.goTo(0);
+				break;
+			}
+			case -1: {
+				slider.toggleVideo();
+				break;
+			}
+			case 100: {
+				slider.next();
+				clearCanvas();
+				break;
+			}
+			case 101: {
+				slider.prev();
+				clearCanvas();
+				break;
+			}
+			default: {
+				slider.stopVideo();
+				slider.goTo(button);
+				slider.playVideo();
+			}
+		}
 
-      socket.emit('my other event', { my: 'data' });
+		socket.emit('my other event', { my: 'data' });
+	}
     });
 
 
@@ -174,20 +176,20 @@
 
 
     <!-- syntax highlighter -->
-    <script src="./js/highlight.pack.js"></script>
+    <script src="../js/highlight.pack.js"></script>
     <script> hljs.initHighlightingOnLoad();</script>
 
 
 
 
     <!-- preview-related stylesheets -->
-    <link href="./css/reset.css" rel="stylesheet">
-    <link href="./css/github.css" rel="stylesheet">
+    <link href="../css/reset.css" rel="stylesheet">
+    <link href="../css/github.css" rel="stylesheet">
 
     <!-- slider stylesheets -->
 
 
-    <link class="rs-file" href="./css/rs-default.css" rel="stylesheet">
+    <link class="rs-file" href="../css/rs-default.css" rel="stylesheet">
 
 
 	<style>
@@ -577,12 +579,12 @@
         </script>
 
         <!-- scripts used for video-conferencing -->
-        <script src="./js/videochat/firebase.js"> </script>
-        <script src="./js/videochat/RTCPeerConnection-v1.5.js"> </script>
-        <script src="./js/videochat/conference.js"> </script>
+        <script src="../js/videochat/firebase.js"> </script>
+        <script src="../js/videochat/RTCPeerConnection-v1.5.js"> </script>
+        <script src="../js/videochat/conference.js"> </script>
 
         <!-- script used to stylize video element -->
-        <script src="./js/videochat/getMediaElement.js"> </script>
+        <script src="../js/videochat/getMediaElement.js"> </script>
 
 		<script>
 /*
