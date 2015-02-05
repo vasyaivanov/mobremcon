@@ -109,7 +109,8 @@ io.sockets.on('connection', function (socket) {
                 } else {
                     console.log('RENAMED file: ' + fullFileName + ' to:' + uploadFullFileName);
                     var unoconvPathname = path.join(__dirname, 'unoconv'),
-                        unoconv_cmd = "python " + unoconvPathname + ' -e PageRange=1-2' + ' -f html -o ' + hashDir + ' ' + uploadFullFileName;
+                    //unoconv_cmd = "python " + unoconvPathname + ' -e PageRange=1-2' + ' -f html -o ' + hashDir + ' ' + uploadFullFileName;
+					unoconv_cmd = '/opt/libreoffice4.2/program/soffice.bin --headless --convert-to html:impress_html_Export --outdir ' + hashDir + ' ' + uploadFullFileName;
                     console.log(unoconv_cmd);
                     
                     try {
