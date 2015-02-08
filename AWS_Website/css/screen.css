@@ -14,10 +14,8 @@ html {
 body {
   font: 13px Helvetica, arial, freesans, clean, "sans-serif", "Segoe UI Emoji", "Segoe UI Symbol";
   /* background-color: #010352; */
-  background-image: radial-gradient(at 50% top, rgba(84, 151, 182, 0.6) 0%, rgba(84, 151, 182, 0) 75%), radial-gradient(at right top, #060877 0%, rgba(84, 151, 182, 0) 57%);
-  background-image: -webkit-gradient(at 50% top, rgba(84, 151, 182, 0.6) 0%, rgba(84, 151, 182, 0) 75%), -webkit-gradient(at right top, #060877 0%, rgba(84, 151, 182, 0) 57%);
-  background-repeat: no-repeat;
-  background-size: 100% 1000px;
+  background-color: black;
+  /* background-image: url(img/Slite_Background.jpg); */
 }
 
 /* line 25, ../sass/screen.scss */
@@ -129,6 +127,7 @@ body {
 .m-form-signin {
   width: 350px;
   margin: 0 auto;
+  padding-top: 150px;
 }
 /* line 141, ../sass/screen.scss */
 .m-form-signin h2 {
@@ -175,3 +174,31 @@ p {
 	cursor: pointer;
   font-size: 18px;
 }
+
+
+    
+    .back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      text-align: center;
+      display: block;
+      padding: 0px;
+      width: 100%;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: bold;
+      font-size: 15px;
+      color: #000;
+      -webkit-transition: all 500ms ease-in-out;
+      -moz-transition: all 500ms ease-in-out;
+      -o-transition: all 500ms ease-in-out;
+      transition: all 500ms ease-in-out;
+	   height: 40px;
+    }
+    .back:hover {
+      /* color: black; */
+      /* background: darkblue; */
+    }
