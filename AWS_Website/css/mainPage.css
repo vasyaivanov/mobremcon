@@ -171,32 +171,6 @@ html {
       text-align: center;
     }
     
-    .back {
-      position: absolute;
-      top: 0;
-      left: 0;
-      text-align: center;
-      display: block;
-      padding: 0px;
-      width: 100%;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      background: rgba(255, 255, 255, 0.1);
-      font-weight: bold;
-      font-size: 15px;
-      color: #000;
-      -webkit-transition: all 500ms ease-in-out;
-      -moz-transition: all 500ms ease-in-out;
-      -o-transition: all 500ms ease-in-out;
-      transition: all 500ms ease-in-out;
-	   height: 40px;
-    }
-    .back:hover {
-      /* color: black; */
-      /* background: darkblue; */
-    }
-    
     header {
       position: relative;
       z-index: 10;
@@ -369,8 +343,7 @@ html {
 	
 	/* VIDEO BACKGROUND */
 	#bgvid {
-		/* background: url(img/Slite_Background.jpg) no-repeat; */
-		background-color: black;
+		background: url(img/Slite_Background.jpg)
 		background-size: cover;
 		background-position-y: 0px;
 		min-height: 750px;
