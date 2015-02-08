@@ -38,7 +38,8 @@ body {
   margin-right: 15px;
   padding: 0;
   position: relative;
-  top: 3px;
+  top: 0px;
+  margin-top: -20px;
 }
 /* line 48, ../sass/screen.scss */
 .m-navbar .container-fluid .link-signin a {
@@ -150,6 +151,27 @@ body {
 }
 
 div.WordSection1 {
-	color: black;
-	font-weight: bold;
+color: white;
+background: rgba(0, 0, 0, 0.8);
+padding: 10px;
+padding-top: 50px;
+font-size: 14px;
+height: 100%;
+text-align: left;
+}
+
+p {
+    text-indent: 20px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.onepage-pagination{
+	background-color: white;
+  display: none;
+}
+
+.menuLink{
+	cursor: pointer;
+  font-size: 18px;
 }

@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 socket.on('fileConverted', function (data) {
 	console.log("MA fileConverted: " + JSON.stringify(data));
+	//cacheHash();
 	});
 
 	socket.on('news', function (data) {
