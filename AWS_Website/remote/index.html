@@ -4,7 +4,7 @@
     <meta charset="utf-8" content="user-scalable=yes">
     <title>SENDER</title>
     <link rel="stylesheet" type="text/css" href="./css/index.css">
-    <script src="http://slite-dev.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
+    <script src="http://slite-prod.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
     <script src="./js/jquery-2.0.3.min.js"></script>
     <script src="./js/speechRecognizer.js"></script>
     <script src="./js/volumeButtonControl.js"></script>
@@ -19,7 +19,7 @@
 			if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1'){
 				url = 'http://localhost';
 			} else {
-				url = 'http://slite-dev.elasticbeanstalk.com';
+				url = 'http://slite-prod.elasticbeanstalk.com';
 			}
 			var socket = io.connect(url + ':1337');
     </script>
