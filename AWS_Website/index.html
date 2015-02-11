@@ -52,7 +52,7 @@
        $('.menuLink').toggleClass('active');
 		}		
         </script>
-        <script src="http://slite-dev.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
+        <script src="http://slite-prod.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
         <script src="js/client.js"></script>
         <script src="js/main.js"></script>
     </body>
@@ -194,18 +194,18 @@
 
                         <ul class="nav navbar-nav navbar-right">
                           <li class="link-signin">
-                           <!-- <% if (!user) { %>-->
+                           <% if (!user) { %>
                               <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
-                           <!-- <% } else { %>
+                           <% } else { %>
                               <a href="/account"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
                             <% } %> -->
                           </li>
                           <li class="link-signin">
-                           <!-- <% if (!user) { %> -->
+                           <% if (!user) { %>
                               <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-                           <!-- <% } else { %>
+                           <% } else { %>
                               <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
-                            <% } %>-->
+                            <% } %>
                           </li>
                         </ul>
                       </div><!-- /.navbar-collapse -->
