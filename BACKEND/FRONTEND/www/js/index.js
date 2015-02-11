@@ -61,3 +61,9 @@ var app = {
         //alert("JD: inside index.js in onpositionsuccess");
 }
 };
+
+
+function startup(){
+    conssole.log("remote/js/index.js startup");
+    &("")
+}

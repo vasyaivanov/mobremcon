@@ -1,22 +1,30 @@
-/*
+/* 
  * This script is for controlling browser specific functions 
  * of the remote control.
  */
 
 thumbnails();
 
-$('#URLBox').change(function() {
-	changeURL();
+$('#URLBox').keypress(function(e) {
+	if(e.which == 13) {	
+		changeURL();
+	}
 });
 
-$( '#currentSlide' ).mousedown(function(event) {
-    //console.log("mousedown at x = " + event.pageX);
-    $( "#currentSlide" ).on ("mousemove", touchMove);
-    console.log("touchmove bound (probably)");
-    // Only turn on laser if we are in laser mode
+// Adding event handlers to the currentSlide div, the user
+// touches this div to draw or move laser
+currentSlide.addEventListener('touchstart', touchStart, false);
+currentSlide.addEventListener('touchmove', touchMove, false);
+currentSlide.addEventListener('touchend', touchEnd, false);
+
+// Touching the control area (the currentSlide div) will turn the
+// laser on, making the red dot appear on the presentation.
+// But only if we are in laser mode. 
+function touchStart() {
+    event.preventDefault();
     if(LASER === interactionType) {
-        socket.emit('laserOn');
-    } else if(DRAW === interactionType) {
+        socket.emit('laserOn', {slideID: $('#URLSlides').val()});
+    } else if (DRAW === interactionType) {
         // recalculate offsets in case window size has changed
         xOffset = currentSlide.offsetLeft;
         yOffset = currentSlide.offsetTop;
@@ -27,19 +35,18 @@ $( '#currentSlide' ).mousedown(function(event) {
         //console.log("xPercent: " + xPercent);
         //console.log("yPercent: " + yPercent);
         socket.emit('drawStart',{x:xPercent,
-                                 y:yPercent});
+                                 y:yPercent , slideID: $('#URLSlides').val()});
     }
-});
+};
 
-$( '#currentSlide' ).mouseup(function() {
-    $( "#currentSlide" ).off ("mousemove", touchMove);
-    // Only turn off laser if we are in laser mode
-    if(LASER === interactionType) {
+function touchEnd() {
+    event.preventDefault();
+    if (LASER === interactionType) {
         socket.emit('laserOff');
-    } else if(DRAW === interactionType) {
+    } else if (DRAW === interactionType) {
         socket.emit('drawStop');
     }
-});
+};
 
 $('#prev').click(function() {
     prevSlide();

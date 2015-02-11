@@ -1,4 +1,4 @@
-/* This is the main JS file for index.html, our remote control app */
+/*  This is the main JS file for index.html, our remote control app */
 
 // variables to deal with offset
 var currentSlide = document.getElementById("currentSlide"),
@@ -14,7 +14,7 @@ var currentSlide = document.getElementById("currentSlide"),
 // dim = width or height of the element
 function calcOffset(coord, offset, dim) {
     return ((coord - offset)/dim);
-};    
+};
 
 // interactionType is a global variable for switching between different modes
 var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
@@ -25,20 +25,15 @@ $('img').on('dragstart', function(event) { event.preventDefault(); });
 
 // Functions that handle moving to the next slide and updating notes
 function prevSlide() {
-    socket.emit('mymessage', { my:102, slide:currSlideNum });
+    socket.emit('mymessage', { my:102, slide:currSlideNum, slideID: $('#URLSlides').val() });
     currSlideNum--;
     $("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlide() {
-    socket.emit('mymessage', { my:101, slide:currSlideNum });
+    socket.emit('mymessage', { my:101, slide:currSlideNum, slideID: $('#URLSlides').val() });
     currSlideNum++;
     $("#notes").text(notesArray[currSlideNum]);
 };
-
-function closedCaptioning(ccText){
-    socket.emit('cc', { my:ccText});
-	//alert("JD: ccText="+ccText);
-}
 
 function thumbnails() {
     var elements    = document.querySelectorAll('#otherSlides button');
@@ -47,7 +42,9 @@ function thumbnails() {
         var element = elements[i];
         element.setAttribute('slide_num', i);
         var url = document.getElementById("URLSlides").value;
-        element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
+        //element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
+        element.style.backgroundImage = "url(../slites/" + url + "/thumbnails/img" + (i+1) + ".png)";
+
         // each event will be logged to the virtual console
         element.addEventListener("mousedown", function(e) {
                                  var slide_num = parseInt(this.getAttribute('slide_num'));
@@ -59,14 +56,21 @@ function thumbnails() {
 }
 
 function changeURL() {
-	document.getElementById('theIframe').src = "http://www.slite.us/" + document.getElementById("URLSlides").value;
-	if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-	else socket = io.connect('http://slite-dev.elasticbeanstalk.com:1337');
-	document.getElementById('theIframe').src += '';
-	currSlideNum = 0;
-	$("#notes").text(notesArray[currSlideNum]);
-	socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
-	thumbnails(); // thumbnails have to match the slides
+    var url;
+    if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1') {
+        url = 'http://localhost';
+    } else {
+        url = 'http://slite-prod.elasticbeanstalk.com';
+    }
+	//if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+    //else socket = io.connect('http://slite.elasticbeanstalk.com:1337');
+    socket = io.connect(url + ':1337');
+    var iFrameUrl = url + ':8081/' + document.getElementById("URLSlides").value;
+    document.getElementById('theIframe').src = iFrameUrl;
+    currSlideNum = 0;
+    $("#notes").text(notesArray[currSlideNum]);
+    socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
+    thumbnails(); // thumbnails have to match the slides
 }
 
 // this is the main function handling laser and draw control by sending
@@ -74,7 +78,7 @@ function changeURL() {
 function touchMove(event) {
     event.preventDefault();
     console.log("touchMove called");
-    
+
     // This code is needed because the touch event is different on mobile vs browser
     var xTouch, yTouch;
     if (/mobile/i.test(navigator.userAgent)) {
@@ -84,23 +88,23 @@ function touchMove(event) {
         xTouch = event.pageX;
         yTouch = event.pageY;
     }
-    
+
     var xPercent = calcOffset(xTouch, xOffset, slideWidth);
     var yPercent = calcOffset(yTouch, yOffset, slideHeight);
-    
+
     switch(interactionType) {
         case LASER: {
             socket.emit('laserCoords',
                         { x:xTouch - xOffset,
                           y:yTouch - yOffset,
                           width:slideWidth,
-                          height:slideHeight });
+                          height:slideHeight , slideID: $('#URLSlides').val() });
             break;
         }
         case DRAW: {
             socket.emit('drawCoords',
                         { x:xPercent,
-                          y:yPercent});
+                          y:yPercent , slideID: $('#URLSlides').val()});
             break;
         }
         default: {
@@ -120,11 +124,11 @@ $(window).resize(function() {
 // the program is opened in a mobile browser, and load
 // the correct .js file.
 var scriptSrc = './js/slite_browser.js';
-if (/mobile/i.test(navigator.userAgent)) {
+/* if (/mobile/i.test(navigator.userAgent)) {
     scriptSrc = './js/slite_iphone.js';
 } else {
     scriptSrc = './js/slite_browser.js';
-}
+} */
 var script = document.createElement('script');
 script.src = scriptSrc;
 var head = document.getElementsByTagName('head')[0];

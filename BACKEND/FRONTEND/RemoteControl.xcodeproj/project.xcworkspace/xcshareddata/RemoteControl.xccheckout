@@ -10,31 +10,31 @@
 	<string>RemoteControl</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>17DA6956-1464-4D67-B320-A3C03C922A78</key>
+		<key>A66C7BD6DD1537E9CCD88BE7142D71918B517F1D</key>
 		<string>https://github.com/vasyaivanov/mobremcon.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>RemoteControl.xcodeproj/project.xcworkspace</string>
+	<string>BACKEND/FRONTEND/RemoteControl.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>17DA6956-1464-4D67-B320-A3C03C922A78</key>
-		<string>../..</string>
+		<key>A66C7BD6DD1537E9CCD88BE7142D71918B517F1D</key>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/vasyaivanov/mobremcon.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>17DA6956-1464-4D67-B320-A3C03C922A78</string>
+	<string>A66C7BD6DD1537E9CCD88BE7142D71918B517F1D</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>17DA6956-1464-4D67-B320-A3C03C922A78</string>
+			<string>A66C7BD6DD1537E9CCD88BE7142D71918B517F1D</string>
 			<key>IDESourceControlWCCName</key>
-			<string>REMOTECONTROL3</string>
+			<string>mobremcon</string>
 		</dict>
 	</array>
 </dict>

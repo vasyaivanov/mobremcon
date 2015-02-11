@@ -15,11 +15,6 @@ var canvas, ctx, flag = false,
 var paintColor = "red",
     lineThickness = 2;
 
-slider.swiperight(function() {
-    slider.next();
-    clearCanvas();
-});
-
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
 socket.on('laserOn', function() {
@@ -35,6 +30,8 @@ socket.on('laserOff', function() {
 // This function receives the x/y coordinates from the APP.JS server 
 // and moves the laser dot by adjusting the dot's CSS. 
 socket.on('moveLaser', function(data) {
+    // console.log("Laser Data received");
+    // console.log("X: " + data.x + ", " + "Y: " + data.y);
     var slider = $(".royalSlider").data('royalSlider');
     var receiverHeight = slider.currSlide.content.height();
     var receiverWidth = slider.currSlide.content.width();
@@ -65,17 +62,8 @@ function resizeCanvas() {
     canvas.width(newWidth);
 };
 
-// Converts percent offset received from server into XY coords
-// (this mirrors calcOffset in slite.js)
-function calcCoords(percent, offset, dim) {
-    return (offset + (percent * dim));
-};
-
 socket.on('drawStart', function(data) {
-    var canvOffset = canvas.offset();
-    var x = calcCoords(data.x, canvOffset.left, canvas.width());
-    var y = calcCoords(data.y, canvOffset.top, canvas.height());
-    findxy('down', x, y);
+    findxy('down', data.x, data.y);
 });
 
 socket.on('drawStop', function() {
@@ -83,10 +71,7 @@ socket.on('drawStop', function() {
 });
 
 socket.on('drawCoords', function(data) {
-    var canvOffset = canvas.offset();
-    var x = calcCoords(data.x, canvOffset.left, canvas.width());
-    var y = calcCoords(data.y, canvOffset.top, canvas.height());
-    findxy('move', x, y);
+    findxy('move', data.x, data.y);
 });
 
 socket.on('shake', function() {
@@ -98,8 +83,6 @@ function clearCanvas () {
     ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
 };
 
-// Draw code written by user1083202 on StackOverflow
-// http://stackoverflow.com/questions/2368784/draw-by-mouse-with-html5-canvas
 function draw() {
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);
