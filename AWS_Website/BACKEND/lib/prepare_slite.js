@@ -159,7 +159,6 @@ Slite.prototype.reserveHash = function (callback) {
     var self = this;
     self.count++;
     self.hashValue = self.getHash();
-    //console.log("JD: hashValue=" + self.hashValue + " count=" + self.count);
     // get the value
     cache.get(self.hashValue, function (err, value) {
         if (self.count > self.maxNumTries) {
@@ -170,13 +169,10 @@ Slite.prototype.reserveHash = function (callback) {
             console.error('Error while getting hash cache: ' + err);
             callback(err);
         } else if (value != true) {
-            //console.log("MA: found value is " + value);
             cache.set(self.hashValue, true , cacheTimeout, function (err) {
                 if (err) {
                     console.error('Error storing hash cache: ' + err);
                  }
-                //console.log("JD: set my hash to " + self.hashValue);
-                //console.log('Found hash: ' + self.hashValue);
                 callback(err);
             });
         } else {

@@ -1,5 +1,10 @@
-var flash = require('connect-flash')
-  , express = require('express3')
+var express = require('express')
+  , logger = require('morgan')
+  , cookieParser = require('cookie-parser')
+  , bodyParser = require('body-parser')                                
+  , session = require('express-session')
+  , methodOverride = require('method-override')
+  , flash = require('connect-flash')
   , fs = require('fs')
   , passport = require('passport')
   , util = require('util')
@@ -9,6 +14,9 @@ var flash = require('connect-flash')
   , bcrypt = require('bcrypt')
   , path = require('path')
   , SALT_WORK_FACTOR = 10;
+
+var app = express();               
+module.exports.app = app;
 
 mongoose.connect('localhost', 'test');
 var db = mongoose.connection;
@@ -89,7 +97,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
   });
 }));
 
-var app = express();
 
 var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'}); //use {flags: 'w'} to open in write mode
 
@@ -110,73 +117,63 @@ var slitesDir = "slites";
 var slitesReg = "[0-9a-zA-Z]{4}";
 
 // configure Express
-app.configure(function () {
-  app.set('views', www_dir);
-  app.set('view engine', 'ejs');
-  app.engine('.html', require('ejs').renderFile);
-  app.set("view options", {layout: false});
-  app.use(express.logger({stream: expressLogFile}));
-  app.use(express.cookieParser());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  // Initialize Passport!  Also use passport.session() middleware, to support
-  // persistent login sessions (recommended).
-  app.use(flash());
-  app.use(passport.initialize());
-  app.use(passport.session());
+app.set('port', 8081);//process.env.PORT || 
+app.set('view engine', 'ejs');//'html'
+app.set('views', www_dir);
+app.engine('.html', require('ejs').renderFile);
+app.set("view options", {layout: false});
+app.use(logger('dev', { stream: expressLogFile }));                             
+app.use(cookieParser());                                                        
+app.use(bodyParser.json());                                                     
+app.use(bodyParser.urlencoded({ extended: true }));                             
+app.use(methodOverride());                                                      
+app.use(session({                                                               
+    secret: 'abrakadabra',
+    resave: false,
+    saveUninitialized: false
+}));
+// Initialize Passport!  Also use passport.session() middleware, to support
+// persistent login sessions (recommended).
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
-   // middleware do retrieve slites files from /slites folders
-    var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
-    app.use(function (req, res, next) {
-        var match = req.url.match(slitesRegMW);
-        if (match) {
-            //console.log('URL: url=' + req.url);
-            req.url = '/' + slitesDir + req.url;
-            //console.log('REPLACED WITH: ' + req.url + '\n');
-        }
-        next();
-    });
-
-  app.use(app.router);
-  app.use(express.static(www_dir));
-  //app.use(express.static(path.join(www_dir, 'static/')));
-
-  // custom 404 page
-  app.use(function (req, res) {
-        console.log('404: ' + req.url);
-        res.type('text/html');
-        res.status(404);
-        res.send('<h1>404 - Not Found</h1>');
-  });
-  // custom 500 page
-  app.use(function (err, req, res, next) {
-        console.error(err.stack);
-        res.type('text/html');
-        res.status(500);
-        res.send('<h1>500 - Server Error</h1>');
-  });
+// middleware do retrieve slites files from /slites folders
+var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
+app.use(function (req, res, next) {
+    var match = req.url.match(slitesRegMW);
+    if (match) {
+        //console.log('URL: url=' + req.url);
+        req.url = '/' + slitesDir + req.url;
+        //console.log('REPLACED WITH: ' + req.url + '\n');
+    }
+    next();
 });
- 
+
+// ROUTES
+var router = express.Router();
+
 // remote
-//app.get('/remote/:slite_path?', function (req, res) {
+//router.get('/remote/:slite_path?', function (req, res) {
 //    console.log('remote: ' + req.params.slite_path);
 //});
 
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
-app.get(rootRegExp, function (req, res){
-  //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);
+router.get(rootRegExp, function (req, res){
+  //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);               
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
-  res.render(indexHtml, { user: req.user });				
+  res.render(path.join(www_dir, indexHtml), { user: req.user });				
 });
 
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account.html', { user: req.user });
+router.get('/account', ensureAuthenticated, function (req, res){
+    //console.log('get /account');
+    res.render(path.join(www_dir, 'account.html'), { user: req.user });
 });
 
-app.post('/signup', function(req, res){
+router.post('/signup', function (req, res){
+  //console.log('post /signup');
   console.log("MA: new user: " + req.body.username + " " + req.body.password + " " + req.body.email);
   if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html');
   else
@@ -186,18 +183,21 @@ app.post('/signup', function(req, res){
   }
 });
 
-app.get('/login', function(req, res){
-  res.render('signin.html', { user: req.user, message: req.flash('error') });
+router.get('/login', function (req, res){
+    //console.log('get /login');
+    res.render(path.join(www_dir, 'signin.html'), { user: req.user, message: req.flash('error') });
 });
 
-app.post('/login',
+router.post('/login',
   passport.authenticate('local', { failureRedirect: '/signin.html', failureFlash: true }),
-  function(req, res) {
+  function (req, res) {
+      //console.log('post /login');
 	  console.log("MA: login2: " + req.user.username + " " + req.user.password + " " + req.user.email);
     res.redirect('/');
   });
 
-app.get('/logout', function(req, res){
+router.get('/logout', function (req, res){
+  //console.log('get /logout');
   req.logout();
   req.session.destroy(function (err) {
     if (err) {
@@ -212,9 +212,49 @@ app.get('/logout', function(req, res){
   });
 });
 
-app.listen(8081);
+app.use('/', router);
 
-module.exports.app = app;
+app.use(express.static(www_dir));
+//app.use(express.static(path.join(www_dir, 'static/')));
+
+
+// ERROR HANDLING
+// custom 404 page
+app.use(function (req, res) {                                                   //4
+    console.log('404: ' + req.url);
+    res.type('text/html');
+    res.status(404);
+    res.send('<h1>404 - Not Found</h1>');
+});
+
+// custom 500 page
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function (err, req, res, next) {                                     //4
+        console.error(err.stack);
+        res.status(err.status || 500);
+        res.type('text/html');
+        res.send('<h1>500 - Server Error</h1>');
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {                                        //4
+    res.status(err.status || 500);
+    res.type('text/html');
+    res.send('<h1>500 - Server Error</h1>');
+});
+
+
+// APP LISTEN
+var http = require('http').createServer(app).listen(app.get('port'), function () {
+    console.log('Server listening on port: ' + app.get('port'));
+});
+
+var io = require('socket.io').listen(http, { log: true });
+module.exports.io = io;
 
 require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, slitesReg, function () { });
 

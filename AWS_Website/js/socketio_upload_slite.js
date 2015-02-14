@@ -1,13 +1,5 @@
 require("./js/client.js");
-
-var url;
-if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1'){
-	url = 'http://localhost';
-} else {
-	url = 'http://slite-dev.elasticbeanstalk.com';
-}
-url += ':1337';
-var socket = io.connect(url);
+var socket = io.connect();
 
 document.addEventListener("DOMContentLoaded", function(){
 

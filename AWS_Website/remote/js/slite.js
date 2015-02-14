@@ -56,16 +56,8 @@ function thumbnails() {
 }
 
 function changeURL() {
-    var url;
-    if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1') {
-        url = 'http://localhost';
-    } else {
-        url = 'http://slite-prod.elasticbeanstalk.com';
-    }
-	//if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-    //else socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-    socket = io.connect(url + ':1337');
-    var iFrameUrl = url + ':8081/' + document.getElementById("URLSlides").value;
+    socket = io.connect();
+    var iFrameUrl = document.location.hostname + ':8081/' + document.getElementById("URLSlides").value;
     document.getElementById('theIframe').src = iFrameUrl;
     currSlideNum = 0;
     $("#notes").text(notesArray[currSlideNum]);

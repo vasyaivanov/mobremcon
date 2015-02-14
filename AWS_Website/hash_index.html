@@ -1,4 +1,4 @@
-
+﻿
 <html>
 <head>
 	<title>Slite Pitch Deck</title>
@@ -15,7 +15,7 @@
 	<script src="../../js/jquery-ui-1.8.22.custom.min.js"></script>
 	<script class="rs-file" src="../../js/jquery.royalslider.min.js"></script>
 	<script src="../../js/jquery.infinitescroll.js"></script>
-	<script src="http://slite-dev.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 
 	<!-- Lev: This script controls the laser dot -->
 	<script defer src="../../js/LASER_RECEIVER.js"></script>
@@ -35,15 +35,7 @@
 <link rel="stylesheet" type="text/css" href="../../css/index1.css">
 
 <script>
-
-	var url;
-	if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1') {
-		url = 'http://localhost';
-	} else {
-		url = 'http://slite-dev.elasticbeanstalk.com';
-	}
-	url += ':1337';
-	var socket = io.connect(url);
+	var socket = io.connect();
 
 socket.on('ccBroadcast', function (data) {
 	//alert("JD: ccBroadcast text="+data.hello);
