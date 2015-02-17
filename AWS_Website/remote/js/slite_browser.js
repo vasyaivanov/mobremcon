@@ -5,7 +5,7 @@
 
 thumbnails();
 
-$('#URLBox').keypress(function(e) {
+$('#URLBox').keypress(function (e) {
 	if(e.which == 13) {	
 		changeURL();
 	}

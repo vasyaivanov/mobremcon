@@ -57,7 +57,7 @@ function thumbnails() {
 
 function changeURL() {
     socket = io.connect(document.location.hostname + ':1337');
-    var iFrameUrl = document.location.hostname + ':8081/' + document.getElementById("URLSlides").value;
+    var iFrameUrl = 'http://' + document.location.hostname + ':8081/' + document.getElementById("URLSlides").value;
     document.getElementById('theIframe').src = iFrameUrl;
     currSlideNum = 0;
     $("#notes").text(notesArray[currSlideNum]);
