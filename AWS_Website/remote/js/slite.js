@@ -56,7 +56,7 @@ function thumbnails() {
 }
 
 function changeURL() {
-    socket = io.connect();
+    socket = io.connect(document.location.hostname + ':1337');
     var iFrameUrl = document.location.hostname + ':8081/' + document.getElementById("URLSlides").value;
     document.getElementById('theIframe').src = iFrameUrl;
     currSlideNum = 0;

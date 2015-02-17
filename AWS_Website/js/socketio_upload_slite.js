@@ -1,5 +1,5 @@
 require("./js/client.js");
-var socket = io.connect();
+var socket = io.connect(document.location.hostname + ':1337');
 
 document.addEventListener("DOMContentLoaded", function(){
 

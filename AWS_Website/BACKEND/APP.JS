@@ -1,7 +1,7 @@
 var express = require('express')
   , logger = require('morgan')
   , cookieParser = require('cookie-parser')
-  , bodyParser = require('body-parser')                                
+  , bodyParser = require('body-parser')
   , session = require('express-session')
   , methodOverride = require('method-override')
   , flash = require('connect-flash')
@@ -13,7 +13,9 @@ var express = require('express')
   , mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
   , path = require('path')
-  , SALT_WORK_FACTOR = 10;
+  , SALT_WORK_FACTOR = 10
+  , appPort = 8081
+  , ioPort  = 1337;
 
 var app = express();               
 module.exports.app = app;
@@ -117,7 +119,7 @@ var slitesDir = "slites";
 var slitesReg = "[0-9a-zA-Z]{4}";
 
 // configure Express
-app.set('port', 8081);//process.env.PORT || 
+app.set('port', appPort || process.env.PORT);
 app.set('view engine', 'ejs');//'html'
 app.set('views', www_dir);
 app.engine('.html', require('ejs').renderFile);
@@ -143,9 +145,11 @@ var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
     var match = req.url.match(slitesRegMW);
     if (match) {
-        //console.log('URL: url=' + req.url);
+        console.log('URL: url=' + req.url);
         req.url = '/' + slitesDir + req.url;
-        //console.log('REPLACED WITH: ' + req.url + '\n');
+        console.log('REPLACED WITH: ' + req.url + '\n');
+    //} else if(req.url === '/socket.io/socket.io.js'){
+    //    console.log('COCKET.IO: ' + req.url);
     }
     next();
 });
@@ -157,6 +161,30 @@ var router = express.Router();
 //router.get('/remote/:slite_path?', function (req, res) {
 //    console.log('remote: ' + req.params.slite_path);
 //});
+
+router.get('/socket.io/socket.io.js', function (req, res, next) {
+    if (appPort === ioPort) {
+        next();
+    } else {
+        var options = {
+            dotfiles: 'deny',
+            headers: {
+                'x-timestamp': Date.now(),
+                'x-sent': true
+            }
+        };
+        
+        res.sendFile(path.join(www_dir, 'js/socket.io-1.3.4.js'), options, function (err) {
+            if (err) {
+                console.log(err);
+                res.status(err.status).end();
+            }
+            else {
+                //console.log('Sent: socket.io');
+            }
+        });
+    }
+})
 
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
@@ -248,12 +276,23 @@ app.use(function (err, req, res, next) {                                        
 });
 
 
-// APP LISTEN
-var http = require('http').createServer(app).listen(app.get('port'), function () {
-    console.log('Server listening on port: ' + app.get('port'));
-});
+// SOCKET.IO HTTP LISTEN
+var http;
+if (appPort !== ioPort) {
+    http = require('http').Server(app).listen(ioPort, function () {
+        console.log('Socket.io Http server listening on port: ' + ioPort);
+    });
+}
 
-var io = require('socket.io').listen(http, { log: true });
+// APP LISTEN
+var server = app.listen(app.get('port'), function () {
+    console.log('Express server listening on port: ' + app.get('port'));
+});
+//require('socket.io').of().listen(server); // additional socket.io server to serve /socket.io/ requests
+
+// SOCKET.IO LISTEN
+var io = require('socket.io').listen((appPort === ioPort ? server : http), { log: true });
+
 module.exports.io = io;
 
 require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, slitesReg, function () { });
