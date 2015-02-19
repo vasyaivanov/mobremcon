@@ -30,8 +30,7 @@
 
 	<script>
         
-    var socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-    //var socket = io.connect('http://localhost:1337');
+        var socket = io.connect(document.location.hostname + ':1337');
     
     socket.on('news', function (data) {	
 

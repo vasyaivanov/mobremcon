@@ -9,8 +9,7 @@
   <script src="http://slite-prod.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
   <script language="JavaScript" src="../../js/jquery-2.0.3.min.js"></script>
   	<script>
-	  var socket = io.connect('http://slite-prod.elasticbeanstalk.com:1337');
-		//var socket = io.connect('http://localhost:1337');
+        var socket = io.connect(document.location.hostname + ':1337');
 		
 		document.addEventListener("DOMContentLoaded", function(){
 			var answerTable = document.getElementById('answerTextID').value;
