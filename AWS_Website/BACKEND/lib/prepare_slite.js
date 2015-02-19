@@ -141,8 +141,9 @@ Slite.prototype.generateHtml = function (callback) {
             callback(err);
         } else {
             var indexHtml = 'index.html';
-            var data_replaced = data.replace("NUM_SLIDES", self.num_slides);
-            fs.writeFile(path.join(self.dir, indexHtml), data_replaced, function (err) {
+            var data_replaced1 = data.replace("NUM_SLIDES", self.num_slides);
+            var data_replaced2 = data_replaced1.replace("HASH", self.hashValue);
+            fs.writeFile(path.join(self.dir, indexHtml), data_replaced2, function (err) {
                 if (err) {
                     console.error('Error writing ' + indexHtml + ' '  + err);
                 } else {

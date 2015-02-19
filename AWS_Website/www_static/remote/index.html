@@ -1,0 +1,52 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+    <meta charset="utf-8" content="user-scalable=yes">
+    <title>SENDER</title>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/jquery-2.0.3.min.js"></script>
+    <script src="./js/speechRecognizer.js"></script>
+    <script src="./js/volumeButtonControl.js"></script>
+    <script src="./js/shake.js"></script>
+    <script src="./js/notes.js"></script>
+    <script defer src="./js/timer.js"></script>
+    <script defer src="./js/slite.js"></script>
+    <script src="./js/thumbs.0.6.0.min.js"></script>
+
+    <script>
+        var socket = io.connect(document.location.hostname + ':1337');
+    </script>
+
+	</head>
+<body onload="startup()"
+    ><br
+    ><div class="UI topRow leftCol" id="menu">&nbsp;</div
+    ><div class="UI topRow midCol" id="URLBox">http://www.slite.us/<input type="text" id="URLSlides" placeholder="Enter code here"></div
+    ><div class="UI topRow rightCol" id="timeDisplay">Start Timer</div
+    ><br
+    ><div class="UI midRow leftCol" id="notes">1: Beginning slide, or should I say 'slite'. Get ready to see powerpoint with all the powers of the web.</div
+    ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
+        ><div id="overlay"></div>
+          <iframe id="theIframe" class="frame" seamless></iframe>
+		</div
+    ><div class="UI midRow rightCol" id="otherSlides">
+        <button></button>
+        <button></button>
+        <button></button>
+        <button></button>
+        <button></button>
+        <button></button
+    ></div
+    ><br
+    ><div class="UI botRow" id="prev">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="laser">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="draw">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="speech">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="next">&nbsp;</div
+></body>
+</html>

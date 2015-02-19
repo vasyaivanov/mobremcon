@@ -39,9 +39,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     if (pollAnswerArray.length > 0) {
         pollUpdate();
     }
-    console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.address.address +' Socket: ' + socket.id);
+    console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
+    //console.log(socket);
     socket.on('disconnect', function () {
-        console.log('DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.address.address + ' Socket: ' + socket.id);
+        console.log('DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
     });
 
     var uploader = new SocketIOFileUploadServer();
