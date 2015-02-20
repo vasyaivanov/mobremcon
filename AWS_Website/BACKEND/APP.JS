@@ -108,7 +108,7 @@ var indexHtml = 'index.html';
 var awsDir = '/home/ec2-user/www/';
 var localDir = __dirname + "/../";
 var www_dir;
-if (fs.existsSync(path.join(localDir, indexHtml))) {
+if (fs.existsSync(path.join(localDir, www_static_dir, indexHtml))) {
     www_dir = localDir;
 } else {
     www_dir = awsDir;
@@ -242,7 +242,7 @@ router.get(rootRegExp, function (req, res){
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
-  res.render(path.join(www_dir, indexHtml), { user: req.user });				
+  res.render(path.join(www_dir, www_static_dir, indexHtml), { user: req.user });				
 });
 
 router.get('/account', ensureAuthenticated, function (req, res){
