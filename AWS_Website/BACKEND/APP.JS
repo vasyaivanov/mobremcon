@@ -147,6 +147,10 @@ var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
     var match = req.url.match(slitesRegMW);
     if (match) {                                                        // if hash found in url
+        if (req.url[req.url.length - 1] === '/') {
+            req.url = req.url.slice(0, -1);
+            console.log("removed trailing slash");  
+        }
         console.log('URL: "' + req.url + '"');
         var slashPos = req.url.indexOf('/', 1);
         console.log('slashPos: ' + slashPos);
