@@ -43,7 +43,7 @@ function thumbnails() {
         element.setAttribute('slide_num', i);
         var url = document.getElementById("URLSlides").value;
         //element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
-        if (url === '') {
+        if (url === '' || url.length != 2) {
             element.style.backgroundImage = '';
         } else {
             element.style.backgroundImage = "url(../" + url + "/thumbnails/img" + (i+1) + ".png)";
