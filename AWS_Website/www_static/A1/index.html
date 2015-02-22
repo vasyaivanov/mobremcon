@@ -87,6 +87,14 @@
 		socket.emit('my other event', { my: 'data' });
 	}
     });
+	
+	function isMobile(){
+		if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 
 	function showHideComments(){
@@ -126,15 +134,19 @@
 		return (helpShownCookie != "true");
 	}
 	
-	var explanatorsTurnedOn = true;
+	var explanatorsTurnedOff = false;
 	function showHideExplanators(){
-		if(!explanatorsTurnedOn){
+		if( isMobile() ){
+			$('.startTemporaryPopup').fadeOut( 0 );
+			explanatorsTurnedOff = true;
+		}
+		if(explanatorsTurnedOff){
 			$('.startTemporaryPopup').fadeOut( 400 );
-			explanatorsTurnedOn = true;
+			explanatorsTurnedOff = true;
 		}else{			
 			document.cookie="isHelpAlreadyShown=true;";
 			$('.startTemporaryPopup').fadeIn( 400 );
-			explanatorsTurnedOn = false;
+			explanatorsTurnedOff = false;
 		}
 	}
 	
