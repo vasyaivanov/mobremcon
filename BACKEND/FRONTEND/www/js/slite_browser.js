@@ -3,6 +3,10 @@
  * of the remote control.
  */
 
+function startup() {
+    speechRecognizer = new SpeechRecognizer();
+};
+
 thumbnails();
 
 $('#URLBox').keypress(function(e) {
@@ -10,6 +14,19 @@ $('#URLBox').keypress(function(e) {
 		changeURL();
 	}
 });
+
+
+function printSpeechResult(resultObject){
+    console.log("MA printResult");
+    console.log(resultObject);
+    console.log(resultObject.indexOf("NEXT"));
+    if (resultObject.indexOf("NEXT") > -1) {
+        nextSlide();
+    }
+    else if (resultObject.indexOf("PREVIOUS") > -1) {
+        prevSlide();
+    }
+};
 
 // Adding event handlers to the currentSlide div, the user
 // touches this div to draw or move laser
@@ -84,7 +101,7 @@ $('#draw').click(function() {
     yOffset = currentSlide.offsetTop;
     slideWidth = currentSlide.offsetWidth;
     slideHeight = currentSlide.offsetHeight;
-
+console.log(interactionType);
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
@@ -100,3 +117,18 @@ $('#draw').click(function() {
     }
 });
 
+
+$('#speech').click(function() {
+    console.log("MA numClicked");
+    console.log(interactionType);
+    if (SPEECH === interactionType) {
+        speechRecognizer.cleanup();
+        interactionType = NONE;
+        $('#speech').css("background-image", "url(./img/buttonSpeech.png)");
+    } else {
+        console.log("Recognize speech");
+        speechRecognizer.initialize( function(r){printSpeechResult(r)}, function(e){printSpeechResult(e)} );
+        interactionType = SPEECH;
+        $('#speech').css("background-image", "url(./img/buttonSpeech_inverse.png)");
+    }
+});

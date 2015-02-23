@@ -47,13 +47,12 @@
     
     LanguageModelGenerator *lmGenerator = [[LanguageModelGenerator alloc] init];
 
-    /*
-    NSArray *words = [NSArray arrayWithObjects:@"NEXT", @"PREVIOUS", @"FIRST", @"LAST", @"SLIDE", nil];
+  
+    /*NSArray *words = [NSArray arrayWithObjects:@"NEXT", @"PREVIOUS", @"FIRST", @"LAST", @"SLIDE", nil];
     NSString *name = @"SlideNavigation";
-    NSError *err = [lmGenerator generateLanguageModelFromArray:words withFilesNamed:name forAcousticModelAtPath:[AcousticModel pathToModel:@"AcousticModelEnglish"]]; // Change "AcousticModelEnglish" to "AcousticModelSpanish" to create a Spanish language model instead of an English one.
-	*/
+    NSError *err = [lmGenerator generateLanguageModelFromArray:words withFilesNamed:name forAcousticModelAtPath:[AcousticModel pathToModel:@"AcousticModelEnglish"]]; // Change "AcousticModelEnglish" to "AcousticModelSpanish" to create a Spanish language model instead of an English one.*/
 	
-	
+
 	
 	NSString *myCorpus = [[NSBundle mainBundle] pathForResource:@"corpus" ofType:@"txt"];
 NSString *name = @"NameIWantForMyLanguageModelFiles";

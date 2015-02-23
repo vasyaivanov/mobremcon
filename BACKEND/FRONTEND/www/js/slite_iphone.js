@@ -73,6 +73,7 @@ function onDeviceReady() {
         }
     });
     
+    
     $('#draw').click(function() {
         event.preventDefault();
         // if draw is on, turn it off

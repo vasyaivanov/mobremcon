@@ -50,6 +50,7 @@
 		5AA0E66D1729F45B000DC89A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA0E66C1729F45B000DC89A /* OpenAL.framework */; };
 		5AA0E66F1729F460000DC89A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA0E66E1729F460000DC89A /* ImageIO.framework */; };
 		5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */; };
+		AE15E9C61A9BCB8D009D79DF /* corpus.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE15E9C51A9BCB8D009D79DF /* corpus.txt */; };
 		CE09CAD519C11E050082D54B /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE09CAD419C11E050082D54B /* CoreAudio.framework */; };
 		CE09CAD819C11E7B0082D54B /* VolumeButtonControl.m in Sources */ = {isa = PBXBuildFile; fileRef = CE09CAD719C11E7B0082D54B /* VolumeButtonControl.m */; };
 		CEBDCEFD19BD066900F8C8F0 /* RBVolumeButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBDCEFC19BD066900F8C8F0 /* RBVolumeButtons.m */; };
@@ -127,6 +128,7 @@
 		5AEE5B34173C68D80009041E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* RemoteControl-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "RemoteControl-Info.plist"; path = "../RemoteControl-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		AE15E9C51A9BCB8D009D79DF /* corpus.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = corpus.txt; path = RemoteControl/Plugins/corpus.txt; sourceTree = "<group>"; };
 		CE09CAD419C11E050082D54B /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		CE09CAD619C11E7B0082D54B /* VolumeButtonControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VolumeButtonControl.h; sourceTree = "<group>"; };
 		CE09CAD719C11E7B0082D54B /* VolumeButtonControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VolumeButtonControl.m; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				AE15E9C51A9BCB8D009D79DF /* corpus.txt */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F840E1F1165FE0F500CFE078 /* config.xml in Resources */,
+				AE15E9C61A9BCB8D009D79DF /* corpus.txt in Resources */,
 				1EA05529197CC9F600C5FD1B /* AcousticModelSpanish.bundle in Resources */,
 				308D05371370CCF300D202BF /* icon-72.png in Resources */,
 				1EA05528197CC9F600C5FD1B /* AcousticModelEnglish.bundle in Resources */,
