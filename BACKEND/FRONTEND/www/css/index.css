@@ -14,7 +14,7 @@ body {
     -webkit-tap-highlight-color: transparent; /* For some Androids */
 }
 
-/* previous width and height in em units commented  
+/* previous width and height in em units commented
  * in case there is a need to revert. */
 
 /* all the UI elements (buttons, laser control, notes, etc)
@@ -24,10 +24,11 @@ body {
     border: 1px solid black;
     display: inline-block;
     vertical-align: top;
-    }
+}
 
 input[type=text] {
-    font-size: 5.4vmin;
+    font-size: 20px;
+    
     /*border: none;*/ /*turns off border on the URL element text box*/
     border-style: inset;
 }
@@ -45,27 +46,26 @@ input[type=text] {
 }
 
 /* overlay element is intended to cover up the iframe to disable
- * user interaction with the iframe. */ 
+ * user interaction with the iframe. */
 #overlay {
     position:absolute;
     width: inherit; height: inherit;
     border: none;
     z-index: 0;
-}    
-    
-#theIframe {
-    position: absolute;
-    width: 233%; height: 233%;
-    z-index: 1;
 }
-    
+
+#theIframe {
+    width: 100%; height: 100%;
+    z-index: 0;
+}
+
 .topRow {
     height: 7%;
-    }
+}
 
 .midRow {
     height: 71%;
-    }
+}
 
 .botRow {
     height: 14%;
@@ -86,82 +86,76 @@ input[type=text] {
 }
 
 #prev {
-    width: 20.7%;
+    width: 90px;
     background-image: url('../img/buttonPrev.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
     
-    }
-    
-    #prev:active {
-        border-color: red;
-    }
+}
+
+#prev:active {
+    border-color: red;
+}
 
 #next {
-    width: 20.7%;
-    
+    width: 90px;
     background-image: url('../img/buttonNext.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
     
-    }
-    
-    #next:active {
-        border-color:red;
-    }
+}
+
+#next:active {
+    border-color:red;
+}
 
 /* filler elements are for spacing the buttons on the
  * bottom row. */
 #filler {
-    width: 3.95%;
+    width: 10px;
     border: white;
 }
 
 #laser {
-    width: 13.8%;
     color: black;
-    
     background-image: url('../img/buttonLaser.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    
-    }
+}
 
 #draw {
-    width: 13.8%;
     color: black;
-    
     background-image: url('../img/buttonDraw.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
     
-    }
+}
 
 #speech {
-    width: 13.8%;
     color: black;
-    
     background-image: url('../img/buttonSpeech.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    
-    }
+}
 
-button {
-    width: 100%; height: 15%;
-    color: black;
-    
-    background-image: url('../img/buttonSpeech.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    
-    }
+
+.buttons {
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+}
+
+.buttons_div {
+    position: absolute;
+    z-index: 100;
+    left: 25%;
+    bottom: 10px;
+}
 
 /* wrap and frame classes are for resizing the content inside
  * the iframe */
@@ -170,20 +164,20 @@ button {
     padding: 0;
     overflow: hidden;
 }
-    
+
 .frame {
     width: auto; height: auto;
     border: 0;
     
-    -ms-transform: scale(0.3);
-    -moz-transform: scale(0.3);
-    -o-transform: scale(0.3);
-    -webkit-transform: scale(0.3);
-    transform: scale(0.3);
-    
-    -ms-transform-origin: 0 0;
-    -moz-transform-origin: 0 0;
-    -o-tranform-origin: 0 0;
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
+    /*-ms-transform: scale(0.3);
+     -moz-transform: scale(0.3);
+     -o-transform: scale(0.3);
+     -webkit-transform: scale(0.3);
+     transform: scale(0.3);
+     
+     -ms-transform-origin: 0 0;
+     -moz-transform-origin: 0 0;
+     -o-tranform-origin: 0 0;
+     -webkit-transform-origin: 0 0;
+     transform-origin: 0 0;*/
 }

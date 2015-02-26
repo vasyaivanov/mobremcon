@@ -30,7 +30,7 @@
     openEarsPlugin.delegate = self;
     [openEarsPlugin startListening];
     
-    [NSThread sleepForTimeInterval:5.0];
+    //[NSThread sleepForTimeInterval:5.0];
     
     CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [result setKeepCallbackAsBool:YES];
