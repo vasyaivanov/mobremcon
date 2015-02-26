@@ -173,6 +173,11 @@
 			//put main window back to full size	
 			$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
 			//$(".rsContainer").css({"width":"100%", "clear":"both"});
+			
+			// remove the video window on closing the panel
+			var videosContainer = document.getElementById('videos-container');
+			videosContainer.removeChild(videosContainer.firstChild);
+			
 			isVideoOn = false;
 		}	
 		
@@ -671,7 +676,7 @@
 					openSocket: function(config) {
 						var channel = config.channel || location.href.replace( /\/|:|#|%|\.|\[|\]/g , '');
 						channel += _channelHash;
-						var socket = new Firebase('https://chat.firebaseIO.com/' + channel);
+						var socket = new Firebase('https://webrtc.firebaseIO.com/' + channel);
 						socket.channel = channel;
 						socket.on("child_added", function(data) {
 							config.onmessage && config.onmessage(data.val());
