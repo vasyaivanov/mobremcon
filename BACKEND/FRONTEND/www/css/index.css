@@ -55,8 +55,10 @@ input[type=text] {
 }
 
 #theIframe {
-    width: 100%; height: 100%;
-    z-index: 0;
+position: absolute;
+width: 268%; height: 270%;
+z-index: 0;
+left: 10%;
 }
 
 .topRow {
@@ -167,17 +169,18 @@ input[type=text] {
 
 .frame {
     width: auto; height: auto;
-    border: 0;
+    border: 0px;
     
-    /*-ms-transform: scale(0.3);
-     -moz-transform: scale(0.3);
-     -o-transform: scale(0.3);
-     -webkit-transform: scale(0.3);
-     transform: scale(0.3);
-     
-     -ms-transform-origin: 0 0;
-     -moz-transform-origin: 0 0;
-     -o-tranform-origin: 0 0;
-     -webkit-transform-origin: 0 0;
-     transform-origin: 0 0;*/
+    -ms-transform: scale(0.3);
+    -moz-transform: scale(0.3);
+    -o-transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    transform: scale(0.3);
+    
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-tranform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+
 }
