@@ -142,11 +142,11 @@
 		}
 		if(explanatorsTurnedOff){
 			$('.startTemporaryPopup').fadeOut( 400 );
-			explanatorsTurnedOff = true;
-		}else{			
+			explanatorsTurnedOff = false;
+		}else{		
 			document.cookie="isHelpAlreadyShown=true;";
 			$('.startTemporaryPopup').fadeIn( 400 );
-			explanatorsTurnedOff = false;
+			explanatorsTurnedOff = true;
 		}
 	}
 	
