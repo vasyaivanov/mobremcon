@@ -841,19 +841,37 @@ $( "#setup-new-room" ).trigger( "click" );
 					navigateByCenterClick: true
 				}
 			});
-			for (var slide = 0; slide <= NUM_SLIDES; ++slide) {
+			var number_of_slides = "NUM_SLIDES_TEMPLATE";
+			if (!parseInt(number_of_slides, 10)) number_of_slides = 15;
+			for (var slide = 1; slide <= number_of_slides; ++slide) {
 				//var slide_html_path= "C:\\Users\\marov\\Documents\\GitHub\\mobremcon\\BACKEND\\TEST\\MA\\SliteShow_PitchDeck.pptx.html\\";
 				//var slide_html_path = data.filename;
-				var slide_html_path = '/HASH/' + "img" + slide + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
-				var slide_html= "<div style='text-align:center;overflow:scroll' id=slide class='rsContent'>"
-				+ "<img src='"+slide_html_path+"' height='100%'>"
-				+ "<div class='rsTmb'>"
-				+ "<h5>SLIDE"+slide+"</h5>"
-				+ "     <span>Slide "+slide+" here</span>"
-				+ "</div> </div>";
-
+				var slide_html_path = '/HASH_TEMPLATE/' + "img" + slide + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
+				var slite = "HASH_TEMPLATE";
 				var slider = $(".royalSlider").data('royalSlider');
-				slider.appendSlide(slide_html);
+				if (slite.length == 13) // we did not do any replacment!
+				{
+					slide_html_path= "A1/PPT/SliteShow_PitchDeck.pptx";
+					if (slide == 1) slide_html_path += ".html/SliteShow_PitchDeck.html";
+					else slide_html_path += ".html/img"+slide+".html" + "?ts=" +  (new Date().getTime()); //slide url with added time stamp to stop caching
+					var slide_html= "<div style='text-align:center' id=slide class='rsContent'>"
+						+ "<iframe src='"+slide_html_path+"' width='100%' height='100%' seamless> </iframe>"
+						+ "<div class='rsTmb'>"
+						+ "<h5>SLIDE"+slide+"</h5>"
+						+ "     <span>Slide "+slide+" here</span>"
+						+ "</div> </div>";
+					slider.appendSlide(slide_html);
+				}
+				else
+				{
+					var slide_html= "<div style='text-align:center;overflow:scroll' id=slide class='rsContent'>"
+						+ "<img src='"+slide_html_path+"' height='100%'>"
+						+ "<div class='rsTmb'>"
+						+ "<h5>SLIDE"+slide+"</h5>"
+						+ "     <span>Slide "+slide+" here</span>"
+						+ "</div> </div>";
+					slider.appendSlide(slide_html);
+				}
 			}
 
 

@@ -6,12 +6,13 @@ var url = require('url')
   , prepare_slite = require('./prepare_slite.js')
   , path = require('path');
 
-var www_dir, slitesDir, slitesReg;
-exports.setDir = function (new_dir, newSlitesDir, newSlitesReg, callback){
+var www_dir, slitesDir, staticDir, slitesReg;
+exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, callback){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
+    staticDir = newstaticDir;
     slitesReg = newSlitesReg;
-	prepare_slite.setDir(www_dir, slitesDir, slitesReg, callback);
+	prepare_slite.setDir(www_dir, slitesDir, staticDir, slitesReg, callback);
 }
 
 function pollUpdate () {

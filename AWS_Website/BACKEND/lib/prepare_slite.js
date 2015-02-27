@@ -13,7 +13,7 @@ var cache = new CachemanMongo(options);
 var cacheReady = false;
 var cacheTimeout = 60000;
 
-var www_dir, slitesDir, slitesReg;
+var www_dir, slitesDir, staticDir, slitesReg;
 
 function onCacheReady(addedFiles){
     cacheReady = true;
@@ -74,9 +74,10 @@ function initCache(callback) {
 };
 
 
-exports.setDir = function (new_dir, newSlitesDir, newSlitesReg, callback){
+exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, callback){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
+    staticDir = newstaticDir;
     slitesReg = newSlitesReg;
     initCache(callback);
 }
@@ -135,14 +136,14 @@ Slite.prototype.getHash = function ()
 
 Slite.prototype.generateHtml = function (callback) {
     var self = this;
-    fs.readFile(path.join(www_dir, "hash_index.html"), "utf8", function (err, data) {
+    fs.readFile(path.join(www_dir, staticDir, "hash_index.html"), "utf8", function (err, data) {
         if (err) {
             console.error('Error reading hash_index.html' + err);
             callback(err);
         } else {
             var indexHtml = 'index.html';
-            var data_replaced1 = data.replace("NUM_SLIDES", self.num_slides);
-            var data_replaced2 = data_replaced1.replace("HASH", self.hashValue);
+            var data_replaced1 = data.replace("NUM_SLIDES_TEMPLATE", self.num_slides);
+            var data_replaced2 = data_replaced1.replace("HASH_TEMPLATE", self.hashValue);
             fs.writeFile(path.join(self.dir, indexHtml), data_replaced2, function (err) {
                 if (err) {
                     console.error('Error writing ' + indexHtml + ' '  + err);
