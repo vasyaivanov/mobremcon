@@ -349,7 +349,7 @@ var io = require('socket.io').listen((appPort === ioPort ? server : http), { log
 
 module.exports.io = io;
 
-require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, slitesReg, function () { });
+require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, www_static_dir, slitesReg, function () { });
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

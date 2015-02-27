@@ -136,7 +136,7 @@ Slite.prototype.getHash = function ()
 
 Slite.prototype.generateHtml = function (callback) {
     var self = this;
-    fs.readFile(path.join(www_dir, staticDir, "hash_index.html"), "utf8", function (err, data) {
+    fs.readFile(path.join(www_dir, staticDir, "A1/index.html"), "utf8", function (err, data) {
         if (err) {
             console.error('Error reading hash_index.html' + err);
             callback(err);
