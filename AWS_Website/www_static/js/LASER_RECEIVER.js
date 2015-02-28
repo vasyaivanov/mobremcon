@@ -18,7 +18,7 @@ var paintColor = "red",
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
 socket.on('laserOn', function(data) {
-    if (document.location.pathname == "/"+ data.slideID) {
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
     	$( "#redDot" ).css("visibility", "visible");
     }
 });
@@ -32,7 +32,7 @@ socket.on('laserOff', function() {
 // This function receives the x/y coordinates from the APP.JS server 
 // and moves the laser dot by adjusting the dot's CSS. 
 socket.on('moveLaser', function(data) {
-    if (document.location.pathname == "/"+ data.slideID) {
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
 	    var slider = $(".royalSlider").data('royalSlider');
 	    var receiverHeight = slider.currSlide.content.height();
 	    var receiverWidth = slider.currSlide.content.width();
@@ -77,7 +77,7 @@ socket.on('drawStart', function(data) {
     var canvOffset = canvas.offset();
     var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
     var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
-    if (document.location.pathname == "/"+ data.slideID) {
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
     	findxy('down', x, y);
     }
 });
@@ -91,7 +91,7 @@ socket.on('drawCoords', function(data) {
     var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
     var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
 
-    if (document.location.pathname == "/"+ data.slideID) {
+    if (document.location.pathname == "/slites/"+ data.slideID +"/") {
 	    findxy('move', x, y);
     }
 });
