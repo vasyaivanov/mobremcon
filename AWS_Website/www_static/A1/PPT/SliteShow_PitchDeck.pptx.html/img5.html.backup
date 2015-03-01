@@ -13,15 +13,17 @@
 </head>
 <body>
 <center>
-	<div class="title">PROBLEMS</div>
+	<div class="title">SOLUTION</div>
 	<div class="slideBody">
-		<ul>				
-				<li>Too many different tools are required for (remote) presentation</li>
+		<img src="../img/SLITE_LOGO.gif" width=100px/>
+		<ul>
+				<li>Powerpoint meets Facebook meets Skype meets Web 2.0</li>
+				<li>In-browser remote presentation platform</li>
 				<ul>
-					<li>Present, create, store, connect to remote participants, demo, take notes, follow up, repeat</li>
+					<li>Web Portal for live presentation, discussion and video communication inside presentation</li>
+					<li>Remote Control iPhone and Android app </li>
+					<li>Simple API for embedding into other products </li>
 				</ul>
-				<li>Non-tech savvy users (majority of population) are unable to use remote presentations</li>
-				<li>No “buy” option for companies who need to embed remote presentation functionality in their products</li>
 		      	<!--<ul style='font-size:30px;'>
 		      		<li>Commenting, Interactive, Sharing</li>
 		      	</ul>-->
