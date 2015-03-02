@@ -4,36 +4,11 @@
 <head>
   <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
   <title>Slite: Pain Points</title>
-  <link rel="stylesheet" type="text.css" href="./css/slide.css">
-  <style>
-	li {
-		padding-bottom: 20px;
-	}
-  </style>
 </head>
-<body>
-<center>
-	<div class="title">SOLUTION</div>
-	<div class="slideBody">
-		<img src="../img/SLITE_LOGO.gif" width=100px/>
-		<ul>
-				<li>Powerpoint meets Facebook meets Skype meets Web 2.0</li>
-				<li>In-browser remote presentation platform</li>
-				<ul>
-					<li>Web Portal for live presentation, discussion and video communication inside presentation</li>
-					<li>Remote Control iPhone and Android app </li>
-					<li>Simple API for embedding into other products </li>
-				</ul>
-		      	<!--<ul style='font-size:30px;'>
-		      		<li>Commenting, Interactive, Sharing</li>
-		      	</ul>-->
-				<!--<ul>
-			      	<li>15% lost on setup instead of content</li>
-			      	<li><span style='font-size:30px'><b>$11 billion annually</b> in US loss ONLY on setup issues</span></li>
-			      	<li>A year of your life (avg) is wasted in unproductive meetings</li>
-			      </ul>-->
-		</ul>
-	</div>
-</center>
+<body style='
+    position: absolute;
+    height: 100%;
+    width: 100%'>
+		<iframe style="overflow:hidden" height="100%" width="100%" src="http://www.slite.us"></iframe>
 </body>
 </html>
