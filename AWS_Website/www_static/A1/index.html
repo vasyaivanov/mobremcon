@@ -194,7 +194,7 @@
 			
 			// remove the video window on closing the panel
 			var videosContainer = document.getElementById('videos-container');
-			videosContainer.removeChild(videosContainer.firstChild);
+			if(videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
 			
 			isVideoOn = false;
 		}		
