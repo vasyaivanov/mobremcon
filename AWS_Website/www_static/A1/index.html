@@ -99,7 +99,24 @@
 
 	function showHideComments(){
 		$("#comments").slideToggle();
+		var label = $("#chatOpenCloseLabel");
+		if(label.html() == "Open"){
+			$("#chatOpenCloseLabel").html("Close");
+		}else{
+			$("#chatOpenCloseLabel").html("Open");
+		}
 	}
+	
+	function showHidePersonalNotes(){
+		$("#personalNotes").slideToggle();
+		var label = $("#personalNotesOpenCloseLabel");
+		if(label.html() == "Open"){
+			$("#personalNotesOpenCloseLabel").html("Close");
+		}else{
+			$("#personalNotesOpenCloseLabel").html("Open");
+		}
+	}
+	
 	
 	var isMenuOn = false;
 	function showHideMenu(){
@@ -134,7 +151,7 @@
 		return (helpShownCookie != "true");
 	}
 	
-	var explanatorsTurnedOff = false;
+	var explanatorsTurnedOff = true;
 	function showHideExplanators(){
 		if( isMobile() ){
 			$('.startTemporaryPopup').fadeOut( 0 );
@@ -179,7 +196,14 @@
 			videosContainer.removeChild(videosContainer.firstChild);
 			
 			isVideoOn = false;
-		}	
+		}		
+		
+		var label = $("#videoChatOpenCloseLabel");
+		if(label.html() == "Open"){
+			$("#videoChatOpenCloseLabel").html("Close");
+		}else{
+			$("#videoChatOpenCloseLabel").html("Open");
+		}
 		
 		$("#videochat").slideToggle();
 		/*
@@ -433,11 +457,80 @@
 	    #comments{
 	    	position: absolute;
 	    	bottom: 0px;
-			right: 0px
-	    	width: 100%;
+			left: 0px;
+	    	width: 50%;
 	    	height: 500px;
 	    	display: none;
 	    }
+
+	    #personalNotes{
+	    	position: absolute;
+	    	bottom: 0px;
+			right: 0px;
+	    	display: none;			
+			width: 50%;
+			border-style: solid;
+			border-width: 1px;
+			border-color: lightblue;
+			right: 0px;
+	    	height: 500px;			
+			
+			background-image:  -webkit-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -webkit-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -webkit-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -webkit-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+			background-image:  -moz-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -moz-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -moz-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -moz-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+			background-image:  -ms-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -ms-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -ms-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -ms-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+			background-image:  -o-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -o-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -o-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -o-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+			background-image:  linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
+			background-size: 1px, 1px, auto, auto 20px;
+			background-repeat: repeat-y, repeat-y, no-repeat, repeat;
+			background-position: 90% 0px, 10% 0px, 0px 0px, 0px 0px;
+		}
+
+		.paper {
+			margin: 0;
+			display: block;
+			font: 10pt Arial, sans-serif;    
+			line-height: 20px;
+			padding-top: 50px;
+			padding-left: 10.5%;
+			padding-right: 10.5%;
+			text-align: justify;
+		}
+		.paper:first-line {
+			font: 20pt Arial, sans-serif;
+			line-height: 33px;
+			vertical-align: baseline;
+		}
+		.paper:after {    
+			content: '';
+			display: block;
+			width: 20px;
+			height: 20px;
+			border-radius: 10px;
+			position: absolute;
+			background: rgba(255,255,255,1);
+			top: 40px;
+			left: 2%;
+			z-index: 10;
+			-webkit-box-shadow: 
+				inset 2px 2px 5px rgba(125,125,125,1),  
+				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),  
+				2px 90.1em 5px rgba(255,255,255,1), 0px 90em rgba(125,125,125,.5),
+				2px 130.1em 5px rgba(255,255,255,1), 0px 130em rgba(125,125,125,.25);
+			-moz-box-shadow: 
+				inset 2px 2px 5px rgba(125,125,125,1),  
+				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),  
+				2px 90.1em 5px rgba(255,255,255,1), 0px 90em rgba(125,125,125,.5),
+				2px 130.1em 5px rgba(255,255,255,1), 0px 130em rgba(125,125,125,.25);
+			box-shadow: 
+				inset 2px 2px 5px rgba(125,125,125,1),  
+				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),  
+				2px 90.1em 5px rgba(255,255,255,1), 0px 90em rgba(125,125,125,.5),
+				2px 130.1em 5px rgba(255,255,255,1), 0px 130em rgba(125,125,125,.25);
+		}
+
+		.paper:focus {
+			outline: none;
+		}
 
 	    #commentsPanel{
 	    	position: fixed;
@@ -631,6 +724,15 @@
 
   	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
 
+	<div id="personalNotes">
+	<p class="paper" contenteditable>
+		<br>
+		Need to follow up with Kevin Kraus<br>
+		Research remote mobile presentation on web<br>
+		Invest in Slite<br>
+	</p>
+	</div>
+	
 	<div id="comments">
 			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5434a641072d9(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5434a641072d9"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5434a641072d9=document.createElement('script');fcs_5434a641072d9.type="text/javascript";fcs_5434a641072d9.src=ajaxpath_5434a641072d9("http://www.freecommentscript.com/GetComments2.php?p=5434a641072d9&s=&Size=10#!5434a641072d9");setTimeout("document.getElementById('fcs_div_5434a641072d9').appendChild(fcs_5434a641072d9)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
 	</div>
@@ -856,8 +958,10 @@
 			<li><a href="#"></a>
 				<ul class="menuSubmenu">
 				  <li><a href="http://www.slite.us">&#8962; Home</a></li>
-				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; Open Wall/Chat</a></li>
-				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; Open Video Chat</a></li>
+				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; <span id='chatOpenCloseLabel'>Open</span> Chat</a></li>
+				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes">&#128247; <span id='personalNotesOpenCloseLabel'>Open</span> Personal Notes</a></li>
+				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; <span id='videoChatOpenCloseLabel'>Open</span> Video Chat</a></li>
+				  
 				  <li><a href="javascript:showHideExplanators()" id="menuOpenMenu">? Help</a></li>
 				</ul>
 			</li>
