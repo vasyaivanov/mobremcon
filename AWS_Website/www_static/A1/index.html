@@ -99,6 +99,7 @@
 
 	function showHideComments(){
 		$("#comments").slideToggle();
+		$("#comments").css('overflow','scroll');
 		var label = $("#chatOpenCloseLabel");
 		if(label.html() == "Open"){
 			$("#chatOpenCloseLabel").html("Close");
