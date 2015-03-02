@@ -184,13 +184,14 @@
 			isVideoOn = true;			
 			
 			//reduce main window
-			$(".rsContainer").animate({"width":"80%"},300);
+			//$(".rsContainer").animate({"width":"80%"},300);
 			$(".rsContainer").css("float","right");
+			$(".rsContainer").css({"width":"80%", "clear":"both"});
 			hideClickAllow();
 		}else{
 			//put main window back to full size	
-			$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-			//$(".rsContainer").css({"width":"100%", "clear":"both"});
+			//$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
+			$(".rsContainer").css({"width":"100%", "clear":"both"});
 			
 			// remove the video window on closing the panel
 			var videosContainer = document.getElementById('videos-container');
