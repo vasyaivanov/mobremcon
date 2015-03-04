@@ -44,3 +44,4 @@ AWS_Website/slites
 AWS_Website/old_slites
 expressLogFile.log
 BACKEND/UPLOADS/
+BACKEND/FRONTEND/RemoteControl.xcodeproj/project.pbxproj
