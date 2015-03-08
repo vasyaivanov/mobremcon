@@ -27,6 +27,7 @@ $(document).ready(function(){
 	    $(".overlay").remove();
 	    $('body').append('<div class="overlay"><div class="upload-text">Converting to HTML...<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
     });
+    
 
     // Do something when a file upload fails:
     siofu.addEventListener("error", function(event){
@@ -36,11 +37,17 @@ $(document).ready(function(){
 	    setTimeout(function(){ window.location = window.location; }, 10000); // reload after 10 sec
     });
     
+    socket.on("uploadProgress", function (data) {
+        console.log("Upload progress: " + data.procentage + '%');
+        $(".overlay").remove();
+        $('body').append('<div class="overlay"><div class="upload-text">Converting to HTML, slide:' + data.slide + ' Progress:' + data.procentage + '%<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
+    });
+
     socket.on('slitePrepared', function (data) {
         console.log('File converted: ' + JSON.stringify(data));
  	    $(".overlay").remove();
 	    $('body').append('<div class="overlay"><div class="upload-text">Converted successfully!<br>YOU WILL BE FORWARDED TO THE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
-	    setTimeout(function(){ window.location = window.location + data.hash; }, 3000); // forward after 3 sec
+	    setTimeout(function(){ window.location = window.location + data.hash; }, 1000); // forward after 1 sec
     });
 
     socket.on('sliteConversionError', function (data) {
