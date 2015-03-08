@@ -6,12 +6,12 @@ var url = require('url')
   , prepare_slite = require('./prepare_slite.js')
   , path = require('path')
   , watchr = require('watchr')
+  , ppt = require('ppt')
   , officeParser = require("./office-parser")
   , xml = '/docProps/app.xml'
   , sliteExt = '.jpg'
   , numRegExp = /\d+\./
   , slideRegExp = new RegExp('^img\\d+' + sliteExt + '$');
-
 
 var www_dir, slitesDir, staticDir, slitesReg;
 exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, callback){
@@ -135,27 +135,42 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                     var curSlideRepeats = 0;
 
                     console.log('PARSING: ' + uploadFullFileName);
-                    officeParser.readFile(uploadFullFileName, xml, function (err, data) {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            //console.log('Parsing complete, Object:');
-                            //console.log(data);
-                            try {
-                                numSlides = parseInt(data['Properties']['Slides'][0]);
-                                console.log('PARSED NUM SLIDES: ' + numSlides);
-                            } catch (err) {
-                                console.error(err);
-                            }
-                        }
-                        officeParser.deleteXML(uploadFullFileName, function (err) {
+                    if (extention === '.ppt') {
+                        var opts = {
+                            //WTF: 1,
+                            //dump: 1
+                        };
+                        
+                        var w = ppt.readFile(uploadFullFileName, opts);
+                        //console.log('PPT:');
+                        //console.log(w);
+                        numSlides = w.slides.length;
+                        //console.log(ppt.utils.to_text(w));//.join("\n"));
+                    } else {
+                        officeParser.readFile(uploadFullFileName, xml, function (err, data) {
                             if (err) {
                                 console.error(err);
                             } else {
-                                console.log('XML files deleted');
+                                //console.log('Parsing complete, Object:');
+                                //console.log(data);
+                                try {
+                                    numSlides = parseInt(data['Properties']['Slides'][0]);
+                                } catch (err) {
+                                    console.error(err);
+                                }
                             }
+                            officeParser.deleteXML(uploadFullFileName, function (err) {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log('XML files deleted');
+                                }
+                            });
                         });
-                    });
+                    }
+                    if (numSlides > 0) {
+                        console.log('PARSED NUM SLIDES: ' + numSlides);
+                    }
 
 
                     // WATCHER
