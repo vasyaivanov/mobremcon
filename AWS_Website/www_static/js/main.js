@@ -39,8 +39,13 @@ $(document).ready(function(){
     
     socket.on("uploadProgress", function (data) {
         console.log("Upload progress: " + data.procentage + '%');
+        var msg = '<div class="overlay"><div class="upload-text">Converting to HTML, slide:' + data.slide;
+        if (data.procentage > 0) {
+            msg += ' Progress:' + data.procentage + '%'
+        }
+        msg += '<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>';
         $(".overlay").remove();
-        $('body').append('<div class="overlay"><div class="upload-text">Converting to HTML, slide:' + data.slide + ' Progress:' + data.procentage + '%<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
+        $('body').append(msg);
     });
 
     socket.on('slitePrepared', function (data) {

@@ -3,15 +3,15 @@ var url = require('url')
   , cheerio = require('cheerio')
   , exec = require('child_process').exec
   , SocketIOFileUploadServer = require("socketio-file-upload")
-  , prepare_slite = require('./prepare_slite.js')
   , path = require('path')
   , watchr = require('watchr')
   , ppt = require('ppt')
+  , prepare_slite = require('./prepare_slite.js')
   , officeParser = require("./office-parser")
-  , xml = '/docProps/app.xml'
-  , sliteExt = '.jpg'
-  , numRegExp = /\d+\./
-  , slideRegExp = new RegExp('^img\\d+' + sliteExt + '$');
+  , XML = '/docProps/app.xml'
+  , SLITE_EXT = '.jpg'
+  , NUM_REG_EXP = /\d+\./
+  , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$');
 
 var www_dir, slitesDir, staticDir, slitesReg;
 exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, callback){
@@ -145,9 +145,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         //console.log('PPT:');
                         //console.log(w);
                         numSlides = w.slides.length;
+                        console.log('PARSED NUM SLIDES: ' + numSlides);
                         //console.log(ppt.utils.to_text(w));//.join("\n"));
                     } else {
-                        officeParser.readFile(uploadFullFileName, xml, function (err, data) {
+                        officeParser.readFile(uploadFullFileName, XML, function (err, data) {
                             if (err) {
                                 console.error(err);
                             } else {
@@ -155,6 +156,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                                 //console.log(data);
                                 try {
                                     numSlides = parseInt(data['Properties']['Slides'][0]);
+                                    console.log('PARSED NUM SLIDES: ' + numSlides);
                                 } catch (err) {
                                     console.error(err);
                                 }
@@ -168,18 +170,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                             });
                         });
                     }
-                    if (numSlides > 0) {
-                        console.log('PARSED NUM SLIDES: ' + numSlides);
-                    }
-
 
                     // WATCHER
                     //console.log('Watching hash folder:' + event.file.pathName);
                     fs.watch(hashDir, function (event, filename) {
                         //var l = 'EVENT: ' + event;
                         if (filename) {
-                            if (event === 'change' && filename.match(slideRegExp)) {
-                                var num = parseInt(numRegExp.exec(filename), 10);
+                            if (event === 'change' && filename.match(SLIDE_REG_EXP)) {
+                                var num = parseInt(NUM_REG_EXP.exec(filename), 10);
                                 if (num > curSlide) {
                                     curSlide = num;
                                     curSlideRepeats = 0;
@@ -253,7 +251,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                                         // characters 3-5 of "img14.html" is "14", the number of slides
                                         var lastSliteFile = $('a').next().attr('href');
                                         console.log('lastSliteFile: ' + lastSliteFile);
-                                        var lastFileName = numRegExp.exec(lastSliteFile);
+                                        var lastFileName = NUM_REG_EXP.exec(lastSliteFile);
                                         try {
                                             numSlides = parseInt(lastFileName, 10) + 1;
                                         } catch (err) {

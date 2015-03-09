@@ -17,7 +17,7 @@ var express = require('express')
   , appPort = 8081
   , ioPort = 1337;
 
-var app = express();               
+var app = express();
 module.exports.app = app;
 
 mongoose.connect('localhost', 'test');
@@ -102,8 +102,8 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'}); //use {flags: 'w'} to open in write mode
 
-// find path www_dir to index.html							
-var www_static_dir = 'www_static';					
+// find path www_dir to index.html
+var www_static_dir = 'www_static';
 var indexHtml = 'index.html';
 var awsDir = '/home/ec2-user/www/';
 var localDir = __dirname + "/../";
@@ -114,9 +114,9 @@ if (fs.existsSync(path.join(localDir, www_static_dir, indexHtml))) {
     www_dir = awsDir;
 }
 www_dir = path.normalize(www_dir);
-console.log('www_dir: ' + www_dir);						
-					
-// hash redirection											
+console.log('www_dir: ' + www_dir);
+
+// hash redirection
 var slitesDir = "slites";
 var slitesReg = "[0-9a-zA-Z]{4}";
 
@@ -126,12 +126,12 @@ app.set('view engine', 'ejs');//'html'
 app.set('views', www_dir);
 app.engine('.html', require('ejs').renderFile);
 app.set("view options", {layout: false});
-app.use(logger('dev', { stream: expressLogFile }));                             
-app.use(cookieParser());                                                        
-app.use(bodyParser.json());                                                     
-app.use(bodyParser.urlencoded({ extended: true }));                             
-app.use(methodOverride());                                                      
-app.use(session({                                                               
+app.use(logger('dev', { stream: expressLogFile }));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(methodOverride());
+app.use(session({
     secret: 'abrakadabra',
     resave: false,
     saveUninitialized: false
@@ -149,7 +149,7 @@ app.use(function (req, res, next) {
     if (match) {                                                        // if hash found in url
         if (req.url[req.url.length - 1] === '/') {
             req.url = req.url.slice(0, -1);
-            //console.log("removed trailing slash");  
+            //console.log("removed trailing slash");
         }
         //console.log('URL: "' + req.url + '"');
         var slashPos = req.url.indexOf('/', 1);
@@ -164,10 +164,10 @@ app.use(function (req, res, next) {
         //console.log('hash: ' + hash);
         //console.log('afterHash: ' + afterHash);
 
-        if (afterHash === '' || 
+        if (afterHash === '' ||
             afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
-            var indexPathname = path.join(wwwSlites, 
-                                          hash, 
+            var indexPathname = path.join(wwwSlites,
+                                          hash,
                                           'index.html');                // www/slites/hash/index.html
             //console.log('RENDERING HTML: ' + indexPathname);
             res.render(indexPathname);
@@ -176,14 +176,14 @@ app.use(function (req, res, next) {
             var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
             var jpgOptions = { lastModified: true, maxAge: 0 };
             if (extTsPos !== -1) {
-                afterHash = afterHash.substring(0, extTsPos + 4); 
+                afterHash = afterHash.substring(0, extTsPos + 4);
                 //console.log('ts-truncated jpg: ' + afterHash);
                 jpgOptions.lastModified = false;
             }
 
             var jpgPathname = path.join(wwwSlites, hash, afterHash);    // www/slites/hash/img*.jpg
             //console.log('filePathname: ' + jpgPathname);
-            res.sendFile(jpgPathname, jpgOptions, function (err) {      
+            res.sendFile(jpgPathname, jpgOptions, function (err) {
                 if (err) {
                     console.log(err + ' sending file: ' + jpgPathname);
                 }
@@ -191,7 +191,7 @@ app.use(function (req, res, next) {
         } else {                                                        // all other files from www_static folder
             //console.log('file: ' + afterHash);
             var fileOptions = { lastModified: true, maxAge: 0, root: path.join(www_dir, www_static_dir) };
-            
+
             var filePathname = path.normalize(afterHash);
             //console.log('filePathname: ' + filePathname);
             res.sendFile(filePathname, fileOptions, function (err) {
@@ -225,7 +225,7 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
                 'x-sent': true
             }
         };
-        
+
         res.sendFile(path.join(www_dir, www_static_dir, '/js/socket.io-1.3.4.js'), options, function (err) {
             if (err) {
                 console.log(err);
@@ -240,11 +240,11 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
 
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
-  //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);               
+  //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
-  res.render(path.join(www_dir, www_static_dir, indexHtml), { user: req.user });				
+  res.render(path.join(www_dir, www_static_dir, indexHtml), { user: req.user });
 });
 
 router.get('/account', ensureAuthenticated, function (req, res){
@@ -300,7 +300,7 @@ app.use(express.static(path.join(www_dir, www_static_dir)));
 
 // ERROR HANDLING
 // custom 404 page
-app.use(function (req, res) {                                                   
+app.use(function (req, res) {
     console.log('404: ' + req.url);
     res.type('text/html');
     res.status(404);
@@ -311,7 +311,7 @@ app.use(function (req, res) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {                                     
+    app.use(function (err, req, res, next) {
         console.error(err.stack);
         res.status(err.status || 500);
         res.type('text/html');
@@ -321,7 +321,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function (err, req, res, next) {                                        
+app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.type('text/html');
     res.send('<h1>500 - Server Error</h1>');

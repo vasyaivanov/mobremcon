@@ -2,20 +2,21 @@ var OfficeParser = (function () {
 
     var fs     = require("fs-extra"),
         xml2js = require("xml2js"),
-        parser = xml2js.Parser({ xmlns: "w" }),
+        parser = xml2js.Parser({ xmlns: "w" }),//
         zip    = require("adm-zip"),
-        path   = require("path");
+        path   = require("path"),
+        wrench = require('wrench');
 
 
-  var EXTRACT_FOLDER = "./xml",
-      ext            = ['.docx', '.xlsx', '.pptx'];
+  var extractFolder = "./xml",
+      EXT            = ['.docx', '.xlsx', '.pptx'];
     
     function setExtractFolder(v) { 
-        EXTRACT_FOLDER = v;
+        extractFolder = v;
     };
     
     function getExtractFolder() {
-        return EXTRACT_FOLDER;
+        return extractFolder;
     };
 
 
@@ -35,10 +36,10 @@ var OfficeParser = (function () {
                         //console.log(e.entryName);
                     //});
                     var dir = path.dirname(file);
-                    var exrtactFolder = path.join(dir, EXTRACT_FOLDER);
+                    var exrtactFolder = path.join(dir, extractFolder);
                     //console.log('extracting to folder: ' + exrtactFolder);
                     zipFile.extractAllTo(exrtactFolder, true);
-                    var rawXmlPath = path.join(dir, EXTRACT_FOLDER, xml);
+                    var rawXmlPath = path.join(dir, extractFolder, xml);
                     //console.log('extracted All, starting parsing xml: ' + rawXmlPath);
                     parseDocument(rawXmlPath, next);
                     //console.log('exiting parseDocument(), file: ' + file);
@@ -52,9 +53,19 @@ var OfficeParser = (function () {
     
     function deleteXML(file, next){
         var dir = path.dirname(file);
-        var deleteFolder = path.join(dir, EXTRACT_FOLDER);
+        var deleteFolder = path.join(dir, extractFolder);
         //console.log('Deleting XML folder: ' + deleteFolder);
-        fs.remove(deleteFolder, next);
+        //fs.remove(deleteFolder, next);
+        var failSilent = false;
+        wrench.rmdirRecursive(deleteFolder, failSilent, function (err) {
+            if (err) {
+                //console.error(err);
+                next(err);
+            } else {
+                //console.log('xml deleted');
+                next(null);
+            }
+        });
     };
 
     //parse content xml document
@@ -75,6 +86,7 @@ var OfficeParser = (function () {
                             //console.dir(result);
                             next(null, result);
                         });
+                        //console.log(Object.getOwnPropertyNames(parser));
                     }
                 });
             } else {
@@ -90,8 +102,8 @@ var OfficeParser = (function () {
         //console.log('HasSupportedExtension(' + file + ')');
         var extension = path.extname(file);
         //console.log('EXTENSION: ' + extension);
-        for (var key in ext) {
-           if (ext[key] === extension) {
+        for (var key in EXT) {
+           if (EXT[key] === extension) {
                 return true;
             }
         }
