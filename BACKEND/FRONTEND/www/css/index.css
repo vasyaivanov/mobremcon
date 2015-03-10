@@ -56,7 +56,7 @@ input[type=text] {
 
 #theIframe {
 position: absolute;
-width: 268%; height: 270%;
+width: 268%; height: 250%;
 z-index: 0;
 left: 10%;
 }
@@ -148,8 +148,8 @@ left: 10%;
 
 .buttons {
     display: inline-block;
-    height: 60px;
-    width: 60px;
+    height: 80px;
+    width: 80px;
 }
 
 .buttons_div {
