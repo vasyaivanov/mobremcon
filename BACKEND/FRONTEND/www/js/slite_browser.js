@@ -23,10 +23,10 @@ function printSpeechResult(resultObject){
     socket.emit('cc',{my: resultObject});
     console.log(resultObject.indexOf("NEXT"));
     if (resultObject.indexOf("NEXT") > -1) {
-       // nextSlide();
+       nextSlide();
     }
     else if (resultObject.indexOf("PREVIOUS") > -1) {
-       // prevSlide();
+       prevSlide();
     }
 };
 
