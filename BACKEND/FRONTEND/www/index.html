@@ -1,8 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <meta charset="utf-8" content="user-scalable=no">
-        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no" />
+        <meta charset="utf-8" content="user-scalable=yes">
             <title>SENDER</title>
             <link rel="stylesheet" type="text/css" href="./css/index.css">
                 <script src="http://slite-prod.elasticbeanstalk.com:1337/socket.io/socket.io.js"></script>
@@ -19,9 +18,9 @@
                 <script>
                     var socket = io.connect('http://slite-prod.elasticbeanstalk.com:1337');
                     //var socket = io.connect('http://localhost:1337');
-                </script>
+                    </script>
                 
-    </head>
+                </head>
     <body onload="startup()">
         
         <div class="UI topRow leftCol" id="menu" style="display: none">&nbsp;</div>
