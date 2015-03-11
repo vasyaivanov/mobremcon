@@ -13,6 +13,20 @@ var url = require('url')
   , NUM_REG_EXP = /\d+\./
   , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$');
 
+var start = process.hrtime();
+
+function resetElapsedTime() {
+    start = process.hrtime();
+}
+
+function elapsedTime(note) { 
+    var precision = 0; // 0 decimal places
+    var elapsed = process.hrtime(start)[1] / 1000000;
+                                                           // divide by a million to get nano to milliseconds
+    console.log(note + ' in: ' + process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms"); // print message + time
+    start = process.hrtime(); // reset the timer
+}
+
 var www_dir, slitesDir, staticDir, slitesReg;
 exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, callback){
     www_dir = new_dir;
@@ -43,12 +57,58 @@ var clients = [];
 
 console.log('in remote control');
 
+function parseFile(parsedFile, next) {
+    var parsedNumSlides = 0;
+    //console.log('PARSING: ' + parsedFile);
+    var parsedExt = require('path').extname(parsedFile);
+    //console.log('parsedExt=' + parsedExt);
+    if (parsedExt === '.ppt') {
+        var opts = {
+            //WTF: 1,
+            //dump: 1
+        };
+        
+        try {
+            var w = ppt.readFile(parsedFile, opts);
+            //console.log('PPT:');
+            //console.log(w);
+            parsedNumSlides = w.slides.length;
+            //console.log(ppt.utils.to_text(w));//.join("\n"));
+            next(null, parsedNumSlides);
+        } catch (err) {
+            next(err, -1);
+        }
+    } else {
+        //console.log('starting officeParser...');
+        officeParser.readFile(parsedFile, XML, function (err, data) {
+            if (err) {
+                next(err, -1);
+            } else {
+                //console.log('Parsing complete, Object:');
+                //console.log(data);
+                try {
+                    parsedNumSlides = parseInt(data['Properties']['Slides'][0]);
+                    next(null, parsedNumSlides);
+                } catch (err) {
+                    next(err, -1);
+                }
+                officeParser.deleteXML(parsedFile, function (err) {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        console.log('XML files deleted');
+                    }
+                });
+            }
+        });
+    }
+}
+
 module.parent.exports.io.sockets.on('connection', function (socket) {
     if (pollAnswerArray.length > 0) {
         pollUpdate();
     }
     console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
-    //console.log(socket);
     socket.on('disconnect', function () {
         console.log('DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
     });
@@ -59,7 +119,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     var imageCount = 1;
     var slite;
 
-    sliteError = function (err){
+    function sliteError(err) {
         console.error('ERROR WHILE UPLOADING/CONVERTING slite: ' + err);
         if (typeof slite !== 'undefined') {
             slite.deleteHash(true, function () {
@@ -68,25 +128,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         }
         socket.emit("sliteConversionError");
     }
-
+    
     uploader.on("start", function (event) {
+        resetElapsedTime();
         console.log("UPLOAD started  file: " + event.file.name);
      });
 
     uploader.on("progress", function (event) {
         console.log("UPLOAD progress file: " + event.file.pathName);
-
-        //console.log('Upload folder watching: ', event.file.pathName);
-        //fs.watch(uploader.dir, function (event, filename) {
-        //    var l = 'UPLOAD EVENT: ' + event;
-        //    if (filename) {
-        //        l += ' ' + filename;
-        //        var stats = fs.statSync(event.file.pathName);
-        //        var fileSizeInBytes = stats["size"];
-        //        l += ' ' + fileSizeInBytes;
-        //    }
-        //    console.log(l);
-        //});
     });
 
     uploader.on("error", function (event) {
@@ -95,12 +144,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
      });
 
     uploader.on("complete", function (event) {
-        console.log("UPLOAD complete file: " + event.file.pathName);
+        elapsedTime("UPLOAD complete file: " + event.file.pathName);
 
         var extention = path.extname(event.file.pathName);
         var fullFileName = event.file.pathName;
-        //fs.unwatchFile(uploader.dir);
-        //console.log('Folder: ' + event.file.pathName + ' unwatched');
 
         slite = new prepare_slite.Slite(socket, function (err) {
             if (err) {
@@ -116,6 +163,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             var uploadFileName = uploadFileTitle + extention;
             var hashDir = path.join(www_dir, slitesDir, slite.hashValue);
             var uploadFullFileName = path.join(hashDir, uploadFileName);
+            
+            resetElapsedTime();
+            var conversionStartTime = start;
 
             fs.rename(fullFileName, uploadFullFileName, function (err) {
                if (err) {
@@ -129,81 +179,88 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                     return;
                 } else {
                     console.log('RENAMED file: ' + fullFileName + ' to:' + uploadFullFileName);
+                    
+                    var numSlides = 0,
+                        curSlide = -1,
+                        curSlideRepeats = 0,
+                        parseDone = false,
+                        readDone  = false,
+                        finalDone = false;
+                    
+                    function reportProgress(msg, noTime) {
+                        var PARSE_COEFF = 1.0,
+                            READ_COEFF  = 1.6
+                            FINAL_COEFF = 1.3;
+                            proc        = -1;
 
-                    var numSlides = 0;
-                    var curSlide = -1;
-                    var curSlideRepeats = 0;
-
+                        if (numSlides > 0) {
+                            var sum = 0;
+                            sum += parseDone ? PARSE_COEFF : 0;
+                            sum +=  readDone ?  READ_COEFF : 0;
+                            sum += finalDone ? FINAL_COEFF : 0;
+                            sum += (curSlide + 1);
+                            var max = numSlides + PARSE_COEFF + READ_COEFF + FINAL_COEFF;
+                            //console.log('sum=' + sum + ' max=' + max);
+                            proc += (100 * sum / max) + 0.5;
+                            proc = proc.toFixed(0);//Math.round
+                            msg += '   PROGRESS: ' + proc + '%';
+                        }
+                        socket.emit("uploadProgress", { slide: curSlide, slides: numSlides, procentage: proc, message: msg });//, repeats: curSlideRepeats});
+                        if (noTime) {
+                            console.log(msg);
+                        } else {
+                            elapsedTime(msg);
+                        }
+                    };
+                    
+                    reportProgress('STARTED conversion', true); //     display 0%
+    
                     console.log('PARSING: ' + uploadFullFileName);
-                    if (extention === '.ppt') {
-                        var opts = {
-                            //WTF: 1,
-                            //dump: 1
-                        };
-                        
-                        var w = ppt.readFile(uploadFullFileName, opts);
-                        //console.log('PPT:');
-                        //console.log(w);
-                        numSlides = w.slides.length;
-                        console.log('PARSED NUM SLIDES: ' + numSlides);
-                        //console.log(ppt.utils.to_text(w));//.join("\n"));
-                    } else {
-                        officeParser.readFile(uploadFullFileName, XML, function (err, data) {
-                            if (err) {
-                                console.error(err);
-                            } else {
-                                //console.log('Parsing complete, Object:');
-                                //console.log(data);
-                                try {
-                                    numSlides = parseInt(data['Properties']['Slides'][0]);
-                                    console.log('PARSED NUM SLIDES: ' + numSlides);
-                                } catch (err) {
-                                    console.error(err);
-                                }
-                            }
-                            officeParser.deleteXML(uploadFullFileName, function (err) {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log('XML files deleted');
-                                }
-                            });
-                        });
-                    }
+                    parseFile(uploadFullFileName, function (err, data) {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            numSlides = data;
+                            parseDone = true;
+                            reportProgress('PARSED NUM SLIDES: ' + numSlides);
+                        }
+                    });
 
                     // WATCHER
-                    //console.log('Watching hash folder:' + event.file.pathName);
+                    console.log('Watching hash folder:' + uploader.dir);
                     fs.watch(hashDir, function (event, filename) {
-                        //var l = 'EVENT: ' + event;
+                        var l = 'EVENT: ' + event;
                         if (filename) {
-                            if (event === 'change' && filename.match(SLIDE_REG_EXP)) {
-                                var num = parseInt(NUM_REG_EXP.exec(filename), 10);
-                                if (num > curSlide) {
-                                    curSlide = num;
-                                    curSlideRepeats = 0;
-                                    var proc = -1;
-                                } else if (num === curSlide) {
-                                    curSlideRepeats++;
-                                } else {
-                                    console.log("Misplased order of slite upload");
-                                }
-                                var msg = 'UPLOADED SLIDE: ' + num;
-                                if (numSlides > 0) {
-                                    proc = Math.round(100 * ((curSlide + 1) / numSlides));
-                                    msg += '   PROGRESS: ' + proc + '%';//    rep:' + curSlideRepeats;
-                                }
-                                if (curSlideRepeats === 0) {
-                                    socket.emit("uploadProgress", { slide: curSlide, slides: numSlides, procentage: proc });//, repeats: curSlideRepeats});
-                                    console.log(msg);
-                                }
-                            }
-
-                            //l += ' ' + filename;
+                            l += ' ' + filename;
                             //var stats = fs.statSync(path.join(hashDir, filename));
                             //var fileSizeInBytes = stats["size"];
                             //l += ' ' + fileSizeInBytes;
                         }
-//                        console.log(l);
+
+                        if (filename && event === 'change' && filename.match(SLIDE_REG_EXP)) {
+                            var num = parseInt(NUM_REG_EXP.exec(filename), 10);
+                            if (num > curSlide) {
+                                curSlide = num;
+                                curSlideRepeats = 0;
+                            } else if (num === curSlide) {
+                                curSlideRepeats++;
+                            } else {
+                                console.log("Misplased order of slite upload");
+                            }
+                            if (curSlideRepeats === 0) {
+                                reportProgress('UPLOADED SLIDE: ' + num);
+                            }
+                        } else if (event === 'rename' && filename === '.~lock.img0.html#') {
+                            //elapsedTime(l);
+                            readDone = true;
+                            if (curSlideRepeats === 0) {
+                                reportProgress('TEMP html file created');
+                            }
+                            curSlideRepeats++;
+                        }
+                        else {
+                            //console.log(l);
+                        }
                      });
 
                     var conversionFormat = 'html';
@@ -212,7 +269,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                     // CONVERSION
                     //unoconv_cmd = "python " + unoconvPathname + ' -f ' + conversionFormat + ' -o ' + hashDir + ' ' + uploadFullFileName;
                     //unoconv_cmd = "python " + unoconvPathname + ' -e PageRange=1-1' + ' -f ' + conversionFormat + ' -o ' + hashDir + ' ' + uploadFullFileName;                 // milti-platform version
-                    unoconv_cmd = "python " + unoconvPathname + ' -e Width=1600 -e Compression=90%' + ' -f ' + conversionFormat + ' -o ' + hashDir + ' ' + uploadFullFileName;   // milti-platform version
+                    unoconv_cmd = "python " + unoconvPathname + ' -e Width=1280 -e Compression=70%' + ' -f ' + conversionFormat + ' -o ' + hashDir + ' ' + uploadFullFileName;   // milti-platform version
 					//unoconv_cmd = '/opt/libreoffice4.2/program/soffice.bin --headless --convert-to html:impress_html_Export --outdir ' + hashDir + ' ' + uploadFullFileName; // not a mutli-platform version
                     console.log(unoconv_cmd);
 
@@ -223,18 +280,23 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                                 sliteError(err);
                                 return;
                             }
-                            console.log('CONVERTED presentation: ', slite.hashValue);
+                            finalDone = true;
+                            reportProgress('FINAL stage: ' + slite.hashValue);
                             var convertedHtml = path.join(hashDir, uploadFileTitle + '.' + conversionFormat);
 
                             function finish(){
                                 slite.setFilename(hashDir, uploadFileTitle + '.' + conversionFormat, numSlides);
                                 slite.generateHtml(function (err) {
+                                    fs.unwatchFile(hashDir);    // stop watcher
                                     if (err) {
                                         sliteError(err);
                                         return;
                                     }
+                                    elapsedTime("INDEX generated: " + path.join(www_dir, slite.hashValue, 'index.html'));
+                                    start = conversionStartTime;
+                                    elapsedTime("SUCCESS! CONVERTED PRESENTATION");
+
                                     socket.emit("slitePrepared", { dir: slite.dir, hash: slite.hashValue, num_slides: slite.num_slides, fileName: slite.filename });
-                                    fs.unwatchFile(hashDir);    // stop watcher
                                 });
                             };
 

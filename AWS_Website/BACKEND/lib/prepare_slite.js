@@ -138,20 +138,17 @@ Slite.prototype.generateHtml = function (callback) {
     var self = this;
     fs.readFile(path.join(www_dir, staticDir, "A1/index.html"), "utf8", function (err, data) {
         if (err) {
-            console.error('Error reading hash_index.html' + err);
-            callback(err);
+            callback('Error reading hash_index.html' + err);
         } else {
             var indexHtml = 'index.html';
             var data_replaced1 = data.replace("NUM_SLIDES_TEMPLATE", self.num_slides);
             var data_replaced2 = data_replaced1.replace("HASH_TEMPLATE", self.hashValue);
             fs.writeFile(path.join(self.dir, indexHtml), data_replaced2, function (err) {
                 if (err) {
-                    console.error('Error writing ' + indexHtml + ' '  + err);
+                    callback('Error writing ' + indexHtml + ' '  + err);
                 } else {
-                    console.log("INDEX generated: " + path.join(www_dir, self.hashValue, indexHtml));
-                    console.log("SUCCESS!");
+                    callback(null);
                 }
-                callback(err);
             });
         }
     });
