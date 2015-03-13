@@ -7,7 +7,7 @@ var url = require('url')
   , watchr = require('watchr')
   , ppt = require('ppt')
   , prepare_slite = require('./prepare_slite.js')
-  , officeParser = require("./office-parser")
+  , parseFile = require('./num-slides-parser.js')
   , XML = '/docProps/app.xml'
   , SLITE_EXT = '.jpg'
   , NUM_REG_EXP = /\d+\./
@@ -56,53 +56,6 @@ var pollAnswerArray = new Array();
 var clients = [];
 
 console.log('in remote control');
-
-function parseFile(parsedFile, next) {
-    var parsedNumSlides = 0;
-    //console.log('PARSING: ' + parsedFile);
-    var parsedExt = require('path').extname(parsedFile);
-    //console.log('parsedExt=' + parsedExt);
-    if (parsedExt === '.ppt') {
-        var opts = {
-            //WTF: 1,
-            //dump: 1
-        };
-        
-        try {
-            var w = ppt.readFile(parsedFile, opts);
-            //console.log('PPT:');
-            //console.log(w);
-            parsedNumSlides = w.slides.length;
-            //console.log(ppt.utils.to_text(w));//.join("\n"));
-            next(null, parsedNumSlides);
-        } catch (err) {
-            next(err, -1);
-        }
-    } else {
-        //console.log('starting officeParser...');
-        officeParser.readFile(parsedFile, XML, function (err, data) {
-            if (err) {
-                next(err, -1);
-            } else {
-                //console.log('Parsing complete, Object:');
-                //console.log(data);
-                try {
-                    parsedNumSlides = parseInt(data['Properties']['Slides'][0]);
-                    next(null, parsedNumSlides);
-                } catch (err) {
-                    next(err, -1);
-                }
-                officeParser.deleteXML(parsedFile, function (err) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        console.log('XML files deleted');
-                    }
-                });
-            }
-        });
-    }
-}
 
 module.parent.exports.io.sockets.on('connection', function (socket) {
     if (pollAnswerArray.length > 0) {
@@ -201,11 +154,18 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                             sum += (curSlide + 1);
                             var max = numSlides + PARSE_COEFF + READ_COEFF + FINAL_COEFF;
                             //console.log('sum=' + sum + ' max=' + max);
-                            proc += (100 * sum / max) + 0.5;
+                            var frac = (100 * sum / max);
+                            proc = frac + 0.5;
                             proc = proc.toFixed(0);//Math.round
+                            var timeSpent = process.hrtime(conversionStartTime)[1] / 1000000;
                             msg += '   PROGRESS: ' + proc + '%';
                         }
-                        socket.emit("uploadProgress", { slide: curSlide, slides: numSlides, procentage: proc, message: msg });//, repeats: curSlideRepeats});
+                        socket.emit("uploadProgress", { slide:      curSlide+1, 
+                                                        slides:     numSlides, 
+                                                        percentage: proc, 
+                                                        message:    msg, 
+                                                        name:       uploadFileName, 
+                                                        time:       timeSpent });//, repeats: curSlideRepeats});
                         if (noTime) {
                             console.log(msg);
                         } else {
@@ -216,7 +176,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                     reportProgress('STARTED conversion', true); //     display 0%
     
                     console.log('PARSING: ' + uploadFullFileName);
-                    parseFile(uploadFullFileName, function (err, data) {
+                    parseFile(uploadFullFileName, {xml: XML}, function (err, data) {
                         if (err) {
                             console.error(err);
                         } else {
@@ -320,7 +280,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                                             console.error(err);
                                             numSlites = null;
                                         }
-                                        if (isNaN(numSlides)) {
+                                        if (isNaN(
+                                        )) {
                                             console.log("Number of Slides not determined!");
                                             numSlides = 1;
                                         }

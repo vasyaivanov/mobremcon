@@ -1,13 +1,44 @@
 $(document).ready(function(){
     var socket = io.connect(document.location.hostname + ':1337');
+    
+    function FileChosen(event){
+        var files = document.getElementById('uploadPresentation').files;
+        //alert(JSON.stringify(files.item(0).name));
+        //alert(JSON.stringify(files.item(0)));
+        //alert(JSON.stringify(event.target.files[0]));
+        var selectedFile = event.target.files[0];
+        if (selectedFile != "") {
+            FReader = new FileReader();
+            fileName = selectedFile.name;
+            FReader.onload = function (event) {
+                socket.emit('Upload', { 'Name' : fileName, Data : event.target.result });
+                alert('loaded' + fileName);
+            }
+            socket.emit('Start', { 'Name' : fileName, 'Size' : selectedFile.size });
+        }
+        else {
+            alert("Please Select A File");
+            alert('started' + fileName);
+
+        }
+    }
+    
+    //if (window.File && window.FileReader) { //These are the relevant HTML5 objects that we are going to use 
+    //    //document.getElementById('uploadPresentation').addEventListener('click', function () { alert('click');});
+    //    document.getElementById('uploadPresentation').addEventListener('change', FileChosen);
+    //}
+    //else {
+    //    //document.getElementById('UploadArea').innerHTML = "Your Browser Doesn't Support The File API Please Update Your Browser";
+    //    alert("Your Browser Doesn't Support The File API Please Update Your Browser");
+    //}
 
     // Initialize instances:
-    var siofu = new SocketIOFileUpload(socket);
+var siofu = new SocketIOFileUpload(socket);
  
     // Configure the three ways that SocketIOFileUpload can read files:
     //document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
     //siofu.listenOnSubmit(document.getElementById("upload_btn"), document.getElementById("upload_input"));
-    siofu.listenOnInput(document.getElementById("uploadPresentation"));
+siofu.listenOnInput(document.getElementById("uploadPresentation"));
     //siofu.listenOnDrop(document.getElementById("file_drop"));
 
     siofu.addEventListener("choose", function(event){
@@ -38,10 +69,10 @@ $(document).ready(function(){
     });
     
     socket.on("uploadProgress", function (data) {
-        console.log("Upload progress: " + data.procentage + '%');
+        console.log("Upload progress: " + data.percentage + '%');
         var msg = '<div class="overlay"><div class="upload-text">Converting to HTML, slide:' + data.slide;
-        if (data.procentage > 0) {
-            msg += ' Progress:' + data.procentage + '%'
+        if (data.percentage > 0) {
+            msg += ' Progress:' + data.percentage + '%'
         }
         msg += '<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>';
         $(".overlay").remove();
