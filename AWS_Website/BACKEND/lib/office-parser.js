@@ -1,5 +1,3 @@
-var OfficeParser = (function () {
-
     var fs     = require("fs-extra"),
         xml2js = require("xml2js"),
         parser = xml2js.Parser({ xmlns: "w" }),//
@@ -8,61 +6,61 @@ var OfficeParser = (function () {
         wrench = require('wrench');
 
 
-  var extractFolder = "./xml",
-      EXT            = ['.docx', '.xlsx', '.pptx'];
-    
-    function setExtractFolder(v) { 
-        extractFolder = v;
-    };
-    
-    function getExtractFolder() {
-        return extractFolder;
-    };
+  var XML_PATH = "./xml",
+      EXT      = ['.docx', '.xlsx', '.pptx'];
+      DEBUG    = false;
 
 
+var OfficeParser = (function () {
     //reads file and returns of the file
-    var readFile = function (file, xml, next) {
-        //console.log('readFile(' + file + ')');
+    var readFile = function (file, openXml, opt, next) {
+        if (DEBUG) console.log('readFile(' + file + ')');
+        if (!opt.xmlPath) {
+            opt.xmlPath = XML_PATH;
+        }
         //extract content of file, first test for supported extensions
         fs.exists(file, function (exist) {
             if (exist) {
-                //console.log('File: ' + file + ' exists');
+                if (DEBUG) console.log('File: ' + file + ' exists');
                 if (HasSupportedExtension(file)) {
-                    //console.log('File: ' + file + ' has supported extensions');
+                    if (DEBUG) console.log('File: ' + file + ' has supported extensions');
                     var zipFile = new zip(file);
-                    //console.log('unzipped file: ' + file + ', ENTRIES:');
-                    var entries = zipFile.getEntries();
-                    //entries.forEach(function (e) {
-                        //console.log(e.entryName);
-                    //});
+                    if (DEBUG) {
+                        console.log('unzipped file: ' + file + ', ENTRIES:');
+                        var entries = zipFile.getEntries();
+                        entries.forEach(function (e) {
+                            console.log(e.entryName);
+                        });
+                    }
                     var dir = path.dirname(file);
-                    var exrtactFolder = path.join(dir, extractFolder);
-                    //console.log('extracting to folder: ' + exrtactFolder);
-                    zipFile.extractAllTo(exrtactFolder, true);
-                    var rawXmlPath = path.join(dir, extractFolder, xml);
-                    //console.log('extracted All, starting parsing xml: ' + rawXmlPath);
+                    var exrtactFolder = path.join(dir, opt.xmlPath);
+                    if (DEBUG) console.log('extracting to folder: ' + exrtactFolder);
+                    zipFile.extractAllTo(exrtactFolder, true/*overwrite*/);
+                    var rawXmlPath = path.join(dir, opt.xmlPath, openXml);
+                    if (DEBUG) console.log('extracted All, starting parsing xml: ' + rawXmlPath);
                     parseDocument(rawXmlPath, next);
-                    //console.log('exiting parseDocument(), file: ' + file);
+                    if (DEBUG) console.log('exiting parseDocument(), file: ' + file);
+                } else {
+                    next(new Error('Extension not supported'), null);
                 }
             } else {
-                var err = new Error('cannot find file: ' + file);
-                next(err, null);
+                next(new Error('cannot find file: ' + file), null);
             }
         });
     };
     
-    function deleteXML(file, next){
+    function deleteXML(file, xmlPath, next){
         var dir = path.dirname(file);
-        var deleteFolder = path.join(dir, extractFolder);
-        //console.log('Deleting XML folder: ' + deleteFolder);
+        var deleteFolder = path.join(dir, xmlPath);
+        if (DEBUG) console.log('Deleting XML folder: ' + deleteFolder);
         //fs.remove(deleteFolder, next);
         var failSilent = false;
         wrench.rmdirRecursive(deleteFolder, failSilent, function (err) {
             if (err) {
-                //console.error(err);
+                if (DEBUG) console.error('Error while deleting XML: ', err);
                 next(err);
             } else {
-                //console.log('xml deleted');
+                if (DEBUG) console.log('xml deleted');
                 next(null);
             }
         });
@@ -70,20 +68,20 @@ var OfficeParser = (function () {
 
     //parse content xml document
     var parseDocument = function (rel, next) {
-        //console.log('parseDocument(' + rel + ')');
+        if (DEBUG) console.log('parseDocument(' + rel + ')');
         fs.exists(rel, function (exist) {
-            //console.log('exist executed, file: ' + rel);
+            if (DEBUG) console.log('exist executed, file: ' + rel);
             if (exist) {
-                //console.log('Exists, Starting reading File: ' + rel);
+                if (DEBUG) console.log('Exists, Starting reading File: ' + rel);
                 fs.readFile(rel, function (err, data) {
                     if (err) {
                         next(err, null);
                     } else {
-                        //console.log('Started to read file: ', rel);
+                        if (DEBUG) console.log('Started to read file: ', rel);
                         var parser = new xml2js.Parser();
                         parser.parseString(data, function (err, result) {
-                            //console.log('Done parsing, result: ');
-                            //console.dir(result);
+                            if (DEBUG) console.log('Done parsing, result: ');
+                            if (DEBUG) console.dir(result);
                             next(null, result);
                         });
                         //console.log(Object.getOwnPropertyNames(parser));
@@ -99,9 +97,9 @@ var OfficeParser = (function () {
 
     //Utility functions
     var HasSupportedExtension = function (file) {
-        //console.log('HasSupportedExtension(' + file + ')');
+        if (DEBUG) console.log('HasSupportedExtension(' + file + ')');
         var extension = path.extname(file);
-        //console.log('EXTENSION: ' + extension);
+        if (DEBUG) console.log('EXTENSION: ' + extension);
         for (var key in EXT) {
            if (EXT[key] === extension) {
                 return true;
@@ -114,8 +112,6 @@ var OfficeParser = (function () {
      return {
         readFile             : readFile,
         parseDocument        : parseDocument,
-        getExtractFolder     : getExtractFolder,
-        setExtractFolder     : setExtractFolder,
         HasSupportedExtension: HasSupportedExtension,
         deleteXML            : deleteXML
     };

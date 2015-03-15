@@ -5,10 +5,9 @@ var url = require('url')
   , SocketIOFileUploadServer = require("socketio-file-upload")
   , path = require('path')
   , watchr = require('watchr')
-  , ppt = require('ppt')
   , prepare_slite = require('./prepare_slite.js')
   , parseFile = require('./num-slides-parser.js')
-  , XML = '/docProps/app.xml'
+  , XML_PATH = 'xml'
   , SLITE_EXT = '.jpg'
   , NUM_REG_EXP = /\d+\./
   , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$');
@@ -25,6 +24,7 @@ function elapsedTime(note) {
                                                            // divide by a million to get nano to milliseconds
     console.log(note + ' in: ' + process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms"); // print message + time
     start = process.hrtime(); // reset the timer
+    return elapsed;
 }
 
 var www_dir, slitesDir, staticDir, slitesReg;
@@ -133,19 +133,20 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 } else {
                     console.log('RENAMED file: ' + fullFileName + ' to:' + uploadFullFileName);
                     
-                    var numSlides = 0,
-                        curSlide = -1,
+                    var numSlides    = 0,
+                        curSlide     = -1,
                         curSlideRepeats = 0,
-                        parseDone = false,
-                        readDone  = false,
-                        finalDone = false;
+                        parseDone    = false,
+                        readDone     = false,
+                        finalDone    = false,
+                        slideTimeSum = 0,
+                        parseTime, readTime, finalTime, averageSlideTime,
+                        PARSE_COEFF  = 1.4,
+                        READ_COEFF   = 2.5
+                        FINAL_COEFF  = 0.9,
+                        proc         = -1;
                     
                     function reportProgress(msg, noTime) {
-                        var PARSE_COEFF = 1.0,
-                            READ_COEFF  = 1.6
-                            FINAL_COEFF = 1.3;
-                            proc        = -1;
-
                         if (numSlides > 0) {
                             var sum = 0;
                             sum += parseDone ? PARSE_COEFF : 0;
@@ -168,26 +169,27 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                                                         time:       timeSpent });//, repeats: curSlideRepeats});
                         if (noTime) {
                             console.log(msg);
+                            return -1;
                         } else {
-                            elapsedTime(msg);
+                            return elapsedTime(msg);
                         }
                     };
                     
                     reportProgress('STARTED conversion', true); //     display 0%
     
                     console.log('PARSING: ' + uploadFullFileName);
-                    parseFile(uploadFullFileName, {xml: XML}, function (err, data) {
+                    parseFile(uploadFullFileName, { xmlPath: XML_PATH}, function (err, data) {
                         if (err) {
-                            console.error(err);
+                            console.error('Cannot parse: ' + uploadFullFileName + ' ', err);
                         } else {
                             numSlides = data;
                             parseDone = true;
-                            reportProgress('PARSED NUM SLIDES: ' + numSlides);
+                            parseTime = reportProgress('PARSED NUM SLIDES: ' + numSlides);
                         }
                     });
-
+                    
                     // WATCHER
-                    console.log('Watching hash folder:' + uploader.dir);
+                    console.log('Watching hash folder:' + hashDir);
                     fs.watch(hashDir, function (event, filename) {
                         var l = 'EVENT: ' + event;
                         if (filename) {
@@ -208,13 +210,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                                 console.log("Misplased order of slite upload");
                             }
                             if (curSlideRepeats === 0) {
-                                reportProgress('UPLOADED SLIDE: ' + num);
+                                slideTimeSum += reportProgress('UPLOADED SLIDE: ' + num);
                             }
                         } else if (event === 'rename' && filename === '.~lock.img0.html#') {
                             //elapsedTime(l);
                             readDone = true;
                             if (curSlideRepeats === 0) {
-                                reportProgress('TEMP html file created');
+                                readTime = reportProgress('TEMP html file created');
                             }
                             curSlideRepeats++;
                         }
@@ -233,81 +235,81 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 					//unoconv_cmd = '/opt/libreoffice4.2/program/soffice.bin --headless --convert-to html:impress_html_Export --outdir ' + hashDir + ' ' + uploadFullFileName; // not a mutli-platform version
                     console.log(unoconv_cmd);
 
-                    try {
-                        exec(unoconv_cmd, function (err, stdout, stderr) {
-                           if (err !== null) {
-                                console.error('unoconv stderr: ', stderr);
-                                sliteError(err);
-                                return;
-                            }
-                            finalDone = true;
-                            reportProgress('FINAL stage: ' + slite.hashValue);
-                            var convertedHtml = path.join(hashDir, uploadFileTitle + '.' + conversionFormat);
+                    exec(unoconv_cmd, function (err, stdout, stderr) {
+                        if (err !== null) {
+                            console.error('unoconv stderr: ', stderr);
+                            sliteError(err);
+                            return;
+                        }
+                        finalDone = true;
+                        finalTime = reportProgress('FINAL stage: ' + slite.hashValue);
+                        var convertedHtml = path.join(hashDir, uploadFileTitle + '.' + conversionFormat);
 
-                            function finish(){
-                                slite.setFilename(hashDir, uploadFileTitle + '.' + conversionFormat, numSlides);
-                                slite.generateHtml(function (err) {
-                                    fs.unwatchFile(hashDir);    // stop watcher
-                                    if (err) {
-                                        sliteError(err);
-                                        return;
-                                    }
-                                    elapsedTime("INDEX generated: " + path.join(www_dir, slite.hashValue, 'index.html'));
-                                    start = conversionStartTime;
-                                    elapsedTime("SUCCESS! CONVERTED PRESENTATION");
-
-                                    socket.emit("slitePrepared", { dir: slite.dir, hash: slite.hashValue, num_slides: slite.num_slides, fileName: slite.filename });
-                                });
-                            };
-
-                            if (numSlides === 0 || isNaN(numSlides) || !numSlides) {
-                                fs.readFile(convertedHtml, 'utf8', function (err, data) {
-                                    if (err) {
-                                        console.error('Error reading file: ' + err);
-                                        sliteError(err);
-                                        numSlides = 1;
-                                    } else {
-                                        $ = cheerio.load(data); // parse the converted presentation HTML header in order to find out how many slides there is
-                                        // The second link in this HTML file is to the last slide image,
-                                        // like this: <a href="img14.html">
-                                        // characters 3-5 of "img14.html" is "14", the number of slides
-                                        var lastSliteFile = $('a').next().attr('href');
-                                        console.log('lastSliteFile: ' + lastSliteFile);
-                                        var lastFileName = NUM_REG_EXP.exec(lastSliteFile);
-                                        try {
-                                            numSlides = parseInt(lastFileName, 10) + 1;
-                                        } catch (err) {
-                                            console.error(err);
-                                            numSlites = null;
-                                        }
-                                        if (isNaN(
-                                        )) {
-                                            console.log("Number of Slides not determined!");
-                                            numSlides = 1;
-                                        }
-                                    }
-                                    console.log('NUM SLIDES from html: ' + numSlides);
-                                    finish();
-                                }); // fs.readFile ...
-                            } else {
-                                finish();
-                            }
-                            // delete presentation in UPLOAD dir
-                            //return;
-                            fs.unlink(uploadFullFileName, function (err) {
-                                console.log('DELETED presentation: ' + uploadFullFileName);
+                        function finish(){
+                            slite.setFilename(hashDir, uploadFileTitle + '.' + conversionFormat, numSlides);
+                            slite.generateHtml(function (err) {
+                                fs.unwatchFile(hashDir);    // stop watcher
                                 if (err) {
-                                    console.error('Error deleting : ' + fullFileName);
+                                    sliteError(err);
+                                    return;
                                 }
+                                elapsedTime("INDEX generated: " + path.join(www_dir, slite.hashValue, 'index.html'));
+                                start = conversionStartTime;
+                                elapsedTime("\nSUCCESS! CONVERTED PRESENTATION");
+                                averageSlideTime = slideTimeSum / numSlides;
+                                if (numSlides >= 1) console.log('Average time per slide: ' + Math.round(averageSlideTime) + ' ms');
+                                if (numSlides >= 1 && averageSlideTime) {
+                                    console.log('P:%d(%d) R:%d(%d) F:%d(%d)', 
+                                        (parseTime / averageSlideTime).toFixed(2), PARSE_COEFF, 
+                                        (readTime  / averageSlideTime).toFixed(2), READ_COEFF, 
+                                        (finalTime / averageSlideTime).toFixed(2), FINAL_COEFF);
+                                }
+                                console.log('\n');
+
+                                socket.emit("slitePrepared", { dir: slite.dir, hash: slite.hashValue, num_slides: slite.num_slides, fileName: slite.filename });
                             });
-                        }); // exec ...
-                    } // try {
-                    catch (err) {
-                        console.error(err);
-                        console.error('Stack: ' + err.stack);
-                        console.error('JSON.stringify: ' + JSON.stringify(err, null, 2));
-                        sliteError(err);
-                    }
+                        };
+
+                        if (numSlides === 0 || isNaN(numSlides) || !numSlides) {
+                            fs.readFile(convertedHtml, 'utf8', function (err, data) {
+                                if (err) {
+                                    console.error('Error reading file: ' + err);
+                                    sliteError(err);
+                                    numSlides = 1;
+                                } else {
+                                    $ = cheerio.load(data); // parse the converted presentation HTML header in order to find out how many slides there is
+                                    // The second link in this HTML file is to the last slide image,
+                                    // like this: <a href="img14.html">
+                                    // characters 3-5 of "img14.html" is "14", the number of slides
+                                    var lastSliteFile = $('a').next().attr('href');
+                                    console.log('lastSliteFile: ' + lastSliteFile);
+                                    var lastFileName = NUM_REG_EXP.exec(lastSliteFile);
+                                    try {
+                                        numSlides = parseInt(lastFileName, 10) + 1;
+                                    } catch (err) {
+                                        console.error('Error reading num slides from HTML: ', err);
+                                        numSlides = null;
+                                    }
+                                    if (isNaN(numSlides) || numSlides <= 0) {
+                                        console.log("Number of Slides not determined!");
+                                        numSlides = 1;
+                                    }
+                                }
+                                console.log('NUM SLIDES from html: ' + numSlides);
+                                finish();
+                            }); // fs.readFile ...
+                        } else {
+                            finish();
+                        }
+                        // delete presentation in UPLOAD dir
+                        //return;
+                        fs.unlink(uploadFullFileName, function (err) {
+                            console.log('DELETED presentation: ' + uploadFullFileName);
+                            if (err) {
+                                console.error('Error deleting : ' + fullFileName);
+                            }
+                        });
+                    }); // exec ...
                 } // if (err) ... else ...
             }); // fs.rename ...
         }); // slite = new ...
