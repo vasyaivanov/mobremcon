@@ -3,7 +3,7 @@
 	<head>
     <meta charset="utf-8" content="user-scalable=no">
     <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no" />
-    <title>SENDER</title>
+    <title>REMOTE CONTROL FOR SLITES</title>
     <link rel="stylesheet" type="text/css" href="./css/index.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/jquery-2.0.3.min.js"></script>
@@ -22,32 +22,19 @@
 	</head>
 <body onload="startup()"
     ><br
-    ><div class="UI topRow leftCol" id="menu">&nbsp;</div
-    ><div class="UI topRow midCol" id="URLBox">http://www.slite.us/<input type="text" id="URLSlides" placeholder="Enter code here"></div
+    ><div class="UI topRow midCol" id="URLBox">www.slite.us/<input type="text" id="URLSlides" value="Enter code here" style="color:grey; border:0px" onclick="clearURLSlides()"></div
     ><div class="UI topRow rightCol" id="timeDisplay">Start Timer</div
     ><br
-    ><div class="UI midRow leftCol" id="notes">1: Beginning slide, or should I say 'slite'. Get ready to see powerpoint with all the powers of the web.</div
     ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
         ><div id="overlay"></div>
           <iframe id="theIframe" class="frame" seamless></iframe>
 		</div
-    ><div class="UI midRow rightCol" id="otherSlides">
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button>
-        <button></button
-    ></div
-    ><br
-    ><div class="UI botRow" id="prev">&nbsp;</div
-    ><div class="UI botRow" id="filler">&nbsp;</div
-    ><div class="UI botRow" id="laser">&nbsp;</div
-    ><div class="UI botRow" id="filler">&nbsp;</div
-    ><div class="UI botRow" id="draw">&nbsp;</div
-    ><div class="UI botRow" id="filler">&nbsp;</div
-    ><div class="UI botRow" id="speech">&nbsp;</div
-    ><div class="UI botRow" id="filler">&nbsp;</div
-    ><div class="UI botRow" id="next">&nbsp;</div
-></body>
+    ><div class="UI midRow rightCol" id="otherSlides"
+	><div class="UI botRow roundButton" id="prev"><b>&lt;&lt;</b> PREV</div
+    ><div class="UI botRow roundButton" id="next">NEXT <b>&gt;&gt;</b></div
+	><div class="UI botRow roundButton" id="laser">LASER<br>POINTER</div
+    ><div class="UI botRow roundButton" id="draw">DRAW</div
+    ><!--<div class="UI botRow roundButton" id="speech">VOICE<br>CONTROL</div
+    >--></div
+    ></body>
 </html>
