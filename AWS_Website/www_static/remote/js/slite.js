@@ -68,6 +68,10 @@ function changeURL() {
     thumbnails(); // thumbnails have to match the slides
 }
 
+function clearURLSlides(){
+	$("#URLSlides").val("");
+}
+
 // this is the main function handling laser and draw control by sending
 // touch coordinates on to the server through socket.emit()
 function touchMove(event) {

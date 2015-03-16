@@ -36,6 +36,7 @@ input[type=text] {
     font: bold 6.3vmin impact, sans-serif;
     text-align: center;
     overflow: hidden;
+	cursor: pointer;
 }
 
 #notes {
@@ -86,11 +87,6 @@ input[type=text] {
 }
 
 #prev {
-    width: 20.7%;
-    background-image: url('../img/buttonPrev.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
     
     }
     
@@ -99,14 +95,8 @@ input[type=text] {
     }
 
 #next {
-    width: 20.7%;
-    
-    background-image: url('../img/buttonNext.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    
-    }
+
+}
     
     #next:active {
         border-color:red;
@@ -119,36 +109,34 @@ input[type=text] {
     border: white;
 }
 
+.roundButton{
+  font-size: 36px;
+  width: 96%;
+  color: rgb(69, 166, 247);
+  /* background-image: url('../img/buttonLaser.png'); */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;  
+  text-align: center;
+  border: 6px;
+  border-style: solid;
+  border-color: rgb(69, 166, 247);
+  margin-top:2px;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+
 #laser {
-    width: 13.8%;
-    color: black;
-    
-    background-image: url('../img/buttonLaser.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    
     }
 
 #draw {
-    width: 13.8%;
-    color: black;
-    
-    background-image: url('../img/buttonDraw.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
     
     }
 
 #speech {
-    width: 13.8%;
-    color: black;
-    
-    background-image: url('../img/buttonSpeech.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
     
     }
 
