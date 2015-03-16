@@ -171,6 +171,15 @@
 	function hideClickAllow(delay){
 		$('#clickallow').delay( 3000 ).fadeOut( 600 );
 	}
+	
+	function showRemote(){
+		var pathName=document.location.pathname;
+		if(pathName){
+			pathName = pathName.replace('/','');
+		}
+		var newUrl = "http://"+document.location.hostname+"/remote?presentation="+pathName;
+		window.open(newUrl, "popupWindow", "width=1300,height=800,scrollbars=no");
+	}
 
 	var isVideoOn = false;
 	function showHideVideoChat(){
@@ -960,10 +969,10 @@
 			<li><a href="#"></a>
 				<ul class="menuSubmenu">
 				  <li><a href="http://www.slite.us">&#8962; Home</a></li>
-				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; <span id='chatOpenCloseLabel'>Open</span> Chat</a></li>
+				  				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; <span id='chatOpenCloseLabel'>Open</span> Chat</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes">&#128247; <span id='personalNotesOpenCloseLabel'>Open</span> Personal Notes</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; <span id='videoChatOpenCloseLabel'>Open</span> Video Chat</a></li>
-				  
+				  <li><a href="javascript:showRemote()" id="menuRemote">&#128247; Remote Control</a></li>				  
 				  <li><a href="javascript:showHideExplanators()" id="menuOpenMenu">? Help</a></li>
 				</ul>
 			</li>

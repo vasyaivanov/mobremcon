@@ -132,3 +132,31 @@ var script = document.createElement('script');
 script.src = scriptSrc;
 var head = document.getElementsByTagName('head')[0];
 head.appendChild(script);
+
+
+function getUrlParam(sParam)
+{
+	var sPageURL = window.location.search.substring(1);
+	var sURLVariables = sPageURL.split('&');
+	for (var i = 0; i < sURLVariables.length; i++) 
+	{
+		var sParameterName = sURLVariables[i].split('=');
+		if (sParameterName[0] == sParam) 
+		{
+			return sParameterName[1];
+		}
+	}
+} 
+
+function populateHash(){
+	var presentationHash = getUrlParam("presentation");
+	if(presentationHash){
+		$("#URLSlides").val(presentationHash);
+		changeURL();
+	}
+}
+
+$(function() {
+    console.log( "ready!" );
+	populateHash();
+});
