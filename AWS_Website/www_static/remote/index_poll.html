@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <meta charset="utf-8" content="user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no" />
+    <title>SENDER</title>
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <script src="./js/jquery-2.0.3.min.js"></script>
+    <script src="./js/speechRecognizer.js"></script>
+    <script src="./js/volumeButtonControl.js"></script>
+    <script src="./js/shake.js"></script>
+    <script src="./js/notes.js"></script>
+    <script defer src="./js/timer.js"></script>
+    <script defer src="./js/slite.js"></script>
+    <script src="./js/thumbs.0.6.0.min.js"></script>
+   <style>
+:focus {outline:none;} ::-moz-focus-inner {border:0;}
+
+.poll_button {
+  width: 100%;
+  //height: 100px;
+
+  /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+  -webkit-border-radius: 40px; 
+
+  /* Firefox 1-3.6 */
+  -moz-border-radius: 40px; 
+  
+  /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+  border-radius: 40px; 
+
+  border-collapse: collapse;
+  padding: 0px;
+
+//  background: -webkit-linear-gradient(top, blue, white); /* For Safari 5.1 to 6.0 */
+//  background: -o-linear-gradient(top, blue, white); /* For Opera 11.1 to 12.0 */
+//  background: -moz-linear-gradient(top, blue, white); /* For Firefox 3.6 to 15 */
+//  background: linear-gradient(top, blue, white); /* Standard syntax (must be last) */
+
+}
+</style>
+    <script>
+         var question = "Shall we fund SLITE?";
+         var answers = ["Yes", "No :(", "Do not know...", "What is SLITE?"];
+	 var count = [70, 10, 15, 5];
+         var totCount = 100;
+         totNum = count.length; 
+         function increaseCount(btnObj) {
+	   hiBkg1(btnObj);
+	   var itemNum = btnObj.id.split('_')[1];
+	   var c = document.getElementById('count_'+itemNum);
+	   c.innerHTML = ''+(parseInt(c.innerHTML)+1);
+	   totCount = 0;
+	   for(var i=0; i<totNum; i++) {
+             count[i] = parseInt(document.getElementById('count_'+i).innerHTML);
+             totCount += count[i];
+           }			    
+           for(var i=0; i<totNum; i++) {		    
+             document.getElementById('bar_'+i).style.width = ''+Math.round(count[i]/0.01/totCount)+'%';			    
+             document.getElementById('percentage_'+i).innerHTML = ''+(Math.round(count[i]/0.001/totCount)/10)+'%';
+          }
+        }
+function hiBkg1(btnObj) {
+   var currIndex = parseInt(btnObj.id.split('_')[1]);
+   for(var i=0; i<totNum; i++) {
+     if (i!=currIndex) {
+       var btn = document.getElementById('button_'+i);
+       btn.setAttribute('pressed', 'false');			     
+       loBkg(btn);
+     }
+   }			    
+   if(btnObj.getAttribute('pressed')!='true') {
+      btnObj.setAttribute('pressed', 'true');
+      bgc = 'green';
+      btnObj.style.background = "-webkit-linear-gradient(top, white, "+bgc+")"; /* For Safari 5.1 to 6.0 */
+      btnObj.style.background = "-o-linear-gradient(top, white, "+bgc+")"; /* For Opera 11.1 to 12.0 */
+      btnObj.style.background = "-moz-linear-gradient(top, white, "+bgc+")"; /* For Firefox 3.6 to 15 */
+      btnObj.style.background = "linear-gradient(top, white, "+bgc+")"; /* Standard syntax (must be last) */
+   }
+} 
+function hiBkg(btnObj) {
+//     btnObj.style.border = '5px solid blue'; 
+   if(btnObj.getAttribute('pressed')!='true') {
+      var bgc = 'darkgrey';
+      btnObj.style.background = "-webkit-linear-gradient(top, white, "+bgc+")"; /* For Safari 5.1 to 6.0 */
+      btnObj.style.background = "-o-linear-gradient(top, white, "+bgc+")"; /* For Opera 11.1 to 12.0 */
+      btnObj.style.background = "-moz-linear-gradient(top, white, "+bgc+")"; /* For Firefox 3.6 to 15 */
+      btnObj.style.background = "linear-gradient(top, white, "+bgc+")"; /* Standard syntax (must be last) */
+   }
+}
+function loBkg(btnObj) {
+   if(btnObj.getAttribute('pressed')!='true') {
+      var bgc = 'darkgrey';
+      btnObj.style.background = "-webkit-linear-gradient(top, lightgrey, "+bgc+")"; /* For Safari 5.1 to 6.0 */
+      btnObj.style.background = "-o-linear-gradient(top, lightgrey, "+bgc+")"; /* For Opera 11.1 to 12.0 */
+      btnObj.style.background = "-moz-linear-gradient(top, lightgrey, "+bgc+")"; /* For Firefox 3.6 to 15 */
+      btnObj.style.background = "linear-gradient(top, lightgrey, "+bgc+")"; /* Standard syntax (must be last) */   
+   }
+}
+         var currAnswer = 2;
+         var poll_title = "";
+         var poll_question = "";
+         var poll_answers = [];
+         function save() {
+            // document.getElementById("msg").innerHTML = "Saving...";
+	    poll_title = document.getElementById("poll_title").innerHTML;		  
+	    poll_question = document.getElementById("poll_question").innerHTML;		  
+            var k = 0;
+            for(var i=0; i<currAnswer; i++) {
+                if (document.getElementById("poll_answer_"+i) != null) {
+		    poll_answers[k++] = document.getElementById("poll_answer_"+i).innerHTML;		  
+                }
+            }
+            document.getElementById("msg").innerHTML = "Saved " + k;
+            // closePollCreation(); currAnswer = 2;
+         }
+	 function removeAnswer(num) {			  
+	    document.getElementById("poll_table").deleteRow(document.getElementById("poll_answer_"+num+"_row").rowIndex);
+         }		  
+	 function addAnswer(num) {
+	    var table = document.getElementById("poll_table");
+	    curr = table.rows.length;
+	    row = table.insertRow(curr); row.id = "poll_answer_"+num+"_row";		  
+	    text = row.insertCell(0); text.style.fontSize = "600%"; text.innerHTML = "Poll answer "+(currAnswer-1)+":";		  
+	    input = row.insertCell(1); input.innerHTML = '<input id="poll_answer_'+num+'" size="20"></input>'; 		  
+	    close = row.insertCell(2); close.innerHTML = '<button style="background-image:none;height:100%;font-size:400%" onclick="removeAnswer('+num+')">&nbsp;X&nbsp;</button>';		  
+            document.getElementById('overlay').scrollTop = document.getElementById('add_answer_button').offsetTop;
+         }		  
+         function createPoll(el) {
+	     el.innerHTML += '<table style="float:left" id="poll_table">' + 
+			     '<tr id="poll_title_row"><td style="font-size:600%">Poll title:</td><td><input id="poll_title" style="font-size:600%" size="20"></input></td><td></td></tr>' + 
+			     '<tr id="poll_question_row"><td style="font-size:600%">Poll question:</td><td><input id="poll_question" style="font-size:600%" size="20"></input></td><td></td></tr>' + 
+			     '<tr id="poll_answer_0_row"><td style="font-size:600%">Poll answer 0:</td><td><input id="poll_answer_0" style="font-size:600%" size="20"></input></td><td></td></tr>' +  		  
+			     '<tr id="poll_answer_1_row"><td style="font-size:600%">Poll answer 1:</td><td><input id="poll_answer_1" style="font-size:600%" size="20"></input></td><td></td></tr>' +  		  
+			     '</table>' + 
+			     '<table style="float:right;height:30%">' + 
+			     '<tr><td><button style="background-image:none;height:100%;font-size:400%" onclick="closePollCreation()" value="Cancel">Cancel</button></td></tr>' +
+			     '<tr><td><button style="background-image:none;height:100%;font-size:400%" onclick="save()">Save</button></td></tr>' +
+			     '<tr><td id="msg" style="font-size:400%"></td></tr>' +
+			     '</table>' + 
+			     '<button id="add_answer_button" style="background-image:none;color:black;font-size:400%" onclick="addAnswer(currAnswer++)"><strong>Add answer</strong></button>';
+         }
+         function printHeader(el, text) {
+	     el.innerHTML += '<center>' +
+	           '<strong id="poll_header" style="font-size:400%;">'+text+'</strong>' +
+	           '</center>';
+	 } 
+         function printOneButton(el, num, text, count) {
+            el.innerHTML += '<button id="button_'+num+'" class="poll_button" style="font-size:400%;" pressed="false" onclick="increaseCount(this);return false;" onmouseover="hiBkg(this)" onmouseout="loBkg(this)">' +
+			      '<strong style="float:left;color:black;">&nbsp;&nbsp;&nbsp;'+text+'</strong> <span style="float:right;color:black;"><strong id="count_'+num+'">'+count+'</strong> votes (<span id="percentage_'+num+'">'+count+' %</span>)&nbsp;&nbsp;&nbsp;</span>' +
+			      '<table style="border-collapse:collapse;cell-padding:0px;padding:0px;width:100%;height:30%">' +
+			      '<tr style="width:100%;height:100%;">' +
+			      '  <td id="bar_'+num+'" style="width:'+(count/0.01/totCount)+'%;height:100%;background-color:grey;">&nbsp;</td>' +
+			      '  <td style="width:*;height:100%">&nbsp;</td>' +
+			      '</tr>' +
+			      '</table>' +
+			      '<span>&nbsp;</span>' +
+			      '</button>';	     
+	 }
+         function openPollCreation() {
+           var overlay = document.getElementById("overlay");
+           if(overlay.innerHTML=='') { 
+	     //overlay.id = "poll_overlay";
+             overlay.style.display = '';
+             overlay.style.overflowY = "scroll";
+             overlay.style.width = "70%";
+             overlay.style.height = "70%";
+	     overlay.style.backgroundColor = "#ccc"; 
+             overlay.style.opacity = "0.5";
+             overlay.style.zIndex = "10000";
+             overlay.style.fontSize = "10%";
+             createPoll(overlay);
+	     //printHeader(overlay, question);
+             //for(var i=0; i<totNum; i++) {
+             //  printOneButton(overlay, i, answers[i], count[i]);
+             //  loBkg(document.getElementById('button_'+i));     
+             //}
+             //innerDoc.body.appendChild(overlay);
+            }
+         }
+         function closePollCreation() {				      
+             var overlay = document.getElementById("overlay");
+	     overlay.style.backgroundColor = "#fff"; 
+             overlay.innerHTML='';
+        }
+    </script>
+
+	</head>
+<body
+    ><br
+    ><div class="UI topRow leftCol" id="menu">&nbsp;</div
+    ><div class="UI topRow midCol" id="URLBox">http://www.slite.us/<input type="text" id="URLSlides" placeholder="Enter code here"></div
+    ><div class="UI topRow rightCol" id="timeDisplay">Start Timer</div
+    ><br
+    ><div class="UI midRow leftCol" id="notes">1: Beginning slide, or should I say 'slite'. Get ready to see powerpoint with all the powers of the web.</div
+    ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
+        ><div id="overlay"></div>
+          <iframe id="theIframe" class="frame" seamless></iframe>
+		</div
+    ><div class="UI midRow rightCol" id="otherSlides">
+
+        <div id="msg"></div>
+        <button id="poll_button" onclick="openPollCreation()">Poll</button>
+        <button></button>
+        <button></button>
+        <button></button>
+        <button></button>
+        <button></button
+    ></div
+    ><br
+    ><div class="UI botRow" id="prev">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="laser">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="draw">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="speech">&nbsp;</div
+    ><div class="UI botRow" id="filler">&nbsp;</div
+    ><div class="UI botRow" id="next">&nbsp;</div
+></body>
+</html>
