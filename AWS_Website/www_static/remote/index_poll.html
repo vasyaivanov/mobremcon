@@ -122,7 +122,7 @@ function loBkg(btnObj) {
 	    curr = table.rows.length;
 	    row = table.insertRow(curr); row.id = "poll_answer_"+num+"_row";		  
 	    text = row.insertCell(0); text.style.fontSize = "600%"; text.innerHTML = "Poll answer "+(currAnswer-1)+":";		  
-	    input = row.insertCell(1); input.innerHTML = '<input id="poll_answer_'+num+'" size="20"></input>'; 		  
+	    input = row.insertCell(1); input.innerHTML = '<input id="poll_answer_'+num+'" style="font-size:600%" size="20"></input>'; 		  
 	    close = row.insertCell(2); close.innerHTML = '<button style="background-image:none;height:100%;font-size:400%" onclick="removeAnswer('+num+')">&nbsp;X&nbsp;</button>';		  
             document.getElementById('overlay').scrollTop = document.getElementById('add_answer_button').offsetTop;
          }		  
