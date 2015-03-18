@@ -63,7 +63,8 @@ input[type=text] {
     
 #theIframe {
     position: absolute;
-    width: 233%; height: 239%;
+      width: 267%;
+  height: 289%;
     z-index: 1;
 }
     
