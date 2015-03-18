@@ -178,7 +178,7 @@
 			pathName = pathName.replace('/','');
 		}
 		var newUrl = "http://"+document.location.hostname+"/remote?presentation="+pathName;
-		window.open(newUrl, "popupWindow", "width=1300,height=800,scrollbars=no");
+		window.open(newUrl, "popupWindow", "width=1050,height=700"); //,scrollbars=no
 	}
 
 	var isVideoOn = false;
@@ -295,7 +295,7 @@
 		{
 			display:none;
 			position: fixed;
-			top: 20px;
+			top: 30px;
 			right: 0px;
 			background:#fff;
 			padding:0
@@ -729,8 +729,13 @@
 
     <canvas id="drawCanvas" ></canvas>
 
-	<div id="sliteWatermak">Powered by SLITE.US <span id="mainMenu">☰</span></div>
-
+	
+	<div id="sliteWatermak" style="height:40px; line-height:40px;">
+        <span style="vertical-align:top;">Powered by SLITE.US</span>
+        <span style="font-size:2em; vertical-align:top;">☰</span>
+    </div>
+	
+	
     <div id="redDot"><img src="./img/redDot.png" alt="Laser Pointer"></div>
 
   	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
@@ -969,10 +974,10 @@
 			<li><a href="#"></a>
 				<ul class="menuSubmenu">
 				  <li><a href="http://www.slite.us">&#8962; Home</a></li>
-				  				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; <span id='chatOpenCloseLabel'>Open</span> Chat</a></li>
+				  <li><a href="javascript:showRemote()" id="menuRemote">&#128247; Become Presenter</a></li>	
+				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; <span id='chatOpenCloseLabel'>Open</span> Chat</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes">&#128247; <span id='personalNotesOpenCloseLabel'>Open</span> Personal Notes</a></li>
-				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; <span id='videoChatOpenCloseLabel'>Open</span> Video Chat</a></li>
-				  <li><a href="javascript:showRemote()" id="menuRemote">&#128247; Remote Control</a></li>				  
+				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; <span id='videoChatOpenCloseLabel'>Open</span> Video Chat</a></li>		  
 				  <li><a href="javascript:showHideExplanators()" id="menuOpenMenu">? Help</a></li>
 				</ul>
 			</li>

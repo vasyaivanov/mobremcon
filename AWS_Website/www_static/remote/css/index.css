@@ -32,11 +32,18 @@ input[type=text] {
     border-style: inset;
 }
 
+#URLBox{
+	color: rgb(69, 166, 247);
+	opacity:0.7;
+}
+
 #timeDisplay {
-    font: bold 6.3vmin impact, sans-serif;
+    font: 6.3vmin;
     text-align: center;
     overflow: hidden;
 	cursor: pointer;
+	color: rgb(69, 166, 247);
+	opacity:0.7;
 }
 
 #notes {
@@ -65,7 +72,7 @@ input[type=text] {
     }
 
 .midRow {
-    height: 71%;
+    height: 86%;
     }
 
 .botRow {
@@ -76,14 +83,16 @@ input[type=text] {
 
 .leftCol {
     width: 10%;
+	
 }
 
 .midCol {
-    width: 70%;
+    width: 80%;
+	margin-left: 5px;
 }
 
 .rightCol {
-    width: 18.75%
+    width: 18.75%;
 }
 
 #prev {
@@ -113,6 +122,8 @@ input[type=text] {
   font-size: 36px;
   width: 96%;
   color: rgb(69, 166, 247);
+  height: 60px;
+  line-height: 60px;
   /* background-image: url('../img/buttonLaser.png'); */
   background-repeat: no-repeat;
   background-size: contain;

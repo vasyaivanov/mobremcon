@@ -23,16 +23,26 @@
 <body onload="startup()"
     ><br
     ><div class="UI topRow midCol" id="URLBox">www.slite.us/<input type="text" id="URLSlides" value="Enter code here" style="color:grey; border:0px" onclick="clearURLSlides()"></div
-    ><div class="UI topRow rightCol" id="timeDisplay">Start Timer</div
+    ><div class="UI topRow rightCol" id="timeDisplay">start &#8986;</div
     ><br
     ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
         ><div id="overlay"></div>
           <iframe id="theIframe" class="frame" seamless></iframe>
 		</div
     ><div class="UI midRow rightCol" id="otherSlides"
-	><div class="UI botRow roundButton" id="next">NEXT <b>&gt;&gt;</b></div
-	><div class="UI botRow roundButton" id="prev"><b>&lt;&lt;</b> PREV</div
-    ><div class="UI botRow roundButton" id="laser">LASER<br>POINTER</div
+	>
+	<div class="UI botRow roundButton" id="next" style="height:50px; line-height:50px;">
+        <span style="font-size:2em; vertical-align:top; float:right; padding-right:30px; padding-left:10px;">&gt;</span>
+        <span style="vertical-align:top; float:right">NEXT</span>
+    </div>
+
+	<div class="UI botRow roundButton" id="prev" style="height:50px; line-height:50px;">
+		<span style="font-size:2em; vertical-align:top; float:left; padding-right:10px; padding-left:30px;">&lt;</span>
+        <span style="vertical-align:top;float:left;">PREV</span>
+        
+    </div>
+	
+	<div class="UI botRow roundButton" id="laser">POINTER</div
     ><div class="UI botRow roundButton" id="draw">DRAW</div
     ><!--<div class="UI botRow roundButton" id="speech">VOICE<br>CONTROL</div
     >--></div
