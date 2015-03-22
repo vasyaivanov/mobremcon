@@ -101,31 +101,80 @@
 		$("#comments").slideToggle();
 		$("#comments").css('overflow','scroll');
 		var label = $("#chatOpenCloseLabel");
-		if(label.html() == "Open"){
+		if(label.html() == ""){
 			$("#chatOpenCloseLabel").html("Close");
 		}else{
-			$("#chatOpenCloseLabel").html("Open");
+			$("#chatOpenCloseLabel").html("");
 		}
+		showHideMenu(true);
 	}
 	
 	function showHidePersonalNotes(){
 		$("#personalNotes").slideToggle();
 		var label = $("#personalNotesOpenCloseLabel");
-		if(label.html() == "Open"){
+		if(label.html() == ""){
 			$("#personalNotesOpenCloseLabel").html("Close");
 		}else{
-			$("#personalNotesOpenCloseLabel").html("Open");
+			$("#personalNotesOpenCloseLabel").html("");
 		}
+		showHideMenu(true);
 	}
 	
+	var isVideoOn = false;
+	function showHideVideoChat(){
+		if(!isVideoOn)
+		{
+			if ( $( "#join-button" ).length ) {
+				$( "#join-button" ).trigger( "click" );
+			}else{
+				$( "#setup-new-room" ).trigger( "click" );
+			}
+			isVideoOn = true;			
+			
+			//reduce main window
+			//$(".rsContainer").animate({"width":"80%"},300);
+			$(".rsContainer").css("float","right");
+			$(".rsContainer").css({"width":"80%", "clear":"both"});
+			hideClickAllow();
+		}else{
+			//put main window back to full size	
+			//$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
+			$(".rsContainer").css({"width":"100%", "clear":"both"});
+			
+			// remove the video window on closing the panel
+			var videosContainer = document.getElementById('videos-container');
+			if(videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
+			
+			isVideoOn = false;
+		}		
+		
+		var label = $("#videoChatOpenCloseLabel");
+		if(label.html() == ""){
+			$("#videoChatOpenCloseLabel").html("Close");
+		}else{
+			$("#videoChatOpenCloseLabel").html("");
+		}
+		
+		$("#videochat").slideToggle();
+		/*
+		$("#videochat").css('overflow-x','hidden');
+		$("#videochat").css('overflow-y','scroll');
+		*/
+		
+		showHideMenu(true);
+	}
 	
 	var isMenuOn = false;
-	function showHideMenu(){
-		if(!isMenuOn){
+	function showHideMenu(fromItemClick){
+		if(!isMenuOn && !fromItemClick){
 			$('.menuSubmenu').slideDown( "slow");
 			isMenuOn = true;
 		}else{
-			$('.menuSubmenu').slideUp("medium");
+			if(fromItemClick){
+				$('.menuSubmenu').slideUp("fast");
+			}else{
+				$('.menuSubmenu').slideUp("medium");
+			}
 			isMenuOn = false;
 		}
 	}
@@ -181,48 +230,7 @@
 		window.open(newUrl, "popupWindow", "width=1050,height=700"); //,scrollbars=no
 	}
 
-	var isVideoOn = false;
-	function showHideVideoChat(){
-		if(!isVideoOn)
-		{
-			if ( $( "#join-button" ).length ) {
-				$( "#join-button" ).trigger( "click" );
-			}else{
-				$( "#setup-new-room" ).trigger( "click" );
-			}
-			isVideoOn = true;			
-			
-			//reduce main window
-			//$(".rsContainer").animate({"width":"80%"},300);
-			$(".rsContainer").css("float","right");
-			$(".rsContainer").css({"width":"80%", "clear":"both"});
-			hideClickAllow();
-		}else{
-			//put main window back to full size	
-			//$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-			$(".rsContainer").css({"width":"100%", "clear":"both"});
-			
-			// remove the video window on closing the panel
-			var videosContainer = document.getElementById('videos-container');
-			if(videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
-			
-			isVideoOn = false;
-		}		
-		
-		var label = $("#videoChatOpenCloseLabel");
-		if(label.html() == "Open"){
-			$("#videoChatOpenCloseLabel").html("Close");
-		}else{
-			$("#videoChatOpenCloseLabel").html("Open");
-		}
-		
-		$("#videochat").slideToggle();
-		/*
-		$("#videochat").css('overflow-x','hidden');
-		$("#videochat").css('overflow-y','scroll');
-		*/
-	}
-
+	
 	</script>
 
 
@@ -473,6 +481,12 @@
 	    	height: 500px;
 	    	display: none;
 	    }
+		
+		.panelTitle{
+			font-size:20px;
+			font-weight: bold;
+			color: #8E8D8D;
+		}
 
 	    #personalNotes{
 	    	position: absolute;
@@ -543,12 +557,26 @@
 			outline: none;
 		}
 
-	    #commentsPanel{
+	    #chatPanel{
 	    	position: fixed;
 	    	bottom: 0px;
-	    	width: 100%;
+	    	width: 50%;
 	    	height: 15px;
 	    	 background-color: #444444;
+  			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+  			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
+	    }
+		
+		
+
+	    #personalNotesPanel{
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+	    	bottom: 0px;
+	    	width: 50%;
+	    	height: 15px;
+	    	background-color: #444444;
   			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
   			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
 	    }
@@ -741,21 +769,22 @@
   	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
 
 	<div id="personalNotes">
-	<p class="paper" contenteditable>
-		<br>
-		Need to follow up with Kevin Kraus<br>
-		Research remote mobile presentation on web<br>
-		Invest in Slite<br>
-	</p>
+		<div class="closevideo" id="closePersonalNotes"></div>
+		<center><div class='panelTitle'>Personal Notes (only you can see them)</div></center>
+		<p class="paper" contenteditable>
+		</p>
 	</div>
 	
 	<div id="comments">
+			<center><div class='panelTitle' style='position: absolute; left: 25%;'>Chat with others about this presentation</div><center>
+			<div class="closevideo" id="closeChat" style='margin-right: 20px;'></div>
 			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5434a641072d9(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5434a641072d9"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5434a641072d9=document.createElement('script');fcs_5434a641072d9.type="text/javascript";fcs_5434a641072d9.src=ajaxpath_5434a641072d9("http://www.freecommentscript.com/GetComments2.php?p=5434a641072d9&s=&Size=10#!5434a641072d9");setTimeout("document.getElementById('fcs_div_5434a641072d9').appendChild(fcs_5434a641072d9)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
 	</div>
 
 	<div id="closedCaptioningPanel"></div>
 
-	<div id="commentsPanel"></div>
+	<div id="chatPanel"></div>
+	<div id="personalNotesPanel"></div>
 
 	<div id="videochatpanel"></div>
 	<div id="videochat" style="overflow-x: hidden; overflow-y: scroll;">
@@ -973,12 +1002,12 @@
 		<ul>
 			<li><a href="#"></a>
 				<ul class="menuSubmenu">
-				  <li><a href="http://www.slite.us">&#8962; Home</a></li>
-				  <li><a href="javascript:showRemote()" id="menuRemote">&#128247; Become Presenter</a></li>	
-				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat">&#9998; <span id='chatOpenCloseLabel'>Open</span> Chat</a></li>
-				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes">&#128247; <span id='personalNotesOpenCloseLabel'>Open</span> Personal Notes</a></li>
-				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat">&#128247; <span id='videoChatOpenCloseLabel'>Open</span> Video Chat</a></li>		  
-				  <li><a href="javascript:showHideExplanators()" id="menuOpenMenu">? Help</a></li>
+				  <li><a href="javascript:showRemote()" id="menuRemote">Become Presenter</a></li>	
+				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span> Chat</a></li>
+				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
+				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span> Video Chat</a></li>		  
+				  <li><a href="http://www.slite.us">Home</a></li>
+				  <li><a href="javascript:showHideExplanators()" id="menuOpenMenu">Help</a></li>
 				</ul>
 			</li>
 		</ul>
@@ -1063,15 +1092,27 @@
 
 
 
-	$('#commentsPanel').click(function(){
+	$('#chatPanel').click(function(){
+		showHideComments();
+	});		
+	$('#closeChat').click(function(){
 		showHideComments();
 	});
+	
+	$('#personalNotesPanel').click(function(){
+		showHidePersonalNotes();
+	});
+	$('#closePersonalNotes').click(function(){
+		showHidePersonalNotes();
+	});	
+	
 	$('#videochatpanel').click(function(){
 		showHideVideoChat();
 	});
 	$('#closevideo').click(function(){
 		showHideVideoChat();
 	});	
+	
 	$('#sliteWatermak').click(function(){
 		showHideMenu();
 	});
