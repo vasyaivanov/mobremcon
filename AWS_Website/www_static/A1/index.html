@@ -179,6 +179,18 @@
 		}
 	}
 	
+	
+	var isHelpOverlayOn = false;
+	function showHideHelpOverlay(){
+		if(!isHelpOverlayOn){
+			$('#helpOverlay').fadeIn( 400 );;
+			isHelpOverlayOn = true;
+		}else{
+			$('#helpOverlay').fadeOut( 400 );
+			isHelpOverlayOn = false;
+		}
+	}
+	
 	function deleteAllCookies() {
 		var cookies = document.cookie.split(";");
 
@@ -580,6 +592,19 @@
   			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
   			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
 	    }
+		
+		#helpOverlay {
+		  opacity:    0.9; 
+		  background: black; 
+		  width:      100%;
+		  height:     100%; 
+		  z-index:    10;
+		  top:        0; 
+		  left:       0; 
+		  position:   fixed; 
+		  color: black;
+		  display: none;
+		}
 
 	    #HCB_comment_box{
 	    	height: 100%;
@@ -780,11 +805,16 @@
 			<div class="closevideo" id="closeChat" style='margin-right: 20px;'></div>
 			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5434a641072d9(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5434a641072d9"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5434a641072d9=document.createElement('script');fcs_5434a641072d9.type="text/javascript";fcs_5434a641072d9.src=ajaxpath_5434a641072d9("http://www.freecommentscript.com/GetComments2.php?p=5434a641072d9&s=&Size=10#!5434a641072d9");setTimeout("document.getElementById('fcs_div_5434a641072d9').appendChild(fcs_5434a641072d9)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
 	</div>
+	
+	<div class='helpOverlay' id='helpOverlay'>
+		<div class="closevideo" id="closeHelpOverlay" style='margin-right:30px;'></div>
+		<iframe src="help.html" style='width:100%;height:100%'></iframe>
+	</div>
 
 	<div id="closedCaptioningPanel"></div>
 
 	<div id="chatPanel"></div>
-	<div id="personalNotesPanel"></div>
+	<div id="personalNotesPanel"></div>	
 
 	<div id="videochatpanel"></div>
 	<div id="videochat" style="overflow-x: hidden; overflow-y: scroll;">
@@ -1007,7 +1037,7 @@
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span> Video Chat</a></li>		  
 				  <li><a href="http://www.slite.us">Home</a></li>
-				  <li><a href="javascript:showHideExplanators()" id="menuOpenMenu">Help</a></li>
+				  <li><a href="javascript:showHideHelpOverlay()" id="menuHelpOverlay">Help</a></li>
 				</ul>
 			</li>
 		</ul>
@@ -1106,6 +1136,10 @@
 		showHidePersonalNotes();
 	});	
 	
+	$('#closeHelpOverlay').click(function(){
+		showHideHelpOverlay();
+	});
+		
 	$('#videochatpanel').click(function(){
 		showHideVideoChat();
 	});
