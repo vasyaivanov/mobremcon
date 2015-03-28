@@ -64,6 +64,6 @@ var app = {
 
 
 function startup(){
-    conssole.log("remote/js/index.js startup");
-    &("")
+    console.log("remote/js/index.js startup");
+    //&("");
 }

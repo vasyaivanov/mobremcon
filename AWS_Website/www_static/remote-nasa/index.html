@@ -3,18 +3,18 @@
 	<head>
     <meta charset="utf-8">
     <title>Slite</title>
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="remote/css/index.css">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./js/jquery-2.0.3.min.js"></script>
-    <script src="./js/speechRecognizer.js"></script>
-    <script src="./js/volumeButtonControl.js"></script>
-    <script src="./js/shake.js"></script>
-    <script src="./js/notes.js"></script>
-    <script defer src="./js/timer.js"></script>
-    <script defer src="./js/slite.js"></script>
-    <script src="./js/thumbs.0.6.0.min.js"></script>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="remote/js/speechRecognizer.js"></script>
+    <script src="remote/js/volumeButtonControl.js"></script>
+    <script src="remote/js/shake.js"></script>
+    <script src="remote/js/notes.js"></script>
+    <script defer src="remote/js/timer.js"></script>
+    <script defer src="remote/js/slite.js"></script>
+    <script src="remote/js/thumbs.0.6.0.min.js"></script>
 
     <script>
         var socket = io.connect(document.location.hostname + ':1337');

@@ -38,7 +38,7 @@ input[type=text] {
 }
 
 #timeDisplay {
-    font: 6.3vmin;
+    font-size: 6.3vmin;
     text-align: center;
     overflow: hidden;
 	cursor: pointer;
@@ -130,7 +130,7 @@ input[type=text] {
   background-size: contain;
   background-position: center;
   -webkit-border-radius: 50px;
-  -moz-border-radius: 50px;
+  border-radius: 50px;
   border-radius: 50px;  
   text-align: center;
   border: 6px;
