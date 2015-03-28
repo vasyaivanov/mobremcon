@@ -51,9 +51,9 @@ var OfficeParser = (function () {
     
     function deleteXML(file, xmlPath, next){
         var dir = path.dirname(file);
+        if (DEBUG) console.log('Deleting XML folder, dir:' + dir + ' xmlPath:' + xmlPath);
         var deleteFolder = path.join(dir, xmlPath);
-        if (DEBUG) console.log('Deleting XML folder: ' + deleteFolder);
-        //fs.remove(deleteFolder, next);
+        if (DEBUG) console.log('Deleting XML floder: ' + deleteFolder);
         var failSilent = false;
         wrench.rmdirRecursive(deleteFolder, failSilent, function (err) {
             if (err) {

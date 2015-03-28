@@ -13,6 +13,7 @@
     "express": "^4.11.2",
     "express-session": "^1.10.2",
     "fs-extra": "^0.16.3",
+    "gaze": "^0.5.1",
     "method-override": "^2.3.1",
     "mongodb": "^2.0.15",
     "mongoose": "^3.8.23",

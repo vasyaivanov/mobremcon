@@ -4,47 +4,44 @@
     <meta charset="utf-8" content="user-scalable=no">
     <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no" />
     <title>REMOTE CONTROL FOR SLITES</title>
-    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./js/jquery-2.0.3.min.js"></script>
-    <script src="./js/speechRecognizer.js"></script>
-    <script src="./js/volumeButtonControl.js"></script>
-    <script src="./js/shake.js"></script>
-    <script src="./js/notes.js"></script>
-    <script defer src="./js/timer.js"></script>
-    <script defer src="./js/slite.js"></script>
-    <script src="./js/thumbs.0.6.0.min.js"></script>
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="js/speechRecognizer.js"></script>
+    <script src="js/volumeButtonControl.js"></script>
+    <script src="js/shake.js"></script>
+    <script src="js/notes.js"></script>
+    <script defer src="js/timer.js"></script>
+    <script defer src="js/slite.js"></script>
+    <script src="js/thumbs.0.6.0.min.js"></script>
 
     <script>
         var socket = io.connect(document.location.hostname + ':1337');
     </script>
 
 	</head>
-<body onload="startup()"
-    ><br
-    ><div class="UI topRow midCol" id="URLBox">www.slite.us/<input type="text" id="URLSlides" value="Enter code here" style="color:grey; border:0px" onclick="clearURLSlides()"></div
-    ><div class="UI topRow rightCol" id="timeDisplay">start &#8986;</div
-    ><br
-    ><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)"
-        ><div id="overlay"></div>
-          <iframe id="theIframe" class="frame" seamless></iframe>
-		</div
-    ><div class="UI midRow rightCol" id="otherSlides"
-	>
-	<div class="UI botRow roundButton" id="next" style="height:50px; line-height:50px;">
-        <span style="font-size:2em; vertical-align:top; float:right; padding-right:30px; padding-left:10px;">&gt;</span>
-        <span style="vertical-align:top; float:right">NEXT</span>
-    </div>
+<!--<body onload="startup()">-->
+<body>
+    <br><div class="UI topRow midCol" id="URLBox">www.slite.us/<input type="text" id="URLSlides" value="Enter code here" style="color:grey; border:0px" onclick="clearURLSlides()"></div>
+    <div class="UI topRow rightCol" id="timeDisplay">start &#8986;</div>
+    <br><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)">
+        <div id="overlay"></div>
+        <iframe id="theIframe" class="frame" seamless></iframe>
+    </div><div class="UI midRow rightCol" id="otherSlides">
+        <div class="UI botRow roundButton" id="next" style="height:50px; line-height:50px;">
+            <span style="font-size:2em; vertical-align:top; float:right; padding-right:30px; padding-left:10px;">&gt;</span>
+            <span style="vertical-align:top; float:right">NEXT</span>
+        </div>
 
-	<div class="UI botRow roundButton" id="prev" style="height:50px; line-height:50px;">
-		<span style="font-size:2em; vertical-align:top; float:left; padding-right:10px; padding-left:30px;">&lt;</span>
-        <span style="vertical-align:top;float:left;">PREV</span>
-        
+        <div class="UI botRow roundButton" id="prev" style="height:50px; line-height:50px;">
+            <span style="font-size:2em; vertical-align:top; float:left; padding-right:10px; padding-left:30px;">&lt;</span>
+            <span style="vertical-align:top;float:left;">PREV</span>
+
+        </div>
+
+        <div class="UI botRow roundButton" id="laser">POINTER</div><div class="UI botRow roundButton" id="draw">DRAW</div>
+        <!--<div class="UI botRow roundButton" id="speech">VOICE<br>CONTROL</div
+        >-->
     </div>
-	
-	<div class="UI botRow roundButton" id="laser">POINTER</div
-    ><div class="UI botRow roundButton" id="draw">DRAW</div
-    ><!--<div class="UI botRow roundButton" id="speech">VOICE<br>CONTROL</div
-    >--></div
-    ></body>
+</body>
 </html>

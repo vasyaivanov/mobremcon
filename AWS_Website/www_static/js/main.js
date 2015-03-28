@@ -1,7 +1,63 @@
-$(document).ready(function (){
-    var HTML5_UPLOADER = false;
-    var socket = io.connect(document.location.hostname + ':1337');
+$(document).ready(function () {
+  function getClearUrl() {
+    var url = [location.protocol, '//', location.host, location.pathname].join('');
+    return url;
+  }    
     
+  var url = document.location.href;
+  var hashPos = url.lastIndexOf('#');
+  var localUrl = url.slice(hashPos + 1);
+  if (localUrl === 'upload_presentation') {
+    document.location = getClearUrl();
+  }
+
+   var HTML5_UPLOADER = false;
+   var socket = io.connect(document.location.hostname + ':1337');
+     
+  function setUploadMessage(title) {
+        progressLabel.text(title);
+  }
+
+    var uploadButton  = $('#uploadPresentation'),
+        progressbar   = $('#progressbar'),
+        progressLabel = $('#uploadLabel');
+
+  progressbar.progressbar({
+    value:  false
+  });
+                
+    function openUploadDialog(msg) {
+      var url = getClearUrl();
+      document.location = url + "#upload_presentation";
+      setUploadMessage(msg);
+    };
+    
+    function updateProgress(data) {
+      var printMsg = false, newLine = false;
+      var finalMsg = data.percentage == 100 && typeof data.msg !== 'undefined';
+      var msg = '';
+      if (data.percentage >= 0 && !data.error && !finalMsg) {
+        msg += "Progress: " + data.percentage + "%";
+        newLine = true;
+      } else if(data.slide > 0 && !data.error) {
+        msg += "Loaded slides: " + data.slide + ' ';
+        newLine = true;
+      } else {
+        printMsg = true;
+      }
+      if (printMsg || finalMsg) {
+        if (newLine) {
+          msg += '\n';
+        }
+        msg += data.msg;
+      }
+      progressLabel.text(msg);
+      if (data.percentage >= 0 || data.error) {
+        var n = data.error ? 100 :  parseInt(data.percentage, 10);
+        progressbar.progressbar("value", n);
+      }
+    } 
+      
     if (HTML5_UPLOADER) {
         function fileChosen(event){
             var files = document.getElementById('uploadPresentation').files;
@@ -47,54 +103,62 @@ $(document).ready(function (){
 
         siofu.addEventListener("choose", function(event){
 	        console.log("Upload file(s) chosen: " + event.files[0].name);
-            $('body').append('<div class="overlay"><div class="upload-text">Uploading the file...</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
+            openUploadDialog('Uploading: ' + event.files[0].name);
         });
 
         // Do something when a file upload started:
         siofu.addEventListener("start", function(event){
             console.log("Upload started: " + event.file.name);
- 	        //$('body').append('<div class="overlay"><div class="upload-text">Uploading the file...</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
         });
 
         // Do something when a file upload is finished:
         siofu.addEventListener("complete", function(event){
             console.log("Upload successful: " + event.file.name);
-	        $(".overlay").remove();
-	        $('body').append('<div class="overlay"><div class="upload-text">Converting to HTML...<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
+            setUploadMessage('Converting presentation...');
         });
 
         // Do something when a file upload fails:
         siofu.addEventListener("error", function(event){
 	        console.log("Upload failed: " + event.file.pathName);
-	        $(".overlay").remove();
-	        $('body').append('<div class="overlay"><div class="upload-text">Server error!<br>Please try uploading again. If fails again contact support.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
-	        setTimeout(function(){ window.location = window.location; }, 10000); // reload after 10 sec
+            var data;
+            data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
+            data.error = true;
+            data.percentage = 100;
+            updateProgress(data);
+	        setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
         });
     } // if(HTML5_UPLOADER) .. else ..
     
     socket.on("uploadProgress", function (data) {
-        console.log("Upload progress: " + data.percentage + '%');
-        var msg = '<div class="overlay"><div class="upload-text">Converting to HTML, slide:' + data.slide;
-        if (data.percentage > 0) {
-            msg += ' Progress:' + data.percentage + '%'
+        var msg = "Upload Progress";
+        if (data.percentage >= 0) {
+            msg += ': ' + data.percentage + '%'
         }
-        msg += '<br>YOU WILL GET A UNIQUE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>';
-        $(".overlay").remove();
-        $('body').append(msg);
+        if (data.slite > 0) {
+            msg += ' slide: ' + data.slide;
+        }
+        console.log(msg);
+        if (data.percentage >= 0 || data.slide > 0) {
+          data.error = false;
+          updateProgress(data);
+        }
     });
 
     socket.on('slitePrepared', function (data) {
         console.log('File converted: ' + JSON.stringify(data));
- 	    $(".overlay").remove();
-	    $('body').append('<div class="overlay"><div class="upload-text">Converted successfully!<br>YOU WILL BE FORWARDED TO THE URL TO SHARE.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
-	    setTimeout(function(){ window.location = window.location + data.hash; }, 1000); // forward after 1 sec
+        data.msg = 'Converted successfully!\nYOU WILL BE FORWARDED TO THE URL TO SHARE.';
+        data.percentage = 100;
+        updateProgress(data);
+	    setTimeout(function(){ window.location = getClearUrl() + data.hash; }, 1000); // forward after 1 sec
     });
 
     socket.on('sliteConversionError', function (data) {
 	    console.log("File conversion failed! " + JSON.stringify(data));
-	    $(".overlay").remove();
-	    $('body').append('<div class="overlay"><div class="upload-text">Server error!<br>Please try uploading again. If fails again contact support.</div><div class="progress"><div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div></div></div>');
-	    setTimeout(function(){ window.location = window.location; }, 10000); // reload after 10 sec
+        data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
+        data.error = true;
+        data.percentage = 100;
+        updateProgress(data);
+        setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
     });
 
     $('#createPresentation').click(function(){

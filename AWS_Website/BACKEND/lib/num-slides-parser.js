@@ -7,6 +7,21 @@
 
 
 module.exports = function (parsedFile, opt, next) {
+    function deleteXML(params, next) {
+        _deleteXML(params.parsedFile, params.xmlPath, next);
+    }
+
+    function _deleteXML(parsedFile, xmlPath, next) {
+        officeParser.deleteXML(parsedFile, xmlPath, function (err) {
+            if (err) {
+                console.error('Error while deleting XML: ', err);
+            } else {
+                console.log('XML files deleted');
+            }
+            if (typeof next != 'undefined') next();
+        });
+    }
+
     var parsedNumSlides = 0;
     if(DEBUG) console.log('PARSING: ' + parsedFile);
     var parsedExt = path.extname(parsedFile);
@@ -70,23 +85,18 @@ module.exports = function (parsedFile, opt, next) {
                             error = new Error('Number of files in slides folder not detemined');
                         }
                         next(error, parsedNumSlides);
-                        if (!DEBUG) deleteXML();
+                        if (!DEBUG && !opt.leaveXML) deleteXML(parsedFile, opt.xmlPath);
                     }
                 });
             } else {
                 next(error, parsedNumSlides);
-                if (!DEBUG) deleteXML();
-            }
-                
-            function deleteXML() {
-                officeParser.deleteXML(parsedFile, opt.xmlPath, function (err) {
-                    if (err) {
-                        console.error('Error while deleting XML: ', err);
-                    } else {
-                        console.log('XML files deleted');
-                    }
-                });
-            }
-        }); // officeParser.readFile ..
+                if (!DEBUG && !opt.leaveXML) _deleteXML(parsedFile, opt.xmlPath);
+            }               
+         }); // officeParser.readFile ..
+         return {
+            deleteXML:  deleteXML, 
+            parsedFile: parsedFile, 
+            xmlPath:    opt.xmlPath
+         };
     } // if (parsedExt === '.ppt') {} else ..
 }; // module.exports =

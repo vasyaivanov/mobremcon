@@ -4,10 +4,8 @@ var url = require('url')
   , path = require('path')
   , prepare_slite = require('./prepare_slite.js')
   , converter = require('./converter.js')
-  , watchr = require('watchr')
-  , NUM_REG_EXP = /\d+\./
-  , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$')
   , SLITE_EXT = '.jpg'
+  , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$')
   , HTML5_UPLOADER = false;
 
 var start = process.hrtime();
@@ -63,20 +61,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log('DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
     });
-    
-    var slite;          // currently loaded Slite
-
-    function sliteError(err) {
-        console.error('ERROR WHILE UPLOADING/CONVERTING slite: ' + err);
-        if (typeof slite !== 'undefined') {
-            slite.deleteHash(true, function () {
-                console.log('Deleted folder and hash due to an error');
-            });
-        }
-        socket.emit("sliteConversionError");
-    }
-    
-    var uploaderDir = path.join(www_dir, "UPLOAD/");
+        
+    var uploadDir = path.join(www_dir, "UPLOAD/");
     function uploadStarted(name){
         resetElapsedTime();
         console.log("UPLOAD started  file: " + name);
@@ -89,7 +75,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         sliteError();
     }
     function uploadComplete(name) {
-        converter(name, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP});
+        converter(name, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir});
     }
     
     if (HTML5_UPLOADER) {
@@ -101,7 +87,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         });
     } else {
         var uploader = new SocketIOFileUploadServer();
-        uploader.dir = uploaderDir;
+        uploader.dir = uploadDir;
         uploader.listen(socket);
 
         uploader.on("start", function (event) {
