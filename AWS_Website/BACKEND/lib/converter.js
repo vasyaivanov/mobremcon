@@ -10,6 +10,8 @@
 var XML_PATH = 'xml'
   , NUM_REG_EXP = /\d+\./
   , CONVERSION_FORMAT = 'html'//'jpg'
+  , WIDTH = 1024
+  , COMPRESSION = 70
   , DEBUG = false;
 
 var start = process.hrtime();
@@ -181,7 +183,7 @@ module.exports = function convert(pathName, socket, opt) {
                 // CONVERSION
                 //unoconv_cmd = "python " + unoconvPathname + ' -f ' + CONVERSION_FORMAT + ' -o ' + hashDir + ' ' + uploadFullFileName;
                 //unoconv_cmd = "python " + unoconvPathname + ' -e PageRange=1-1' + ' -f ' + CONVERSION_FORMAT + ' -o ' + hashDir + ' ' + uploadFullFileName;                 // milti-platform version
-                unoconv_cmd = "python " + unoconvPathname + ' -e Width=1024 -e Compression=75%' + ' -f ' + CONVERSION_FORMAT + ' -o ' + hashDir + ' ' + uploadFullFileName;   // milti-platform version
+                unoconv_cmd = "python " + unoconvPathname + ' -e Width=' + WIDTH + ' -e Compression=' + COMPRESSION + '%' + ' -f ' + CONVERSION_FORMAT + ' -o ' + hashDir + ' ' + uploadFullFileName;   // milti-platform version
                 //unoconv_cmd = "python " + unoconvPathname + ' -e PixelWidth=1024 -e Compression=75%' + ' -f ' + CONVERSION_FORMAT + ' -o ' + hashDir + ' ' + uploadFullFileName;   // milti-platform version
                 //unoconv_cmd = '/opt/libreoffice4.2/program/soffice.bin --headless --convert-to html:impress_html_Export --outdir ' + hashDir + ' ' + uploadFullFileName; // not a mutli-platform version
                 console.log(unoconv_cmd);
