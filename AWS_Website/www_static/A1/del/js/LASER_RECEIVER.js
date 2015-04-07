@@ -127,6 +127,7 @@ function findxy(res, x, y) {
     if (res == 'move') {
         if (flag) {
             console.log("findxy move. prevX = " + prevX + " currX = " + currX);
+            console.log("findxy move. prevY = " + prevY + " currY = " + currY);
             prevX = currX;
             prevY = currY;
             currX = x - canvas[0].offsetLeft;
