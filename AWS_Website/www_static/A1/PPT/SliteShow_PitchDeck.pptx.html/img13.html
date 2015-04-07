@@ -3,19 +3,71 @@
 <html>
 <head>
   <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
-  <title>Slite: Mission</title>
-  <link rel="stylesheet" type="text.css" href="./css/slide.css">
-  <style type="text/css">
-  	.middle{
-  		width: ;
+  <title>Embeded video</title>
+
+  <style>
+  	body{
+  		padding: 0px;
+  		margin: 0px;
   	}
+	iframe {
+	  height: 100%;
+	  width: 100%;
+	  position: absolute;
+	}
   </style>
 </head>
 <body>
-<center>
-	<div style='font-size: 60px; padding: 50px;'>We disruptively redefine the presentation industry!</div>
-	<div style='font-size: 50px'><b>More</b> then what Airbnb did for hotel industry.</div>
-	<center><img src="../img/SliteLogo_Subtitle.gif" alt="slite logo" style='width: 300px; height: 150px; padding-top: 100px'></center>
-</center>
+	<!--<iframe src="http://www.w3schools.com"></iframe>-->
+ <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="player"></div>
+
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'M7lc1UVf-VE',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+		//setTimeout(playVideo, 6000);
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+	  function playVideo() {
+        player.playVideo();
+      }
+    </script>
+  </body>
 </body>
 </html>

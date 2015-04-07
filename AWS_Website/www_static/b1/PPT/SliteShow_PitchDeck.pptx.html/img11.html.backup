@@ -1,0 +1,23 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slite: Live Data</title>
+  <link rel="stylesheet" type="text.css" href="./css/slide.css">
+  <style>
+    body, html, center {
+      margin: 0; padding: 0; height: 100%; overflow: hidden;
+    }
+  </style>
+</head>
+<body style="margin: 0">
+<center>
+  <div class="title">FEATURE: Live Data In Slide</div>
+  <div style="width: 700px; height: 1500px; overflow: hidden; margin-top: 150px;">
+    <iframe id='liveStats' src='http://www.worldometers.info' height = 400px; width = 650px scrolling = 'no'  style="position: relative; left: -30%; top: -18%"></iframe>
+  </div>
+  
+</center>
+</body>
+</html>

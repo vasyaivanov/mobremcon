@@ -1,47 +1,70 @@
 ﻿<!DOCTYPE HTML>
 <html>
 	<head>
-    <meta charset="utf-8" content="user-scalable=no">
-    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no" />
-    <title>REMOTE CONTROL FOR SLITES</title>
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="../js/jquery-2.1.3.min.js"></script>
-    <script src="js/speechRecognizer.js"></script>
-    <script src="js/volumeButtonControl.js"></script>
-    <script src="js/shake.js"></script>
-    <script src="js/notes.js"></script>
-    <script defer src="js/timer.js"></script>
-    <script defer src="js/slite.js"></script>
-    <script src="js/thumbs.0.6.0.min.js"></script>
-
-    <script>
-        var socket = io.connect(document.location.hostname + ':1337');
-    </script>
-
+        <meta charset="utf-8" content="user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=no" />
+        <title>REMOTE CONTROL FOR SLITES</title>
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="../js/jquery-2.1.3.min.js"></script>
+        <script src="js/speechRecognizer.js"></script>
+        <script src="js/volumeButtonControl.js"></script>
+        <script src="js/shake.js"></script>
+        <script src="js/notes.js"></script>
+        <script defer src="js/timer.js"></script>
+        <script defer src="js/slite.js"></script>
+        <script src="js/thumbs.0.6.0.min.js"></script>
+        <script>
+            var socket = io.connect(document.location.hostname + ':1337');
+        </script>
 	</head>
-<!--<body onload="startup()">-->
+<!--<body onload="startup()"-->
 <body>
-    <br><div class="UI topRow midCol" id="URLBox">www.slite.us/<input type="text" id="URLSlides" value="Enter code here" style="color:grey; border:0px" onclick="clearURLSlides()"></div>
-    <div class="UI topRow rightCol" id="timeDisplay">start &#8986;</div>
-    <br><div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)">
-        <div id="overlay"></div>
-        <iframe id="theIframe" class="frame" seamless></iframe>
-    </div><div class="UI midRow rightCol" id="otherSlides">
-        <div class="UI botRow roundButton" id="next" style="height:50px; line-height:50px;">
-            <span style="font-size:2em; vertical-align:top; float:right; padding-right:30px; padding-left:10px;">&gt;</span>
-            <span style="vertical-align:top; float:right">NEXT</span>
-        </div>
-
-        <div class="UI botRow roundButton" id="prev" style="height:50px; line-height:50px;">
-            <span style="font-size:2em; vertical-align:top; float:left; padding-right:10px; padding-left:30px;">&lt;</span>
-            <span style="vertical-align:top;float:left;">PREV</span>
-
-        </div>
-
-        <div class="UI botRow roundButton" id="laser">POINTER</div><div class="UI botRow roundButton" id="draw">DRAW</div>
-        <!--<div class="UI botRow roundButton" id="speech">VOICE<br>CONTROL</div
-        >-->
+    <!-- Google Tag Manager -->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-NRK9KQ"
+            height="0" width="0" style="display:none;visibility:hidden">
+        </iframe>
+    </noscript>
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f  = d.getElementsByTagName(s)[0]
+              , j  = d.createElement(s)
+              , dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NRK9KQ');
+    </script>
+    <!-- End Google Tag Manager --><br>
+    <div class="UI topRow midCol" id="URLBox">www.slite.us/<input type="text" id="URLSlides" value="Enter code here" style="color:grey; border:0px" onclick="clearURLSlides()"></div>
+    <div class="UI topRow rightCol" id="timeDisplay">start &#8986;</div><br>
+    <div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)">
+    <div id="overlay"></div>
+    <iframe id="theIframe" class="frame" seamless></iframe>
+	</div><div class="UI midRow rightCol" id="otherSlides">
+	<div class="UI botRow roundButton" id="next" style="height:50px; line-height:50px;">
+        <span style="font-size:2em; vertical-align:top; float:right; padding-right:30px; padding-left:10px;">&gt;</span>
+        <span style="vertical-align:top; float:right">NEXT</span>
     </div>
+    <div class="UI botRow roundButton" id="laser">POINTER</div><div class="UI botRow roundButton" id="draw">DRAW</div>
+    <!--<div class="UI botRow roundButton" id="speech">VOICE<br>CONTROL</div>-->
+    </div>
+	<div class="UI botRow roundButton" id="laser">POINTER</div>
+    <div class="UI botRow roundButton" id="draw">DRAW</div>
+    <!--<div class="UI botRow roundButton" id="speech">VOICE<br>CONTROL</div>
+    </div>-->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-61563357-1', 'auto');
+        ga('send', 'pageview');
+    </script>
 </body>
 </html>
