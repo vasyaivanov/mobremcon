@@ -88,7 +88,9 @@ left: 10%;
 }
 
 #prev {
-    width: 90px;
+    width: 150px;
+    height: 100px;
+    background-color: lightskyblue;
     background-image: url('../img/buttonPrev.png');
     background-repeat: no-repeat;
     background-size: contain;
@@ -101,7 +103,9 @@ left: 10%;
 }
 
 #next {
-    width: 90px;
+    width: 150px;
+    height: 100px;
+    background-color: lightskyblue;
     background-image: url('../img/buttonNext.png');
     background-repeat: no-repeat;
     background-size: contain;
@@ -155,8 +159,8 @@ left: 10%;
 .buttons_div {
     position: absolute;
     z-index: 100;
-    left: 25%;
-    bottom: 10px;
+    left: 18%;
+    bottom: 0px;
 }
 
 /* wrap and frame classes are for resizing the content inside
