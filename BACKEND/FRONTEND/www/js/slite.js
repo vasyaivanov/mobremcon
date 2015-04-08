@@ -60,7 +60,7 @@ function changeURL() {
     if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1') {
         url = 'http://localhost';
     } else {
-        url = 'http://slite-prod.elasticbeanstalk.com';
+        url = 'http://slite.elasticbeanstalk.com';
     }
 	//if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
     //else socket = io.connect('http://slite.elasticbeanstalk.com:1337');
