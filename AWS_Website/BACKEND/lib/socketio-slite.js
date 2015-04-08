@@ -72,7 +72,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     }
     function uploadError(name) {
         console.error("UPLOAD error: " + name);
-        sliteError();
+        var data = {};
+        data.error = true;
+        socket.emit("sliteConversionError", data);
     }
     function uploadComplete(name) {
         converter(name, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir});
