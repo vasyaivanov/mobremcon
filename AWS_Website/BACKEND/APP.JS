@@ -61,18 +61,42 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 var User = mongoose.model('User', userSchema);
 
-function addUser(username, password, email) {
-	console.log("MA: new user2: " + username + " " + password + " " + email);
+function addUser(username, password, password_confirm, email, callback) {
+   console.log("MA: new user2: " + username + " " + password + " " + email);
+	
+   if(password != password_confirm) {
+    console.log("Password confirm error");
+    callback(4)
+   }	
+	
+	
   // Seed a user
   var user = new User({ username: username, email: email, password: password });
-  user.save(function(err) {
+  
+  var error_code = user.save(function(err) {
     if(err) {
-      console.log(err);
+	var err_code = 0;
+	
+	if (err.err.indexOf("username") > 0 ) {
+	    err_code = 1;
+	}
+	else if( err.err.indexOf("email") > 0 ) {
+	    err_code = 2;
+	}
+	else {
+	    err_code = 3;
+	}
+
+	callback(err_code);
+	
     } else {
       console.log('user: ' + user.username + " saved.");
     }
   });
+  
 }
+
+
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -247,28 +271,48 @@ router.get(rootRegExp, function (req, res){
   res.render(path.join(www_dir, www_static_dir, indexHtml), { user: req.user });
 });
 
-router.get('/account', ensureAuthenticated, function (req, res){
-    //console.log('get /account');
-    res.render(path.join(www_dir, 'account.html'), { user: req.user });
+router.get('/account.html', ensureAuthenticated, function (req, res){
+    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user });
 });
 
-router.post('/signup', function (req, res){
+
+
+router.get('/signup.html', function (req, res){
+    //console.log('get /login');
+    res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req });
+});
+
+
+router.post('/signup.html', function (req, res){
   //console.log('post /signup');
   console.log("MA: new user: " + req.body.username + " " + req.body.password + " " + req.body.email);
   if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html');
   else
   {
-	addUser(req.body.username, req.body.password, req.body.email);
-	res.redirect('/login');
+    
+    addUser(req.body.username, req.body.password, req.body.password1,  req.body.email, 
+	function (error_code) {
+	    if(error_code > 0) {
+		console.log("Reg error");
+	        res.render(path.join(www_dir,www_static_dir , '/signup.html'), { user: req.user, error: error_code, request: req })
+	    }
+	    else {
+		console.log("User has registered");
+	        res.redirect('/signin.html?reg=1');
+	    }
+	}
+    );
+
+
   }
 });
 
-router.get('/login', function (req, res){
+router.get('/signin.html', function (req, res){
     //console.log('get /login');
-    res.render(path.join(www_dir, 'signin.html'), { user: req.user, message: req.flash('error') });
+    res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, message: req.flash('error') });
 });
 
-router.post('/login',
+router.post('/signin.html',
   passport.authenticate('local', { failureRedirect: '/signin.html', failureFlash: true }),
   function (req, res) {
       //console.log('post /login');
@@ -351,5 +395,5 @@ require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, www_static_dir, sl
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+  res.redirect('/signin.html');
 }

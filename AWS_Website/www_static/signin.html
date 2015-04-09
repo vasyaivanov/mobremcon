@@ -21,7 +21,7 @@
         <section class="middle">
             <div class="container-fluid">
 
-                <form class="m-form-signin" role="form" action="/login" method="post">
+                <form class="m-form-signin" role="form" action="/signin.html" method="post">
                     <h1>Sign in</h1>
                     <div class="form-group">
                         <label for="Username">Username</label>
@@ -80,18 +80,18 @@
 
                         <ul class="nav navbar-nav navbar-right">
                           <li class="link-signin">
-                           <!-- <% if (!user) { %>-->
+                            <% if (!user) { %>
                               <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
-                           <!-- <% } else { %>
-                              <a href="/account"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
-                            <% } %> -->
+                            <% } else { %>
+                              <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+                            <% } %> 
                           </li>
                           <li class="link-signin">
-                           <!-- <% if (!user) { %> -->
+                            <% if (!user) { %> 
                               <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-                           <!-- <% } else { %>
+                            <% } else { %>
                               <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
-                            <% } %>-->
+                            <% } %>
                           </li>
                         </ul>
                       </div><!-- /.navbar-collapse -->

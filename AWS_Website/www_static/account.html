@@ -16,59 +16,12 @@
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/screen.css">
 
-        <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-
     </head>
     <body style='background-image: url(img/Slite_Background.jpg);'>
-        <nav class="navbar navbar-default m-navbar" role="navigation">
-
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                      </button>
-                      <a href="/" class="logo"><img src="img/logo.png"></a>
-                    </div>
-
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                      <ul class="nav navbar-nav">
-                        <li>
-                            <a href="about.html">About</a>
-                        </li>
-                        <li><a href="#">Support</a></li>
-                        <li>
-                          <a href="#">Contact</a>
-                        </li>
-                      </ul>
-
-                      <form class="navbar-form navbar-left" role="search">
-                          <div class="form-group">
-                              <div class="input-group">
-                                  <input type="text" class="form-control" placeholder="Search...">
-                                  <span class="input-group-btn">
-                                      <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                                  </span>
-                              </div>
-                          </div>
-                      </form>
-
-                      <ul class="nav navbar-nav navbar-right">
-                        <li class="link-signin">
-                            <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
-                        </li>
-                      </ul>
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-        </nav>
-
         <section class="middle">
             <div class="container-fluid">
-                
-                <form class="m-form-signin" role="form" action="/account" method="post">
+
+                <form class="m-form-signin" role="form" action="/account.html" method="post">
                     <h1>Welcome, <%= user.username %></h1>
                     <h2>Change your personal account information </h2>
                     <div class="form-group">
@@ -101,7 +54,65 @@
             </div>
         </section>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+				<div class="back" href="http://www.slite.us">
+ <nav class="navbar navbar-default m-navbar" role="navigation">
+
+                  <div class="container-fluid">
+                      <!-- Brand and toggle get grouped for better mobile display -->
+                      <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                        </button>
+                        <a href="/" class="logo"><img src="img/logo.png" width=100px></a>
+                      </div>
+
+                      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style='z-index: 5'>
+                        <ul class="nav navbar-nav">
+                          <li>
+                              <a href="http://www.slite.us#2" class='menuLink' id='menuAbout'>About</a>
+                          </li>
+                          <li>
+                              <a href="http://www.slite.us#3" class='menuLink' id='menuContact'>Contact</a>
+                          </li>
+                        </ul>
+
+                        <!--<form class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control btn-create" placeholder="Search...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>-->
+
+                        <ul class="nav navbar-nav navbar-right">
+                          <li class="link-signin">
+                            <% if (!user) { %>
+                              <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
+                           <% } else { %>
+                              <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+                            <% } %> 
+                          </li>
+                          <li class="link-signin">
+                           <% if (!user) { %> 
+                              <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+                           <% } else { %>
+                              <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
+                            <% } %>
+                          </li>
+                        </ul>
+                      </div><!-- /.navbar-collapse -->
+                  </div><!-- /.container-fluid -->
+          </nav>
+        
+		</div>
+        
+		<script src="js/jquery-2.1.1.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
         <script src="js/bootstrap.js"></script>
         <script src="js/main.js"></script>
