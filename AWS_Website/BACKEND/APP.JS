@@ -94,6 +94,7 @@ function addUser(username, password, password_confirm, email, callback) {
     }
   });
   
+  callback(0);
 }
 
 
@@ -279,19 +280,20 @@ router.get('/account.html', ensureAuthenticated, function (req, res){
 
 router.get('/signup.html', function (req, res){
     //console.log('get /login');
-    res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req });
+    res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req,  error: 0});
 });
 
 
 router.post('/signup.html', function (req, res){
   //console.log('post /signup');
   console.log("MA: new user: " + req.body.username + " " + req.body.password + " " + req.body.email);
-  if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html');
+  if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA');
   else
   {
     
     addUser(req.body.username, req.body.password, req.body.password1,  req.body.email, 
 	function (error_code) {
+	    console.log(error_code);
 	    if(error_code > 0) {
 		console.log("Reg error");
 	        res.render(path.join(www_dir,www_static_dir , '/signup.html'), { user: req.user, error: error_code, request: req })
