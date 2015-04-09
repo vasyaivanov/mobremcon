@@ -1,5 +1,4 @@
-﻿
-<html>
+﻿<html>
 <head>
 	<title>Slite Pitch Deck</title>
 
@@ -32,17 +31,17 @@
     <link class="rs-file" href="../A1/css/A1.css" rel="stylesheet">
 </head>
 
-<body> <!--onresize="resizeCanvas()">--> 
+<body> <!--onresize="resizeCanvas()">-->
 
     <canvas id="drawCanvas" ></canvas>
 
-	
+
 	<div id="sliteWatermak" style="height:40px; line-height:40px;">
         <span style="vertical-align:top;">Powered by SLITE.US</span>
         <span style="font-size:2em; vertical-align:top;">☰</span>
     </div>
-	
-	
+
+
     <div id="redDot"><img src="img/redDot.png" alt="Laser Pointer"></div>
 
   	<div id="video-gallery" class="royalSlider videoGallery rsDefault"></div>
@@ -53,13 +52,13 @@
 		<p class="paper" contenteditable>
 		</p>
 	</div>
-	
+
 	<div id="comments">
 			<center><div class='panelTitle' style='position: absolute; left: 25%;'>Chat with others about this presentation</div><center>
 			<div class="closevideo" id="closeChat" style='margin-right: 20px;'></div>
 			<!-- Begin Comments JavaScript Code --><script type="text/javascript" async>function ajaxpath_5434a641072d9(url){return window.location.href == '' ? url : url.replace('&s=','&s=' + escape(window.location.href));}(function(){document.write('<div id="fcs_div_5434a641072d9"><a title="free comment script" href="http://www.freecommentscript.com">&nbsp;&nbsp;<b>Free HTML User Comments</b>...</a></div>');fcs_5434a641072d9=document.createElement('script');fcs_5434a641072d9.type="text/javascript";fcs_5434a641072d9.src=ajaxpath_5434a641072d9("http://www.freecommentscript.com/GetComments2.php?p=5434a641072d9&s=&Size=10#!5434a641072d9");setTimeout("document.getElementById('fcs_div_5434a641072d9').appendChild(fcs_5434a641072d9)",1);})();</script><noscript><div><a href="http://www.freecommentscript.com" title="free html user comment box">Free Comment Script</a></div></noscript><!-- End Comments JavaScript Code -->
 	</div>
-	
+
 	<div class='helpOverlay' id='helpOverlay'>
 		<div class="closevideo" id="closeHelpOverlay" style='margin-right:30px;'></div>
 		<iframe src="../A1/help.html" style='width:100%;height:100%'></iframe>
@@ -68,12 +67,12 @@
 	<div id="closedCaptioningPanel"></div>
 
 	<div id="chatPanel"></div>
-	<div id="personalNotesPanel"></div>	
+	<div id="personalNotesPanel"></div>
 
 	<div id="videochatpanel"></div>
 	<div id="videochat" style="overflow-x: hidden; overflow-y: scroll;">
 		<h1>Video Chat <div class="closevideo" id="closevideo"></div></h1>
-		<div id="clickallow" style='font-size:24px;padding-top:0px;'>click "Allow" above<b style='font-size:38'> &#8599;</b></div>	
+		<div id="clickallow" style='font-size:24px;padding-top:0px;'>click "Allow" above<b style='font-size:38'> &#8599;</b></div>
 		<article id="videochatMainContainer">
 			<!-- just copy this <section> and next script -->
 			<section class="experiment">
@@ -93,28 +92,28 @@
 			</section>
 		</article>
 	</div>
-	
+
 	<div class="startTemporaryPopup" id="videoChatExplanator">&#8592; click grey bar to open Video Chat</div>
 	<div class="startTemporaryPopup" id="wallChatExplanator">click grey bar to open Wall/Chat &#8594;</div>
 	<div class="startTemporaryPopup" id="urlExplanator">share this is unique address of your presentation &#8593;</div>
 	<div class="startTemporaryPopup" id="menuExplanator">click ☰ to open Menu &#8594;</div>
 	<div class="startTemporaryPopup" id="closeExplanator"><div id="closeExplanatorText">Click Here To Close Help</div></div>
-	
+
 	<nav id="primary_nav_wrap">
 		<ul>
 			<li><a href="#"></a>
 				<ul class="menuSubmenu">
-				  <li><a href="javascript:showRemote()" id="menuRemote">Become Presenter</a></li>	
+				  <li><a href="javascript:showRemote()" id="menuRemote">Become Presenter</a></li>
 				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span> Chat</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
-				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span> Video Chat</a></li>		  
+				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span> Video Chat</a></li>
 				  <li><a href="http://www.slite.us">Home</a></li>
 				  <li><a href="javascript:showHideHelpOverlay()" id="menuHelpOverlay">Help</a></li>
 				</ul>
 			</li>
 		</ul>
 	</nav>
-	
+
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
     <script class="rs-file" src="../js/jquery.royalslider.min.js"></script>
@@ -146,8 +145,7 @@
         var number_of_slides = "NUM_SLIDES_TEMPLATE";
         var slite = '/HASH_TEMPLATE/';
     </script>
-    <script src="../A1/js/A1.js"></script>
-
+    <script src="js/A1.js"></script>
     <!-- end VideoChat Javascript -->
 </body>
 </html>

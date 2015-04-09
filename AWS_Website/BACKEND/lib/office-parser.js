@@ -6,9 +6,9 @@
         wrench = require('wrench');
 
 
-  var XML_PATH = "./xml",
-      EXT      = ['.docx', '.xlsx', '.pptx'];
-      DEBUG    = false;
+    var XML_PATH = "./xml",
+        EXT      = ['.docx', '.xlsx', '.pptx'];
+        DEBUG    = false;
 
 
 var OfficeParser = (function () {

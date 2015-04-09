@@ -29,7 +29,7 @@ function elapsedTime(note) {
     return elapsed;
 }
 
-module.exports = function convert(pathName, socket, opt) {
+module.exports.convert = function (pathName, socket, opt) {
     elapsedTime("UPLOAD complete file: " + pathName);
     
     var extention = path.extname(pathName);
