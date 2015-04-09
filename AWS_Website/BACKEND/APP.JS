@@ -91,10 +91,11 @@ function addUser(username, password, password_confirm, email, callback) {
 	
     } else {
       console.log('user: ' + user.username + " saved.");
+      callback(0);
+
     }
   });
-  
-  callback(0);
+
 }
 
 
@@ -290,18 +291,17 @@ router.post('/signup.html', function (req, res){
   if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA');
   else
   {
-    
     addUser(req.body.username, req.body.password, req.body.password1,  req.body.email, 
 	function (error_code) {
-	    console.log(error_code);
 	    if(error_code > 0) {
-		console.log("Reg error");
+		// Error codes: 1 - user exists, 2 - email exists, 3 - other DB errors, 4 - Passwords are different
+		console.log("Reg error code: " + error_code);
+		//res.redirect('/signup.html?err=' + error_code);
 	        res.render(path.join(www_dir,www_static_dir , '/signup.html'), { user: req.user, error: error_code, request: req })
 	    }
 	    else {
 		console.log("User has registered");
 		res.redirect('/signin.html?username=' + req.body.username + '&REG_OK=1;');
-
 	    }
 	}
     );
