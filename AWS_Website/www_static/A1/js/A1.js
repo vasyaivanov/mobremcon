@@ -38,37 +38,37 @@ function showHideVideoChat() {
             $("#setup-new-room").trigger("click");
         }
         isVideoOn = true;
-        
+
         //reduce main window
         //$(".rsContainer").animate({"width":"80%"},300);
         $(".rsContainer").css("float", "right");
         $(".rsContainer").css({ "width": "80%", "clear": "both" });
         hideClickAllow();
     } else {
-        //put main window back to full size	
+        //put main window back to full size
         //$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
         $(".rsContainer").css({ "width": "100%", "clear": "both" });
-        
+
         // remove the video window on closing the panel
         var videosContainer = document.getElementById('videos-container');
         if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
-        
+
         isVideoOn = false;
     }
-    
+
     var label = $("#videoChatOpenCloseLabel");
     if (label.html() == "") {
         $("#videoChatOpenCloseLabel").html("Close");
     } else {
         $("#videoChatOpenCloseLabel").html("");
     }
-    
+
     $("#videochat").slideToggle();
     /*
 		$("#videochat").css('overflow-x','hidden');
 		$("#videochat").css('overflow-y','scroll');
 		*/
-		
+
 		showHideMenu(true);
 }
 
@@ -102,7 +102,7 @@ function showHideHelpOverlay() {
 
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
-    
+
     for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i];
         var eqPos = cookie.indexOf("=");
@@ -225,20 +225,20 @@ var config = {
         if (alreadyExist) {
             return;
         }
-        
+
         if (typeof roomsList === 'undefined') roomsList = document.body;
-        
+
         var tr = document.createElement('tr');
         tr.innerHTML = '<td><strong>' + room.roomName + '</strong> shared a conferencing room with you!</td>' +
 							'<td><button id="join-button" class="join">Join</button></td>';
         roomsList.insertBefore(tr, roomsList.firstChild);
-        
+
         var joinRoomButton = tr.querySelector('.join');
         joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
         joinRoomButton.setAttribute('data-roomToken', room.roomToken);
         joinRoomButton.onclick = function () {
             this.disabled = true;
-            
+
             var broadcaster = this.getAttribute('data-broadcaster');
             var roomToken = this.getAttribute('data-roomToken');
             captureUserMedia(function () {
@@ -277,15 +277,15 @@ function setupNewRoomButtonClickHandler() {
 
 function captureUserMedia(callback, failure_callback) {
     var video = document.createElement('video');
-    
+
     getUserMedia({
         video: video,
         onsuccess: function (stream) {
             config.attachStream = stream;
             callback && callback();
-            
+
             video.setAttribute('muted', true);
-            
+
             var mediaElement = getMediaElement(video, {
                 width: (videosContainer.clientWidth / 2) - 50,
                 buttons: ['mute-audio', 'mute-video', 'full-screen', 'volume-slider']
@@ -327,7 +327,7 @@ function rotateVideo(video) {
 function scaleVideos() {
     var videos = document.querySelectorAll('video'),
         length = videos.length, video;
-    
+
     var minus = 130;
     var windowHeight = 700;
     var windowWidth = 600;
@@ -336,7 +336,7 @@ function scaleVideos() {
     var blockAspectRatio;
     var tempVideoWidth = 0;
     var maxVideoWidth = 0;
-    
+
     for (var i = length; i > 0; i--) {
         blockAspectRatio = i * videoAspectRatio / Math.ceil(length / i);
         if (blockAspectRatio <= windowAspectRatio) {
@@ -354,7 +354,7 @@ function scaleVideos() {
     }
 }
 
-window.onresize = function () { 
+window.onresize = function () {
     scaleVideos();
     resizeCanvas();
 };
@@ -365,7 +365,7 @@ jQuery(document).ready(function ($) {
         fadeinLoadedSlide: true,
         controlNavigationSpacing: 0,
         controlNavigation: 'none',
-        
+
         thumbs: {
             autoCenter: false,
             fitInViewport: true,
@@ -407,30 +407,30 @@ jQuery(document).ready(function ($) {
         var slider = $(".royalSlider").data('royalSlider');
         if (A1) // we did not do any replacement!
         {
-            slide_html_path = "../A1/PPT/SliteShow_PitchDeck.pptx";
+            slide_html_path = "PPT/SliteShow_PitchDeck.pptx";
             if (slide == 1) {
                 slide_html_path += ".html/SliteShow_PitchDeck.html";
             } else {
                 slide_html_path += ".html/img" + slide + ".html" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
             }
-            var slide_html = "<div style='text-align:center' id=slide class='rsContent'>" 
-						   + "<iframe src='" + slide_html_path + "' width='100%' height='100%' seamless> </iframe>" 
-						   + "<div class='rsTmb'>" 
-					       + "<h5>SLIDE" + slide + "</h5>" 
-					       + "     <span>Slide " + slide + " here</span>" 
+            var slide_html = "<div style='text-align:center' id=slide class='rsContent'>"
+						   + "<iframe src='" + slide_html_path + "' width='100%' height='100%' seamless> </iframe>"
+						   + "<div class='rsTmb'>"
+					       + "<h5>SLIDE" + slide + "</h5>"
+					       + "     <span>Slide " + slide + " here</span>"
 					       + "</div> </div>";
             slider.appendSlide(slide_html);
         } else { // !A1
-            var slide_html = "<div style='text-align:center;overflow:scroll' id=slide class='rsContent'>" 
-						           + "<img src='" + slide_html_path + "' height='100%'>" 
-					               + "<div class='rsTmb'>" 
-					               + "<h5>SLIDE" + slide + "</h5>" 
-						           + "     <span>Slide " + slide + " here</span>" 
+            var slide_html = "<div style='text-align:center;overflow:scroll' id=slide class='rsContent'>"
+						           + "<img src='" + slide_html_path + "' height='100%'>"
+					               + "<div class='rsTmb'>"
+					               + "<h5>SLIDE" + slide + "</h5>"
+						           + "     <span>Slide " + slide + " here</span>"
 						           + "</div> </div>";
             slider.appendSlide(slide_html);
         }
     }
-    
+
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
 });
@@ -444,16 +444,16 @@ socket.on('ccBroadcast', function (data) {
     $('#closedCaptioningPanel').show(400).delay(2000).fadeOut(400);
 });
 
-socket.on('news', function (data) { 
+socket.on('news', function (data) {
     if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
         var button = data.hello - 1;
-        
+
         console.log(button);
-        
+
         var slider = $(".royalSlider").data('royalSlider');
-        
+
         slider.goTo(data.slide);
-        
+
         switch (button) {
             case -102: {
                 slider.goTo(0);
@@ -479,7 +479,7 @@ socket.on('news', function (data) {
                 slider.playVideo();
             }
         }
-        
+
         socket.emit('my other event', { my: 'data' });
     }
 });
