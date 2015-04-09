@@ -300,7 +300,8 @@ router.post('/signup.html', function (req, res){
 	    }
 	    else {
 		console.log("User has registered");
-	        res.redirect('/signin.html?reg=1');
+		res.redirect('/signin.html?username=' + req.body.username + '&REG_OK=1;');
+
 	    }
 	}
     );
@@ -311,7 +312,7 @@ router.post('/signup.html', function (req, res){
 
 router.get('/signin.html', function (req, res){
     //console.log('get /login');
-    res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, message: req.flash('error') });
+    res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, message: req.flash('error'), request: req });
 });
 
 router.post('/signin.html',
