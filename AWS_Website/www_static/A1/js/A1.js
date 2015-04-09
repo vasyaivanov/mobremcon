@@ -397,15 +397,15 @@ jQuery(document).ready(function ($) {
             navigateByCenterClick: true
         }
     });
-    var A1 = (number_of_slides === "NUM_SLIDES_TEMPLATE");
-    if (A1) {
-        number_of_slides = 13;
+    var staticSlite = (slite === '/HASH_TEMPLATE/');
+    if (staticSlite) {
         slite = '';
+        number_of_slides = staticSlides;
     }
     for (var slide = 1; slide <= number_of_slides; ++slide) {
         var slide_html_path = slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
         var slider = $(".royalSlider").data('royalSlider');
-        if (A1) // we did not do any replacement!
+        if (staticSlite) // we did not do any replacement!
         {
             slide_html_path = "PPT/SliteShow_PitchDeck.pptx";
             if (slide == 1) {
@@ -420,7 +420,7 @@ jQuery(document).ready(function ($) {
 					       + "     <span>Slide " + slide + " here</span>"
 					       + "</div> </div>";
             slider.appendSlide(slide_html);
-        } else { // !A1
+        } else { // !staticSlite
             var slide_html = "<div style='text-align:center;overflow:scroll' id=slide class='rsContent'>"
 						           + "<img src='" + slide_html_path + "' height='100%'>"
 					               + "<div class='rsTmb'>"
