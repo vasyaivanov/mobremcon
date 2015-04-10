@@ -88,8 +88,11 @@ left: 10%;
 }
 
 #prev {
-    width: 150px;
+    width: 200px;
     height: 100px;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
     background-color: lightskyblue;
     background-image: url('../img/buttonPrev.png');
     background-repeat: no-repeat;
@@ -103,8 +106,11 @@ left: 10%;
 }
 
 #next {
-    width: 150px;
+    width: 200px;
     height: 100px;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
     background-color: lightskyblue;
     background-image: url('../img/buttonNext.png');
     background-repeat: no-repeat;
@@ -159,7 +165,7 @@ left: 10%;
 .buttons_div {
     position: absolute;
     z-index: 100;
-    left: 18%;
+    left: 30%;
     bottom: 0px;
 }
 
