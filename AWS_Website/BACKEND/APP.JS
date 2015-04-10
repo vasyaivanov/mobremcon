@@ -288,7 +288,7 @@ router.get('/signup.html', function (req, res){
 router.post('/signup.html', function (req, res){
   //console.log('post /signup');
   console.log("MA: new user: " + req.body.username + " " + req.body.password + " " + req.body.email);
-  if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA');
+  if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA=1');
   else
   {
     addUser(req.body.username, req.body.password, req.body.password1,  req.body.email, 
@@ -301,7 +301,7 @@ router.post('/signup.html', function (req, res){
 	    }
 	    else {
 		console.log("User has registered");
-		res.redirect('/signin.html?username=' + req.body.username + '&REG_OK=1;');
+		res.redirect('/signin.html?username=' + req.body.username + '&REG_OK=1');
 	    }
 	}
     );

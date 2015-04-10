@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title><%= error %> Slite - web presentation software</title>
+        <title>Slite - web presentation software</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -20,9 +20,20 @@
     <body style='background-image: url(img/Slite_Background.jpg);'>
         <section class="middle">
             <div class="container-fluid">
-
                 <form class="m-form-signin" role="form" action="/signup.html" method="post">
                     <h1>Sign up</h1>
+		    <% if (error == 1) { %>
+				<h4 style="color: #FF0000">Username <i><%= request.param('username') %></i> has already taken. Please try another one.</h4>
+		   <%   } else if (error == 2) { %>
+				<h4 style="color: #FF0000">Email <i><%= request.param('email') %></i> has already registered. Please try another one.</h4>
+		   <%   } else if (error == 3) { %>
+				<h4 style="color: #FF0000">DB error. Contact us, please.</h4>
+		   <%   } else if (error == 4) { %>
+				<h4 style="color: #FF0000">Password does not match the confirm password.</h4>
+		   <%   } else if (request.param("NO_DATA") == 1) { %>
+				<h4 style="color: #FF0000">Please fill out the registration form.</h4>
+		   <% } %>
+
                     <h2>Create your personal account </h2>
                     <div class="form-group">
                         <label for="exampleInputUsername">Username</label>
