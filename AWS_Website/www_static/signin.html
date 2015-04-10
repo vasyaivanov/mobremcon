@@ -26,6 +26,11 @@
 		    <% if (request.param("REG_OK") == 1) { %>
 				<h4 style="color: #FF0000">Congrats! You have registered. Enter your password to log in.</h4>
 		    <% } %>
+
+		    <% if (request.param("ERROR_AUTH") == 1) { %>
+				<h4 style="color: #FF0000">The user name or password is incorrect.</h4>
+		    <% } %>
+
                     <div class="form-group">
                         <label for="Username">Username</label>
                         <input type="text" class="form-control" name="username" placeholder="Enter username" value="<%= request.param('username') %>">

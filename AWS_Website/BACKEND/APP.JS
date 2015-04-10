@@ -315,12 +315,7 @@ router.get('/signin.html', function (req, res){
 });
 
 router.post('/signin.html',
-  passport.authenticate('local', { failureRedirect: '/signin.html', failureFlash: true }),
-  function (req, res) {
-      //console.log('post /login');
-	  console.log("MA: login2: " + req.user.username + " " + req.user.password + " " + req.user.email);
-    res.redirect('/');
-  });
+  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?ERROR_AUTH=1' }));
 
 router.get('/logout', function (req, res){
   //console.log('get /logout');
