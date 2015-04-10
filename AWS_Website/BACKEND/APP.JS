@@ -64,16 +64,15 @@ var User = mongoose.model('User', userSchema);
 function addUser(username, password, password_confirm, email, callback) {
    console.log("MA: new user2: " + username + " " + password + " " + email);
 	
-   if(password != password_confirm) {
-    console.log("Password confirm error");
-    callback(4)
-   }	
-	
-	
   // Seed a user
   var user = new User({ username: username, email: email, password: password });
   
-  var error_code = user.save(function(err) {
+   if(password != password_confirm) {
+    	console.log("Password confirm error");
+    	callback(4)
+   }
+ else {
+  user.save(function(err) {
     if(err) {
 	var err_code = 0;
 	
@@ -90,11 +89,11 @@ function addUser(username, password, password_confirm, email, callback) {
 	callback(err_code);
 	
     } else {
-      console.log('user: ' + user.username + " saved.");
-      callback(0);
-
+     console.log('user: ' + user.username + " saved.");
+     callback(0);
     }
   });
+}
 
 }
 
