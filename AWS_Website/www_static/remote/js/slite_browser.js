@@ -20,7 +20,7 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 // Touching the control area (the currentSlide div) will turn the
 // laser on, making the red dot appear on the presentation.
 // But only if we are in laser mode. 
-function touchStart() {
+function touchStart(event) {
     event.preventDefault();
     if(LASER === interactionType) {
         socket.emit('laserOn', {slideID: $('#URLSlides').val()});
@@ -39,7 +39,7 @@ function touchStart() {
     }
 };
 
-function touchEnd() {
+function touchEnd(event) {
     event.preventDefault();
     if (LASER === interactionType) {
         socket.emit('laserOff');
