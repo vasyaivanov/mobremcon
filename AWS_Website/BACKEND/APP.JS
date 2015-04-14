@@ -15,7 +15,8 @@ var express = require('express')
   , path = require('path')
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
-  , ioPort = 1337;
+  , ioPort = 1337
+  , notesCookie = "slitenotesID";
 
 var app = express();
 module.exports.app = app;
@@ -33,6 +34,20 @@ var userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true},
 });
+
+
+var notesSchema = mongoose.Schema({
+  uid: { type: String},
+  sid: { type: String},
+  note: { type: String},
+  tmp: {type: String}
+});
+
+notesSchema.index({uid: 1, sid: 1}, {unique: true});
+
+
+var Note = mongoose.model('note', notesSchema);
+
 
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
@@ -265,6 +280,7 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
 
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
+
   //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
@@ -279,9 +295,112 @@ router.get('/account.html', ensureAuthenticated, function (req, res){
 
 
 router.get('/signup.html', function (req, res){
-    //console.log('get /login');
+    //console.log('get /login');	
     res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req,  error: 0});
 });
+
+
+router.post('/notes.html', function (req, res){
+    res.type('text/html');
+    res.status(200);
+    var slideId = req.body.slideId;
+    var noteText = req.body.noteText;
+    var initialize = (req.body.initialize > 0) ? 1:0;
+
+    slideId = slideId.replace(/[^a-zA-Z0-9]/g,"");
+
+   // if(noteText) noteText = noteText.replace(/[^a-zA-Z0-9]/g,"");
+ 
+
+    var slidePath = localDir + slitesDir + '/' + slideId + '/';
+
+    var userId = 0;
+    var oldUserId = 0;
+    var tmpNote = 0;
+ 
+   console.log("------------ note request start");
+
+   if(req.user && req.cookies[notesCookie]) {
+	if (req.user._id != req.cookies[notesCookie]) {
+		console.log("Removing old user ID cookie");
+		oldUserId = req.cookies[notesCookie];
+		res.cookie(notesCookie, req.user._id);
+		Note.find({ uid: req.cookies[notesCookie], tmp: 1 }).remove().exec();
+		userId = req.user._id;
+	}
+   }
+
+if(!userId) {
+    if(! req.cookies[notesCookie]) {
+	console.log("No cookie. Setting up a new cookie file");
+	if(req.user) {
+		console.log("New id is " + req.user._id);
+		res.cookie(notesCookie, req.user._id);
+		userId = req.user._id;
+	}
+	else {
+		tmpNote = 1;
+		var newId = Math.floor(Math.random() * (99999999999999 - 1)) + 1;
+		console.log("New id is " + newId);
+		res.cookie(notesCookie, newId);
+		userId = newId;
+	}
+    }
+    else {
+	if(!req.user) {tmpNote = 1;}
+	userId = req.cookies[notesCookie];
+	console.log("Cookie found");
+    }
+
+}
+
+    if(fs.existsSync(slidePath) == true && userId != '') {
+	console.log('Slide was found');
+	console.log('Your id is:' + userId);
+
+
+	Note.find({uid : userId, sid: slideId }, function (err, docs) {
+			if (!docs.length){
+				console.log(' Inserting new note...');
+				// Code 1 - added new note
+				res.json({ "code": 1 })
+				var note = new Note({uid: userId,sid: slideId, note: noteText, tmp: tmpNote});
+				note.save(function(err, saved) {
+						if(err) console.error('Can\'t insert a new note: ' + err);
+					});
+			}
+			else {
+				Note.update({ uid : userId, sid: slideId }, {$set: { note: noteText, tmp: tmpNote}}, {upsert: true},
+					function (err, numAffected) {
+  						if(numAffected > 0) {console.log("Updated rows: " + numAffected)}
+					}
+				);
+
+				if(initialize == 1) {
+					// Code 2 - Initialize
+					console.log('Retrieving note from DB');
+					res.json({"code": "2", "note": docs[0].note});
+					console.log("------------ note request end");
+				}
+				else {
+					// Code 3 - saved
+					console.log('Updating note');
+					res.json({"code": "3"});
+					console.log("------------ note request end");
+				}
+			}
+		});
+    }
+else {
+	// Code 10 - slide was not found
+	res.json({ "code": "10" })
+
+	console.log("Slide was not found");
+	console.log("------------ note request end");
+}
+  
+});
+
 
 
 router.post('/signup.html', function (req, res){
