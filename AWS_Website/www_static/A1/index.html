@@ -63,6 +63,17 @@
 		<div class="closevideo" id="closeHelpOverlay" style='margin-right:30px;'></div>
 		<iframe src="../A1/help.html" style='width:100%;height:100%'></iframe>
 	</div>
+	
+	<div class='insertVideoSlideOverlay' id='insertVideoSlideOverlay'>
+		<div class="closevideo" id="closeInsertVideoSlideOverlay" style='margin-right:30px;'></div>
+		<center>
+			<div id="insertVideoSlide">
+				<div>Enter URL (adress) of <b>Youtube</b></div>
+				<div style='color:grey; font-size:14px'>Example: https://www.youtube.com/watch?v=Yzu3FPo1rHU</div>
+				<input type="text" class="rounded" id="insertVideoSlideValue"/><button type="button" class="btn" id="submitInsertVideoSlide">Submit</button>
+			</div>
+		</center>
+	</div>
 
 	<div id="closedCaptioningPanel"></div>
 
@@ -107,6 +118,7 @@
 				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span> Chat</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span> Video Chat</a></li>
+				  <li><a href="javascript:showHideInsertVideoSlideOverlay()" id="menuInsertVideoSlide">Insert Video Slide</a></li>
 				  <li><a href="http://www.slite.us">Home</a></li>
 				  <li><a href="javascript:showHideHelpOverlay()" id="menuHelpOverlay">Help</a></li>
 				</ul>

@@ -87,6 +87,18 @@ function showHideMenu(fromItemClick) {
     }
 }
 
+var isInsertVideoSlideOverlayOn = false;
+function showHideInsertVideoSlideOverlay() {
+    if (!isInsertVideoSlideOverlayOn) {
+        $('#insertVideoSlideOverlay').fadeIn(400);;
+        isInsertVideoSlideOverlayOn = true;
+    } else {
+        $('#insertVideoSlideOverlay').fadeOut(400);
+        isInsertVideoSlideOverlayOn = false;
+    }
+    showHideMenu(true);
+}
+
 
 var isHelpOverlayOn = false;
 function showHideHelpOverlay() {
@@ -148,8 +160,34 @@ function showRemote() {
         pathName = pathName.replace('/', '');
     }
     var newUrl = "http://" + document.location.hostname + "/remote?presentation=" + pathName;
-    window.open(newUrl, "popupWindow", "width=1050,height=700"); //,scrollbars=no
+    window.open(newUrl, "popupWindow", "width=1050,height=700, scrollbars=no"); //,scrollbars=no
+	showHideMenu(true);
 }
+
+function submitInsertVideoSlide() {
+	var result;
+	
+	var val = $('#insertVideoSlideValue').val();
+	if(val){
+		if(val.match(/^[a-z0-9]+$/i)){
+			result = val;
+		}else{
+			var video_id = val.split('v=')[1];
+			var ampersandPosition = video_id.indexOf('&');
+			if(ampersandPosition != -1) {
+			  video_id = video_id.substring(0, ampersandPosition);
+			}
+			result =  video_id;
+		}
+		
+		socket.emit('insertVideoId', result);
+	}else{
+		alert("Your youtube url or id is wrong. Please see example above");
+	}
+	
+	showHideInsertVideoSlideOverlay();
+}
+
 
 $('#chatPanel').click(function () {
     showHideComments();
@@ -164,8 +202,14 @@ $('#personalNotesPanel').click(function () {
 $('#closePersonalNotes').click(function () {
     showHidePersonalNotes();
 });
-
+$('#closeInsertVideoSlideOverlay').click(function () {
+    showHideInsertVideoSlideOverlay();
+});
 $('#closeHelpOverlay').click(function () {
+    showHideHelpOverlay();
+});
+
+$('#closeInsertVideoSlideOverlay').click(function () {
     showHideHelpOverlay();
 });
 
@@ -175,7 +219,9 @@ $('#videochatpanel').click(function () {
 $('#closevideo').click(function () {
     showHideVideoChat();
 });
-
+$('#submitInsertVideoSlide').click(function () {
+    submitInsertVideoSlide();
+});
 $('#sliteWatermak').click(function () {
     showHideMenu();
 });
