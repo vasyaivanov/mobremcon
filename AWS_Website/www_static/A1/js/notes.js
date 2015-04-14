@@ -9,7 +9,7 @@ $.ajax({
 	url: "../notes.html",
 	data: {slideId: document.location.pathname, initialize: 1},
 	success: function(data){
-		if(data.code == 2) {
+		if(data.code == 2 || data.code == 1) {
 			if(data.note) {
 				$(".paper").html(data.note);
 			}

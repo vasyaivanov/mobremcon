@@ -301,34 +301,55 @@ router.get('/signup.html', function (req, res){
 
 
 router.post('/notes.html', function (req, res){
+
     res.type('text/html');
     res.status(200);
     var slideId = req.body.slideId;
-    var noteText = req.body.noteText;
+    var noteText;
     var initialize = (req.body.initialize > 0) ? 1:0;
 
     slideId = slideId.replace(/[^a-zA-Z0-9]/g,"");
 
    // if(noteText) noteText = noteText.replace(/[^a-zA-Z0-9]/g,"");
- 
-
     var slidePath = localDir + slitesDir + '/' + slideId + '/';
 
     var userId = 0;
     var oldUserId = 0;
     var tmpNote = 0;
  
+    function findAremNote (callback) {
+	   if(req.user && req.cookies[notesCookie]) {
+		if (req.user._id != req.cookies[notesCookie]) {
+			console.log("Removing old user ID cookie");
+			oldUserId = req.cookies[notesCookie];
+			Note.find({ uid: req.cookies[notesCookie], tmp: 1 } , function (err, docs) {
+				if (docs.length > 0 ) {
+					var noteRet;
+					if(req.body.noteText) {noteRet = req.body.noteText;}
+					else {
+						noteRet = docs[0].note;
+					}
+					Note.find({ uid: req.cookies[notesCookie], tmp: 1 }).remove().exec();
+					callback(noteRet,req.user._id);
+				}
+				else {
+					callback("",req.user._id);
+				}
+			});
+
+		}
+   	   }
+	   else {
+		callback("",req.cookies[notesCookie]);
+	   }
+
+    }
+
    console.log("------------ note request start");
 
-   if(req.user && req.cookies[notesCookie]) {
-	if (req.user._id != req.cookies[notesCookie]) {
-		console.log("Removing old user ID cookie");
-		oldUserId = req.cookies[notesCookie];
-		res.cookie(notesCookie, req.user._id);
-		Note.find({ uid: req.cookies[notesCookie], tmp: 1 }).remove().exec();
-		userId = req.user._id;
-	}
-   }
+findAremNote(function(noteText,userId) {
+
+if(!(noteText)) {    var noteText = req.body.noteText;}
 
 if(!userId) {
     if(! req.cookies[notesCookie]) {
@@ -351,7 +372,9 @@ if(!userId) {
 	userId = req.cookies[notesCookie];
 	console.log("Cookie found");
     }
-
+}
+else {
+	if(!req.user) {tmpNote = 1;}
 }
 
     if(fs.existsSync(slidePath) == true && userId != '') {
@@ -363,7 +386,7 @@ if(!userId) {
 			if (!docs.length){
 				console.log(' Inserting new note...');
 				// Code 1 - added new note
-				res.json({ "code": 1 })
+				res.json({ "code": 1, "note": noteText })
 				var note = new Note({uid: userId,sid: slideId, note: noteText, tmp: tmpNote});
 				note.save(function(err, saved) {
 						if(err) console.error('Can\'t insert a new note: ' + err);
@@ -398,6 +421,9 @@ else {
 	console.log("Slide was not found");
 	console.log("------------ note request end");
 }
+
+});
+
   
 });
 
