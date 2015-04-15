@@ -311,10 +311,10 @@ router.post('/notes.html', function (req, res){
     slideId = slideId.replace(/[^a-zA-Z0-9]/g,"");
 
    // if(noteText) noteText = noteText.replace(/[^a-zA-Z0-9]/g,"");
-    var slidePath = localDir + slitesDir + '/' + slideId + '/';
+    var slidePath = www_dir + slitesDir + '/' + slideId + '/';
 
     if(slideId == "A1") {
-	slidePath = localDir + www_static_dir + '/' + slideId;
+	slidePath = www_dir + www_static_dir + '/' + slideId;
     }
 
 
