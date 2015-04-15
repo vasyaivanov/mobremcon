@@ -313,6 +313,11 @@ router.post('/notes.html', function (req, res){
    // if(noteText) noteText = noteText.replace(/[^a-zA-Z0-9]/g,"");
     var slidePath = localDir + slitesDir + '/' + slideId + '/';
 
+    if(slideId == "A1") {
+	slidePath = localDir + www_static_dir + '/' + slideId;
+    }
+
+
     var userId = 0;
     var oldUserId = 0;
     var tmpNote = 0;
@@ -322,22 +327,22 @@ router.post('/notes.html', function (req, res){
 		if (req.user._id != req.cookies[notesCookie]) {
 			console.log("Removing old user ID cookie");
 			oldUserId = req.cookies[notesCookie];
-			Note.find({ uid: req.cookies[notesCookie], tmp: 1 } , function (err, docs) {
-				if (docs.length > 0 ) {
-					var noteRet;
-					if(req.body.noteText) {noteRet = req.body.noteText;}
-					else {
-						noteRet = docs[0].note;
-					}
-					Note.find({ uid: req.cookies[notesCookie], tmp: 1 }).remove().exec();
-					callback(noteRet,req.user._id);
-				}
-				else {
-					callback("",req.user._id);
-				}
-			});
-
+			res.clearCookie(notesCookie);
 		}
+
+		Note.find({ uid: oldUserId, tmp: 1 } , function (err, docs) {
+			if (docs.length > 0 ) {
+				var noteRet;
+				if(req.body.noteText) {noteRet = req.body.noteText;}
+				else {noteRet = docs[0].note;}
+				Note.find({ uid: req.cookies[notesCookie], tmp: 1 }).remove().exec();
+				callback(noteRet,req.user._id);
+			}
+			else {
+				callback("",req.user._id);
+			}
+		});
+
    	   }
 	   else {
 		callback("",req.cookies[notesCookie]);
@@ -361,7 +366,12 @@ if(!userId) {
 	}
 	else {
 		tmpNote = 1;
-		var newId = Math.floor(Math.random() * (99999999999999 - 1)) + 1;
+
+		var userIpAddress = req.connection.remoteAddress
+
+		userIpAddress = userIpAddress.replace(/\./g,"");
+
+		var newId = Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
 		console.log("New id is " + newId);
 		res.cookie(notesCookie, newId);
 		userId = newId;
