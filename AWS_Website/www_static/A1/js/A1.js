@@ -180,7 +180,10 @@ function submitInsertVideoSlide() {
 			result =  video_id;
 		}
 		
-		socket.emit('insertVideoId', result);
+		var slider = $(".royalSlider").data('royalSlider');
+		var sendObject = {'youtubeVideoId': result, "currentSlide" : (slider.currSlideId+1)};
+		alert(sendObject);
+		socket.emit('insertVideoId', sendObject);
 	}else{
 		alert("Your youtube url or id is wrong. Please see example above");
 	}
