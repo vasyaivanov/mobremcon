@@ -208,11 +208,6 @@ $('#closeInsertVideoSlideOverlay').click(function () {
 $('#closeHelpOverlay').click(function () {
     showHideHelpOverlay();
 });
-
-$('#closeInsertVideoSlideOverlay').click(function () {
-    showHideHelpOverlay();
-});
-
 $('#videochatpanel').click(function () {
     showHideVideoChat();
 });
