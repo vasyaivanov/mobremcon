@@ -160,7 +160,7 @@ function showRemote() {
         pathName = pathName.replace('/', '');
     }
     var newUrl = "http://" + document.location.hostname + "/remote?presentation=" + pathName;
-    window.open(newUrl, "popupWindow", "width=1310,height=760, scrollbars=no"); //,scrollbars=no
+    window.open(newUrl, "popupWindow", "width=1060,height=800, scrollbars=no"); //,scrollbars=no
 	showHideMenu(true);
 }
 
