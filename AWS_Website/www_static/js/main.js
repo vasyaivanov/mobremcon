@@ -1,4 +1,17 @@
 $(document).ready(function () {
+
+	$('#uploadPresentation').bind('change', function() {
+
+	  //this.files[0].size gets the size of your file.
+	  var fileSize = this.files[0].size;
+	  alert("fileSize="+fileSize);
+	  if(fileSize > 5000000){
+		alert("Sorry. We are supporting only presentations less then 5MB size. We are working on making this size much bigger!");
+	  }
+
+	});
+
+
   function getClearUrl() {
     var url = [location.protocol, '//', location.host, location.pathname].join('');
     return url;
