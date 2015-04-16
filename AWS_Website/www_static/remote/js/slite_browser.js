@@ -67,14 +67,17 @@ $('#laser').click(function() {
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
-        $('#laser').css("background-color", "white");
+		$('#laser').removeClass("button_pressed");
+        $('#laser').addClass("button_unpressed");
         $('#overlay').css("z-index", 0);
         
     // otherwise turn laser on
     } else {
         interactionType = LASER;
-        $('#laser').css("background-color", "black");
-        $('#draw').css("background-color", "white");
+		$('#laser').removeClass("button_unpressed");
+        $('#laser').addClass("button_pressed");
+        $('#draw').removeClass("button_pressed");
+		$('#draw').addClass("button_unpressed");
         $('#overlay').css("z-index", 3);
     }
 });
@@ -88,14 +91,17 @@ $('#draw').click(function() {
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
-        $('#draw').css("background-color", "white");
+		$('#draw').removeClass("button_pressed");
+        $('#draw').addClass("button_unpressed");
         $('#overlay').css("z-index", 0);
         
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
-        $('#draw').css("background-color", "black");
-        $('#laser').css("background-color", "white");
+		$('#draw').removeClass("button_unpressed");
+        $('#draw').addClass("button_pressed");
+        $('#laser').removeClass("button_pressed");
+		$('#laser').addClass("button_unpressed");
         $('#overlay').css("z-index", 3);
     }
 });
