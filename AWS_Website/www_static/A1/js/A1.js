@@ -179,11 +179,12 @@ function submitInsertVideoSlide() {
 			}
 			result =  video_id;
 		}
-		
-		var slider = $(".royalSlider").data('royalSlider');
-		var sendObject = {'youtubeVideoId': result, "currentSlide" : (slider.currSlideId+1)};
-		alert(sendObject);
-		socket.emit('insertVideoId', sendObject);
+    	var pathName = document.location.pathname;
+        if (pathName) {
+            pathName = pathName.replace('/', '');
+        }
+        var slider = $(".royalSlider").data('royalSlider');
+		socket.emit('insertVideoId', { video_hash: result, slite_hash: pathName, curr_slide: slider.currSlideId+1 });
 	}else{
 		alert("Your youtube url or id is wrong. Please see example above");
 	}

@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Embeded video</title>
+
+  <style>
+  	body{
+  		padding: 0px;
+  		margin: 0px;
+  	}
+	iframe {
+	  height: 100%;
+	  width: 100%;
+	  position: absolute;
+	}
+  </style>
+</head>
+<body>
+	<!--<iframe src="http://www.w3schools.com"></iframe>-->
+ <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <div id="player"></div>
+
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: 'YOUTUBE_HASH_TEMPLATE',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+	    player.mute();
+		player.seekTo(7, false);
+		playVideo();
+		player.setVolume(0);
+		//setTimeout(stopVideo, 174000);
+        //event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 25000);
+          done = true;
+        }
+		
+		if(event.data == YT.PlayerState.ENDED){
+			player.seekTo(0);
+			$('#video-front').show();
+			$('.video-container').hide();
+
+		}
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+	  function playVideo() {
+        player.playVideo();
+      }
+    </script>
+  </body>
+</body>
+</html>

@@ -206,6 +206,25 @@ Slite.prototype.deleteHash = function (deleteFolder, callback) {
         });
     }
 };
-               
+   
+exports.youTube = function (youtube_hash, slite_hash, curr_slide) {
+    fs.readFile(path.join(www_dir, staticDir, "A1/youtube_tmpl.html"), "utf8", function (err, data) {
+        if (err) {
+            console.error('Error reading hash_index.html' + err);
+        } else {
+            var currSlideHtml = "img"+curr_slide+".html";
+            var data_replaced = data.replace("YOUTUBE_HASH_TEMPLATE", youtube_hash);
+            fs.writeFile(path.join(www_dir, slitesDir, slite_hash, currSlideHtml), data_replaced, function (err) {
+                if (err) {
+                    console.error('Error writing ' + currSlideHtml + ' '  + err);
+                } else {
+                    socket.emit("slitePrepared", { hash: slite_hash });
+                }
+            });
+        }
+    });
+};
+
+
 module.exports.cache = cache;
 module.exports.Slite = Slite;
