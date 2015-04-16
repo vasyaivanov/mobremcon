@@ -50,7 +50,7 @@ function showHideVideoChat() {
         $(".rsContainer").css({ "width": "100%", "clear": "both" });
 
         // remove the video window on closing the panel
-        var videosContainer = document.getElementById('videos-container');
+        //var videosContainer = document.getElementById('videos-container');
         if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
 
         isVideoOn = false;
@@ -216,6 +216,7 @@ $('#videochatpanel').click(function () {
 });
 $('#closevideo').click(function () {
     showHideVideoChat();
+    config.attachStream && config.attachStream.stop();
 });
 $('#submitInsertVideoSlide').click(function () {
     submitInsertVideoSlide();
@@ -237,7 +238,16 @@ if (needToShowExplanators()) {
 var _channelHash = "9WDXH6OH-6K73NMI";
 var config = {
     openSocket: function (config) {
-        var channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g , '');
+        //var channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g , '');
+        var hash = document.location.href;
+        if (hash[hash.length - 1] === '/') {
+            hash = hash.slice(0, -1);
+        }
+        var slashPos = hash.lastIndexOf('/');
+        hash = hash.slice(slashPos + 1);
+        hash = hash.toUpperCase();
+
+        var channel = hash;
         channel += _channelHash;
         var socket = new Firebase('https://webrtc.firebaseIO.com/' + channel);
         socket.channel = channel;
@@ -251,7 +261,7 @@ var config = {
         socket.onDisconnect().remove();
         return socket;
     },
-    onRemoteStream: function (media) {
+    onRemoteStream: function (media) { // argument type: RemoteStream 
         var mediaElement = getMediaElement(media.video, {
             width: (videosContainer.clientWidth / 2) - 50,
             buttons: ['mute-audio', 'mute-video', 'full-screen', 'volume-slider']
@@ -304,6 +314,29 @@ var config = {
             // joinButton.parentNode.parentNode.parentNode.parentNode === <table>
             joinButton.parentNode.parentNode.parentNode.parentNode.removeChild(joinButton.parentNode.parentNode.parentNode);
         }
+    },
+    // testing functions:
+    onICE: function (rtcIceCandidate) { // argument type: RTCIceCandidate
+        // rtcIceCandidate.candidate
+        // rtcIceCandidate.sdpMLineIndex
+        // etc.
+    },
+    onOfferSDP: function (offerSDP) { // argument type: RTCSessionDescription
+        // offerSDP.type === 'offer'
+        // offerSDP.sdp
+        // to POST using XHR: JSON.stringify(offerSDP)
+    },
+    onAnswerSDP: function (answerSDP) { // argument type: RTCSessionDescription 
+        // answerSDP.type === 'answer'
+        // answerSDP.sdp
+        // to POST using XHR: JSON.stringify(answerSDP)
+    },
+    onChannelMessage: function (event) { //argument type: RTCPeerConnection 
+        // to get data: event.data
+        // on chrome: JSON.parse(event.data)
+    },
+    onChannelOpened: function (channel) {
+    // channel.send('hi there, data ports are ready to transfer data');
     }
 };
 
@@ -332,14 +365,17 @@ function captureUserMedia(callback, failure_callback) {
 
             var mediaElement = getMediaElement(video, {
                 width: (videosContainer.clientWidth / 2) - 50,
-                buttons: ['mute-audio', 'mute-video', 'full-screen', 'volume-slider']
+                buttons: ['mute-audio', 'mute-video', 'full-screen', 'volume-slider'],
+                onStopped: function () {
+                    mediaElement.toggle('stop');
+                },
             });
             mediaElement.toggle('mute-audio');
             videosContainer.insertBefore(mediaElement, videosContainer.firstChild);
         },
         onerror: function () {
             alert('unable to get access to your webcam');
-            callback && callback();
+            failure_callback && failure_callback();
         }
     });
 }
