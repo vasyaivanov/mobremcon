@@ -164,9 +164,24 @@ function showRemote() {
     if (document.location.hostname === 'localhost') {
         newUrl += ':8081';
     }
-    newUrl += "/remote?presentation=" + pathName;
-    window.open(newUrl, "popupWindow", "width=1060,height=800, scrollbars=no"); //,scrollbars=no
+    newUrl += "/remote/index.html?presentation=" + pathName;
+    window.open(newUrl, "popupWindow", "width=1060, height=800, scrollbars=no"); 
 	showHideMenu(true);
+}
+
+function isPresenter() {
+    if (!parent || !parent.document) return false;
+    var pathName = parent.document.location.pathname;
+    var reg = RegExp(/^\/?remote(\/|#|\?|$).*/i);
+    var res = reg.test(pathName);
+    return res;
+}
+
+function getPresentationInRemote() {
+    if (!parent || !parent.document) return null;
+    var editBox = parent.document.getElementById('URLSlides');
+    if (!editBox || !editBox.value) return null;
+    return editBox.value.toUpperCase();
 }
 
 function submitInsertVideoSlide() {
@@ -465,7 +480,7 @@ jQuery(document).ready(function ($) {
         slidesSpacing: 0,
         loop: false,
         loopRewind: true,
-        numImagesToPreload: 1,
+        numImagesToPreload: 999,
         video: {
             autoHideArrows: true,
             autoHideControlNav: false,

@@ -43,9 +43,9 @@ function onDeviceReady() {
     
 	thumbnails();
 	
-	$('#URLBox').change(function() {
-		changeURL();
-	});
+	//$('#URLBox').change(function() {
+	//	changeURL();
+	//});
 	
     $('#prev').click(function() {
         event.preventDefault();

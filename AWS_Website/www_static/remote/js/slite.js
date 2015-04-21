@@ -50,20 +50,31 @@ function thumbnails() {
         }
         // each event will be logged to the virtual console
         element.addEventListener("mousedown", function(e) {
-                                 var slide_num = parseInt(this.getAttribute('slide_num'));
-                                 currSlideNum = slide_num;
-                                 $("#notes").text(notesArray[currSlideNum]);
-                                 socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
+                                     var slide_num = parseInt(this.getAttribute('slide_num'));
+                                     currSlideNum = slide_num;
+                                     $("#notes").text(notesArray[currSlideNum]);
+                                     socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
                                  }, false);
     }
 }
 
 function changeURL() {
-    socket = io.connect(document.location.hostname + ':1337');
-    var iFrameUrl = 'http://' + document.location.hostname + ':8081/' + document.getElementById("URLSlides").value;
-    document.getElementById('theIframe').src = iFrameUrl;
+    var newUrl = 'http://' + document.location.hostname + ':8081/remote/index.html?presentation=' + document.getElementById("URLSlides").value;
+    //location.href = newUrl; // redirect to a new url with ?presentation= query string
+    location.replace(newUrl);
+}
+
+function setIFrameUrl(hash){
+    var newUrl = 'http://' + document.location.hostname + ':8081/' + hash;
+    var iFrame = document.getElementById('theIframe');
+    iFrame.src = newUrl;
+    iFrame.addEventListener("load", onSlideLoaded);
+}
+
+function onSlideLoaded() {
     currSlideNum = 0;
     $("#notes").text(notesArray[currSlideNum]);
+    socket = io.connect(document.location.hostname + ':1337');
     socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
     thumbnails(); // thumbnails have to match the slides
 }
@@ -136,7 +147,7 @@ head.appendChild(script);
 
 function getUrlParam(sParam)
 {
-	var sPageURL = window.location.search.substring(1);
+	var sPageURL = window.location.search.substring(1); // get query string without ? 
 	var sURLVariables = sPageURL.split('&');
 	for (var i = 0; i < sURLVariables.length; i++) 
 	{
@@ -151,8 +162,8 @@ function getUrlParam(sParam)
 function populateHash(){
 	var presentationHash = getUrlParam("presentation");
 	if(presentationHash){
-		$("#URLSlides").val(presentationHash);
-		changeURL();
+        $("#URLSlides").val(presentationHash);
+        setIFrameUrl(presentationHash);
 	}
 }
 
