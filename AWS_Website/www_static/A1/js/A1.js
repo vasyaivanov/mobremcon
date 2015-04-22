@@ -1,3 +1,5 @@
+var isFile = RegExp(/^file:.*/i).test(document.location.href);
+
 function isMobile() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
@@ -401,7 +403,8 @@ function captureUserMedia(callback, failure_callback) {
     });
 }
 
-var conferenceUI = conference(config);
+var conferenceUI;
+if(!isFile) conferenceUI = conference(config);
 
 /* UI specific */
 var videosContainer = document.getElementById('videos-container') || document.body;
@@ -536,51 +539,55 @@ jQuery(document).ready(function ($) {
     $(".rsOverflow").css("height", "100%");
 });
 
-var socket = io.connect(document.location.hostname + ':1337');
 
-socket.on('ccBroadcast', function (data) {
-    //alert("JD: ccBroadcast text="+data.hello);
-    $('#closedCaptioningPanel').hide();
-    $('#closedCaptioningPanel').html(data.hello);
-    $('#closedCaptioningPanel').show(400).delay(2000).fadeOut(400);
-});
-
-socket.on('news', function (data) {
-    if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
-        var button = data.hello - 1;
-
-        console.log(button);
-
-        var slider = $(".royalSlider").data('royalSlider');
-
-        slider.goTo(data.slide);
-
-        switch (button) {
-            case -102: {
-                slider.goTo(0);
-                break;
+var socket;
+if (!isFile) {
+    socket = io.connect(document.location.hostname + ':1337');
+    
+    socket.on('ccBroadcast', function (data) {
+        //alert("JD: ccBroadcast text="+data.hello);
+        $('#closedCaptioningPanel').hide();
+        $('#closedCaptioningPanel').html(data.hello);
+        $('#closedCaptioningPanel').show(400).delay(2000).fadeOut(400);
+    });
+    
+    socket.on('news', function (data) {
+        if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
+            var button = data.hello - 1;
+            
+            console.log(button);
+            
+            var slider = $(".royalSlider").data('royalSlider');
+            
+            slider.goTo(data.slide);
+            
+            switch (button) {
+                case -102: {
+                    slider.goTo(0);
+                    break;
+                }
+                case -1: {
+                    slider.toggleVideo();
+                    break;
+                }
+                case 100: {
+                    slider.next();
+                    clearCanvas();
+                    break;
+                }
+                case 101: {
+                    slider.prev();
+                    clearCanvas();
+                    break;
+                }
+                default: {
+                    slider.stopVideo();
+                    slider.goTo(button);
+                    slider.playVideo();
+                }
             }
-            case -1: {
-                slider.toggleVideo();
-                break;
-            }
-            case 100: {
-                slider.next();
-                clearCanvas();
-                break;
-            }
-            case 101: {
-                slider.prev();
-                clearCanvas();
-                break;
-            }
-            default: {
-                slider.stopVideo();
-                slider.goTo(button);
-                slider.playVideo();
-            }
+            
+            socket.emit('my other event', { my: 'data' });
         }
-
-        socket.emit('my other event', { my: 'data' });
-    }
-});
+    });
+}
