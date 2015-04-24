@@ -172,7 +172,7 @@
 	    #redDot {
 	      /* the width is set to a small value so when the dot moves it will
 	         not create a horizontal scroll bar. */
-	      width: 2%;
+	    /*  width: 2%;*/
 	      overflow: hidden;
         visibility: hidden;
 	      position: absolute;
