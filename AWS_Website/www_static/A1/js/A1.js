@@ -8,6 +8,15 @@ function isMobile() {
     }
 }
 
+function openContactUs() {
+     var form = document.createElement("form");
+     form.method = "GET";
+     form.action = "https://www.facebook.com/slitepresentations";
+     form.target = "_blank";
+     document.body.appendChild(form);
+     form.submit();
+}
+
 function showHideComments() {
     $("#comments").slideToggle();
     $("#comments").css('overflow', 'scroll');
