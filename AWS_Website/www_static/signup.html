@@ -10,8 +10,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon">
 
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/screen.css">
@@ -20,29 +20,18 @@
     <body style='background-image: url(img/Slite_Background.jpg);'>
         <section class="middle">
             <div class="container-fluid">
-                <form class="m-form-signin" role="form" action="/signup.html" method="post">
-                    <h1>Sign up</h1>
-		    <% if (error == 1) { %>
-				<h4 style="color: #FF0000">Username <i><%= request.param('username') %></i> has already taken. Please try another one.</h4>
-		   <%   } else if (error == 2) { %>
-				<h4 style="color: #FF0000">Email <i><%= request.param('email') %></i> has already registered. Please try another one.</h4>
-		   <%   } else if (error == 3) { %>
-				<h4 style="color: #FF0000">DB error. Contact us, please.</h4>
-		   <%   } else if (error == 4) { %>
-				<h4 style="color: #FF0000">Password does not match the confirm password.</h4>
-		   <%   } else if (request.param("NO_DATA") == 1) { %>
-				<h4 style="color: #FF0000">Please fill out the registration form.</h4>
-		   <% } %>
 
+                <form class="m-form-signin" role="form" action="/signup" method="post">
+                    <h1>Sign up</h1>
                     <h2>Create your personal account </h2>
                     <div class="form-group">
                         <label for="exampleInputUsername">Username</label>
-                        <input type="text" class="form-control" placeholder="Enter Username" name="username" value="<%= request.param('username') %>">
+                        <input type="text" class="form-control" placeholder="Enter Username" name="username">
                     </div>
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.param('email') %>">
+                        <input type="email" class="form-control" name="email" placeholder="Enter email">
                     </div>
 
                     <div class="form-group">
@@ -103,18 +92,18 @@
 
                         <ul class="nav navbar-nav navbar-right">
                           <li class="link-signin">
-                            <% if (!user) { %>
+                           <!-- <% if (!user) { %>-->
                               <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
-                           <% } else { %>
-                              <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
-                            <% } %> 
+                           <!-- <% } else { %>
+                              <a href="/account"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+                            <% } %> -->
                           </li>
                           <li class="link-signin">
-                           <% if (!user) { %> 
+                           <!-- <% if (!user) { %> -->
                               <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-                           <% } else { %>
+                           <!-- <% } else { %>
                               <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
-                            <% } %>
+                            <% } %>-->
                           </li>
                         </ul>
                       </div><!-- /.navbar-collapse -->
@@ -123,8 +112,8 @@
         
 		</div>
         
-		<script src="js/jquery-2.1.1.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
+		<script src="js/jquery-2.1.3.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/jquery-2.1.3.min.js"><\/script>')</script>
         <script src="js/bootstrap.js"></script>
         <script src="js/main.js"></script>
     </body>

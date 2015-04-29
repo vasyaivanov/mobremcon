@@ -15,7 +15,7 @@ body {
   font: 13px Helvetica, arial, freesans, clean, "sans-serif", "Segoe UI Emoji", "Segoe UI Symbol";
   /* background-color: #010352; */
   background-color: black;
-  /* background-image: url(img/Slite_Background.jpg); */
+  /* background-image: url("../img/Slite_Background.jpg"); */
 }
 
 /* line 25, ../sass/screen.scss */
@@ -46,14 +46,21 @@ body {
 }
 
 /* line 56, ../sass/screen.scss */
+/*
 .uploadfile {
   width: 400px;
   height: 70px;
   position: relative;
   margin: 250px auto 0 auto;
+  left: 0;
+  top: 0;
+  right 0;
+  bottom: 0;
+  padding: 0;
 }
+    */
 /* line 62, ../sass/screen.scss */
-.uploadfile .btn-yellow {
+.uploadfile .uploadButton {
   width: inherit;
   height: inherit;
   display: block;
@@ -69,13 +76,16 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd772', endColorstr='#ffc226',GradientType=0 );
   font-family: 'PT Sans', sans-serif;
   font-size: 34px;
+  position: inherit;
 }
 /* line 81, ../sass/screen.scss */
-.uploadfile input[type="file"] {
+.uploadfile input[type="file"] #uploadPresentation {
   width: inherit;
   height: inherit;
-  position: absolute;
+  position: inherit;
+  left: 0;
   top: 0;
+  right: 0;
   left: 0;
   font-size: 0;
   background: none;
@@ -150,13 +160,13 @@ body {
 }
 
 div.WordSection1 {
-color: white;
-background: rgba(0, 0, 0, 0.8);
-padding: 10px;
-padding-top: 50px;
-font-size: 14px;
-height: 100%;
-text-align: left;
+    color: white;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    padding-top: 50px;
+    font-size: 14px;
+    height: 100%;
+    text-align: left;
 }
 
 p {
@@ -167,38 +177,38 @@ p {
 
 .onepage-pagination{
 	background-color: white;
-  display: none;
+    display: none;
 }
 
 .menuLink{
-	cursor: pointer;
-  font-size: 18px;
+    cursor: pointer;
+    font-size: 18px;
 }
 
 
     
-    .back {
-      position: absolute;
-      top: 0;
-      left: 0;
-      text-align: center;
-      display: block;
-      padding: 0px;
-      width: 100%;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      background: rgba(255, 255, 255, 0.1);
-      font-weight: bold;
-      font-size: 15px;
-      color: #000;
-      -webkit-transition: all 500ms ease-in-out;
-      -moz-transition: all 500ms ease-in-out;
-      -o-transition: all 500ms ease-in-out;
-      transition: all 500ms ease-in-out;
-	   height: 40px;
-    }
-    .back:hover {
-      /* color: black; */
-      /* background: darkblue; */
-    }
+.back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    display: block;
+    padding: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: bold;
+    font-size: 15px;
+    color: #000;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+	height: 40px;
+}
+.back:hover {
+    /* color: black; */
+    /* background: darkblue; */
+}

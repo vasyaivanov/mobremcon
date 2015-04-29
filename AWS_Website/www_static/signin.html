@@ -10,8 +10,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon">
 
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/screen.css">
@@ -21,19 +21,11 @@
         <section class="middle">
             <div class="container-fluid">
 
-                <form class="m-form-signin" role="form" action="/signin.html" method="post">
+                <form class="m-form-signin" role="form" action="/login" method="post">
                     <h1>Sign in</h1>
-		    <% if (request.param("REG_OK") == 1) { %>
-				<h4 style="color: #FF0000">Congrats! You have registered. Enter your password to log in.</h4>
-		    <% } %>
-
-		    <% if (request.param("ERROR_AUTH") == 1) { %>
-				<h4 style="color: #FF0000">The user name or password is incorrect.</h4>
-		    <% } %>
-
                     <div class="form-group">
                         <label for="Username">Username</label>
-                        <input type="text" class="form-control" name="username" placeholder="Enter username" value="<%= request.param('username') %>">
+                        <input type="text" class="form-control" name="username" placeholder="Enter username">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label> <a href="#">(forgot password)</a>
@@ -88,18 +80,18 @@
 
                         <ul class="nav navbar-nav navbar-right">
                           <li class="link-signin">
-                            <% if (!user) { %>
+                           <!-- <% if (!user) { %>-->
                               <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
-                            <% } else { %>
-                              <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
-                            <% } %> 
+                           <!-- <% } else { %>
+                              <a href="/account"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+                            <% } %> -->
                           </li>
                           <li class="link-signin">
-                            <% if (!user) { %> 
+                           <!-- <% if (!user) { %> -->
                               <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-                            <% } else { %>
+                           <!-- <% } else { %>
                               <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
-                            <% } %>
+                            <% } %>-->
                           </li>
                         </ul>
                       </div><!-- /.navbar-collapse -->
@@ -108,7 +100,7 @@
     </div>
 
         
-		<script src="js/jquery-2.1.1.min.js"></script>
+        <script src="js/jquery-2.1.3.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
         <script src="js/bootstrap.js"></script>
         <script src="js/main.js"></script>

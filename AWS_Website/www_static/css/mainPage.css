@@ -1,3 +1,17 @@
+   /* main page styles*/
+
+.menuLink {
+    font-size: 16px;
+}
+
+#headerLogo {
+    height: 40px; 
+    left: 0; 
+    position: absolute;
+}
+
+
+   /* other */
 html {
       height: 100%;
     }
@@ -193,7 +207,7 @@ html {
     }
     
     .main section.page1 {
-      background:rgb(img/Slite_Background.jpg);
+      background:rgb("../img/Slite_Background.jpg");
     }
 	
     .main section.page1 h1 {
@@ -249,17 +263,17 @@ html {
       }	  
     .page2 {
       background: url(Background_BusinessMeeting.jpg) no-repeat; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
     }
     .main section.page3 {
       background:url(Background_BusinessPeople.jpg) no-repeat; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
     }
     .main section.page3 .page_container {
       overflow: hidden;
@@ -343,7 +357,7 @@ html {
 	
 	/* VIDEO BACKGROUND */
 	#bgvid {
-		background: url(img/Slite_Background.jpg)
+		background: url("../img/Slite_Background.jpg")
 		background-size: cover;
 		background-position-y: 0px;
 		min-height: 750px;
@@ -367,81 +381,4 @@ html {
 		z-index: -1		
 	}
 
-    /* uploadDialog */
-.uploadDialog {
-    position: fixed;
-    font-family: Arial, Helvetica, sans-serif;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 99999;
-    opacity:0;
-    -webkit-transition: opacity 400ms ease-in;
-    -moz-transition: opacity 400ms ease-in;
-    transition: opacity 400ms ease-in;
-    pointer-events: none;
-}
-
-.uploadDialog:target {
-    opacity:1;
-    pointer-events: auto;
-}
-
-.uploadDialog > div {
-    width: 600px;
-    position: relative;
-    margin: 30% auto;
-    padding: 5px 30px 20px 30px;
-    border-radius: 15px;
-    background: #fff;
-    background: -moz-linear-gradient(#fff, #999);
-    background: -webkit-linear-gradient(#fff, #999);
-    background: -o-linear-gradient(#fff, #999);
-}
-
-.closeUpload {
-    background: #606061;
-    color: #FFFFFF;
-    line-height: 30px;
-    position: absolute;
-    right: -12px;
-    text-align: center;
-    top: -10px;
-    width: 28px;
-    text-decoration: none;
-    font-weight: bold;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
-    -moz-box-shadow: 1px 1px 3px #000;
-    -webkit-box-shadow: 1px 1px 3px #000;
-    box-shadow: 1px 1px 3px #000;
-}
-
-.closeUpload:hover { background: #00d9ff; }
-
-#progressbar {
-    margin-top: 25px;
-    height:     40px;
-    background: #474747;
-}
-
-#uploadLabel {
-    font-weight: bold;
-    color: blue;
-    font-size: 28px;
-}
-
-/*
-.ui-dialog-titlebar-close {
-    display: none;
-}
-*/
-
-.ui-progressbar .ui-widget-header {
-     color: blue;
-     background: blue repeat-x 50% 50%;
-}
         

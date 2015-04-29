@@ -1,62 +1,51 @@
-﻿<!doctype html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="en-US">
 <head>
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Slite - online presentations</title>
     <meta name="title" content="SLITE - online presentations" />
     <meta name="description" content="Live online powerpoint slides presentation for web" />
-    <link rel="image_src" href="img/favicon.png" />
     <meta content="http://slite.us" property="og:url" />
     <meta content="http://slite.us/img/logo.png" property="og:image" />
-    <link rel="shortcut icon" id="favicon" href="img/favicon.png"> 
+    <link rel="shortcut icon" id="favicon" href="img/favicon.png">
     <meta name="author" content="SLITE inc.">
     <link rel="canonical" href="http://slite.us" />
+
+    <!--<link rel="stylesheet" href="css/bootstrap.css">-->
+    <!--<link rel="stylesheet" href="css/base.css">-->
+    <!--<link rel="stylesheet" href="css/skel.css" />-->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <!--<link rel=" stylesheet" href="css/style-xlarge.css" />-->
+    <!--<link rel="stylesheet" href="css/jquery-ui.min.css">-->
+    <!--<link rel="stylesheet" href="css/screen.css">-->
+    <!--<link rel="stylesheet" href="css/mainPage.css">-->
+
+    <!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
     <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/jquery.scrolly.min.js"></script>
+    <script src="js/jquery.dropotron.min.js"></script>
+    <script src="js/jquery.scrollex.min.js"></script>
+    <script src="js/skel.min.js"></script>
+    <script src="js/skel-layers.min.js"></script>
+    <script src="js/init.js"></script>
     <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery.onepage-scroll.js"></script>
-    <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
-	
-    <style>
-    </style>
-	
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/screen.css">
-    <link rel="stylesheet" href="css/mainPage.css">
-    <link rel="stylesheet" href="css/jquery-ui.min.css">
-    <link rel='stylesheet' href='css/onepage-scroll.css'>
-    <script>
-        $(document).ready(function(){
-            $(".main").onepage_scroll({
-                sectionContainer: "section",
-                responsiveFallback: 600,
-                loop: true
-            });
-        });		
-    </script>
-	
-  <script src="js/bootstrap.js"></script>
-  <!--<input type="hidden" id="refreshed" value="no">-->
-  <script>
-    //onload=function(){
-    //  var e=document.getElementById("refreshed");
-    //  if(e.value=="no") e.value="yes";
-    //  else{e.value="no"; location.reload();}
-    //}
-			
-    function goToPage(page_index){
-	  $.fn.moveTo(page_index);
-      $('.menuLink').toggleClass('active');
-    }		
-  </script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="js/client.js"></script>
-  <script src="js/main.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/jquery.scrollTo.js"></script>
+
+    <!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
+    <!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css"/><![endif]-->
+    <script src="js/modernizr.js"></script>
 </head>
-<body>
+
+<body class="landing">
     <div id="upload_presentation" class="uploadDialog">
         <div>
             <a href="#closeUpload" title="Close" class="closeUpload">X</a>
-            <h3 id="uploadLabel">Uploading presentation...</h3>
+            <h3 id="uploadLabel" hidden>Uploading presentation...</h3>
             <div id="progressbar"></div>
         </div>
     </div>
@@ -64,8 +53,7 @@
     <!-- Google Tag Manager -->
     <noscript>
         <iframe src="//www.googletagmanager.com/ns.html?id=GTM-NRK9KQ"
-        height="0" width="0" style="display:none;visibility:hidden">
-        </iframe>
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <script>
         (function (w, d, s, l, i) {
@@ -74,146 +62,177 @@
                 event: 'gtm.js'
             });
             var f = d.getElementsByTagName(s)[0]
-              , j = d.createElement(s)
-              , dl = l != 'dataLayer' ? '&l=' + l : '';
+                , j = d.createElement(s)
+                , dl = l != 'dataLayer' ? '&l=' + l : '';
             j.async = true;
             j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-NRK9KQ');
     </script>
     <!-- End Google Tag Manager -->
+    <!-- Header -->
+    <header id="header">
+        <h1>
+            <a href="index.html" id="logo">
+                <img src="img/logo.png" id="headerLogo" />
+            </a>
+        </h1>
+        <nav id="nav">
+            <ul id="navigation" class="clearfix">
+                <li><a href="#one" data-index="one" class="menuLink">Product</a></li>
+                <li><a href="#two" data-index="two" class="menuLink">How it works</a></li>
+                <li><a href="#three" data-index="three" class="menuLink">Company</a></li>
+                <li><a href="#four" data-index="four" class="menuLink">Contact</a></li>
+                <!--<li class="link-signin">
+                    <% if (!user) { %>
+                    <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
+                    <% } else { %>
+                    <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+                    <% } %>
+                </li>
+                <li class="link-signin">
+                    <% if (!user) { %>
+                    <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+                    <% } else { %>
+                    <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
+                    <% } %>
+                </li>-->
+                <li><a href="signin.html" data-index="three" class="glyphicon glyphicon-user">Sign in</a></li>
+                <li><a href="signup.html" data-index="four" class="glyphicon glyphicon-user">Sign up</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="banner">
+        <div class="uploadfile">
+            <button type="button" class="uploadButton">Upload Presentation</button>
+            <input type="file" accept="pptx" id="uploadPresentation">
+        </div>
+ 
+        <!--<div id="bgvid">
+            <video autoplay poster="img/Slite_Background.jpg" style="width:100%"><source src="media/Slite_Background.mp4" type="video/mp4"></video><br />
+        </div>-->
+        <!--<video id="cmn-video-demo4__video" autoplay muted>
+            <source src="media/Slite_Background.mp4" type="video/mp4">
+            <source src="media/Slite_Background.ogv" type="video/ogg">
+            <source src="media/Slite_Background.webm" type="video/webm">
+        </video>-->
+        <a href="#one" class="goto-next scrolly">Next</a>   
+</section>
 
-    <div class="wrapper">
-  	    <div class="main">	  
-            <section class="page1">
-    	  	    <div id="bgvid">
-    			    <video autoplay poster="img/Slite_Background.jpg" style="width:100%"><source src="Slite_Background.mp4" type="video/mp4"></video><br/>
-    			    <!--<img data-id="180"  src="img/Slite_Background.jpg" alt="blick" class="alignnone size-medium wp-image-180 blick_bg" />-->
-    		    </div> 
-                <div class="page_container">
-                    <div class="uploadfile">
-                        <button type="button" class="btn btn-default btn-yellow">Upload Presentation</button>
-                        <input type="file" accept="pptx" id="uploadPresentation">
+    <!-- One -->
+    <section id="one" class="spotlight style2 right">
+        <span class="image fit main">
+            <img src="img/Background_BusinessMeeting.jpg" alt="" />
+        </span>
+        <div class="content">
+            <header>
+                <h3>About Our Product</h3>
+                <p>Slite is a new way of showcasing what was called the&ldquo;PowerPoint Presentation&rdquo; of the 20th century.</p>
+                <p>Slite is a combination of PowerPoint, Skype, and Facebook. While you are showing your presentation, you are able to text chat, video chat, poll your audience live, and have a cool iPhone/Android application to control your presentation. Moreover, your presentations will now be live on the web, so you will never forget them or lose them. And the coolest thing? There is no installation or registration required! Use it for free!</p>
+            </header>
+        </div>
+        <a href="#two" class="goto-next scrolly">Next</a>
+    </section>
+    <!-- Two -->
+    <section id="two" class="spotlight style1 bottom">
+        <span class="image fit main">
+            <img src="img/Background_BusinessPeople.jpg" alt="" />
+        </span>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="4u 12u$(small)">
+                        <h3>How It Works</h3>
+                        <ol>
+                            <li>Upload your existing PowerPoint presentation to our main page OR create a new online presentation via our website in minutes!</li>
+                            <li>Obtain the unique 4 digit code in which you can use to enter into the browser AND share the slideshow with everyone you want to show your presentation to.</li>
+                            <li>Now you can share your presentation LIVE by sending a unique URL, viewable by anyone in the world - all you need is a browser!</li>
+                        </ol>
                     </div>
-                    <div class="uploadfile" style='margin: 40px auto 0 auto;display:none'>
-                        <button type="button" id="createPresentation" class="btn btn-default btn-yellow">Create Presentation</button>
+                    <div class="4u 12u$(small)">
+                        <h3>Cool things you can do during your presentation:</h3>
+                        <ol>
+                            <li>use mobile app remote control to: move to next/previous slide, have a virtual laser pointer, draw on slides from your phone, and just for fun: voice control your presentation!</li>
+                            <li>poll your audience live. Get feedback immediately on your topic during the presentation.</li>
+                        </ol>
                     </div>
-      	        </div>
-            </section>
-	    
-	        <section class="page2" id="about" style="position: absolute; top: 100%; left: 0px;background: url(Background_BusinessMeeting.jpg) no-repeat; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-                <div class="container-fluid" style='width: 50%;padding:0px;float: right; height: 100%'>
-      			    <div class=WordSection1 style='font-size: 17px; padding-top: 70px;'>
-      				    <p>About our product:</p>
-					    <p>Slite - is a new way of doing what was called &ldquo;Powerpoint presentation&rdquo; in XX century.</p>
-					    <p>Slite - is a combination of Powerpoint, Skype, and Facebook. While doing your presentation you are able to text chat, video chat, poll your audience live and have a cool iPhone and Android app to control your presentation. Moreover, your presentations now live on the web, so you can never forget them or lose them. And the coolest thing? No installation, not even registration required! Use it for free.</p>
-					    <p>How it works?</p>
-					    <ol>
-					        <li>You upload your existing Powerpoint presentation on our main page OR you create a presentation online on our website in minutes!</li>
-					        <li>You get a unique 4 digit code that you can use to enter in browser AND share with everyone you want to show your presentation to.</li>
-					        <li>Now you can show your presentation to anyone in the world (!) looking at this unique address of your presentation LIVE! (all they need is internet browser, and nothing else!)</li>
-					        <li>Cool things you can do during your presentation:
-                                <ol>
-					                <li>use mobile app remote control to: move to next/previous slide, have a virtual laser pointer, draw on slides from your phone, and just for fun: voice control your presentation!</li>
-					                <li>poll your audience live. Get feedback immediately on your topic during the presentation.</li>
-					                <li>video present, right inside your presentation! for those who are not in the room</li>
-					                <li>have all minutes/notes of the presentation stay with your presentation forever.</li>
-					            </ol>
-                            </li>
-					    </ol>
-					    <p>&nbsp;</p>
-					    <p>About our company:</p>
-					    <p>We are young company based in Mountain View - a city in the heart of Silicon Valley, California.</p>
-					    <p>It took 2 PhDs and 75 years of experience to design and make this product for you guys.</p>
-					    <p>Our goal is to make your life easier, make presentations less boring and more fun (while increasing your productivity).</p>
-					    <p>We embrace latest, coolest technologies and let you play with them in our product while making sure your 80 year grandmother is able to use our product too.</p>
-					    <p>&nbsp;</p>	
+                    <div class="4u$ 12u$(small)">
+                        <ol>
+                            <li value="3">video present, right inside your presentation! for those who are not in the room</li>
+                            <li>have all minutes/notes of the presentation stay with your presentation forever.</li>
+                        </ol>
                     </div>
                 </div>
-            </section>
-	    
-	        <section class="page3" style="position: absolute; top: 200%; left: 0px;background: url(Background_BusinessPeople.jpg) no-repeat; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-  		        <div class="container-fluid" style='width: 50%;padding:0px;float: left; height: 100%'>
-  			        <div class=WordSection1 style='padding-top: 50px'>
-  				        <p class=MsoNormal>Business inquiries: partners@slite.com</p>
-  				        <p class=MsoNormal>Press: press@slite.com</p>
-                    </div>
-  		        </div>
-            </section>
+            </div>
         </div>
-        <div class="back" href="http://www.slite.us">
-            <nav class="navbar navbar-default m-navbar" role="navigation">
-                <div class="container-fluid">
-                    <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a href="javascript:goToPage(1)" class="logo"><img src="img/logo.png" width=100px></a>
-                    </div>
+        <a href="#three" class="goto-next scrolly">Next</a>
+    </section>
 
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style='z-index: 5'>
-                        <ul class="nav navbar-nav">
-                            <li>
-                                <a href="javascript:goToPage(2);" class='menuLink' id='menuAbout'>About</a>
-                            </li>
-                            <li>
-                                <a href="javascript:goToPage(3);" class='menuLink' id='menuContact'>Contact</a>
-                            </li>
-                        </ul>
-
-                        <!--<form class="navbar-form navbar-left" role="search">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input type="text" class="form-control btn-create" placeholder="Search...">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>-->
-
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="link-signin">
-                                <% if (!user) { %>
-                                    <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
-                                <% } else { %>
-                                <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
-                                <% } %>
-                            </li>
-                            <li class="link-signin">
-                                <% if (!user) { %>
-                                <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-                                <% } else { %>
-                                <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
-                                <% } %>
-                            </li>
-                        </ul>
-                    </div><!-- /.navbar-collapse -->
-                </div><!-- /.container-fluid -->
-            </nav>
+    <!-- Three -->
+    <section id="three" class="spotlight style3 left">
+        <span class="image fit main bottom">
+            <img src="img/Meeting_to_discuss.jpg" alt="" />
+        </span>
+        <div class="content">
+            <header>
+                <h2>About our company</h2>
+            </header>
+            <p>
+                We are young company based in Mountain View - a city in the heart of Silicon Valley, California.
+                It took 2 PhDs and 75 years of experience to design and make this product for you guys.
+                Our goal is to make your life easier, make presentations less boring and more fun (while increasing your productivity).
+                We embrace latest, coolest technologies and let you play with them in our product while making sure your 80 year grandmother is able to use our product too.
+            </p>
         </div>
-        <!--<a href="https://github.com/peachananr/onepage-scroll"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>-->
-    </div>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments);
-            }
-            i[r].l = 1 * new Date();
-            a = s.createElement(o);
-            m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m);
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        <a href="#four" class="goto-next scrolly">Next</a>
+    </section>
 
-        ga('create', 'UA-61563357-1', 'auto');
-        ga('send', 'pageview');
-    </script> 
+    <!--<!-- Four -->
+    <section id="four" class="spotlight style1 bottom">
+        <span class="image fit main">
+            <img src="img/Background_BusinessMeeting.jpg" alt="" />
+        </span>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="6u 12u$(small)" style="text-align: center">
+                        <span class="icon alt major fa-area-chart"></span>
+                        <h3>Business inquiries</h3>
+                        <p>partners@slite.us</p>
+                    </div>
+                    <div class="6u 12u$(small)" style="text-align: center">
+                        <span class="icon alt major fa-comment"></span>
+                        <h3>Press</h3>
+                        <p>press@slite.us</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <ul class="icons">
+            <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
+            <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
+            <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+            <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
+            <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+            <li><a href="#" class="icon alt fa-envelope"><span class="label">Email</span></a></li>
+        </ul>
+        <ul class="copyright">
+            <li>&copy; Slite. All rights reserved.</li>
+        </ul>
+    </footer>
+    <script type="text/javascript">
+        $(function () {
+            $(".menuLink").on('click',function (e) {
+                e.preventDefault();
+                $('html,body').scrollTo(this.hash, this.hash);
+            });
+        });
+    </script>
 </body>
 </html>

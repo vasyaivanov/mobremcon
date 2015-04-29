@@ -1,73 +1,69 @@
 $(document).ready(function () {
+	//$('#uploadPresentation').bind('change', function() {
+ //       //this.files[0].size gets the size of your file.
+ //       var fileSize = this.files[0].size;
+ //       if(fileSize > 5000000){
+ //           alert("Sorry. We are supporting only presentations less then 5MB size. We are working on making this size much bigger!");
+ //       }
+	//});
 
-	$('#uploadPresentation').bind('change', function() {
-
-	  //this.files[0].size gets the size of your file.
-	  var fileSize = this.files[0].size;
-	  if(fileSize > 5000000){
-		alert("Sorry. We are supporting only presentations less then 5MB size. We are working on making this size much bigger!");
-	  }
-
-	});
-
-
-  function getClearUrl() {
-    var url = [location.protocol, '//', location.host, location.pathname].join('');
-    return url;
-  }    
+    function getClearUrl() {
+        var url = [location.protocol, '//', location.host, location.pathname].join('');
+        return url;
+    }    
     
-  var url = document.location.href;
-  var hashPos = url.lastIndexOf('#');
-  var localUrl = url.slice(hashPos + 1);
-  if (localUrl === 'upload_presentation') {
-    document.location = getClearUrl();
-  }
+    var url = document.location.href;
+    var hashPos = url.lastIndexOf('#');
+    var localUrl = url.slice(hashPos + 1);
+    if (localUrl === 'upload_presentation') {
+        document.location = getClearUrl();
+    }
 
-   var HTML5_UPLOADER = false;
-   var socket = io.connect(document.location.hostname + ':1337');
+    var HTML5_UPLOADER = false;
+    var socket = io.connect(document.location.hostname + ':1337');
      
-  function setUploadMessage(title) {
+    function setUploadMessage(title) {
         progressLabel.text(title);
-  }
+    }
 
     var uploadButton  = $('#uploadPresentation'),
         progressbar   = $('#progressbar'),
         progressLabel = $('#uploadLabel');
 
-  progressbar.progressbar({
-    value:  false
-  });
+    progressbar.progressbar({
+        value:  false
+    });
                 
     function openUploadDialog(msg) {
-      var url = getClearUrl();
-      document.location = url + "#upload_presentation";
-      setUploadMessage(msg);
+        var url = getClearUrl();
+        document.location = url + "#upload_presentation";
+        setUploadMessage(msg);
     };
     
     function updateProgress(data) {
-      var printMsg = false, newLine = false;
-      var finalMsg = data.percentage == 100 && typeof data.msg !== 'undefined';
-      var msg = '';
-      if (data.percentage >= 0 && !data.error && !finalMsg) {
-        msg += "Progress: " + data.percentage + "%";
-        newLine = true;
-      } else if(data.slide > 0 && !data.error) {
-        msg += "Loaded slides: " + data.slide + ' ';
-        newLine = true;
-      } else {
-        printMsg = true;
-      }
-      if (printMsg || finalMsg) {
-        if (newLine) {
-          msg += '\n';
+        var printMsg = false, newLine = false;
+        var finalMsg = data.percentage == 100 && typeof data.msg !== 'undefined';
+        var msg = '';
+        if (data.percentage >= 0 && !data.error && !finalMsg) {
+            msg += "Progress: " + data.percentage + "%";
+            newLine = true;
+        } else if(data.slide > 0 && !data.error) {
+            msg += "Loaded slides: " + data.slide + ' ';
+            newLine = true;
+        } else {
+            printMsg = true;
         }
-        msg += data.msg;
-      }
-      progressLabel.text(msg);
-      if (data.percentage >= 0 || data.error) {
-        var n = data.error ? 100 :  parseInt(data.percentage, 10);
-        progressbar.progressbar("value", n);
-      }
+        if (printMsg || finalMsg) {
+            if (newLine) {
+                msg += '\n';
+            }
+            msg += data.msg;
+        }
+        progressLabel.text(msg);
+        if (data.percentage >= 0 || data.error) {
+            var n = data.error ? 100 :  parseInt(data.percentage, 10);
+            progressbar.progressbar("value", n);
+        }
     } 
       
     if (HTML5_UPLOADER) {

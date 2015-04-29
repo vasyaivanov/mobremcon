@@ -11,7 +11,7 @@ var XML_PATH = 'xml'
   , NUM_REG_EXP = /\d+\./
   , CONVERSION_FORMAT = 'html'//'jpg'
   , WIDTH = 1024
-  , COMPRESSION = 70
+  , COMPRESSION = 80
   , DEBUG = false;
 
 var start = process.hrtime();
