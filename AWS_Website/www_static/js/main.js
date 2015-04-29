@@ -10,7 +10,13 @@ $(document).ready(function () {
     function getClearUrl() {
         var url = [location.protocol, '//', location.host, location.pathname].join('');
         return url;
-    }    
+    }
+    
+    function getClearHost() {
+        var url = [location.protocol, '//', location.host].join('');
+        return url;
+    }
+
     
     var url = document.location.href;
     var hashPos = url.lastIndexOf('#');
@@ -157,7 +163,10 @@ $(document).ready(function () {
         data.msg = 'Converted successfully!\nYOU WILL BE FORWARDED TO THE URL TO SHARE.';
         data.percentage = 100;
         updateProgress(data);
-	    setTimeout(function(){ window.location = getClearUrl() + data.hash; }, 1000); // forward after 1 sec
+        setTimeout(function () {
+            var url = getClearHost() + '/' + data.hash;
+            window.location = url;
+        }, 1000); // forward after 1 sec
     });
 
     socket.on('sliteConversionError', function (data) {
