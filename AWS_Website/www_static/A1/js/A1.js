@@ -8,6 +8,14 @@ function isMobile() {
     }
 }
 
+function shareFacebook() {
+	window.open("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '_blank');
+}
+
+function shareTwitter() {
+	window.open("http://twitter.com/share", '_blank');
+}
+
 function openContactUs() {
      var form = document.createElement("form");
      form.method = "GET";
