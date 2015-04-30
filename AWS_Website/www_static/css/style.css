@@ -2240,8 +2240,8 @@ body.is-touch #banner {
 }
 
 .closeUpload {
-    line-height: 6.0vh;
-    top: -3.0vh;
+    line-height: 4.3vh;
+    top: -2.0vh;
     width: 2.3vw;
     right: -1.2vw;
     -webkit-border-radius: 1.5em;
@@ -2265,6 +2265,8 @@ body.is-touch #banner {
     margin-top: 1vh;
     height:     7vh;
     background: #474747;
+
+    /*background-color: blue;*/
 }
 
 #uploadLabel {
@@ -2278,12 +2280,12 @@ body.is-touch #banner {
 .ui-dialog-titlebar-close {
     display: none;
 }
-
-
+*/
 .ui-progressbar .ui-widget-header {
-     color: blue;
+     color: red;
      background: blue repeat-x 50% 50%;
 }
+
 
 /* Button Upload Presentation*/
 .uploadfile {
