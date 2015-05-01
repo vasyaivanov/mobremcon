@@ -153,12 +153,6 @@ body {
   line-height: 20px;
 }
 
-/* line 159, ../sass/screen.scss */
-.b-list-presentation {
-  margin: 0;
-  display: none;
-}
-
 div.WordSection1 {
     color: white;
     background: rgba(0, 0, 0, 0.8);

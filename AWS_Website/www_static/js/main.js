@@ -183,7 +183,6 @@ $(document).ready(function () {
     });
 
     if(navigator.userAgent.match(/(iPhone|iPad)/i)) {
-		$('.uploadfile').css('display', 'none');
-		$('.b-list-presentation').css('display', 'block');
-    };
+		//$('.uploadfile').css('display', 'none');
+   };
 });
