@@ -36,6 +36,7 @@ var userSchema = mongoose.Schema({
 });
 
 
+// Notes
 var notesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
@@ -45,9 +46,18 @@ var notesSchema = mongoose.Schema({
 
 notesSchema.index({uid: 1, sid: 1}, {unique: true});
 
-
 var Note = mongoose.model('note', notesSchema);
 
+// SlidesDB
+var slidesSchema = mongoose.Schema({
+  uid: { type: String},
+  sid: { type: String},
+  tmp: {type: String}
+});
+
+notesSchema.index({uid: 1, sid: 1}, {unique: true});
+
+var Note = mongoose.model('note', notesSchema);
 
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
