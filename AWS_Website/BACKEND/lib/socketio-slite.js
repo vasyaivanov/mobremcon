@@ -121,8 +121,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         data.error = true;
         socket.emit("sliteConversionError", data);
     }
-    function uploadComplete(name) {
-        converter.convert(name, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir});
+    function uploadComplete(name, origName) {
+        converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir});
     }
     
     if (HTML5_UPLOADER) {
@@ -150,7 +150,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         });
 
         uploader.on("complete", function (event) {
-            uploadComplete(event.file.pathName);
+            uploadComplete(event.file.pathName, event.file.name);
         });
     }
         
