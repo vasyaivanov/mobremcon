@@ -16,6 +16,7 @@ var express = require('express')
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
   , ioPort = 1337
+  , sessionIdCookie = "sliteCurrUser"
   , notesCookie = "slitenotesID";
 
 var app = express();
@@ -55,9 +56,7 @@ var slidesSchema = mongoose.Schema({
   tmp: {type: String}
 });
 
-notesSchema.index({uid: 1, sid: 1}, {unique: true});
-
-var Note = mongoose.model('note', notesSchema);
+slidesSchema.index({uid: 1, sid: 1}, {unique: true});
 
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
@@ -333,11 +332,11 @@ router.post('/notes.html', function (req, res){
     var tmpNote = 0;
  
     function findAremNote (callback) {
-	   if(req.user && req.cookies[notesCookie]) {
-		if (req.user._id != req.cookies[notesCookie]) {
+	   if(req.user && req.cookies[sessionIdCookie]) {
+		if (req.user._id != req.cookies[sessionIdCookie]) {
 			console.log("Removing old user ID cookie");
-			oldUserId = req.cookies[notesCookie];
-			res.clearCookie(notesCookie);
+			oldUserId = req.cookies[sessionIdCookie];
+			res.clearCookie(sessionIdCookie);
 		}
 
 		Note.find({ uid: oldUserId, tmp: 1 } , function (err, docs) {
@@ -345,7 +344,7 @@ router.post('/notes.html', function (req, res){
 				var noteRet;
 				if(req.body.noteText) {noteRet = req.body.noteText;}
 				else {noteRet = docs[0].note;}
-				Note.find({ uid: req.cookies[notesCookie], tmp: 1 }).remove().exec();
+				Note.find({ uid: req.cookies[sessionIdCookie], tmp: 1 }).remove().exec();
 				callback(noteRet,req.user._id);
 			}
 			else {
@@ -355,7 +354,7 @@ router.post('/notes.html', function (req, res){
 
    	   }
 	   else {
-		callback("",req.cookies[notesCookie]);
+		callback("",req.cookies[sessionIdCookie]);
 	   }
 
     }
@@ -367,11 +366,11 @@ findAremNote(function(noteText,userId) {
 if(!(noteText)) {    var noteText = req.body.noteText;}
 
 if(!userId) {
-    if(! req.cookies[notesCookie]) {
+    if(! req.cookies[sessionIdCookie]) {
 	console.log("No cookie. Setting up a new cookie file");
 	if(req.user) {
 		console.log("New id is " + req.user._id);
-		res.cookie(notesCookie, req.user._id);
+		res.cookie(sessionIdCookie, req.user._id);
 		userId = req.user._id;
 	}
 	else {
@@ -383,13 +382,13 @@ if(!userId) {
 
 		var newId = Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
 		console.log("New id is " + newId);
-		res.cookie(notesCookie, newId);
+		res.cookie(sessionIdCookie, newId);
 		userId = newId;
 	}
     }
     else {
 	if(!req.user) {tmpNote = 1;}
-	userId = req.cookies[notesCookie];
+	userId = req.cookies[sessionIdCookie];
 	console.log("Cookie found");
     }
 }

@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Slite - online presentations</title>
+    <title><%= user.username %> Slite - online presentations</title>
     <meta name="title" content="SLITE - online presentations" />
     <meta name="description" content="Live online powerpoint slides presentation for web" />
     <meta content="http://slite.us" property="og:url" />
@@ -83,22 +83,13 @@
                 <li><a href="#two" data-index="two" class="menuLink">How it works</a></li>
                 <li><a href="#three" data-index="three" class="menuLink">Company</a></li>
                 <li><a href="#four" data-index="four" class="menuLink">Contact</a></li>
-                <!--<li class="link-signin">
                     <% if (!user) { %>
-                    <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
+                    	<li><a href="signin.html" data-index="three" class="glyphicon glyphicon-user">Sign in</a></li>
+			<li><a href="signup.html" data-index="four" class="glyphicon glyphicon-user">Sign up</a></li>
                     <% } else { %>
-                    <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+			<li><a href="/account.html" data-index="three" class="glyphicon glyphicon-user"> Hello, <%= user.username %>.</a></li>
+			<li><a href="/logout" data-index="three" class="glyphicon glyphicon-user">Sign out</a></li>
                     <% } %>
-                </li>
-                <li class="link-signin">
-                    <% if (!user) { %>
-                    <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-                    <% } else { %>
-                    <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
-                    <% } %>
-                </li>-->
-                <li><a href="signin.html" data-index="three" class="glyphicon glyphicon-user">Sign in</a></li>
-                <li><a href="signup.html" data-index="four" class="glyphicon glyphicon-user">Sign up</a></li>
             </ul>
         </nav>
     </header>
