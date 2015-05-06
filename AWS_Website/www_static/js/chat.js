@@ -63,9 +63,23 @@ function toggleChatWindow() {
   $("#main-chat-screen").toggle();
 }
 
+function getUrlParam(sParam)
+{
+  var sPageURL = window.location.search.substring(1); // get query string without ? 
+  var sURLVariables = sPageURL.split('&');
+  for (var i = 0; i < sURLVariables.length; i++) 
+  {
+    var sParameterName = sURLVariables[i].split('=');
+    if (sParameterName[0] == sParam) 
+    {
+      return sParameterName[1];
+    }
+  }
+} 
+
 $(document).ready(function() {
   //setup "global" variables first
-  var socket = io.connect("127.0.0.1:1337");
+  var socket = io.connect("www.slite.us:1337");
   var myRoomID = null;
 
   $("form").submit(function(event) {
@@ -93,7 +107,7 @@ $(document).ready(function() {
   toggleChatWindow();
   $("#msg").focus();
 
-  var roomName = "slite";
+  var roomName = getUrlParam("presentation");
   socket.emit("check", roomName, function(data) {
     roomExists = data.result;
      if (!roomExists)
@@ -101,7 +115,7 @@ $(document).ready(function() {
       else     
         socket.emit("joinRoom", roomName);
   });
-  socket.emit("createRoom", document.location.pathname);
+  socket.emit("createRoom", roomName);
 
   //main chat screen
   $("#chatForm").submit(function() {
@@ -275,29 +289,6 @@ socket.on("exists", function(data) {
 
 socket.on("joined", function() {
   $("#errors").hide();
-  if (navigator.geolocation) { //get lat lon of user
-    navigator.geolocation.getCurrentPosition(positionSuccess, positionError, { enableHighAccuracy: true });
-  } else {
-    $("#errors").show();
-    $("#errors").append("Your browser is ancient and it doesn't support GeoLocation.");
-  }
-  function positionError(e) {
-    console.log(e);
-  }
-
-  function positionSuccess(position) {
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
-    //consult the yahoo service
-    $.ajax({
-      type: "GET",
-      url: "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.placefinder%20where%20text%3D%22"+lat+"%2C"+lon+"%22%20and%20gflags%3D%22R%22&format=json",
-      dataType: "json",
-       success: function(data) {
-        socket.emit("countryUpdate", {country: data.query.results.Result.countrycode});
-      }
-    });
-  }
 });
 
 socket.on("history", function(data) {
