@@ -138,7 +138,7 @@
 				font-size: 14px;
 			  }
 			.royalSlider .rsSlide {
-				opacity: 0.45;
+				/*opacity: 0.45;*/
 				-webkit-transition: all 0.3s ease-out;
 				-moz-transition: all 0.3s ease-out;
 				transition: all 0.3s ease-out;
@@ -204,7 +204,7 @@
 			color: white;
 			line-height: normal;
 			overflow-x: hidden;
-			overflow-y: scroll;
+			overflow-y: scroll@media screen and (min-width: 0px) and (max-width: 600px) {;
 		}
 
 		#videochatpanel{

@@ -270,6 +270,8 @@ $('#closeExplanator').click(function () {
 if (needToShowExplanators()) {
     showHideExplanators();
 }
+// overflow my code
+$('#slide').css('overflow','hidden'); //include property in '' 
 
 // Muaz Khan     - https://github.com/muaz-khan
 // MIT License   - https://www.webrtc-experiment.com/licence/
