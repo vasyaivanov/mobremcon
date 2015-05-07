@@ -270,7 +270,11 @@ $('#closeExplanator').click(function () {
 if (needToShowExplanators()) {
     showHideExplanators();
 }
-
+var hostname = window.location.hostname;
+if( hostname.indexOf("www") == 0){
+	hostname = hostname.substring(3);
+}
+$('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
 
 // Muaz Khan     - https://github.com/muaz-khan
