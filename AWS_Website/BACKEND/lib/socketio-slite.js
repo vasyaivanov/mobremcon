@@ -98,6 +98,31 @@ function purge(s, action) {
 
 console.log('in remote control');
 
+function getHashPresentation(hash, next){
+    var hashPath = path.join(www_dir, slitesDir, hash); // www/slites/hash
+    fs.readdir(hashPath, function (err, files) {
+        if (err) {
+            next(err, null);
+        } else {
+            var presentations = [];
+            for (var i in files) {
+                var file = files[i];
+                if (converter.isReservedHashFileName(file)) continue;
+                if (!converter.isExtentionSupported(file)) continue;
+                presentations.push(file);
+            }
+            //console.dir(files);
+            //console.dir(presentations);
+            if (presentations.length != 1) {
+                 next(new Error("Number of presentations in the hash folder: " + presentations.length + "!= 1"), null);
+            } else {
+                next(null, presentations[0]);
+            }
+        }
+    });
+}
+
+
 module.parent.exports.io.sockets.on('connection', function (socket) {
     if (pollAnswerArray.length > 0) {
         pollUpdate();
@@ -424,5 +449,17 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         var room = rooms[id];
         if (room)
             purge(socket, "leaveRoom");
+    });
+
+    socket.on('requestDownloadPresentation', function (data) {
+        console.log('Recieved Request to Dowloading presentation, hash:', data.hash);
+        getHashPresentation(data.hash, function (err, fileName) {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log('Sending Response to Download Presentation: ', fileName);
+                socket.emit('responseDownloadPresentation', { 'fileName': fileName });
+            }
+        });
     });
 }); // module.parent.exports.io.sockets.on('connection' ...
