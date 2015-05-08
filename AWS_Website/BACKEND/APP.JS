@@ -13,9 +13,11 @@ var express = require('express')
   , mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
   , path = require('path')
+  , converter = require('./lib/converter.js')
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
   , ioPort = 1337
+  , sessionIdCookie = "sliteCurrUser"
   , notesCookie = "slitenotesID";
 
 var app = express();
@@ -36,6 +38,7 @@ var userSchema = mongoose.Schema({
 });
 
 
+// Notes
 var notesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
@@ -45,9 +48,16 @@ var notesSchema = mongoose.Schema({
 
 notesSchema.index({uid: 1, sid: 1}, {unique: true});
 
-
 var Note = mongoose.model('note', notesSchema);
 
+// SlidesDB
+var slidesSchema = mongoose.Schema({
+  uid: { type: String},
+  sid: { type: String},
+  tmp: {type: String}
+});
+
+slidesSchema.index({uid: 1, sid: 1}, {unique: true});
 
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
@@ -199,11 +209,11 @@ app.use(function (req, res, next) {
         var afterHash = '';                                             // all that is after hash
         if (slashPos !== -1) {                                          // something after second slash
             hash = req.url.substring(1, slashPos);
-            afterHash = req.url.substring(slashPos + 1);
-         }
+            afterHash = req.url.substring(slashPos + 1).trim();
+        }
         //console.log('hash: ' + hash);
         //console.log('afterHash: ' + afterHash);
-
+        
         if (afterHash === '' ||
             afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
             var indexPathname = path.join(wwwSlites,
@@ -211,7 +221,7 @@ app.use(function (req, res, next) {
                                           'index.html');                // www/slites/hash/index.html
             //console.log('RENDERING HTML: ' + indexPathname);
             res.render(indexPathname);
-        } else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/)) {  // img*.jpg files (from slites/hash folder)
+        } else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
             //console.log('jpg: ' + afterHash);
             var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
             var jpgOptions = { lastModified: true, maxAge: 0 };
@@ -220,23 +230,40 @@ app.use(function (req, res, next) {
                 //console.log('ts-truncated jpg: ' + afterHash);
                 jpgOptions.lastModified = false;
             }
-
+            
             var jpgPathname = path.join(wwwSlites, hash, afterHash);    // www/slites/hash/img*.jpg
             //console.log('filePathname: ' + jpgPathname);
             res.sendFile(jpgPathname, jpgOptions, function (err) {
                 if (err) {
-                    console.log(err + ' sending file: ' + jpgPathname);
+                    console.log(err + ' sending img file: ' + jpgPathname);
                 }
             });
-        } else {                                                        // all other files from www_static folder
-            //console.log('file: ' + afterHash);
-            var fileOptions = { lastModified: true, maxAge: 0, root: path.join(www_dir, www_static_dir) };
-
-            var filePathname = path.normalize(afterHash);
-            //console.log('filePathname: ' + filePathname);
-            res.sendFile(filePathname, fileOptions, function (err) {
+        } else if (hash && afterHash.match(/download\s*(\/?|\\)?$/i)) {
+            var hashPath = path.join(wwwSlites, hash);
+            console.log('Downloading presentation from: ', hashPath);
+            socketIoSlite.getHashPresentation(hash, function (err, fileName) {
                 if (err) {
-                    console.log(err + ' sending file: ' + filePathname);
+                    console.error(err);
+                } else {
+                    var fileOptions = { lastModified: true, maxAge: 0 };
+                    var fileToSend = path.join(hashPath, fileName);
+                    console.log("Sending presentation: " + fileToSend);
+                    res.sendFile(fileToSend, fileOptions, function (err) {
+                        if (err) {
+                            console.log('Error while sending presentation file:' + fileToSend, err);
+                        }
+                    });
+                }
+            });
+        } else {                                                    // all other files from www_static folder
+            console.log('Arbitrary hash file: ' + afterHash);
+            var fileOptions = { lastModified: true, maxAge: 0 };
+            var hashPath = path.join(wwwSlites, hash);
+            var fileToSend = path.join(hashPath, afterHash);
+            //console.log('filePathname: ' + filePathname);
+            res.sendFile(fileToSend, fileOptions, function (err) {
+                if (err) {
+                    console.log(err + ' sending arbitrary file: ' + fileToSend);
                 }
             });
         }
@@ -323,11 +350,11 @@ router.post('/notes.html', function (req, res){
     var tmpNote = 0;
  
     function findAremNote (callback) {
-	   if(req.user && req.cookies[notesCookie]) {
-		if (req.user._id != req.cookies[notesCookie]) {
+	   if(req.user && req.cookies[sessionIdCookie]) {
+		if (req.user._id != req.cookies[sessionIdCookie]) {
 			console.log("Removing old user ID cookie");
-			oldUserId = req.cookies[notesCookie];
-			res.clearCookie(notesCookie);
+			oldUserId = req.cookies[sessionIdCookie];
+			res.clearCookie(sessionIdCookie);
 		}
 
 		Note.find({ uid: oldUserId, tmp: 1 } , function (err, docs) {
@@ -335,7 +362,7 @@ router.post('/notes.html', function (req, res){
 				var noteRet;
 				if(req.body.noteText) {noteRet = req.body.noteText;}
 				else {noteRet = docs[0].note;}
-				Note.find({ uid: req.cookies[notesCookie], tmp: 1 }).remove().exec();
+				Note.find({ uid: req.cookies[sessionIdCookie], tmp: 1 }).remove().exec();
 				callback(noteRet,req.user._id);
 			}
 			else {
@@ -345,7 +372,7 @@ router.post('/notes.html', function (req, res){
 
    	   }
 	   else {
-		callback("",req.cookies[notesCookie]);
+		callback("",req.cookies[sessionIdCookie]);
 	   }
 
     }
@@ -357,11 +384,11 @@ findAremNote(function(noteText,userId) {
 if(!(noteText)) {    var noteText = req.body.noteText;}
 
 if(!userId) {
-    if(! req.cookies[notesCookie]) {
+    if(! req.cookies[sessionIdCookie]) {
 	console.log("No cookie. Setting up a new cookie file");
 	if(req.user) {
 		console.log("New id is " + req.user._id);
-		res.cookie(notesCookie, req.user._id);
+		res.cookie(sessionIdCookie, req.user._id);
 		userId = req.user._id;
 	}
 	else {
@@ -373,13 +400,13 @@ if(!userId) {
 
 		var newId = Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
 		console.log("New id is " + newId);
-		res.cookie(notesCookie, newId);
+		res.cookie(sessionIdCookie, newId);
 		userId = newId;
 	}
     }
     else {
 	if(!req.user) {tmpNote = 1;}
-	userId = req.cookies[notesCookie];
+	userId = req.cookies[sessionIdCookie];
 	console.log("Cookie found");
     }
 }
@@ -543,7 +570,7 @@ var io = require('socket.io').listen((appPort === ioPort ? server : http), { log
 
 module.exports.io = io;
 
-require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, www_static_dir, slitesReg, function () { });
+var socketIoSlite = require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, www_static_dir, slitesReg, function () { });
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

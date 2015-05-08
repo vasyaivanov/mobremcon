@@ -131,6 +131,24 @@ function showHideHelpOverlay() {
     showHideMenu(true);
 }
 
+function getCurrentHash() {
+    var hash = document.location.href;
+    if (hash[hash.length - 1] === '/') {
+        hash = hash.slice(0, -1);
+    }
+    var slashPos = hash.lastIndexOf('/');
+    hash = hash.slice(slashPos + 1);
+    hash = hash.toUpperCase();
+    return hash;
+}
+
+function downloadPresentation() {
+    var hash = getCurrentHash();
+    console.log('Sending Request to Download Presentation in Hash: ' + hash);
+    socket.emit('requestDownloadPresentation', { 'hash': hash });
+    showHideMenu(true);
+}
+
 function deleteAllCookies() {
     var cookies = document.cookie.split(";");
 
@@ -232,13 +250,15 @@ function submitInsertVideoSlide() {
 }
 
 
+//$('#downloadPresentation').click(function () {
+//    downloadPresentation();
+//});
 $('#chatPanel').click(function () {
     showHideComments();
 });
 $('#closeChat').click(function () {
     showHideComments();
 });
-
 $('#personalNotesPanel').click(function () {
     showHidePersonalNotes();
 });
@@ -270,7 +290,11 @@ $('#closeExplanator').click(function () {
 if (needToShowExplanators()) {
     showHideExplanators();
 }
-
+var hostname = window.location.hostname;
+if( hostname.indexOf("www") == 0){
+	hostname = hostname.substring(3);
+}
+$('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
 
 // Muaz Khan     - https://github.com/muaz-khan
@@ -281,14 +305,7 @@ var _channelHash = "9WDXH6OH-6K73NMI";
 var config = {
     openSocket: function (config) {
         //var channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g , '');
-        var hash = document.location.href;
-        if (hash[hash.length - 1] === '/') {
-            hash = hash.slice(0, -1);
-        }
-        var slashPos = hash.lastIndexOf('/');
-        hash = hash.slice(slashPos + 1);
-        hash = hash.toUpperCase();
-
+        var hash = getCurrentHash();
         var channel = hash;
         channel += _channelHash;
         var socket = new Firebase('https://webrtc.firebaseIO.com/' + channel);
@@ -558,10 +575,21 @@ jQuery(document).ready(function ($) {
     $(".rsOverflow").css("height", "100%");
 });
 
+function getClearUrl() {
+    var url = [location.protocol, '//', location.host, location.pathname].join('');
+    return url;
+}
 
 var socket;
 if (!isFile) {
     socket = io.connect(document.location.hostname + ':1337');
+    
+    socket.on('responseDownloadPresentation', function (data) {
+        if (data.fileName) {
+            console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
+            document.location.replace(getClearUrl() + '/' + data.fileName);
+        }
+    });
     
     socket.on('ccBroadcast', function (data) {
         //alert("JD: ccBroadcast text="+data.hello);
