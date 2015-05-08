@@ -10,7 +10,6 @@
 var XML_PATH = 'xml'
   , NUM_REG_EXP = /\d+\./
   , CONVERSION_FORMAT = 'html'//'jpg'
-  , SUPPORTED_EXTENSIONS = ['PPT', 'PPTX']
   , WIDTH = 1024
   , COMPRESSION = 85
   , DEBUG = false;
@@ -28,23 +27,6 @@ function elapsedTime(note) {
     console.log(note + ' in: ' + process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms"); // print message + time
     start = process.hrtime(); // reset the timer
     return elapsed;
-}
-
-module.exports.isReservedHashFileName = function (file) {
-    var reserved = (file === 'index.html' || 
-                    file.match(/img[0-9]*.(html|jpg)$/i) || 
-                    file.match(/text[0-9]*.html$/i));
-    return reserved;
-};
-
-module.exports.isExtentionSupported = function (fileName) {
-    var ext = path.extname(fileName).toUpperCase();
-    if (ext[0] !== '.') {
-        return false;
-    }
-    ext = ext.substring(1);
-    var index = SUPPORTED_EXTENSIONS.indexOf(ext);
-    return (index != -1); 
 }
 
 module.exports.convert = function (pathName, origName, socket, opt) {

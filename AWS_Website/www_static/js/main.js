@@ -16,18 +16,8 @@ $(document).ready(function () {
         var url = [location.protocol, '//', location.host].join('');
         return url;
     }
-    
-    function getCurrentHash() {
-        var hash = document.location.href;
-        if (hash[hash.length - 1] === '/') {
-            hash = hash.slice(0, -1);
-        }
-        var slashPos = hash.lastIndexOf('/');
-        hash = hash.slice(slashPos + 1);
-        hash = hash.toUpperCase();
-        return hash;
-    }
 
+    
     var url = document.location.href;
     var hashPos = url.lastIndexOf('#');
     var localUrl = url.slice(hashPos + 1);
