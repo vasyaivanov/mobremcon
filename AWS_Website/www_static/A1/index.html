@@ -33,12 +33,15 @@
 
 <body> <!--onresize="resizeCanvas()">-->
 
-    <canvas id="drawCanvas" ></canvas>
+	<img src="./img/RightCurtain.gif" id="rightCurtain" class="curtain" />
+	<img src="./img/RightCurtain.gif" id="leftCurtain" class="curtain leftCurtain" />
+	
+	<canvas id="drawCanvas" ></canvas>
 
 
 	<div id="sliteWatermak" style="height:40px; line-height:40px;">
         <span style="vertical-align:top;" id='menuTitle'>www.slite.us</span>
-        <span style="font-size:2em; vertical-align:top;">☰</span>
+        <span style="font-size:2em; vertical-align:top;" alt="Website Menu">☰</span>
     </div>
 
 
@@ -49,7 +52,7 @@
 	<div id="personalNotes">
 		<div class="closevideo" id="closePersonalNotes"></div>
 		<center><div class='panelTitle'>Personal Notes (only you can see them)</div></center>
-		<p class="paper" contenteditable>
+		<p class="paper" id="personalNotesArea" contenteditable>
 		</p>
 	</div>
 
@@ -121,16 +124,15 @@
 	<nav id="primary_nav_wrap">
 		<ul>
 			<li><a href="#"></a>
-				<ul class="menuSubmenu">
+				<ul class="menuSubmenu">		  
 				  <li><a href="javascript:showRemote()" id="menuRemote">Become Presenter</a></li>
-                  <li><a href="javascript:downloadPresentation()" id="downloadPresentation">Download Presentation</a></li>
-				  <li><a href="javascript:shareFacebook()" id="shareFacebook">Share on Facebook</a></li>
-				  <li><a href="javascript:shareTwitter()" id="shareTwitter">Share on Twitter</a></li>
-				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
-				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span> Chat</a></li>
+				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span>Text Chat</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span> Video Chat</a></li>
-				  <!--<li><a href="javascript:showHideInsertVideoSlideOverlay()" id="menuInsertVideoSlide">Insert Video Slide</a></li> -->
-				  <li><a href="http://www.slite.us">Home</a></li>
+				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
+                  <li><a href="javascript:shareFacebook()" id="shareFacebook">Share on Facebook</a></li>
+				  <li><a href="javascript:shareTwitter()" id="shareTwitter">Share on Twitter</a></li>
+				  <!--<li><a href="javascript:showHideInsertVideoSlideOverlay()" id="menuInsertVideoSlide">Insert Video Slide</a></li>
+				  <li><a href="http://www.slite.us">Home</a></li>-->
 				  <li><a href="javascript:openContactUs()" id="menuContactUs">Contact Us / Suggest / Ask</a></li>
 				  <li><a href="javascript:showHideHelpOverlay()" id="menuHelpOverlay">Help</a></li>
 				</ul>
