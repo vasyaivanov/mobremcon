@@ -292,7 +292,7 @@ if (needToShowExplanators()) {
 }
 var hostname = window.location.hostname;
 if( hostname.indexOf("www") == 0){
-	hostname = hostname.substring(3);
+	hostname = hostname.substring(4);
 }
 $('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
