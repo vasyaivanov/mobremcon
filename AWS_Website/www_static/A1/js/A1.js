@@ -8,12 +8,21 @@ function isMobile() {
     }
 }
 
+function share(url) {
+	var h = 200;
+	var w = 500;
+	var left = (screen.width/2)-(w/2);
+	 var top = (screen.height/2)-(h/2);
+	window.open(url, 'shareFacebook', 'height=' + h + ', width=' + w + ', top='+top+', left='+left);
+	showHideMenu(true);
+}
+
 function shareFacebook() {
-	window.open("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href, '_blank');
+	share("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href);
 }
 
 function shareTwitter() {
-	window.open("http://twitter.com/share", '_blank');
+	share("http://twitter.com/share");
 }
 
 function openContactUs() {
@@ -45,6 +54,7 @@ function showHidePersonalNotes() {
     } else {
         $("#personalNotesOpenCloseLabel").html("");
     }
+	$('#personalNotesArea').focus();	
     showHideMenu(true);
 }
 
