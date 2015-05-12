@@ -147,7 +147,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         socket.emit("sliteConversionError", data);
     }
     function uploadComplete(name, origName) {
-        converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir});
+        converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: module.parent.exports.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: module.parent.exports.userAuth});
     }
     
     if (HTML5_UPLOADER) {

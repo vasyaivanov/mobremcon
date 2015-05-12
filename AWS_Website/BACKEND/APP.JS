@@ -17,8 +17,9 @@ var express = require('express')
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
   , ioPort = 1337
-  , sessionIdCookie = "sliteCurrUser"
-  , notesCookie = "slitenotesID";
+  , sessionIdCookie = "sliteCurrUser";
+
+module.exports.sessionIdCookie = sessionIdCookie;
 
 var app = express();
 module.exports.app = app;
@@ -54,10 +55,15 @@ var Note = mongoose.model('note', notesSchema);
 var slidesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
+  title: { type: String}, 
   tmp: {type: String}
 });
 
 slidesSchema.index({uid: 1, sid: 1}, {unique: true});
+
+var Slide = mongoose.model('slide', slidesSchema);
+
+module.exports.SlideScheme = mongoose.model('slide', slidesSchema);
 
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
@@ -195,6 +201,17 @@ app.use(passport.session());
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
+    if(req.user) {
+	module.exports.userAuth = 1;
+    }
+    else {
+	module.exports.userAuth = 0;
+    }
+
+    setUserSession(req,res,function(userId) {
+	module.exports.currentUserId =  userId;
+    });
+
     var match = req.url.match(slitesRegMW);
     if (match) {                                                        // if hash found in url
         if (req.url[req.url.length - 1] === '/') {
@@ -305,8 +322,49 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
     }
 })
 
+function setUserSession(req, res, callback) {
+	console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
+	var oldUserId = 0;
+	var expDate = new Date(Number(new Date()) + 315360000000);
+	   // If no user id - generate or add from req.user._id
+	   if(!(req.cookies[sessionIdCookie])) {
+		var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
+		var newUserId = (req.user) ? req.user._id : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
+		console.log("New user ID: " + newUserId);
+		console.log("Setting new session cookie");
+		res.cookie(sessionIdCookie, newUserId, { expires: expDate });
+		callback(newUserId);
+	   }
+	   else {
+		console.log("User id is " + req.cookies[sessionIdCookie]);
+		// User loged in, but has older, random generated id
+		if((req.user) /*&& (req.user._id != req.cookies[sessionIdCookie])*/) {
+			console.log("Setting new user id");
+			oldUserId = req.cookies[sessionIdCookie];
+			if(req.user._id != req.cookies[sessionIdCookie]) {
+				res.cookie(sessionIdCookie, req.user._id, { expires: expDate });
+			}
+			// Update user Notes
+			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}).exec();
+			// Update user slides
+			Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}).exec();
+			callback(req.user._id);
+		}
+		else {
+			console.log("User is set");
+			callback(req.cookies[sessionIdCookie]);
+		}
+		// Else - User  doesn't need any changes
+	   }
+	console.log("------------------------ ");
+}
+
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
+
+/* setUserSession(req,res,function(userId) {
+	console.log("Current user id is " + userId);
+ });*/
 
   //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -388,7 +446,7 @@ if(!userId) {
 	console.log("No cookie. Setting up a new cookie file");
 	if(req.user) {
 		console.log("New id is " + req.user._id);
-		res.cookie(sessionIdCookie, req.user._id);
+		res.cookie(sessionIdCookie, req.user._id, { expires: new Date(Number(new Date()) + 315360000000)});
 		userId = req.user._id;
 	}
 	else {
@@ -400,7 +458,7 @@ if(!userId) {
 
 		var newId = Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
 		console.log("New id is " + newId);
-		res.cookie(sessionIdCookie, newId);
+		res.cookie(sessionIdCookie, newId, { expires: new Date(Number(new Date()) + 315360000000)});
 		userId = newId;
 	}
     }

@@ -5,6 +5,8 @@
   , cheerio = require('cheerio')
   , Gaze = require('gaze')
   , prepare_slite = require('./prepare_slite.js')
+  , mongodb = require('mongodb')
+  , mongoose = require('mongoose')
   , numSlidesParser = require('./num-slides-parser.js');
 
 var XML_PATH = 'xml'
@@ -294,6 +296,14 @@ module.exports.convert = function (pathName, origName, socket, opt) {
                             }
                         }
                         console.log('NUM SLIDES from html: ' + numSlides);
+
+			// Saving slide to DB
+			var slideTmp = (opt.userAuth) ? 0 : 1;
+			var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp});
+			addSlide.save(function(err, saved) {
+				if(err) console.error('Can\'t insert a new note: ' + err);
+			});
+
                         finish();
                     }); // fs.readFile ...
                 } else {
