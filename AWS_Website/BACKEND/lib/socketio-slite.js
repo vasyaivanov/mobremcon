@@ -221,6 +221,51 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		//socket.emit('news', { hello: 1 });
 
     });
+	
+	socket.on('notes-server', function (data) {
+		
+		//module.exports.userAuth
+		var slideId = data.slideId.replace(/[^a-zA-Z0-9]/g,"");
+		var slidePath = www_dir + slitesDir + '/' + slideId + '/';
+		var tmpNote = module.exports.userAuth ? 0 : 1;
+		if(slideId == "A1") {
+			slidePath = www_dir + module.parent.exports.www_static_dir + '/' + slideId;
+		}
+		var currentUserId = module.parent.exports.currentUserId;
+
+	    if(fs.existsSync(slidePath) == true) {
+			//console.log('Slide was found');
+			if(currentUserId && data.slideId) {
+				module.parent.exports.NoteScheme.find({uid : currentUserId, sid: slideId }, function (err, docs) {
+					if (!docs.length){
+						console.log('Inserting new note...');
+						// Adding new note
+						console.log("Current user" + currentUserId);
+						var note = new module.parent.exports.NoteScheme({uid: currentUserId,sid: slideId, note: data.noteText, tmp: tmpNote});
+						note.save(function(err, saved) {
+								if(err) console.error('Can\'t insert a new note: ' + err);
+							});
+					}
+					else {
+						module.parent.exports.NoteScheme.update({ uid : currentUserId, sid: slideId }, {$set: { note: data.noteText, tmp: tmpNote}}, {upsert: true},
+							function (err, numAffected) {
+								if(numAffected > 0) {console.log("Updated rows: " + numAffected)}
+							}
+						);
+					}
+					if(data.init == 1 && docs.length) {
+						console.log("Notes initializing, returning note...");
+						socket.emit('notes-client', {slideId: slideId, noteText: docs[0].note});
+					}					
+				});
+			
+				
+				/*else {
+					console.log("Note socket received data: " + data.noteText);
+				}*/
+			}
+		}
+    });
 
     //socket.emit('cc', { hello: 0 });
     socket.on('cc', function (data) {

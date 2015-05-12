@@ -607,6 +607,8 @@ if (!isFile) {
         $('#closedCaptioningPanel').html(data.hello);
         $('#closedCaptioningPanel').show(400).delay(2000).fadeOut(400);
     });
+
+
     
     socket.on('news', function (data) {
         if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {

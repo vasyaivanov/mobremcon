@@ -31,7 +31,7 @@ db.once('open', function callback() {
 
 // User Schema
 var userSchema = mongoose.Schema({
-  username: { type: String, required: true, unique: true },
+  username: { type: String, required: true, unique: true, lowercase: true, trim: true},
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true},
 });
@@ -48,6 +48,8 @@ var notesSchema = mongoose.Schema({
 notesSchema.index({uid: 1, sid: 1}, {unique: true});
 
 var Note = mongoose.model('note', notesSchema);
+
+module.exports.NoteScheme = Note;
 
 // SlidesDB
 var slidesSchema = mongoose.Schema({
@@ -158,6 +160,7 @@ var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'});
 
 // find path www_dir to index.html
 var www_static_dir = 'www_static';
+module.exports.www_static_dir = www_static_dir;
 var indexHtml = 'index.html';
 var awsDir = '/home/ec2-user/www/';
 var localDir = __dirname + "/../";
@@ -200,14 +203,14 @@ app.use(passport.session());
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
     if(req.user) {
-	module.exports.userAuth = 1;
+		module.exports.userAuth = 1;
     }
     else {
-	module.exports.userAuth = 0;
+		module.exports.userAuth = 0;
     }
 
     setUserSession(req,res,function(userId) {
-	module.exports.currentUserId =  userId;
+		module.exports.currentUserId =  userId;
     });
 
     var match = req.url.match(slitesRegMW);
@@ -321,23 +324,23 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
 })
 
 function setUserSession(req, res, callback) {
-	console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
+	//console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
 	var oldUserId = 0;
 	var expDate = new Date(Number(new Date()) + 315360000000);
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
 		var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
 		var newUserId = (req.user) ? req.user._id : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
-		console.log("New user ID: " + newUserId);
-		console.log("Setting new session cookie");
+		//console.log("New user ID: " + newUserId);
+		//console.log("Setting new session cookie");
 		res.cookie(sessionIdCookie, newUserId, { expires: expDate });
 		callback(newUserId);
 	   }
 	   else {
-		console.log("User id is " + req.cookies[sessionIdCookie]);
+		//console.log("User id is " + req.cookies[sessionIdCookie]);
 		// User loged in, but has older, random generated id
 		if((req.user) /*&& (req.user._id != req.cookies[sessionIdCookie])*/) {
-			console.log("Setting new user id");
+			//console.log("Setting new user id");
 			oldUserId = req.cookies[sessionIdCookie];
 			if(req.user._id != req.cookies[sessionIdCookie]) {
 				res.cookie(sessionIdCookie, req.user._id, { expires: expDate });
@@ -349,12 +352,12 @@ function setUserSession(req, res, callback) {
 			callback(req.user._id);
 		}
 		else {
-			console.log("User is set");
+			//console.log("User is set");
 			callback(req.cookies[sessionIdCookie]);
 		}
 		// Else - User  doesn't need any changes
 	   }
-	console.log("------------------------ ");
+	//console.log("------------------------ ");
 }
 
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
@@ -381,145 +384,6 @@ router.get('/signup.html', function (req, res){
     //console.log('get /login');	
     res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req,  error: 0});
 });
-
-
-router.post('/notes.html', function (req, res){
-
-    res.type('text/html');
-    res.status(200);
-    var slideId = req.body.slideId;
-    var noteText;
-    var initialize = (req.body.initialize > 0) ? 1:0;
-
-    slideId = slideId.replace(/[^a-zA-Z0-9]/g,"");
-
-   // if(noteText) noteText = noteText.replace(/[^a-zA-Z0-9]/g,"");
-    var slidePath = www_dir + slitesDir + '/' + slideId + '/';
-
-    if(slideId == "A1") {
-	slidePath = www_dir + www_static_dir + '/' + slideId;
-    }
-
-
-    var userId = 0;
-    var oldUserId = 0;
-    var tmpNote = 0;
- 
-    function findAremNote (callback) {
-	   if(req.user && req.cookies[sessionIdCookie]) {
-		if (req.user._id != req.cookies[sessionIdCookie]) {
-			console.log("Removing old user ID cookie");
-			oldUserId = req.cookies[sessionIdCookie];
-			res.clearCookie(sessionIdCookie);
-		}
-
-		Note.find({ uid: oldUserId, tmp: 1 } , function (err, docs) {
-			if (docs.length > 0 ) {
-				var noteRet;
-				if(req.body.noteText) {noteRet = req.body.noteText;}
-				else {noteRet = docs[0].note;}
-				Note.find({ uid: req.cookies[sessionIdCookie], tmp: 1 }).remove().exec();
-				callback(noteRet,req.user._id);
-			}
-			else {
-				callback("",req.user._id);
-			}
-		});
-
-   	   }
-	   else {
-		callback("",req.cookies[sessionIdCookie]);
-	   }
-
-    }
-
-   console.log("------------ note request start");
-
-findAremNote(function(noteText,userId) {
-
-if(!(noteText)) {    var noteText = req.body.noteText;}
-
-if(!userId) {
-    if(! req.cookies[sessionIdCookie]) {
-	console.log("No cookie. Setting up a new cookie file");
-	if(req.user) {
-		console.log("New id is " + req.user._id);
-		res.cookie(sessionIdCookie, req.user._id, { expires: new Date(Number(new Date()) + 315360000000)});
-		userId = req.user._id;
-	}
-	else {
-		tmpNote = 1;
-
-		var userIpAddress = req.connection.remoteAddress
-
-		userIpAddress = userIpAddress.replace(/\./g,"");
-
-		var newId = Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
-		console.log("New id is " + newId);
-		res.cookie(sessionIdCookie, newId, { expires: new Date(Number(new Date()) + 315360000000)});
-		userId = newId;
-	}
-    }
-    else {
-	if(!req.user) {tmpNote = 1;}
-	userId = req.cookies[sessionIdCookie];
-	console.log("Cookie found");
-    }
-}
-else {
-	if(!req.user) {tmpNote = 1;}
-}
-
-    if(fs.existsSync(slidePath) == true && userId != '') {
-	console.log('Slide was found');
-	console.log('Your id is:' + userId);
-
-
-	Note.find({uid : userId, sid: slideId }, function (err, docs) {
-			if (!docs.length){
-				console.log(' Inserting new note...');
-				// Code 1 - added new note
-				res.json({ "code": 1, "note": noteText })
-				var note = new Note({uid: userId,sid: slideId, note: noteText, tmp: tmpNote});
-				note.save(function(err, saved) {
-						if(err) console.error('Can\'t insert a new note: ' + err);
-					});
-			}
-			else {
-				Note.update({ uid : userId, sid: slideId }, {$set: { note: noteText, tmp: tmpNote}}, {upsert: true},
-					function (err, numAffected) {
-  						if(numAffected > 0) {console.log("Updated rows: " + numAffected)}
-					}
-				);
-
-				if(initialize == 1) {
-					// Code 2 - Initialize
-					console.log('Retrieving note from DB');
-					res.json({"code": "2", "note": docs[0].note});
-					console.log("------------ note request end");
-				}
-				else {
-					// Code 3 - saved
-					console.log('Updating note');
-					res.json({"code": "3"});
-					console.log("------------ note request end");
-				}
-			}
-		});
-    }
-else {
-	// Code 10 - slide was not found
-	res.json({ "code": "10" })
-
-	console.log("Slide was not found");
-	console.log("------------ note request end");
-}
-
-});
-
-  
-});
-
 
 
 router.post('/signup.html', function (req, res){
