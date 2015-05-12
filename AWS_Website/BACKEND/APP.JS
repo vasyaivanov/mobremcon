@@ -19,8 +19,6 @@ var express = require('express')
   , ioPort = 1337
   , sessionIdCookie = "sliteCurrUser";
 
-module.exports.sessionIdCookie = sessionIdCookie;
-
 var app = express();
 module.exports.app = app;
 

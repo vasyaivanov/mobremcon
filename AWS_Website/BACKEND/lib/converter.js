@@ -5,8 +5,6 @@
   , cheerio = require('cheerio')
   , Gaze = require('gaze')
   , prepare_slite = require('./prepare_slite.js')
-  , mongodb = require('mongodb')
-  , mongoose = require('mongoose')
   , numSlidesParser = require('./num-slides-parser.js');
 
 var XML_PATH = 'xml'
