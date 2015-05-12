@@ -68,7 +68,6 @@ module.exports.SlideScheme = mongoose.model('slide', slidesSchema);
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
   var user = this;
-
   if(!user.isModified('password')) return next();
 
   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
@@ -141,6 +140,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(function(username, password, done) {
+  username = username.toLowerCase();
   User.findOne({ username: username }, function(err, user) {
     if (err) { return done(err); }
     if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
