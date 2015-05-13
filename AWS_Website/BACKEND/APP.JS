@@ -14,6 +14,7 @@ var express = require('express')
   , bcrypt = require('bcrypt')
   , path = require('path')
   , converter = require('./lib/converter.js')
+  , moment = require('moment')
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
   , ioPort = 1337
@@ -42,7 +43,16 @@ var notesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
   note: { type: String},
-  tmp: {type: String}
+  tmp: {type: String},
+  created: { type: Date },
+  updated: { type: Date }
+});
+
+notesSchema.pre('save', function(next){
+  now = new Date();
+  this.created = now;
+  this.updated = now;
+  next();
 });
 
 notesSchema.index({uid: 1, sid: 1}, {unique: true});
@@ -56,14 +66,24 @@ var slidesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
   title: { type: String}, 
-  tmp: {type: String}
+  tmp: {type: String},
+  created: { type: Date }
+});
+
+slidesSchema.pre('save', function(next){
+  now = new Date();
+  this.created = now;
+  if ( !this.created ) {
+    this.created = now;
+  }
+  next();
 });
 
 slidesSchema.index({uid: 1, sid: 1}, {unique: true});
 
 var Slide = mongoose.model('slide', slidesSchema);
 
-module.exports.SlideScheme = mongoose.model('slide', slidesSchema);
+module.exports.SlideScheme = Slide;
 
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
@@ -433,6 +453,21 @@ router.get('/logout', function (req, res){
     console.log("MA: logout success ");
     res.redirect('/');
   });
+});
+
+router.get('/my.html', function (req, res){
+	return Slide.find({uid : module.exports.currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
+        if( !err ) {
+            res.render(path.join(www_dir,www_static_dir , 'my.html'), {
+              slides: docs,
+			  request: req,
+			  user: req.user,
+			  moment: moment
+            });
+        } else {
+            return console.log( err );
+        }
+    });
 });
 
 app.use('/', router);

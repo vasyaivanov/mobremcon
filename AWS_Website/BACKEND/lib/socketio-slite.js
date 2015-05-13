@@ -247,7 +247,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 							});
 					}
 					else {
-						module.parent.exports.NoteScheme.update({ uid : currentUserId, sid: slideId }, {$set: { note: data.noteText, tmp: tmpNote}}, {upsert: true},
+						module.parent.exports.NoteScheme.update({ uid : currentUserId, sid: slideId }, {$set: { note: data.noteText, tmp: tmpNote, updated: Date.now()}}, {upsert: true},
 							function (err, numAffected) {
 								if(numAffected > 0) {console.log("Updated rows: " + numAffected)}
 							}

@@ -297,7 +297,10 @@ module.exports.convert = function (pathName, origName, socket, opt) {
 
 			// Saving slide to DB
 			var slideTmp = (opt.userAuth) ? 0 : 1;
-			var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp});
+			var titleS = origName;
+			titleS = titleS.replace(/\.[^/.]+$/, "");
+			titleS = titleS.replace(/\_/, " ");
+			var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS});
 			addSlide.save(function(err, saved) {
 				if(err) console.error('Can\'t insert a new note: ' + err);
 			});
