@@ -113,8 +113,8 @@ module.exports.convert = function (pathName, origName, socket, opt) {
                 slideTimeSum = 0,
                 parseTime, readTime, finalTime, averageSlideTime,
                 PARSE_COEFF = 1.4,
-                READ_COEFF = 2.5
-            FINAL_COEFF = 0.9,
+                READ_COEFF = 2.5,
+                FINAL_COEFF = 0.9,
                 proc = -1;
 
             function deleteUploadFile(deletedFile) {
@@ -229,7 +229,7 @@ module.exports.convert = function (pathName, origName, socket, opt) {
                         gaze.close();
                         console.log('Unwatched gaze');
                     }
-                    slite.setFilename(hashDir, uploadFileTitle + '.' + CONVERSION_FORMAT, numSlides);
+                    slite.setFilename(hashDir, uploadFileTitle + '.' + CONVERSION_FORMAT, numSlides, origName);
                     slite.generateHtml(function (err) {
                         if (err) {
                             sliteError(err, hashDir);

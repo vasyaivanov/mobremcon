@@ -112,10 +112,11 @@ var Slite = function (socket, callback) {
     });
   }
 
-Slite.prototype.setFilename = function (dir, filename, num_slides) {
+Slite.prototype.setFilename = function (dir, filename, num_slides, origName) {
     this.dir = dir;
     this.filename = filename;
     this.num_slides = num_slides;
+    this.origName = origName;
     console.log("SLITE file: " + path.join(this.dir, this.filename) + " Slides:" + this.num_slides);
 };
 
@@ -141,9 +142,10 @@ Slite.prototype.generateHtml = function (callback) {
             callback('Error reading hash_index.html' + err);
         } else {
             var indexHtml = 'index.html';
-            var data_replaced1 = data.replace("NUM_SLIDES_TEMPLATE", self.num_slides);
-            var data_replaced2 = data_replaced1.replace("HASH_TEMPLATE", self.hashValue);
-            fs.writeFile(path.join(self.dir, indexHtml), data_replaced2, function (err) {
+            var data_replaced1 = data.replace('NUM_SLIDES_TEMPLATE', self.num_slides);
+            var data_replaced2 = data_replaced1.replace('HASH_TEMPLATE', self.hashValue);
+            var title_replaced = data_replaced2.replace('TITLE', self.origName);
+            fs.writeFile(path.join(self.dir, indexHtml), title_replaced, function (err) {
                 if (err) {
                     callback('Error writing ' + indexHtml + ' '  + err);
                 } else {
