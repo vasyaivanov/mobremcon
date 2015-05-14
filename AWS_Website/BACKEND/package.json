@@ -31,7 +31,7 @@
     "watchr": "^2.4.13",
     "wrench": "^1.5.8",
     "xml2js": "^0.4.5",
-    "moment": "^2.10",
+    "moment": "^2.10"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
