@@ -294,24 +294,23 @@ module.exports.convert = function (pathName, origName, socket, opt) {
                             }
                         }
                         console.log('NUM SLIDES from html: ' + numSlides);
-
-			// Saving slide to DB
-			var slideTmp = (opt.userAuth) ? 0 : 1;
-			var titleS = origName;
-			titleS = titleS.replace(/\.[^/.]+$/, "");
-			titleS = titleS.replace(/\_/, " ");
-			var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS});
-			addSlide.save(function(err, saved) {
-				if(err) console.error('Can\'t insert a new note: ' + err);
-			});
-
+		
                         finish();
                     }); // fs.readFile ...
                 } else {
                     finish();
                 }
                 //return;
-                
+				
+				// Saving slide to DB
+				var slideTmp = (opt.userAuth) ? 0 : 1;
+				var titleS = origName;
+				titleS = titleS.replace(/\.[^/.]+$/, "");
+				titleS = titleS.replace(/\_/, " ");
+				var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS});
+				addSlide.save(function(err, saved) {
+					if(err) console.error('Can\'t insert a new note: ' + err);
+				});
                 // delete presentation in UPLOAD dir
             }); // exec ...
         }); // fs.rename ...
