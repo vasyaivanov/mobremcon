@@ -206,7 +206,7 @@ function showRemote() {
     if (pathName) {
         pathName = pathName.replace('/', '');
     }
-    pathName = pathName.toUpperCase();
+    pathName = pathName.toLowerCase();
     var newUrl = "http://" + document.location.hostname;
     if (document.location.hostname === 'localhost') {
         newUrl += ':8081';
