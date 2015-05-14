@@ -451,6 +451,7 @@ router.get('/logout', function (req, res){
     //req.session.user = null;
     res.clearCookie('connect.sid', { path: '/' });
     console.log("MA: logout success ");
+	res.clearCookie(sessionIdCookie);
     res.redirect('/');
   });
 });
