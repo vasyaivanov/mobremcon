@@ -12,7 +12,6 @@ var express = require('express')
   , mongodb = require('mongodb')
   , mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
-  , math = require('math')
   , path = require('path')
   , converter = require('./lib/converter.js')
   , moment = require('moment')
@@ -473,8 +472,7 @@ router.get('/my.html', function (req, res){
               slides: docs,
 			  request: req,
 			  user: req.user,
-			  moment: moment,
-			  math: math
+			  moment: moment
             });
         } else {
             return console.log( err );
