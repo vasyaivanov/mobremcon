@@ -307,10 +307,24 @@ module.exports.convert = function (pathName, origName, socket, opt) {
 				var titleS = origName;
 				titleS = titleS.replace(/\.[^/.]+$/, "");
 				titleS = titleS.replace(/\_/, " ");
-				var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS});
-				addSlide.save(function(err, saved) {
-					if(err) console.error('Can\'t insert a new note: ' + err);
+				console.log("----------------");
+				module.parent.exports.readSlideSize(hashDir, function(sizec) {
+					var addSlide; 
+					if(sizec > 0) {
+						console.log(" ----------------- SLIDE SIZE IS: " + sizec);
+						addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS, size: sizec});
+					}
+					else {
+						addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS, size: 0});
+					}
+					
+					addSlide.save(function(err, saved) {
+						if(err) console.error('Can\'t insert a new note: ' + err);
+					}
+				);
+					
 				});
+
                 // delete presentation in UPLOAD dir
             }); // exec ...
         }); // fs.rename ...

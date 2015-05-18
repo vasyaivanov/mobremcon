@@ -12,6 +12,7 @@ var express = require('express')
   , mongodb = require('mongodb')
   , mongoose = require('mongoose')
   , bcrypt = require('bcrypt')
+  , math = require('math')
   , path = require('path')
   , converter = require('./lib/converter.js')
   , moment = require('moment')
@@ -66,6 +67,7 @@ var slidesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
   title: { type: String}, 
+  size: { type: Number}, 
   tmp: {type: String},
   created: { type: Date }
 });
@@ -456,6 +458,14 @@ router.get('/logout', function (req, res){
   });
 });
 
+readSlideSize = function(path_to_slide, callback) {
+	var size = require('du')(path_to_slide, { filter: function (f) { return !/\.(ppt|pptx)$/.test(f) } },  function (err, size) {
+		callback(size);
+	});
+}
+
+module.exports.readSlideSize = readSlideSize;
+
 router.get('/my.html', function (req, res){
 	return Slide.find({uid : module.exports.currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
         if( !err ) {
@@ -463,7 +473,8 @@ router.get('/my.html', function (req, res){
               slides: docs,
 			  request: req,
 			  user: req.user,
-			  moment: moment
+			  moment: moment,
+			  math: math
             });
         } else {
             return console.log( err );
