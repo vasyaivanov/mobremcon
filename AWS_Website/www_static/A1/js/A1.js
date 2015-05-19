@@ -154,8 +154,8 @@ function getCurrentHash() {
 
 function downloadPresentation() {
     var hash = getCurrentHash();
-    console.log('Sending Request to Download Presentation in Hash: ' + hash);
-    socket.emit('requestDownloadPresentation', { 'hash': hash });
+    console.log('Sending Request to Download Presentation in Hash: ' + hash.toLowerCase());
+    socket.emit('requestDownloadPresentation', { 'hash': hash.toLowerCase() });
     showHideMenu(true);
 }
 
