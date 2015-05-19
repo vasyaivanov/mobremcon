@@ -146,7 +146,7 @@ Slite.prototype.generateHtml = function (callback) {
             var data_replaced2 = data_replaced1.replace('HASH_TEMPLATE', self.hashValue);
 			// Deleted 05/18/15, Konstantin R. - Now title generates from DB
             //var title_replaced = data_replaced2.replace('TITLE', self.origName);
-            fs.writeFile(path.join(self.dir, indexHtml), title_replaced, function (err) {
+            fs.writeFile(path.join(self.dir, indexHtml), data_replaced2, function (err) {
                 if (err) {
                     callback('Error writing ' + indexHtml + ' '  + err);
                 } else {
