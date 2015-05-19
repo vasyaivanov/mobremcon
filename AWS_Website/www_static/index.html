@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title> <% if (user) { %> <%= user.username %> <%} %> online presentations</title>
+    <title><% if (user) { %> <%= user.username %> <%} %> online presentations</title>
     <meta name="title" content="SLITE - online presentations" />
     <meta name="description" content="Live online powerpoint slides presentation for web" />
     <meta content="http://slite.us" property="og:url" />
@@ -33,6 +33,9 @@
     <script src="js/bootstrap.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/client.js"></script>
+	<script>
+	var noUploadForUser = <%= noUploadForUser %>;
+	</script>
     <script src="js/main.js"></script>
     <script src="js/jquery.scrollTo.js"></script>
 
@@ -96,10 +99,17 @@
     </header>
 	    
     <section id="banner">
+	
+	<% if(noUploadForUser == 0) { %>
         <div class="uploadfile">
             <button type="button" class="uploadButton">Upload Presentation</button>
             <input type="file" accept="pptx" id="uploadPresentation">
         </div>
+	<% } else { %>
+		<div class="uploadfile">
+            <button type="button" class="uploadButton" onclick="javascript:document.location='my.html'">You have reached the upload limit</button>
+        </div>
+	<% } %>
 		
 		
 	<img src="./img/RightCurtain.png" id="rightCurtain" class="curtain" />

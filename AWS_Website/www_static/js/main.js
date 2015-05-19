@@ -118,42 +118,45 @@ $(document).ready(function () {
     } else {
         // Initialize instances:
         var siofu = new SocketIOFileUpload(socket);
- 
-        // Configure the three ways that SocketIOFileUpload can read files:
-        //document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
-        //siofu.listenOnSubmit(document.getElementById("upload_btn"), document.getElementById("upload_input"));
-        siofu.listenOnInput(document.getElementById("uploadPresentation"));
-        //siofu.listenOnDrop(document.getElementById("file_drop"));
+			// Configure the three ways that SocketIOFileUpload can read files:
+			//document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
+			//siofu.listenOnSubmit(document.getElementById("upload_btn"), document.getElementById("upload_input"));
+			
+			if(noUploadForUser == 0) {
+				siofu.listenOnInput(document.getElementById("uploadPresentation"));
+			}
 
-        siofu.addEventListener("choose", function(event){
-	        console.log("Upload file(s) chosen: " + event.files[0].name);
-            openUploadDialog('Uploading: ' + event.files[0].name);
-        });
+			//siofu.listenOnDrop(document.getElementById("file_drop"));
 
-        // Do something when a file upload started:
-        siofu.addEventListener("start", function(event){
-            console.log("Upload started: " + event.file.name);
-        });
+			siofu.addEventListener("choose", function(event){
+				console.log("Upload file(s) chosen: " + event.files[0].name);
+				openUploadDialog('Uploading: ' + event.files[0].name);
+			});
 
-        // Do something when a file upload is finished:
-        siofu.addEventListener("complete", function(event){
-            console.log("Upload successful: " + event.file.name);
-            setUploadMessage('Converting presentation...');
-        });
+			// Do something when a file upload started:
+			siofu.addEventListener("start", function(event){
+				console.log("Upload started: " + event.file.name);
+			});
 
-        // Do something when a file upload fails:
-        siofu.addEventListener("error", function(event){
-	        console.log("Upload failed: " + event.file.pathName);
-            var data;
-            data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
-            data.error = true;
-            data.percentage = 100;
-            updateProgress(data);
-	        setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
-        });
+			// Do something when a file upload is finished:
+			siofu.addEventListener("complete", function(event){
+				console.log("Upload successful: " + event.file.name);
+				setUploadMessage('Converting presentation...');
+			});
+
+			// Do something when a file upload fails:
+			siofu.addEventListener("error", function(event){
+				console.log("Upload failed: " + event.file.pathName);
+				var data;
+				data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
+				data.error = true;
+				data.percentage = 100;
+				updateProgress(data);
+				setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
+			});
     } // if(HTML5_UPLOADER) .. else ..
     
-    socket.on("uploadProgress", function (data) {
+	socket.on("uploadProgress", function (data) {
         var msg = "Upload Progress";
         if (data.percentage >= 0) {
             msg += ': ' + data.percentage + '%'
@@ -185,7 +188,13 @@ $(document).ready(function () {
         data.error = true;
         data.percentage = 100;
         updateProgress(data);
-        setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
+		if(data.limit == 1) {
+			alert("You've reached the maximum limit of slides per user");
+			window.location = getClearUrl();
+		}
+		else {
+			setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
+		}
     });
 
     $('#createPresentation').click(function(){

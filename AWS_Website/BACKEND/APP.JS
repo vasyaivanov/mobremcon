@@ -18,6 +18,8 @@ var express = require('express')
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
   , ioPort = 1337
+  , maxSlidesCount = 5
+  , maxSlidesSize = 10485760
   , sessionIdCookie = "sliteCurrUser";
 
 var app = express();
@@ -233,7 +235,37 @@ app.use(function (req, res, next) {
     setUserSession(req,res,function(userId) {
 		module.exports.currentUserId =  userId;
     });
-
+	
+	
+	var getUserSlidesMb = function (userId, callback) {
+			Slide.find({uid : userId }).exec(function (err, docs) {
+			if( docs ) {
+				var slidesMB = 0;
+				for(i=0;i<docs.length;i++) {
+					slidesMB = slidesMB + docs[i].size;		
+				}
+				callback(slidesMB,docs.length);
+			}
+			else {
+				callback(0,0);
+			}
+			});
+	}
+	
+	getUserSlidesMb(module.exports.currentUserId, function(totalsize, totalcount) {
+			if(totalcount >= maxSlidesCount) {
+			module.exports.noUploadForUser = 1;
+		}
+		else if(totalsize >= maxSlidesSize) {
+			module.exports.noUploadForUser = 1;
+		}
+		else {
+			module.exports.noUploadForUser = 0;
+		}
+		
+	});
+	
+	
     var match = req.url.match(slitesRegMW);
     if (match) {                                                        // if hash found in url
         if (req.url[req.url.length - 1] === '/') {
@@ -261,14 +293,15 @@ app.use(function (req, res, next) {
             //console.log('RENDERING HTML: ' + indexPathname);
 			// Check slide in DB
 
-			Slide.findOne({sid : hash }).exec(function (err, doc) {
-				if( doc ) {
-					var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
-					res.render(indexPathname, {presenter: slidePresenter, title: doc.title});
-				} else {
-					console.log( "Slide was not found" );
+			slideCheckPresentor(hash, function(sfound, spresenter, stitle) {
+				if(sfound == 1) {
+					res.render(indexPathname, {presenter: spresenter, title: stitle});
 				}
-			});		
+				else {
+					console.log( "Slide was not found" );
+					res.redirect('/');
+				}
+			});
         } else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
             //console.log('jpg: ' + afterHash);
             var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
@@ -399,15 +432,14 @@ function setUserSession(req, res, callback) {
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
 
-/* setUserSession(req,res,function(userId) {
-	console.log("Current user id is " + userId);
- });*/
-
   //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
-  res.render(path.join(www_dir, www_static_dir, indexHtml), { user: req.user });
+  res.render(path.join(www_dir, www_static_dir, indexHtml), { 
+		user: req.user,
+		noUploadForUser: module.exports.noUploadForUser
+	});
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){
@@ -493,6 +525,40 @@ router.get('/my.html', function (req, res){
             return console.log( err );
         }
     });
+});
+// Render remote control
+
+slideCheckPresentor = function(hashId, callback) {
+		Slide.findOne({sid : hashId }).exec(function (err, doc) {
+			if( doc ) {
+				console.log("Slide was found");
+				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
+				callback(1,slidePresenter,doc.title);
+			} else {
+				console.log("Slide was not found");
+				callback(0,0,"");
+			}
+		});	
+}
+
+router.get('/remote/index.html', function (req, res){
+	
+		var hashId = req.query.presentation;
+
+		var slitesReg = "[0-9a-zA-Z]{4}";
+		var slitesRegMW = new RegExp('^' + slitesReg + '$');
+		var match = hashId.match(slitesRegMW);
+		
+		if(match) {
+			slideCheckPresentor(hashId, function(sfound, spresenter, stitle) {
+				if(sfound == 1 && spresenter == 1) {
+					 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: stitle});
+				}
+				else {
+					res.redirect('/');
+				}			
+			});
+		}
 });
 
 app.use('/', router);

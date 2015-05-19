@@ -303,21 +303,12 @@ module.exports.convert = function (pathName, origName, socket, opt) {
                 //return;
 				
 				// Saving slide to DB
-				var slideTmp = (opt.userAuth) ? 0 : 1;
 				var titleS = origName;
 				titleS = titleS.replace(/\.[^/.]+$/, "");
 				titleS = titleS.replace(/\_/, " ");
 				console.log("----------------");
 				module.parent.exports.readSlideSize(hashDir, function(sizec) {
-					var addSlide; 
-					if(sizec > 0) {
-						console.log(" ----------------- SLIDE SIZE IS: " + sizec);
-						addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS, size: sizec});
-					}
-					else {
-						addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: slideTmp, title: titleS, size: 0});
-					}
-					
+					var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0)});
 					addSlide.save(function(err, saved) {
 						if(err) console.error('Can\'t insert a new note: ' + err);
 					}

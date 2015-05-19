@@ -10,8 +10,8 @@ var url = require('url')
   , SLITE_EXT = '.jpg'
   , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$')
   , HTML5_UPLOADER = false;
-
 var start = process.hrtime();
+
 
 function resetElapsedTime() {
     start = process.hrtime();
@@ -140,9 +140,17 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     function uploadProgress(name){
         console.log("UPLOAD progress file: " + name);
     }
-    function uploadError(name) {
-        console.error("UPLOAD error: " + name);
+    function uploadError(type,name) {
         var data = {};
+		if(type == 1) {
+			data.limit = 1;
+			console.error("User reached limit of slides or size");
+		}
+		else {
+			data.limit = 0;
+			console.error("UPLOAD error: " + name);
+		}
+			
         data.error = true;
         socket.emit("sliteConversionError", data);
     }
@@ -158,25 +166,33 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             console.log('uploadFile event', data);
         });
     } else {
+		
         var uploader = new SocketIOFileUploadServer();
-        uploader.dir = uploadDir;
-        uploader.listen(socket);
-
+			uploader.dir = uploadDir;
+			uploader.listen(socket);
+		
         uploader.on("start", function (event) {
-            uploadStarted(event.file.name);
+				if(module.parent.exports.noUploadForUser == 1) {
+					uploadError(1, event.file.name);
+				}
+				else {
+					uploadStarted(event.file.name);
+				}
          });
 
-        uploader.on("progress", function (event) {
-            uploadProgress(event.file.pathName);
-        });
+		if(module.parent.exports.noUploadForUser == 0) {		
+				uploader.on("progress", function (event) {
+					uploadProgress(event.file.pathName);
+				});
 
-        uploader.on("error", function (event) {
-            uploadError(JSON.stringify(event));
-        });
+				uploader.on("error", function (event) {
+					uploadError(0, JSON.stringify(event));
+				});
 
-        uploader.on("complete", function (event) {
-            uploadComplete(event.file.pathName, event.file.name);
-        });
+				uploader.on("complete", function (event) {
+					uploadComplete(event.file.pathName, event.file.name);
+				});
+		}
     }
         
 
