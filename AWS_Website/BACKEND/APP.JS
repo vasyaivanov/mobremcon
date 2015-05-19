@@ -259,7 +259,16 @@ app.use(function (req, res, next) {
                                           hash,
                                           'index.html');                // www/slites/hash/index.html
             //console.log('RENDERING HTML: ' + indexPathname);
-            res.render(indexPathname);
+			// Check slide in DB
+
+			Slide.findOne({sid : hash }).exec(function (err, doc) {
+				if( doc ) {
+					var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
+					res.render(indexPathname, {presenter: slidePresenter, title: doc.title});
+				} else {
+					console.log( "Slide was not found" );
+				}
+			});		
         } else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
             //console.log('jpg: ' + afterHash);
             var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
@@ -307,7 +316,13 @@ app.use(function (req, res, next) {
             });
         }
         //console.log('\n');
-    } else {
+	} 
+	else if(req.url == "/A1/") {
+		 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
+		 res.render(indexPathname, {presenter: 1, title: "A1"});
+		console.log(indexPathname);
+	}
+    else {
         next();
     }
 });
