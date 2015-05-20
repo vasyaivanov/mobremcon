@@ -157,7 +157,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     function uploadComplete(name, origName) {
         converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: module.parent.exports.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: module.parent.exports.userAuth});
     }
-    
+	
+    socket.on('server-useruploadstatus', function () {
+		socket.emit('client-useruploadstatus', { noUploadForUser: module.parent.exports.noUploadForUser });		
+    });
+	
     if (HTML5_UPLOADER) {
         socket.on('uploadStarted', function (data) {
             console.log('uploadStarted event', data);
@@ -166,33 +170,33 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             console.log('uploadFile event', data);
         });
     } else {
-		
         var uploader = new SocketIOFileUploadServer();
 			uploader.dir = uploadDir;
 			uploader.listen(socket);
-		
+
         uploader.on("start", function (event) {
-				if(module.parent.exports.noUploadForUser == 1) {
-					uploadError(1, event.file.name);
-				}
-				else {
-					uploadStarted(event.file.name);
-				}
+				console.log();
+				uploadStarted(event.file.name);
          });
 
-		if(module.parent.exports.noUploadForUser == 0) {		
-				uploader.on("progress", function (event) {
-					uploadProgress(event.file.pathName);
-				});
+		uploader.on("progress", function (event) {
+			uploadProgress(event.file.pathName);
+		});
+		uploader.on("error", function (event) {
+			uploadError(0, JSON.stringify(event));
+		});
 
-				uploader.on("error", function (event) {
-					uploadError(0, JSON.stringify(event));
+		uploader.on("complete", function (event) {
+			if(module.parent.exports.noUploadForUser == 1) {
+				fs.unlink(event.file.pathName, function (err) {
+					uploadError(1, "");
 				});
+			}
+			else {
+				uploadComplete(event.file.pathName, event.file.name);
+			}
 
-				uploader.on("complete", function (event) {
-					uploadComplete(event.file.pathName, event.file.name);
-				});
-		}
+		});
     }
         
 

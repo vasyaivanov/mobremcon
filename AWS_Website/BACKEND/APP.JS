@@ -253,7 +253,7 @@ app.use(function (req, res, next) {
 	}
 	
 	getUserSlidesMb(module.exports.currentUserId, function(totalsize, totalcount) {
-			if(totalcount >= maxSlidesCount) {
+		if(totalcount >= maxSlidesCount) {
 			module.exports.noUploadForUser = 1;
 		}
 		else if(totalsize >= maxSlidesSize) {
