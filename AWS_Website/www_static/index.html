@@ -33,9 +33,6 @@
     <script src="js/bootstrap.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/client.js"></script>
-	<script>
-	var noUploadForUser = <%= noUploadForUser %>;
-	</script>
     <script src="js/main.js"></script>
     <script src="js/jquery.scrollTo.js"></script>
 
@@ -108,6 +105,7 @@
 	<% } else { %>
 		<div class="uploadfile">
             <button type="button" class="uploadButton" onclick="javascript:document.location='my.html'">You have reached the upload limit</button>
+			<input type="file" accept="pptx" id="uploadPresentation" style="display: none">		
         </div>
 	<% } %>
 		

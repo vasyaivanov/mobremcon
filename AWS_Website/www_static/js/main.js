@@ -1,12 +1,4 @@
 $(document).ready(function () {
-	//$('#uploadPresentation').bind('change', function() {
- //       //this.files[0].size gets the size of your file.
- //       var fileSize = this.files[0].size;
- //       if(fileSize > 5000000){
- //           alert("Sorry. We are supporting only presentations less then 5MB size. We are working on making this size much bigger!");
- //       }
-	//});
-
     function getClearUrl() {
         var url = [location.protocol, '//', location.host, location.pathname].join('');
         return url;
@@ -55,6 +47,20 @@ $(document).ready(function () {
         document.location = url + "#upload_presentation";
         setUploadMessage(msg);
     };
+	
+	// Delete user slide	
+	
+	$(".deleteSlide").click(function(){
+		var slideId = $(this).attr('slideId');
+		if(slideId) {
+			socket.emit('server-deleteSlide', { sid: slideId });
+		}
+	});
+	
+	socket.on("client-deleteSlide", function (data) {
+		//alert(data.sid);
+		$( "#slide_" + data.sid).hide();
+	});
     
     function updateProgress(data) {
         var printMsg = false, newLine = false;
@@ -121,18 +127,17 @@ $(document).ready(function () {
 			// Configure the three ways that SocketIOFileUpload can read files:
 			//document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
 			//siofu.listenOnSubmit(document.getElementById("upload_btn"), document.getElementById("upload_input"));
-			
-			if(noUploadForUser == 0) {
-				siofu.listenOnInput(document.getElementById("uploadPresentation"));
-			}
 
+			// Check if user possible to upload ppt 
+
+			siofu.listenOnInput(document.getElementById("uploadPresentation"));		
 			//siofu.listenOnDrop(document.getElementById("file_drop"));
 
 			siofu.addEventListener("choose", function(event){
 				console.log("Upload file(s) chosen: " + event.files[0].name);
 				openUploadDialog('Uploading: ' + event.files[0].name);
 			});
-
+				
 			// Do something when a file upload started:
 			siofu.addEventListener("start", function(event){
 				console.log("Upload started: " + event.file.name);
@@ -143,8 +148,8 @@ $(document).ready(function () {
 				console.log("Upload successful: " + event.file.name);
 				setUploadMessage('Converting presentation...');
 			});
-
-			// Do something when a file upload fails:
+			
+			
 			siofu.addEventListener("error", function(event){
 				console.log("Upload failed: " + event.file.pathName);
 				var data;
@@ -153,7 +158,10 @@ $(document).ready(function () {
 				data.percentage = 100;
 				updateProgress(data);
 				setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
-			});
+			});	
+
+					// Do something when a file upload fails:
+
     } // if(HTML5_UPLOADER) .. else ..
     
 	socket.on("uploadProgress", function (data) {
@@ -182,21 +190,26 @@ $(document).ready(function () {
         }, 1000); // forward after 1 sec
     });
 
-    socket.on('sliteConversionError', function (data) {
-	    console.log("File conversion failed! " + JSON.stringify(data));
-        data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
-        data.error = true;
-        data.percentage = 100;
-        updateProgress(data);
-		if(data.limit == 1) {
-			alert("You've reached the maximum limit of slides per user");
-			window.location = getClearUrl();
+    socket.on('sliteConversionError', function (rdata) {
+		var data = {};
+		if(rdata.limit == 1) {
+			data.msg = "You've reached the maximum limit of slides per user";
+		}
+		else if(rdata.limit == 2) {
+			data.msg = "The file is too big";
 		}
 		else {
-			setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
+	        data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
 		}
-    });
+	    console.log("File conversion failed! " + JSON.stringify(data));
+        data.error = true;
+        data.percentage = 100;
+		updateProgress(data);
+		setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
 
+
+    });
+	
     $('#createPresentation').click(function(){
 		window.location = window.location + "editor";
     });
@@ -205,3 +218,7 @@ $(document).ready(function () {
 		//$('.uploadfile').css('display', 'none');
    };
 });
+
+function delSlide(slideId) {
+	deleteSlide(slideId);
+}

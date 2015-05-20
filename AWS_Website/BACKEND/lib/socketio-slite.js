@@ -169,9 +169,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         });
     } else {
         var uploader = new SocketIOFileUploadServer();
-			uploader.dir = uploadDir;
-			uploader.listen(socket);
-			uploader.maxFileSize = module.parent.exports.maxSlideUploadSize;			
+		uploader.dir = uploadDir;
+		uploader.listen(socket);
+		uploader.maxFileSize = module.parent.exports.maxSlideUploadSize;			
 
         uploader.on("start", function (event) {
 				console.log();
@@ -190,14 +190,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			}
 			else {
 				fs.exists(event.file.pathName, function (exists) {
-						if((fs.statSync(event.file.pathName)["size"] > 0)) {
-							uploadComplete(event.file.pathName, event.file.name);
-						}
-						else {
-							fs.unlinkSync(event.file.pathName);
-							uploadError(2, "");
-						}
-						//
+					if((fs.statSync(event.file.pathName)["size"] > 0)) {
+						uploadComplete(event.file.pathName, event.file.name);
+					}
+					else {
+						fs.unlinkSync(event.file.pathName);
+						uploadError(2, "");
+					}
 				});
 			}
 
@@ -209,7 +208,34 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		});
 
     }
-        
+
+	var deleteFolderRecursive = function(path) {
+		if( fs.existsSync(path)) {
+			fs.readdirSync(path).forEach(function(file,index){
+			  var curPath = path + "/" + file;
+			  if(fs.lstatSync(curPath).isDirectory()) { // recurse
+				deleteFolderRecursive(curPath);
+			  } else { // delete file
+				fs.unlinkSync(curPath);
+			  }
+			});
+			fs.rmdirSync(path);
+		}
+	}
+	
+    socket.on('server-deleteSlide', function (data) {
+		var hashPath = path.join(www_dir, slitesDir, data.sid);
+		module.parent.exports.SlideScheme.remove({ uid: module.parent.exports.currentUserId, sid: data.sid }, function(err) {
+			if (!err) {
+					deleteFolderRecursive(hashPath);
+					socket.emit("client-deleteSlide", {sid: data.sid});
+					console.log("Deleted" + data.sid)
+			}
+			else {
+					console.log("Can't delete the slide" + data.sid);
+			}
+		});
+	});
 
     socket.on('pollStarted', function (data) {
         console.log("JD: received from remote this data: " + JSON.stringify(data));
