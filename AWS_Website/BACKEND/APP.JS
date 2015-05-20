@@ -21,6 +21,7 @@ var express = require('express')
   , maxSlidesCount = 5
   , maxSlidesSize = 10485760
   , maxSlideUploadSize = 5242880
+  , noUploadForUser = 0
   , sessionIdCookie = "sliteCurrUser";
 
 var app = express();
@@ -235,11 +236,6 @@ app.use(function (req, res, next) {
 		module.exports.userAuth = 0;
     }
 
-    setUserSession(req,res,function(userId) {
-		module.exports.currentUserId =  userId;
-    });
-	
-	
 	var getUserSlidesMb = function (userId, callback) {
 			Slide.find({uid : userId }).exec(function (err, docs) {
 			if( docs ) {
@@ -255,18 +251,27 @@ app.use(function (req, res, next) {
 			});
 	}
 	
-	getUserSlidesMb(module.exports.currentUserId, function(totalsize, totalcount) {
-		if(totalcount >= maxSlidesCount) {
-			module.exports.noUploadForUser = 1;
-		}
-		else if(totalsize >= maxSlidesSize) {
-			module.exports.noUploadForUser = 1;
-		}
-		else {
-			module.exports.noUploadForUser = 0;
-		}
-		
-	});
+    setUserSession(req,res,function(userId) {
+		module.exports.currentUserId =  userId;
+
+		getUserSlidesMb(userId, function(totalsize, totalcount) {
+			if(totalcount >= maxSlidesCount) {
+				noUploadForUser = 1;
+				module.exports.noUploadForUser = noUploadForUser;
+			}
+			else if(totalsize >= maxSlidesSize) {
+				noUploadForUser = 1;
+				module.exports.noUploadForUser = noUploadForUser;
+			}
+			else {
+				noUploadForUser = 0;
+				module.exports.noUploadForUser = noUploadForUser;
+			}
+			
+		});	
+	
+    });
+	
 	
 	
     var match = req.url.match(slitesRegMW);
@@ -441,7 +446,7 @@ router.get(rootRegExp, function (req, res){
   res.header("Expires", 0);
   res.render(path.join(www_dir, www_static_dir, indexHtml), { 
 		user: req.user,
-		noUploadForUser: module.exports.noUploadForUser
+		noUploadForUser: noUploadForUser
 	});
 });
 
