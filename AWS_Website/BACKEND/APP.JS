@@ -298,7 +298,7 @@ app.use(function (req, res, next) {
 
 			slideCheckPresentor(hash, function(sfound, spresenter, stitle) {
 				if(sfound == 1) {
-					res.render(indexPathname, {presenter: spresenter, title: stitle});
+					res.render(indexPathname, {title: stitle});
 				}
 				else {
 					console.log( "Slide was not found" );
@@ -355,7 +355,7 @@ app.use(function (req, res, next) {
 	} 
 	else if(req.url == "/A1/") {
 		 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
-		 res.render(indexPathname, {presenter: 1, title: "A1"});
+		 res.render(indexPathname, {title: "A1"});
 		console.log(indexPathname);
 	}
     else {

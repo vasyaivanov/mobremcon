@@ -510,6 +510,11 @@ window.onresize = function () {
 };
 
 jQuery(document).ready(function ($) {
+    if (isPresenter()) {                // if in remote already - remove "Become Presenter" item
+        var item = $('.menuSubmenu #menuRemote');
+        item.remove();
+     }
+    
     $('#video-gallery').royalSlider({
         arrowsNav: false,
         fadeinLoadedSlide: true,
