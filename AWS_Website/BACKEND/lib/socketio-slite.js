@@ -142,15 +142,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     }
     function uploadError(type,name) {
         var data = {};
-		if(type == 1) {
-			data.limit = 1;
-			console.error("User reached limit of slides or size");
+		if(type > 0) {
+			data.limit = type;
 		}
 		else {
 			data.limit = 0;
 			console.error("UPLOAD error: " + name);
 		}
-			
         data.error = true;
         socket.emit("sliteConversionError", data);
     }
@@ -173,6 +171,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         var uploader = new SocketIOFileUploadServer();
 			uploader.dir = uploadDir;
 			uploader.listen(socket);
+			uploader.maxFileSize = module.parent.exports.maxSlideUploadSize;			
 
         uploader.on("start", function (event) {
 				console.log();
@@ -182,10 +181,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		uploader.on("progress", function (event) {
 			uploadProgress(event.file.pathName);
 		});
-		uploader.on("error", function (event) {
-			uploadError(0, JSON.stringify(event));
-		});
-
+		
 		uploader.on("complete", function (event) {
 			if(module.parent.exports.noUploadForUser == 1) {
 				fs.unlink(event.file.pathName, function (err) {
@@ -193,10 +189,25 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 				});
 			}
 			else {
-				uploadComplete(event.file.pathName, event.file.name);
+				fs.exists(event.file.pathName, function (exists) {
+						if((fs.statSync(event.file.pathName)["size"] > 0)) {
+							uploadComplete(event.file.pathName, event.file.name);
+						}
+						else {
+							fs.unlinkSync(event.file.pathName);
+							uploadError(2, "");
+						}
+						//
+				});
 			}
 
 		});
+		
+		
+		uploader.on("error", function (event) {
+			uploadError(0, JSON.stringify(event));		
+		});
+
     }
         
 

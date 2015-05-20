@@ -20,10 +20,13 @@ var express = require('express')
   , ioPort = 1337
   , maxSlidesCount = 5
   , maxSlidesSize = 10485760
+  , maxSlideUploadSize = 5242880
   , sessionIdCookie = "sliteCurrUser";
 
 var app = express();
 module.exports.app = app;
+module.exports.maxSlideUploadSize = maxSlideUploadSize;
+
 
 mongoose.connect('localhost', 'test');
 var db = mongoose.connection;
