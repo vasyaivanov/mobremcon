@@ -224,8 +224,13 @@ function isPresenter() {
 }
 
 function canBePresenter() {
-	var result = presenter ? true : false;
-	return result;
+	if( typeof presenter !== 'undefined' ) { 
+		var result = presenter ? true : false;
+		return result;
+	}
+	else {
+		return false;
+	}
 }
 
 function getPresentationInRemote() {
