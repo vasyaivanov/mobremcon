@@ -203,9 +203,9 @@ function hideClickAllow(delay) {
 function showRemote() {
     var pathName = document.location.pathname;
     if (pathName) {
-        pathName = pathName.replace('/', '');
+        pathName = pathName.replace(/\//g, '');
     }
-    pathName = pathName.toLowerCase();
+
     var newUrl = "http://" + document.location.hostname;
     if (document.location.hostname === 'localhost') {
         newUrl += ':8081';

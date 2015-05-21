@@ -360,7 +360,7 @@ app.use(function (req, res, next) {
 	} 
 	else if(req.url == "/A1/") {
 		 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
-		 res.render(indexPathname, {title: "A1"});
+		 res.render(indexPathname, {title: "A1", presenter: 1});
 		console.log(indexPathname);
 	}
     else {
@@ -553,6 +553,8 @@ router.get('/remote/index.html', function (req, res){
 	
 		var hashId = req.query.presentation;
 
+		console.log(hashId);
+		
 		var slitesReg = "[0-9a-zA-Z]{4}";
 		var slitesRegMW = new RegExp('^' + slitesReg + '$');
 		var match = hashId.match(slitesRegMW);
@@ -566,6 +568,12 @@ router.get('/remote/index.html', function (req, res){
 					res.redirect('/');
 				}			
 			});
+		}
+		else if(hashId == "A1") {
+			 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: "A1"});
+		}
+		else {
+			res.redirect('/');			
 		}
 });
 
