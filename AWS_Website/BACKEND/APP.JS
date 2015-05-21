@@ -301,9 +301,9 @@ app.use(function (req, res, next) {
             //console.log('RENDERING HTML: ' + indexPathname);
 			// Check slide in DB
 
-			slideCheckPresentor(hash, function(sfound, spresenter, stitle) {
+			slideCheckPresenter(hash, function(sfound, spresenter, stitle) {
 				if(sfound == 1) {
-					res.render(indexPathname, {title: stitle});
+					res.render(indexPathname, {title: stitle, presenter: spresenter });					
 				}
 				else {
 					console.log( "Slide was not found" );
@@ -454,8 +454,6 @@ router.get('/account.html', ensureAuthenticated, function (req, res){
     res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user });
 });
 
-
-
 router.get('/signup.html', function (req, res){
     //console.log('get /login');	
     res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req,  error: 0});
@@ -536,7 +534,7 @@ router.get('/my.html', function (req, res){
 });
 // Render remote control
 
-slideCheckPresentor = function(hashId, callback) {
+slideCheckPresenter = function(hashId, callback) {
 		Slide.findOne({sid : hashId }).exec(function (err, doc) {
 			if( doc ) {
 				console.log("Slide was found");
@@ -549,6 +547,8 @@ slideCheckPresentor = function(hashId, callback) {
 		});	
 }
 
+module.exports.slideCheckPresenter = slideCheckPresenter;
+
 router.get('/remote/index.html', function (req, res){
 	
 		var hashId = req.query.presentation;
@@ -558,7 +558,7 @@ router.get('/remote/index.html', function (req, res){
 		var match = hashId.match(slitesRegMW);
 		
 		if(match) {
-			slideCheckPresentor(hashId, function(sfound, spresenter, stitle) {
+			slideCheckPresenter(hashId, function(sfound, spresenter, stitle) {
 				if(sfound == 1 && spresenter == 1) {
 					 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: stitle});
 				}

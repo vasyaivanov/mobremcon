@@ -1,5 +1,4 @@
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
-
 function isMobile() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
@@ -148,7 +147,7 @@ function getCurrentHash() {
     }
     var slashPos = hash.lastIndexOf('/');
     hash = hash.slice(slashPos + 1);
-    hash = hash.toUpperCase();
+    hash = hash.toLowerCase();
     return hash;
 }
 
@@ -222,6 +221,11 @@ function isPresenter() {
     var reg = RegExp(/^\/?remote(\/|#|\?|$).*/i);
     var res = reg.test(pathName);
     return res;
+}
+
+function canBePresenter() {
+	var result = presenter ? true : false;
+	return result;
 }
 
 function getPresentationInRemote() {
@@ -510,10 +514,17 @@ window.onresize = function () {
 };
 
 jQuery(document).ready(function ($) {
+	
+
     if (isPresenter()) {                // if in remote already - remove "Become Presenter" item
         var item = $('.menuSubmenu #menuRemote');
         item.remove();
      }
+	 
+	 if (canBePresenter()) {
+		 var item = $('.menuSubmenu #menuRemote');
+		 item.show();
+	 }
     
     $('#video-gallery').royalSlider({
         arrowsNav: false,

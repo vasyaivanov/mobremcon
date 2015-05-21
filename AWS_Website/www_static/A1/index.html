@@ -18,7 +18,7 @@
       myRedraw="both";
     </script>-->
 
-
+	<script>var presenter = <%= presenter %>;</script>
     <link rel="stylesheet" href="../css/videochat/videochat-style.css">
     <link rel="stylesheet" href="../css/jquery-ui.min.css">
     <link class="rs-file" href="../css/royalslider.css" rel="stylesheet">
@@ -125,7 +125,7 @@
 		<ul>
 			<li><a href="#"></a>
 				<ul class="menuSubmenu">
-				  <li><a href="javascript:showRemote()" id="menuRemote">Become Presenter</a></li>
+				  <li><a href="javascript:showRemote()" id="menuRemote" style="display: none">Become Presenter</a></li>
 				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span>Text Chat</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span> Video Chat</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>

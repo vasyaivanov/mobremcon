@@ -236,7 +236,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			}
 		});
 	});
-
+	
     socket.on('pollStarted', function (data) {
         console.log("JD: received from remote this data: " + JSON.stringify(data));
         pollStatisticsArray = new Array();
