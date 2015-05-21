@@ -77,16 +77,16 @@
 
 
 		.curtain {
-			z-index: 5;
+		  z-index: 2;
 		  position: absolute;
 		  right: 0px;
 		  height: 100%;
-		  width: 75px;
-		  opacity: 0.5;
+		  width: 45px;
+		  opacity: 0.4;
 		}
 		
 		.leftCurtain{
-			left: 0px;;
+			left: 5px;;
 			-moz-transform: scaleX(-1);
 			-o-transform: scaleX(-1);
 			-webkit-transform: scaleX(-1);
@@ -96,9 +96,12 @@
 		}
 		
 		#video-gallery {
-      position: absolute;
-      z-index: 0;
-		  width: 100%;
+		  position: absolute;
+		  left:5%;
+		  right:5%;
+		  z-index: 0;
+		  width: 90%;
+		  height: 100%;
 		}
 
 		.videoGallery .rsTmb {
@@ -178,6 +181,7 @@
 		}
 
 		#sliteWatermak{
+			z-index: 6;
 			position: fixed;
 			right: 20px;
 			top: 0px;
