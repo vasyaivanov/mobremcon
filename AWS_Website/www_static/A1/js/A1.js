@@ -515,11 +515,11 @@ window.onresize = function () {
 
 jQuery(document).ready(function ($) {
 	
-
-    if (isPresenter()) {                // if in remote already - remove "Become Presenter" item
+	// Not works on real host - Show error mismatch 8081 & 80
+    /*if (isPresenter()) {                // if in remote already - remove "Become Presenter" item
         var item = $('.menuSubmenu #menuRemote');
         item.remove();
-     }
+     }*/
 	 
 	 if (canBePresenter()) {
 		 var item = $('.menuSubmenu #menuRemote');
