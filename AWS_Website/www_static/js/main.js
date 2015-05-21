@@ -130,6 +130,7 @@ $(document).ready(function () {
 
 			// Check if user possible to upload ppt 
 
+			siofu.chunkSize = 100 * 1024;
 			siofu.listenOnInput(document.getElementById("uploadPresentation"));		
 			//siofu.listenOnDrop(document.getElementById("file_drop"));
 

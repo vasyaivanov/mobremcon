@@ -171,8 +171,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         var uploader = new SocketIOFileUploadServer();
 		uploader.dir = uploadDir;
 		uploader.listen(socket);
-		uploader.maxFileSize = module.parent.exports.maxSlideUploadSize;			
-
+		uploader.maxFileSize = module.parent.exports.maxSlideUploadSize;
+	
         uploader.on("start", function (event) {
 				console.log();
 				uploadStarted(event.file.name);
@@ -204,6 +204,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		
 		
 		uploader.on("error", function (event) {
+			//console.log(JSON.stringify(event));
 			uploadError(0, JSON.stringify(event));		
 		});
 
