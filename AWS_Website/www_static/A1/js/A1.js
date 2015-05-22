@@ -235,7 +235,7 @@ function isPresenter() {    // returns true if there is a 'remote' word in the u
 }
 
 function canBePresenter() {
-	if( typeof presenter !== 'undefined' && presenter !== "<%= presenter %>") { 
+	if( typeof presenter !== 'undefined') { 
 		var result = presenter ? true : false;
 		return result;
 	}
@@ -535,7 +535,7 @@ jQuery(document).ready(function ($) {
 		 var item = $('.menuSubmenu #menuRemote');
 		 item.show();
     }
-    if (title !== "<%= title %>") {
+    if ( typeof title !== 'undefined' ) {
         document.title = title;
     }
     
