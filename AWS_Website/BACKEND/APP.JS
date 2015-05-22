@@ -21,7 +21,6 @@ var express = require('express')
   , maxSlidesCount = 5
   , maxSlidesSize = 10485760
   , maxSlideUploadSize = 5242880
-  , noUploadForUser = 0
   , sessionIdCookie = "sliteCurrUser";
 
 var app = express();
@@ -226,6 +225,31 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+// Calculate user slides size sum & slides count
+var getUserUploadStatus = function (userId, callback) {
+	Slide.find({uid : userId }).exec(function (err, docs) {
+		if( docs ) {
+			var slidesMB = 0;
+			for(i=0;i<docs.length;i++) {
+				slidesMB = slidesMB + docs[i].size;		
+			}
+			if(docs.length >= maxSlidesCount) {
+				callback(1);
+			}
+			else if(slidesMB >= maxSlidesSize) {
+				callback(1);
+			}
+			else {
+				callback(0);
+			}
+		}
+		else {
+			callback(0);
+		}
+	});
+}
+
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
@@ -236,40 +260,11 @@ app.use(function (req, res, next) {
 		module.exports.userAuth = 0;
     }
 
-	var getUserSlidesMb = function (userId, callback) {
-			Slide.find({uid : userId }).exec(function (err, docs) {
-			if( docs ) {
-				var slidesMB = 0;
-				for(i=0;i<docs.length;i++) {
-					slidesMB = slidesMB + docs[i].size;		
-				}
-				callback(slidesMB,docs.length);
-			}
-			else {
-				callback(0,0);
-			}
-			});
-	}
-	
     setUserSession(req,res,function(userId) {
 		module.exports.currentUserId =  userId;
-
-		getUserSlidesMb(userId, function(totalsize, totalcount) {
-			if(totalcount >= maxSlidesCount) {
-				noUploadForUser = 1;
-				module.exports.noUploadForUser = noUploadForUser;
-			}
-			else if(totalsize >= maxSlidesSize) {
-				noUploadForUser = 1;
-				module.exports.noUploadForUser = noUploadForUser;
-			}
-			else {
-				noUploadForUser = 0;
-				module.exports.noUploadForUser = noUploadForUser;
-			}
-			
+		getUserUploadStatus(userId, function(userAccess) {
+				module.exports.noUploadForUser = userAccess;
 		});	
-	
     });
 	
 	
@@ -439,15 +434,17 @@ function setUserSession(req, res, callback) {
 
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
-
-  //console.log('ROOT: ' + req.url + ' RegExp: ' + rootRegExp);
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
-  res.render(path.join(www_dir, www_static_dir, indexHtml), { 
+
+  getUserUploadStatus(module.exports.currentUserId, function(userAccess) {
+	res.render(path.join(www_dir, www_static_dir, indexHtml), { 
 		user: req.user,
-		noUploadForUser: noUploadForUser
+		noUploadForUser: userAccess
 	});
+ 
+  });
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){

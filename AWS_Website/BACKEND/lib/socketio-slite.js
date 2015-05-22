@@ -156,10 +156,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: module.parent.exports.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: module.parent.exports.userAuth});
     }
 	
-    socket.on('server-useruploadstatus', function () {
-		socket.emit('client-useruploadstatus', { noUploadForUser: module.parent.exports.noUploadForUser });		
-    });
-	
     if (HTML5_UPLOADER) {
         socket.on('uploadStarted', function (data) {
             console.log('uploadStarted event', data);
@@ -230,7 +226,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			if (!err) {
 					deleteFolderRecursive(hashPath);
 					socket.emit("client-deleteSlide", {sid: data.sid});
-					console.log("Deleted" + data.sid)
 			}
 			else {
 					console.log("Can't delete the slide" + data.sid);
