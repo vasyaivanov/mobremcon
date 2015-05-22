@@ -1,4 +1,8 @@
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
+var currentHash = getCurrentHash();
+var isAPresenter = isPresenter();
+
+
 function isMobile() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
@@ -57,21 +61,25 @@ function showHidePersonalNotes() {
     showHideMenu(true);
 }
 
-var isVideoOn = false;
+var isVideoChatOn = false;
 function showHideVideoChat() {
-    if (!isVideoOn) {
+    if (!isVideoChatOn) {
         if ($("#join-button").length) {
             $("#join-button").trigger("click");
         } else {
             $("#setup-new-room").trigger("click");
         }
-        isVideoOn = true;
+        isVideoChatOn = true;
 
         //reduce main window
         //$(".rsContainer").animate({"width":"80%"},300);
         $(".rsContainer").css("float", "right");
         $(".rsContainer").css({ "width": "80%", "clear": "both" });
-        hideClickAllow();
+        if (!isAPresenter) {
+            $('#clickallow').hide();
+        } else {
+            hideClickAllow();
+        }
     } else {
         //put main window back to full size
         //$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
@@ -81,7 +89,11 @@ function showHideVideoChat() {
         //var videosContainer = document.getElementById('videos-container');
         if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
 
-        isVideoOn = false;
+        isVideoChatOn = false;
+    }
+    
+    if (isAPresenter) {
+        socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: currentHash});
     }
 
     var label = $("#videoChatOpenCloseLabel");
@@ -152,9 +164,8 @@ function getCurrentHash() {
 }
 
 function downloadPresentation() {
-    var hash = getCurrentHash();
-    console.log('Sending Request to Download Presentation in Hash: ' + hash.toLowerCase());
-    socket.emit('requestDownloadPresentation', { 'hash': hash.toLowerCase() });
+    console.log('Sending Request to Download Presentation in Hash: ' + currentHash);
+    socket.emit('requestDownloadPresentation', { 'hash': currentHash });
     showHideMenu(true);
 }
 
@@ -215,7 +226,7 @@ function showRemote() {
 	showHideMenu(true);
 }
 
-function isPresenter() {
+function isPresenter() {    // returns true if there is a 'remote' word in the url
     if (!parent || !parent.document) return false;
     var pathName = parent.document.location.pathname;
     var reg = RegExp(/^\/?remote(\/|#|\?|$).*/i);
@@ -224,7 +235,7 @@ function isPresenter() {
 }
 
 function canBePresenter() {
-	if( typeof presenter !== 'undefined' ) { 
+	if( typeof presenter !== 'undefined' && presenter !== "<%= presenter %>") { 
 		var result = presenter ? true : false;
 		return result;
 	}
@@ -268,10 +279,6 @@ function submitInsertVideoSlide() {
 	showHideInsertVideoSlideOverlay();
 }
 
-
-//$('#downloadPresentation').click(function () {
-//    downloadPresentation();
-//});
 $('#chatPanel').click(function () {
     showHideComments();
 });
@@ -324,8 +331,7 @@ var _channelHash = "9WDXH6OH-6K73NMI";
 var config = {
     openSocket: function (config) {
         //var channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g , '');
-        var hash = getCurrentHash();
-        var channel = hash;
+        var channel = currentHash;
         channel += _channelHash;
         var socket = new Firebase('https://webrtc.firebaseIO.com/' + channel);
         socket.channel = channel;
@@ -369,7 +375,7 @@ var config = {
         joinRoomButton.setAttribute('data-broadcaster', room.broadcaster);
         joinRoomButton.setAttribute('data-roomToken', room.roomToken);
         joinRoomButton.onclick = function () {
-            this.disabled = true;
+             this.disabled = true;
 
             var broadcaster = this.getAttribute('data-broadcaster');
             var roomToken = this.getAttribute('data-roomToken');
@@ -431,8 +437,12 @@ function setupNewRoomButtonClickHandler() {
 }
 
 function captureUserMedia(callback, failure_callback) {
+    if (false && !isAPresenter) {
+        callback && callback();
+        return;
+    }
+    
     var video = document.createElement('video');
-
     getUserMedia({
         video: video,
         onsuccess: function (stream) {
@@ -519,17 +529,15 @@ window.onresize = function () {
 };
 
 jQuery(document).ready(function ($) {
-	
 	// Not works on real host - Show error mismatch 8081 & 80
-    /*if (isPresenter()) {                // if in remote already - remove "Become Presenter" item
-        var item = $('.menuSubmenu #menuRemote');
-        item.remove();
-     }*/
 	 
-	 if (canBePresenter()) {
+	 if (canBePresenter() && !isAPresenter) {
 		 var item = $('.menuSubmenu #menuRemote');
 		 item.show();
-	 }
+    }
+    if (title !== "<%= title %>") {
+        document.title = title;
+    }
     
     $('#video-gallery').royalSlider({
         arrowsNav: false,
@@ -623,7 +631,6 @@ if (!isFile) {
     });
     
     socket.on('ccBroadcast', function (data) {
-        //alert("JD: ccBroadcast text="+data.hello);
         $('#closedCaptioningPanel').hide();
         $('#closedCaptioningPanel').html(data.hello);
         $('#closedCaptioningPanel').show(400).delay(2000).fadeOut(400);
@@ -669,5 +676,12 @@ if (!isFile) {
             
             socket.emit('my other event', { my: 'data' });
         }
+    });
+    
+    socket.on('broadcastVideoChat', function (data) {
+        if (data.hash !== currentHash || isAPresenter) return;
+        console.log('broadcastVideoChat received');
+        if (data.open === isVideoChatOn) return;
+        showHideVideoChat();
     });
 }
