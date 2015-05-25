@@ -220,9 +220,13 @@
 	    	/* height: 100vh; */
 	    	display: none;
 			margin-left: 10px;
-	    	background-color: #444444;
+	    	/*
+			background-color: #444444;
   			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
   			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
+			*/
+			border-color: lightblue;
+			border-radius: 25px;
 			opacity: 0.93;
 			font-size: 40px;
 			font-weight: bold;
@@ -243,6 +247,12 @@
 		}
 
 	    #comments{
+			background-color: white;
+			border-style: ridge;
+			border-width: 2px;
+			border-radius: 25px;
+			border-color: lightblue;
+			opacity: 1;
 	    	position: absolute;
 	    	bottom: 0px;
 			left: 0px;
@@ -267,6 +277,7 @@
 			border-style: solid;
 			border-width: 1px;
 			border-color: lightblue;
+			border-radius: 25px;
 			right: 0px;
 	    	height: 500px;			
 			
