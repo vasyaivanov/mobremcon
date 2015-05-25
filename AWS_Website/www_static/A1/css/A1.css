@@ -96,8 +96,8 @@
 		}
 		
 		#video-gallery {
-		  position: absolute;
-		  /* left:5%;
+		  /* position: absolute;
+		  left:5%;
 		  right:5%; */
 		  z-index: 0;
 		  width: 90%;
@@ -215,6 +215,7 @@
 		#videochat{
 	    	position: absolute;
 	    	left: 0px;
+			top: 0px;
 	    	width: 20%;
 	    	height: 100vh;
 	    	display: none;
@@ -393,6 +394,7 @@
 	    iframe * img{
 	    	width: 100%;
 	    }
+		
 
 
 		/* VideoChat  */

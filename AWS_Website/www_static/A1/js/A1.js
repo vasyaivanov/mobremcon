@@ -600,8 +600,8 @@ jQuery(document).ready(function ($) {
 					       + "</div> </div>";
             slider.appendSlide(slide_html);
         } else { // !staticSlite
-            var slide_html = "<div style='text-align:center' id=slide class='rsContent'>"
-						           + "<img src='" + slide_html_path + "' height='100%'>";
+            var slide_html = "<div style='text-align:center; position: relative' id=slide class='rsContent'>"
+						           + "<img src='" + slide_html_path + "' height='100% width='100%' style='position: absolute;left: 0px;width: 100%;'>";
 					               //+ "<div class='rsTmb'>"
 					               //+ "<h5>SLIDE" + slide + "</h5>"
 						           //+ "     <span>Slide " + slide + " here</span>"
@@ -611,7 +611,6 @@ jQuery(document).ready(function ($) {
     }
 
     $("#video-gallery").css("height", "100%");
-	$("#video-gallery").css("width", "100%");
     $(".rsOverflow").css("height", "100%");
     $(".rsOverflow").css("width", "100%");
 });
