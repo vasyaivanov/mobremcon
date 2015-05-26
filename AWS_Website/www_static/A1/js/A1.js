@@ -231,10 +231,10 @@ function showRemote() {
         pathName = pathName.replace(/\//g, '');
     }
 
-    var newUrl = "http://" + document.location.hostname;
-    if (document.location.hostname === 'localhost') {
+    var newUrl = "http://" + document.location.hostname + ':' + location.port
+    /*if (document.location.hostname === 'localhost') {
         newUrl += ':8081';
-    }
+    }*/
     newUrl += "/remote/index.html?presentation=" + pathName;
     window.open(newUrl, "popupWindow", "width=1060, height=800, scrollbars=no"); 
 	showHideMenu(true);

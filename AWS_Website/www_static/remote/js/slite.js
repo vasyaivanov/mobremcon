@@ -59,13 +59,14 @@ function thumbnails() {
 }
 
 function changeURL() {
-    var newUrl = 'http://' + document.location.hostname + ':8081/remote/index.html?presentation=' + document.getElementById("URLSlides").value;
+	alert(location.port);
+    var newUrl = 'http://' + document.location.hostname + ':' + location.port + '/remote/index.html?presentation=' + document.getElementById("URLSlides").value;
     //location.href = newUrl; // redirect to a new url with ?presentation= query string
     location.replace(newUrl);
 }
 
 function setIFrameUrl(hash){
-    var newUrl = 'http://' + document.location.hostname + ':8081/' + hash;
+    var newUrl = 'http://' + document.location.hostname + ':' + location.port + '/' + hash;
     var iFrame = document.getElementById('theIframe');
     iFrame.src = newUrl;
     iFrame.addEventListener("load", onSlideLoaded);
