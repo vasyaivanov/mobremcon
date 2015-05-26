@@ -6,9 +6,9 @@
   text-align: center;
 }
 #conversation {
-  font-size: 18px;
+  font-size: 12px;
   margin: 0px;
-  height: 300px;
+  height: 200px;
   overflow: scroll;
 }
 .final {

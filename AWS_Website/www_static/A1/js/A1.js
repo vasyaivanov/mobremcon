@@ -43,8 +43,22 @@ function showHideComments() {
     var label = $("#chatOpenCloseLabel");
     if (label.html() == "") {
         $("#chatOpenCloseLabel").html("Close");
+		
+		//redue main window
+		//$(".rsContainer").animate({"width":"80%"},300);
+        $(".rsContainer").css("float", "right");
+        $(".rsContainer").css({ "width": "77%", "clear": "both" });
+        if (!isAPresenter) {
+            $('#clickallow').hide();
+        } else {
+            hideClickAllow();
+        }
     } else {
         $("#chatOpenCloseLabel").html("");
+		
+		//put main window back to full size
+        //$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
+        $(".rsContainer").css({ "width": "100%", "clear": "both" });
     }
     showHideMenu(true);
 }
@@ -74,7 +88,7 @@ function showHideVideoChat() {
         //reduce main window
         //$(".rsContainer").animate({"width":"80%"},300);
         $(".rsContainer").css("float", "right");
-        $(".rsContainer").css({ "width": "80%", "clear": "both" });
+        $(".rsContainer").css({ "width": "77%", "clear": "both" });
         if (!isAPresenter) {
             $('#clickallow').hide();
         } else {
