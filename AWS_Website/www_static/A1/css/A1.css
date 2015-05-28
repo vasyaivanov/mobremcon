@@ -268,11 +268,11 @@
 		
 		.panelTitle{  
 			position: absolute;
-			left: 3;
+			left: 10%;
 			font-size:14px;
 			font-weight: bold;
 			color: #8E8D8D;
-			width: 100%;
+			width: 80%;
 		}
 
 	    #personalNotes{
