@@ -504,8 +504,8 @@ function scaleVideos() {
         length = videos.length, video;
 
     var minus = 130;
-    var windowHeight = 700;
-    var windowWidth = 600;
+    var windowHeight = $( window ).height();//700;
+    var windowWidth = $( window ).width();//600;
     var windowAspectRatio = windowWidth / windowHeight;
     var videoAspectRatio = 4 / 3;
     var blockAspectRatio;
@@ -530,9 +530,21 @@ function scaleVideos() {
 }
 
 window.onresize = function () {
-    scaleVideos();
-    resizeCanvas();
+    setTimeout(function(){
+        $( "#video-gallery" ).width("90%");
+        $( "#video-gallery" ).height("100%");
+        $( ".rsOverflow " ).height("100%");
+        $( ".rsSlide " ).height("100%");
+        $( "#slide " ).height("100%");
+        //scaleVideos();
+        //resizeCanvas();
+    }, 60);
 };
+
+$("#video-gallery").resize(function(){
+    alert("JD: in resize");
+    $( "#video-gallery" ).css( "background-color", "red" );
+});
 
 jQuery(document).ready(function ($) {
 	// Not works on real host - Show error mismatch 8081 & 80
