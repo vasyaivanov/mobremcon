@@ -37,32 +37,6 @@ function openContactUs() {
      form.submit();
 }
 
-function showHideComments() {
-    $("#comments").slideToggle();
-    $("#comments").css('overflow', 'scroll');
-    var label = $("#chatOpenCloseLabel");
-    if (label.html() == "") {
-        $("#chatOpenCloseLabel").html("Close");
-		
-		//redue main window
-		//$(".rsContainer").animate({"width":"80%"},300);
-        $(".rsContainer").css("float", "right");
-        $(".rsContainer").css({ "width": "77%", "clear": "both" });
-        if (!isAPresenter) {
-            $('#clickallow').hide();
-        } else {
-            hideClickAllow();
-        }
-    } else {
-        $("#chatOpenCloseLabel").html("");
-		
-		//put main window back to full size
-        //$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-        $(".rsContainer").css({ "width": "100%", "clear": "both" });
-    }
-    showHideMenu(true);
-}
-
 function showHidePersonalNotes() {
     $("#personalNotes").slideToggle();
     var label = $("#personalNotesOpenCloseLabel");
@@ -75,6 +49,37 @@ function showHidePersonalNotes() {
     showHideMenu(true);
 }
 
+function toggleMainWindow() {
+	if(isCommentsOpen || isVideoChatOn){
+		//redue main window
+		//$(".rsContainer").animate({"width":"80%"},300);
+        $(".rsContainer").css("float", "right");
+        $(".rsContainer").css({ "width": "77%", "clear": "both" });
+	}
+	
+	if( (!isCommentsOpen && !isVideoChatOn) ){
+		//put main window back to full size
+        //$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
+        $(".rsContainer").css({ "width": "100%", "clear": "both" });
+	}
+}
+
+var isCommentsOpen = false;
+function showHideComments() {
+    $("#comments").slideToggle();
+    $("#comments").css('overflow', 'scroll');
+    var label = $("#chatOpenCloseLabel");
+    if (label.html() == "") {
+		isCommentsOpen = true;
+        $("#chatOpenCloseLabel").html("Close");
+    } else {
+		isCommentsOpen = false;
+        $("#chatOpenCloseLabel").html("");
+    }
+	toggleMainWindow();
+    showHideMenu(true);
+}
+
 var isVideoChatOn = false;
 function showHideVideoChat() {
     if (!isVideoChatOn) {
@@ -84,21 +89,7 @@ function showHideVideoChat() {
             $("#setup-new-room").trigger("click");
         }
         isVideoChatOn = true;
-
-        //reduce main window
-        //$(".rsContainer").animate({"width":"80%"},300);
-        $(".rsContainer").css("float", "right");
-        $(".rsContainer").css({ "width": "77%", "clear": "both" });
-        if (!isAPresenter) {
-            $('#clickallow').hide();
-        } else {
-            hideClickAllow();
-        }
     } else {
-        //put main window back to full size
-        //$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-        $(".rsContainer").css({ "width": "100%", "clear": "both" });
-
         // remove the video window on closing the panel
         //var videosContainer = document.getElementById('videos-container');
         if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
@@ -122,8 +113,9 @@ function showHideVideoChat() {
 		$("#videochat").css('overflow-x','hidden');
 		$("#videochat").css('overflow-y','scroll');
 		*/
-
-		showHideMenu(true);
+		
+	toggleMainWindow();
+	showHideMenu(true);
 }
 
 var isMenuOn = false;
