@@ -583,7 +583,7 @@ app.use(express.static(path.join(www_dir, www_static_dir)));
 // ERROR HANDLING
 // custom 404 page
 app.use(function (req, res) {
-    console.log('404: ' + req.url);
+    console.log('404: ' + req.url + ', User-Agent: ' + req.headers['user-agent']);
     res.type('text/html');
     res.status(404);
     res.send('<h1>404 - Not Found</h1>');
