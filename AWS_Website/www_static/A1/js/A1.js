@@ -326,6 +326,9 @@ var hostname = window.location.hostname;
 if( hostname.indexOf("www") == 0){
 	hostname = hostname.substring(4);
 }
+if( isMobile() ) {
+	$("#sliteWatermak").css("display","none");
+}
 $('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
 
@@ -540,11 +543,6 @@ window.onresize = function () {
         //resizeCanvas();
     }, 60);
 };
-
-$("#video-gallery").resize(function(){
-    alert("JD: in resize");
-    $( "#video-gallery" ).css( "background-color", "red" );
-});
 
 jQuery(document).ready(function ($) {
 	// Not works on real host - Show error mismatch 8081 & 80
