@@ -232,17 +232,19 @@ function showRemote() {
 	showHideMenu(true);
 }
 
-function isPresenter() {    // returns true if there is a 'remote' word in the url
-    if (!parent || !parent.document) return false;
-    var pathName = parent.document.location.pathname;
-    var reg = RegExp(/^\/?remote(\/|#|\?|$).*/i);
-    var res = reg.test(pathName);
-    return res;
+function isPresenter() { 
+	 //returns true if there is a 'remote' word in the url
+    //if (!parent || !parent.document) return false;
+    //var pathName = parent.document.location.pathname;
+    //var reg = RegExp(/^\/?remote(\/|#|\?|$).*/i);
+    //var res = reg.test(pathName);
+    //return res;
+	return canBePresenter();
 }
 
 function canBePresenter() {
 	if( typeof presenter !== 'undefined') { 
-		var result = presenter ? true : false;
+		var result = presenter > 0 ? true : false;
 		return result;
 	}
 	else {
@@ -546,8 +548,7 @@ window.onresize = function () {
 
 jQuery(document).ready(function ($) {
 	// Not works on real host - Show error mismatch 8081 & 80
-	 
-	 if (canBePresenter() && !isAPresenter) {
+	 if (canBePresenter()) {
 		 var item = $('.menuSubmenu #menuRemote');
 		 item.show();
     }
