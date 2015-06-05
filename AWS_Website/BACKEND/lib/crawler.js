@@ -101,7 +101,11 @@ function getFile (data, callback) {
 									callback("1", data);
 								}	
 							}
-					).on('end',
+					).on('response', function(response) {
+						//console.log(response.statusCode) // 200
+						//console.log(response.headers['content-type']) // 'image/png'
+					})
+					.on('end',
 						function(file) {
 							callback(null, data);
 						}
@@ -112,8 +116,8 @@ function getFile (data, callback) {
 				}
 			}
 			else {
-				callback("2", data);
 				console.log("This file found in DB, skipping it..." + data.url);							
+				callback("2", data);
 			}
 
 	});
