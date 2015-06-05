@@ -32,7 +32,8 @@
     "wrench": "^1.5.8",
     "xml2js": "^0.4.5",
     "moment": "^2.10",
-	"du": "^0.1.0"
+	"du": "^0.1.0",
+	"node-bing-api": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

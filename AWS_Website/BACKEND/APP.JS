@@ -73,7 +73,11 @@ var slidesSchema = mongoose.Schema({
   title: { type: String}, 
   size: { type: Number}, 
   tmp: {type: String},
-  created: { type: Date }
+  created: { type: Date },
+  crawled: { type: String,  default: 0 },
+  url: {type: String},
+  desc: { type: String },
+  site: { type: String }
 });
 
 slidesSchema.pre('save', function(next){
@@ -485,6 +489,12 @@ router.post('/signup.html', function (req, res){
 router.get('/signin.html', function (req, res){
     //console.log('get /login');
     res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, message: req.flash('error'), request: req });
+});
+
+
+router.get('/letscrawl!', function (req, res){
+	res.send('Crawl is very dangerous! :)');
+	require("./lib/crawler.js").crawl(req.headers.host,5, Slide, www_dir, slitesDir);
 });
 
 router.post('/signin.html',

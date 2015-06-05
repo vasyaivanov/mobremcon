@@ -1,4 +1,4 @@
-﻿var fs = require('fs-extra')
+﻿﻿var fs = require('fs-extra')
   , SocketIOFileUploadServer = require("socketio-file-upload")
   , path = require('path')
   , exec = require('child_process').exec
@@ -47,7 +47,7 @@ module.exports.isExtentionSupported = function (fileName) {
     return (index != -1); 
 }
 
-module.exports.convert = function (pathName, origName, socket, opt) {
+module.exports.convert = function (pathName, origName, socket, opt, callback) {
     elapsedTime("UPLOAD complete file: " + pathName);
     
     var extention = path.extname(pathName);
@@ -71,6 +71,7 @@ module.exports.convert = function (pathName, origName, socket, opt) {
         var data = {};
         data.error = true;
         socket.emit("sliteConversionError", data);
+		callback(2);
     }
     
     slite = new prepare_slite.Slite(socket, function (err) {
@@ -247,8 +248,15 @@ module.exports.convert = function (pathName, origName, socket, opt) {
                                     (finalTime / averageSlideTime).toFixed(2), FINAL_COEFF);
                         }
                         console.log('\n');
-                                
-                        socket.emit("slitePrepared", { dir: slite.dir, hash: slite.hashValue, slides: slite.num_slides, fileName: initialFileName });
+                               
+							   
+						// Do not return finish callback if crawler uploads
+						if(opt.noSocketRet != 1) {
+							socket.emit("slitePrepared", { dir: slite.dir, hash: slite.hashValue, slides: slite.num_slides, fileName: initialFileName });
+						}
+						else {
+							callback(1);
+						}
                         
                         // delete XML
                         if (typeof xmlDeleter != 'undefined') {
@@ -306,9 +314,12 @@ module.exports.convert = function (pathName, origName, socket, opt) {
 				var titleS = origName;
 				titleS = titleS.replace(/\.[^/.]+$/, "");
 				titleS = titleS.replace(/\_/, " ");
+				if(opt.stitle) {
+					titleS = opt.stitle;
+				}
 				console.log("----------------");
 				module.parent.exports.readSlideSize(hashDir, function(sizec) {
-					var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0)});
+					var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite});
 					addSlide.save(function(err, saved) {
 						if(err) console.error('Can\'t insert a new note: ' + err);
 					}
