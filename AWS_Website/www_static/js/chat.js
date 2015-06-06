@@ -79,7 +79,7 @@ function getUrlParam(sParam)
 
 $(document).ready(function() {
   //setup "global" variables first
-  var socket = io.connect("document.location.hostname:1337");
+  var socket = io.connect(document.location.hostname + ":1337");
   var myRoomID = null;
 
   $("form").submit(function(event) {
