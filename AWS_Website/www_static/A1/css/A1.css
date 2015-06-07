@@ -586,3 +586,27 @@
 				background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
 				text-decoration: none;
 				}
+				
+				
+/*  NEXT, PREV buttons */
+.navButton{
+	/*background-color: rgb(181, 181, 181);
+	height: 100%;*/
+	display: none;
+	color: black;
+	position: absolute;
+	top: 0px;
+	padding-top: 30%;
+	font-size: 200px;
+	opacity: 0.1;
+	cursor: pointer;
+}
+.navButtonNext{
+	right: 0px;
+}
+.navButtonNextPrev{
+	left: 0px;
+}
+
+
+/* END NEXT,PREV BUTTONS */

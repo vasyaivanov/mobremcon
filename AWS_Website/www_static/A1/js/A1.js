@@ -49,6 +49,22 @@ function showHidePersonalNotes() {
     showHideMenu(true);
 }
 
+
+function showPreviewsOnMainPage(){
+	//http://jsfiddle.net/q4d9m/2/
+}
+
+var justHidden = false;
+var navigationButtonsTimeout;
+function showHideNavButtons(){
+	if (!justHidden) {
+		justHidden = false;
+		$(".navButton").css('display','block');
+		clearTimeout(navigationButtonsTimeout);
+		navigationButtonsTimeout = setTimeout('$(".navButton").hide(400);', 6000);
+	}
+}
+
 function toggleMainWindow() {
 	if(isCommentsOpen || isVideoChatOn){
 		//redue main window
@@ -245,6 +261,10 @@ function isPresenter() {
 function canBePresenter() {
 	if( typeof presenter !== 'undefined') { 
 		var result = presenter > 0 ? true : false;
+		var location = document.location + "";
+		if(pathName && location.indexOf("file") === 0){ //localhost case
+			result = true;
+		}
 		return result;
 	}
 	else {
@@ -287,6 +307,16 @@ function submitInsertVideoSlide() {
 	showHideInsertVideoSlideOverlay();
 }
 
+$('#navPrev').click(function () {
+    var slider = $(".royalSlider").data('royalSlider');
+	slider.prev();
+	clearCanvas();
+});
+$('#navNext').click(function () {
+	var slider = $(".royalSlider").data('royalSlider');
+    slider.next();
+	clearCanvas();
+});
 $('#chatPanel').click(function () {
     showHideComments();
 });
@@ -320,6 +350,9 @@ $('#sliteWatermak').click(function () {
 });
 $('#closeExplanator').click(function () {
     showHideExplanators();
+});
+$(document).mousemove(function () {
+	showHideNavButtons();
 });
 if (needToShowExplanators()) {
     showHideExplanators();
@@ -659,13 +692,9 @@ if (!isFile) {
     socket.on('news', function (data) {
         if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
             var button = data.hello - 1;
-            
-            console.log(button);
-            
-            var slider = $(".royalSlider").data('royalSlider');
-            
-            slider.goTo(data.slide);
-            
+			var slider = $(".royalSlider").data('royalSlider');
+            console.log(button);                  
+            slider.goTo(data.slide);            
             switch (button) {
                 case -102: {
                     slider.goTo(0);
