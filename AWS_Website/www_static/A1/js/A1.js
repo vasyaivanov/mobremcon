@@ -67,16 +67,16 @@ function showHideNavButtons(){
 
 function toggleMainWindow() {
 	if(isCommentsOpen || isVideoChatOn){
-		//redue main window
-		//$(".rsContainer").animate({"width":"80%"},300);
+		//reduce main window
         $(".rsContainer").css("float", "right");
-        $(".rsContainer").css({ "width": "77%", "clear": "both" });
+		$(".rsContainer").animate({ "width": "77%", "clear": "both" },300);
+        //$(".rsContainer").css({ "width": "77%", "clear": "both" });
 	}
 	
 	if( (!isCommentsOpen && !isVideoChatOn) ){
 		//put main window back to full size
-        //$(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-        $(".rsContainer").css({ "width": "100%", "clear": "both" });
+        $(".rsContainer").animate({"width":"90%", "clear":"both"},300);
+        //$(".rsContainer").css({ "width": "90%", "clear": "both" });
 	}
 }
 
