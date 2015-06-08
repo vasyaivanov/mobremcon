@@ -181,6 +181,7 @@
 		}
 
 		#sliteWatermak{
+			font-size: 20px;
 			z-index: 6;
 			position: fixed;
 			right: 20px;

@@ -248,6 +248,25 @@ function showRemote() {
 	showHideMenu(true);
 }
 
+function isInIFrame(){
+	return (self!=top);
+}
+
+function renderMenuForIFrame(){	
+	if(isInIFrame()){
+		$('#sliteWatermak').css({
+			"height": "60px",
+			"line-height": "60px",
+			"font-size": "60px"
+		});
+		$('.menuSubmenu').css({
+			"font-size": "40px",
+			"right": "250px",
+			"top": "50px"
+		});
+	}
+}
+
 function isPresenter() { 
 	 //returns true if there is a 'remote' word in the url
     //if (!parent || !parent.document) return false;
@@ -366,6 +385,7 @@ if( isMobile() ) {
 }
 $('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
+renderMenuForIFrame();
 
 // Muaz Khan     - https://github.com/muaz-khan
 // MIT License   - https://www.webrtc-experiment.com/licence/
@@ -581,7 +601,7 @@ window.onresize = function () {
 
 jQuery(document).ready(function ($) {
 	// Not works on real host - Show error mismatch 8081 & 80
-	 if (canBePresenter()) {
+	 if (canBePresenter() && !isInIFrame()) {
 		 var item = $('.menuSubmenu #menuRemote');
 		 item.show();
     }
