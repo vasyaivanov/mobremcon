@@ -244,7 +244,7 @@ function showRemote() {
         newUrl += ':8081';
     }*/
     newUrl += "/remote/index.html?presentation=" + pathName;
-    window.open(newUrl, "popupWindow", "width=1060, height=800, scrollbars=no"); 
+    window.open(newUrl, "popupWindow", "width=1160, height=850, scrollbars=no"); 
 	showHideMenu(true);
 }
 
