@@ -70,13 +70,17 @@ function toggleMainWindow() {
 		//reduce main window
         $(".rsContainer").css("float", "right");
 		$(".rsContainer").animate({ "width": "77%", "clear": "both" },300);
-        //$(".rsContainer").css({ "width": "77%", "clear": "both" });
+        //$(".rsContainer").css({ "width": "77%", "clear": "both" });		
+		$(".navButtonPrev").animate({"left":"25%"},300);
+		$(".navButton").animate({"padding-top":"15%"},300);
 	}
 	
 	if( (!isCommentsOpen && !isVideoChatOn) ){
 		//put main window back to full size
-        $(".rsContainer").animate({"width":"90%", "clear":"both"},300);
-        //$(".rsContainer").css({ "width": "90%", "clear": "both" });
+        $(".rsContainer").animate({"width":"100%", "clear":"both"},300);
+        //$(".rsContainer").css({ "width": "100%", "clear": "both" });		
+		$(".navButtonPrev").animate({"left":"0%"},300);
+		$(".navButton").animate({"padding-top":"30%"},300);
 	}
 }
 
