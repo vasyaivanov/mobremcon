@@ -37,7 +37,7 @@
 	<!--<img src="../img/RightCurtain.png" id="rightCurtain" class="curtain" />
 	<img src="../img/RightCurtain.png" id="leftCurtain" class="curtain leftCurtain" />-->
  <!-- Google Tag Manager -->
-    <noscript>
+   <!-- <noscript>
         <iframe src="//www.googletagmanager.com/ns.html?id=GTM-NRK9KQ"
             height="0" width="0" style="display:none;visibility:hidden">
         </iframe>
@@ -55,8 +55,8 @@
             j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-NRK9KQ');
-    </script>
-    <!-- End Google Tag Manager --><br>
+    </script> -->
+<!-- End Google Tag Manager --><br>
 
 	
 	<canvas id="drawCanvas" ></canvas>
@@ -204,13 +204,27 @@
     <script src="../A1/js/notes.js"></script>
     <!-- end VideoChat Javascript -->
 
-    <script>
+    <!--<script>
 	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 	    ga('create', 'UA-61563357-1', 'auto');
 	    ga('send', 'pageview');
-    </script>
-</body>
+    </script>-->
+	<script type="text/javascript">
+		try{
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-61563357-1']);
+			_gaq.push(['_setDomainName', window.location.hostname.substring(4)]);
+			_gaq.push(['_setAllowLinker', true]);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}catch(e) {}
+	</script>
+	</body>
 </html>
