@@ -267,6 +267,11 @@ function renderMenuForIFrame(){
 	}
 }
 
+function isLocalhost() {
+	var location = document.location + "";
+	return (pathName && location.indexOf("file") === 0);
+}
+
 function isPresenter() { 
 	 //returns true if there is a 'remote' word in the url
     //if (!parent || !parent.document) return false;
@@ -281,7 +286,7 @@ function canBePresenter() {
 	if( typeof presenter !== 'undefined') { 
 		var result = presenter > 0 ? true : false;
 		var location = document.location + "";
-		if(pathName && location.indexOf("file") === 0){ //localhost case
+		if(location && location.indexOf("file") === 0){ //localhost case
 			result = true;
 		}
 		return result;
@@ -385,7 +390,7 @@ if( isMobile() ) {
 }
 $('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
-renderMenuForIFrame();
+//renderMenuForIFrame(); //for when inside remote control
 
 // Muaz Khan     - https://github.com/muaz-khan
 // MIT License   - https://www.webrtc-experiment.com/licence/

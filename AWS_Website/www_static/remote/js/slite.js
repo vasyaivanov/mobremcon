@@ -65,10 +65,18 @@ function changeURL() {
     location.replace(newUrl);
 }
 
+function isLocalhost() {
+	var location = document.location + "";
+	return (pathName && location.indexOf("file") === 0);
+}
+
 function setIFrameUrl(hash){
     var newUrl = 'http://' + document.location.hostname + ':' + location.port + '/' + hash;
     var iFrame = document.getElementById('theIframe');
-    iFrame.src = newUrl;
+	iFrame.src = newUrl;
+	if(isLocalhost()){
+		iFrame.src = "www.slite.us/A1";
+	}
     iFrame.addEventListener("load", onSlideLoaded);
 }
 
