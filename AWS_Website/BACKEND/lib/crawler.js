@@ -48,7 +48,7 @@ var addSuffixToSearch = "filetype:ppt";
 								var fileName = file.match('(.*)\/(.*)$');
 								var fileNameSend = fileName[2];
 								fileNameSend = fileNameSend.replace(/[^\w\s\.]/gi, '');
-								getFile({uploadDir: uploadDir, url: body.d.results[a].Url, filename: fileNameSend,title: body.d.results[a].Title, desc: body.d.results[a].Description, host: host, dbSchema: dbSchema}, function(error,data) {
+								getFile({uploadDir: uploadDir, url: body.d.results[a].Url, filename: fileNameSend,title: body.d.results[a].Title, desc: body.d.results[a].Description, host: host, dbSchema: dbSchema, keywords: domainArray[host]}, function(error,data) {
 									try {
 										if(error == 1) {throw "Can't download file"}
 										if(error == 2) {throw "File exists in DB"}
@@ -60,7 +60,7 @@ var addSuffixToSearch = "filetype:ppt";
 									}
 									if(!error) {
 										console.log("+++++++++++++++++++++++++++++++++++++++\nUploaded: " + data.filename);
-										converter.convert(path.join(uploadDir,data.filename), data.filename, module.parent.exports.io, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, SlidesScheme: dbSchema,  userAuth: 1, stitle: data.title, sdesc: data.desc, surl: data.url, scrawled: 1, noSocketRet: 1, ssite: data.host},
+										converter.convert(path.join(uploadDir,data.filename), data.filename, module.parent.exports.io, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, SlidesScheme: dbSchema,  userAuth: 1, stitle: data.title, sdesc: data.desc, surl: data.url, scrawled: 1, noSocketRet: 1, ssite: data.host, skeywords: data.keywords},
 										function (data) {
 											uploader(a+1)
 											if(data == 1) {
@@ -102,8 +102,8 @@ function getFile (data, callback) {
 								}	
 							}
 					).on('response', function(response) {
-						//console.log(response.statusCode) // 200
-						//console.log(response.headers['content-type']) // 'image/png'
+						console.log(response.statusCode) // 200
+						console.log(response.headers['content-type']) // 'image/png'
 					})
 					.on('end',
 						function(file) {

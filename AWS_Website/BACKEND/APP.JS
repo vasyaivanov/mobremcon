@@ -77,7 +77,8 @@ var slidesSchema = mongoose.Schema({
   crawled: { type: String,  default: 0 },
   url: {type: String},
   desc: { type: String },
-  site: { type: String }
+  site: { type: String },
+  keywords: { type: String }
 });
 
 slidesSchema.pre('save', function(next){
@@ -492,9 +493,15 @@ router.get('/signin.html', function (req, res){
 });
 
 
-router.get('/letscrawl!', function (req, res){
+router.get('/letscrawl.html', function (req, res){
 	res.send('Crawl is very dangerous! :)');
-	require("./lib/crawler.js").crawl(req.headers.host,5, Slide, www_dir, slitesDir);
+	if(req.query.password == "startme321!") {
+		console.log("Crawling");
+		require("./lib/crawler.js").crawl(req.headers.host,1, Slide, www_dir, slitesDir);
+	}
+	else {
+		console.log("Wrong password");
+	}
 });
 
 router.post('/signin.html',
