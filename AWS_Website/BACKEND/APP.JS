@@ -455,7 +455,7 @@ router.get(rootRegExp, function (req, res){
 		var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 		
 		for(i=0;i<result.length;i++) {
-			returnRes += '<li><a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" /></a></li>\n'
+			returnRes += '<li><a href="/'+ result[i].sid +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
 			//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
 		}
 		returnRes += '</ul> \
@@ -463,7 +463,6 @@ router.get(rootRegExp, function (req, res){
 		<script type="text/javascript"> \
 			$( \'#carousel\' ).elastislide(); \
 		</script>'
-		console.log(returnRes)
 		callback(returnRes)
 	  }
 	});
