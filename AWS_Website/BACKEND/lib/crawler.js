@@ -16,10 +16,10 @@ var Bing = require('node-bing-api')({ accKey: "1UrRmnNJw+zdJprF+uz9FY5JOhKvcV7NX
 var domainArray = [];
 
 domainArray["slite.loc"] = "slides";
-domainArray["truthstage.com"] = 'conspiracy theorists presidential representative campaign';
-domainArray["writerstage.com"] = 'writers';
-domainArray["productsstage.com"] = 'salesman';
-domainArray["girlstage.com"] = "women in tech";
+domainArray["www.truthstage.com"] = 'conspiracy theorists presidential representative campaign';
+domainArray["www.writerstage.com"] = 'writers';
+domainArray["www.productsstage.com"] = 'salesman';
+domainArray["www.girlstage.com"] = "women in tech";
 
 
 var addSuffixToSearch = "filetype:ppt";
