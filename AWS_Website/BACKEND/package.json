@@ -33,7 +33,8 @@
     "xml2js": "^0.4.5",
     "moment": "^2.10",
 	"du": "^0.1.0",
-	"node-bing-api": ""
+	"node-bing-api": "",
+	"mongoose-simple-random": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
