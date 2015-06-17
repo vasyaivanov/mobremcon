@@ -11,6 +11,7 @@ var express = require('express')
   , LocalStrategy = require('passport-local').Strategy
   , mongodb = require('mongodb')
   , mongoose = require('mongoose')
+  , mongooserand = require('mongoose-simple-random')
   , bcrypt = require('bcrypt')
   , path = require('path')
   , converter = require('./lib/converter.js')
@@ -80,6 +81,8 @@ var slidesSchema = mongoose.Schema({
   site: { type: String },
   keywords: { type: String }
 });
+
+slidesSchema.plugin(mongooserand);
 
 slidesSchema.pre('save', function(next){
   now = new Date();
@@ -443,11 +446,31 @@ router.get(rootRegExp, function (req, res){
   res.header("Pragma", "no-cache");
   res.header("Expires", 0);
 
-  getUserUploadStatus(module.exports.currentUserId, function(userAccess) {
-	res.render(path.join(www_dir, www_static_dir, indexHtml), { 
-		user: req.user,
-		noUploadForUser: userAccess
+  var totalSlides = 0;
+
+  // Paint index page random slides
+  function getRandomSlides(Slide, callback) {
+	Slide.findRandom({site: req.headers.host}, {}, {limit: 3},function(err, result) {
+	  if (!err) {
+		var returnRes = "";
+		for(i=0;i<result.length;i++) {
+			returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
+		}
+		console.log(returnRes)
+		callback(returnRes)
+	  }
 	});
+  }
+  
+  
+  getUserUploadStatus(module.exports.currentUserId, function(userAccess) {
+	 getRandomSlides(Slide,function(randomSlides) {
+		res.render(path.join(www_dir, www_static_dir, indexHtml), { 
+			user: req.user,
+			noUploadForUser: userAccess,
+			randomSlides:  randomSlides
+		});
+	 });
  
   });
 });
