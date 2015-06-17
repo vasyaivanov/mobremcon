@@ -450,17 +450,26 @@ router.get(rootRegExp, function (req, res){
 
   // Paint index page random slides
   function getRandomSlides(Slide, callback) {
-	Slide.findRandom({site: req.headers.host}, {}, {limit: 3},function(err, result) {
+	Slide.findRandom({site: req.headers.host}, {}, {limit: 10},function(err, result) {
 	  if (!err) {
-		var returnRes = "";
+		var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
+		
 		for(i=0;i<result.length;i++) {
-			returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
+			returnRes += '<li><a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" /></a></li>\n'
+			//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
 		}
+		returnRes += '</ul> \
+		<!-- SLIDE CAROUSEL --> \
+		<script type="text/javascript"> \
+			$( \'#carousel\' ).elastislide(); \
+		</script>'
 		console.log(returnRes)
 		callback(returnRes)
 	  }
 	});
   }
+  
+
   
   
   getUserUploadStatus(module.exports.currentUserId, function(userAccess) {
