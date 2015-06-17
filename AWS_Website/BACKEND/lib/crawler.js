@@ -8,7 +8,6 @@ var Bing = require('node-bing-api')({ accKey: "1UrRmnNJw+zdJprF+uz9FY5JOhKvcV7NX
   , request = require('request')
   , SLITE_EXT = '.jpg'
   , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$')
-  , sleep = require('sleep')
   , recordsPerRequest = 50
   ;
 
@@ -17,10 +16,10 @@ var Bing = require('node-bing-api')({ accKey: "1UrRmnNJw+zdJprF+uz9FY5JOhKvcV7NX
 var domainArray = [];
 
 domainArray["slite.loc"] = "slides";
-domainArray["www.truthstage.com"] = 'conspiracy theorists presidential representative campaign';
-domainArray["www.writerstage.com"] = 'writers';
-domainArray["www.productsstage.com"] = 'salesman';
-domainArray["www.girlstage.com"] = "women in tech";
+domainArray["truthstage.com"] = 'conspiracy theorists presidential representative campaign';
+domainArray["writerstage.com"] = 'writers';
+domainArray["productsstage.com"] = 'salesman';
+domainArray["girlstage.com"] = "women in tech";
 
 
 var addSuffixToSearch = "filetype:ppt";
