@@ -1999,6 +1999,7 @@ body.landing .dropotron.level-0 {
         position: absolute;
         right: 1em;
         top: 0;
+		z-index:20;
     }
 
         #header nav ul {
