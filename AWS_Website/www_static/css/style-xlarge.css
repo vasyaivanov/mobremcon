@@ -15,4 +15,7 @@
     width: 350px;
     height: 80px;
     font-size: 30px;
+	position: absolute;
+	top: 40%;
+	left: 40%;
 }

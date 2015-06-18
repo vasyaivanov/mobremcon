@@ -15,10 +15,13 @@
 
 .elastislide-wrapper {
 	position: relative;
-	background-color: #fff;
 	margin: 0 auto;
 	min-height: 60px;
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+	position: absolute;
+	top: 60%;
+	left: 0%;
+	width: 100%;
 }
 
 .elastislide-wrapper.elastislide-loading {
@@ -75,12 +78,14 @@
 .elastislide-carousel ul li a {
 	display: inline-block;
 	width: 100%;
+	border-style: none;
 }
 
 .elastislide-carousel ul li a img {
 	display: block;
 	border: 2px solid white;
 	max-width: 100%;
+	width: 80%;
 }
 
 /* Navigation Arrows */
@@ -104,6 +109,7 @@
 	top: 50%;
 	left: 10px;
 	margin-top: -11px;
+	z-index: 15;
 }
 
 .elastislide-vertical nav span {
