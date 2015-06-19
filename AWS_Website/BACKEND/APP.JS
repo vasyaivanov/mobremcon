@@ -307,7 +307,7 @@ app.use(function (req, res, next) {
 
 			slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1) {
-					res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword });					
+					res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0  });					
 				}
 				else {
 					console.log( "Slide was not found" );

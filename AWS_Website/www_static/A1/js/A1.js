@@ -245,6 +245,7 @@ function showHidePasswordCreateOverlay() {
     }
     showHideMenu(true);
 }
+
 function submitPassword() {
     var pwd = document.getElementById("presentationPassword").value;
     socket.emit('updatePassword', { 'password': pwd, 'currentHash': currentHash});
@@ -263,13 +264,12 @@ function showHidePasswordCheckOverlay() {
     }
     showHideMenu(true);
 }
+
 function submitCheckPassword() {
     var pwd = document.getElementById("presentationCheckPassword").value;
-    if(presentationPassword == pwd){
-        showHidePasswordCheckOverlay();
-    }else{
-        alert("Password is wrong.");
-    }
+	if(pwd) {
+		socket.emit("checkSlidePassword-server", {password: pwd, hash: currentHash});
+	}
 }
 
 
@@ -438,7 +438,7 @@ var hostname = window.location.hostname;
 if( hostname.indexOf("www") == 0){
 	hostname = hostname.substring(4);
 }
-if(presentationPassword) {
+if(presentationPassword == 1) {
     showHidePasswordCheckOverlay();    
 }
 if( isMobile() ) {
@@ -666,6 +666,10 @@ jQuery(document).ready(function ($) {
 		 var item = $('.menuSubmenu #menuRemote');
 		 item.show();
     }
+	if (canBePresenter() && !isInIFrame()) {
+		 var item = $('.menuSubmenu #menuPassword');
+		 item.show();
+    }
     if ( typeof title !== 'undefined' ) {
         document.title = title;
     }
@@ -805,7 +809,13 @@ if (!isFile) {
             socket.emit('my other event', { my: 'data' });
         }
     });
-    
+	
+    socket.on('checkSlidePassword-client', function (data) {
+		if(data.result == 1) {
+			showHidePasswordCheckOverlay();
+		}
+    });
+	
     socket.on('broadcastVideoChat', function (data) {
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastVideoChat received');
