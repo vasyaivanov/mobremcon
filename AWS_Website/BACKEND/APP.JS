@@ -529,7 +529,7 @@ router.get('/letscrawl.html', function (req, res){
 	res.send('Crawl is very dangerous! :)');
 	if(req.query.password == "startme321!") {
 		console.log("Crawling");
-		require("./lib/crawler.js").crawl(req.headers.host,1, Slide, www_dir, slitesDir);
+		require("./lib/crawler.js").crawl(req.headers.host,20, Slide, www_dir, slitesDir);
 	}
 	else {
 		console.log("Wrong password");
