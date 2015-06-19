@@ -79,7 +79,8 @@ var slidesSchema = mongoose.Schema({
   url: {type: String},
   desc: { type: String },
   site: { type: String },
-  keywords: { type: String }
+  keywords: { type: String },
+  password: { type: String }
 });
 
 slidesSchema.plugin(mongooserand);
@@ -304,9 +305,9 @@ app.use(function (req, res, next) {
             //console.log('RENDERING HTML: ' + indexPathname);
 			// Check slide in DB
 
-			slideCheckPresenter(hash, function(sfound, spresenter, stitle) {
+			slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1) {
-					res.render(indexPathname, {title: stitle, presenter: spresenter });					
+					res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword });					
 				}
 				else {
 					console.log( "Slide was not found" );
@@ -584,10 +585,10 @@ slideCheckPresenter = function(hashId, callback) {
 			if( doc ) {
 				console.log("Slide was found");
 				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title);
+				callback(1,slidePresenter,doc.title,doc.password);
 			} else {
 				console.log("Slide was not found");
-				callback(0,0,"");
+				callback(0,0,"","");
 			}
 		});	
 }
@@ -605,9 +606,9 @@ router.get('/remote/index.html', function (req, res){
 		var match = hashId.match(slitesRegMW);
 		
 		if(match) {
-			slideCheckPresenter(hashId, function(sfound, spresenter, stitle) {
+			slideCheckPresenter(hashId, function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
-					 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: stitle});
+					 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: stitle, password: spassword});
 				}
 				else {
 					res.redirect('/');

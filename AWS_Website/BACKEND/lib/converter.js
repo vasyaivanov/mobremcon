@@ -74,6 +74,7 @@ module.exports.convert = function (pathName, origName, socket, opt, callback) {
 		callback(2);
     }
     
+    console.log("JD: in converter");
     slite = new prepare_slite.Slite(socket, function (err) {
         var hashDir = path.join(opt.www_dir, opt.slitesDir, slite.hashValue);
         if (err) {

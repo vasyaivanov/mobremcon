@@ -169,7 +169,7 @@ function showHideInsertVideoSlideOverlay() {
 var isHelpOverlayOn = false;
 function showHideHelpOverlay() {
     if (!isHelpOverlayOn) {
-        $('#helpOverlay').fadeIn(400);;
+        $('#helpOverlay').fadeIn(400);
         isHelpOverlayOn = true;
     } else {
         $('#helpOverlay').fadeOut(400);
@@ -232,6 +232,46 @@ function showHideExplanators() {
         explanatorsTurnedOff = true;
     }
 }
+
+var isPasswordCreateOverlayOn = false;
+function showHidePasswordCreateOverlay() {
+    if (!isPasswordCreateOverlayOn) {
+        $('#passwordCreateOverlay').fadeIn(400);
+        $('#presentationPassword').focus();
+        isPasswordCreateOverlayOn = true;
+    } else {
+        $('#passwordCreateOverlay').fadeOut(400);
+        isPasswordCreateOverlayOn = false;
+    }
+    showHideMenu(true);
+}
+function submitPassword() {
+    var pwd = document.getElementById("presentationPassword").value;
+    socket.emit('updatePassword', { 'password': pwd, 'currentHash': currentHash});
+    showHidePasswordCreateOverlay();
+}
+
+var isPasswordCheckOverlayOn = false;
+function showHidePasswordCheckOverlay() {
+    if (!isPasswordCheckOverlayOn) {
+        $('#passwordCheckOverlay').fadeIn(400);
+        $('#presentationCheckPassword').focus();
+        isPasswordCheckOverlayOn = true;
+    } else {
+        $('#passwordCheckOverlay').fadeOut(400);
+        isPasswordCheckOverlayOn = false;
+    }
+    showHideMenu(true);
+}
+function submitCheckPassword() {
+    var pwd = document.getElementById("presentationCheckPassword").value;
+    if(presentationPassword == pwd){
+        showHidePasswordCheckOverlay();
+    }else{
+        alert("Password is wrong.");
+    }
+}
+
 
 function hideClickAllow(delay) {
     $('#clickallow').delay(3000).fadeOut(600);
@@ -363,6 +403,15 @@ $('#closeInsertVideoSlideOverlay').click(function () {
 $('#closeHelpOverlay').click(function () {
     showHideHelpOverlay();
 });
+$('#closePasswordCreateOverlay').click(function () {
+    showHidePasswordCreateOverlay();
+});
+$('#submitPassword').click(function () {
+    submitPassword();
+});
+$('#submitCheckPassword').click(function () {
+    submitCheckPassword();
+});
 $('#videochatpanel').click(function () {
     showHideVideoChat();
 });
@@ -388,6 +437,9 @@ if (needToShowExplanators()) {
 var hostname = window.location.hostname;
 if( hostname.indexOf("www") == 0){
 	hostname = hostname.substring(4);
+}
+if(presentationPassword) {
+    showHidePasswordCheckOverlay();    
 }
 if( isMobile() ) {
 	$("#sliteWatermak").css("display","none");

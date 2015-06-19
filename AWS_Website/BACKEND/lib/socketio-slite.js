@@ -374,6 +374,34 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             + " slide number " + data.curr_slide);
         prepare_slite.youTube(data.video_hash, data.slite_hash, data.curr_slide);
     });
+    socket.on('updatePassword', function (data) {
+        console.log("updatePassword to: " + data.password + " currentHash=" + data.currentHash);
+
+
+
+        module.parent.exports.SlideScheme.find({ sid: data.currentHash }, function (err, docs) {
+            console.log(docs);
+            if(docs && docs.length){
+                module.parent.exports.SlideScheme.update({ sid: data.currentHash }, {$set: { password: data.password}}, {upsert: true},
+                    function (err, numAffected) {
+                        if(numAffected > 0) {console.log("Updated rows: " + numAffected)}
+                    }
+                );
+            }
+        });
+        
+
+
+
+
+        /*
+        var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite});
+        addSlide.save(function(err, saved) {
+            if(err) console.error('Can\'t insert a new note: ' + err);
+        } \*/
+         
+
+    });
 
 
     socket.on("joinserver", function(name, device) {

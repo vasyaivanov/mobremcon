@@ -19,7 +19,11 @@
       myRedraw="both";
     </script>-->
 
-	<script>var presenter = "<%= presenter %>"; var title = "<%= title %>"</script>
+	<script>
+		var presenter = "<%= presenter %>"; 
+		var title = "<%= title %>";
+		var presentationPassword = "<%= password %>";
+	</script>
     <link rel="stylesheet" href="../css/videochat/videochat-style.css">
     <link rel="stylesheet" href="../css/jquery-ui.min.css">
     <link class="rs-file" href="../css/royalslider.css" rel="stylesheet">
@@ -97,6 +101,29 @@
 		<div class="closevideo" id="closeHelpOverlay" style='margin-right:30px;'></div>
 		<iframe src="../A1/help.html" style='width:100%;height:100%'></iframe>
 	</div>
+
+	<div class='passwordCreateOverlay' id='passwordCreateOverlay'>
+		<div class="closevideo" id="closePasswordCreateOverlay" style='margin-right:30px;'></div>
+		<center>
+			<div id="passwordDialog">
+					<div style="font-size:22px;">Password</div>
+					<div>(all users will be required to enter it to see your presentation)</div> 
+					<input type="password" id="presentationPassword"> <br>
+					<input type="submit" value="Submit" id="submitPassword">
+			</div>
+		</center>
+	</div>
+
+	<div class='passwordCheckOverlay' id='passwordCheckOverlay'>
+		<center>
+			<div id="passwordCheckDialog">
+					<div style="font-size:22px;">This presentation is password protected</div>
+					<div style="font-size:22px;">Please enter password:</div>
+					<input type="password" id="presentationCheckPassword"> <br>
+					<input type="submit" value="Submit" id="submitCheckPassword">
+			</div>
+		</center>
+	</div>
 	
 	<div class='insertVideoSlideOverlay' id='insertVideoSlideOverlay'>
 		<div class="closevideo" id="closeInsertVideoSlideOverlay" style='margin-right:30px;'></div>
@@ -156,6 +183,7 @@
 				  <li><a href="javascript:shareTwitter()" id="shareTwitter">Share on Twitter</a></li>
 				  <li><a href="javascript:downloadPresentation()" id="downloadPresentation">Download Presentation</a></li>
 				  <!--<li><a href="javascript:showHideInsertVideoSlideOverlay()" id="menuInsertVideoSlide">Insert Video Slide</a></li>-->
+				  <li><a href="javascript:showHidePasswordCreateOverlay()" id="menuPassword">Protect With Password</a></li>
 				  <li><a href="../my.html" id="shareTwitter">My Presentations</a></li>
 				  <li><a href="/">Home</a></li>
 				  <li><a href="javascript:openContactUs()" id="menuContactUs">Contact Us / Suggest / Ask</a></li>
