@@ -18,3 +18,11 @@
 .interim {
   font-color: #f00;
 }
+
+#people {
+  font-size: 10px;
+}
+
+#people .list-group-item {
+  height: 30px;
+}
