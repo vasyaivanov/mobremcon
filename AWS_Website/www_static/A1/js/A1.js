@@ -292,6 +292,17 @@ function showRemote() {
 	showHideMenu(true);
 }
 
+function disableMenuItem(menuItem) {
+	$(menuItem).attr('title','only presenter can do this');
+	$(menuItem).off();
+	$(menuItem).addClass("grayedOut");
+}
+function disableNonPresenterMenues() {
+	disableMenuItem("#menuRemote");
+	disableMenuItem("#menuOpenVideoChat");
+	disableMenuItem("#menuPassword");
+}
+
 function isInIFrame(){
 	return (self!=top);
 }
@@ -443,6 +454,9 @@ if(presentationPassword == 1) {
 }
 if( isMobile() ) {
 	$("#sliteWatermak").css("display","none");
+}
+if( !isAPresenter ) {
+	disableNonPresenterMenues();
 }
 $('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
