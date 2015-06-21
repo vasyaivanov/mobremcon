@@ -294,7 +294,9 @@ function showRemote() {
 
 function disableMenuItem(menuItem) {
 	$(menuItem).attr('title','only presenter can do this');
+	$(menuItem).attr('onclick','return false');
 	$(menuItem).off();
+	$(menuItem).unbind();
 	$(menuItem).addClass("grayedOut");
 }
 function disableNonPresenterMenues() {
@@ -455,7 +457,7 @@ if(presentationPassword == 1) {
 if( isMobile() ) {
 	$("#sliteWatermak").css("display","none");
 }
-if( !isAPresenter ) {
+if( isAPresenter ) {
 	disableNonPresenterMenues();
 }
 $('#menuTitle').html(hostname);
