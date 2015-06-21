@@ -67,7 +67,7 @@ function changeURL() {
 
 function isLocalhost() {
 	var location = document.location + "";
-	return (pathName && location.indexOf("file") === 0);
+	return (location && location.indexOf("file") === 0);
 }
 
 function setIFrameUrl(hash){
