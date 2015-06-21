@@ -457,7 +457,7 @@ if(presentationPassword == 1) {
 if( isMobile() ) {
 	$("#sliteWatermak").css("display","none");
 }
-if( isAPresenter ) {
+if( !isAPresenter ) {
 	disableNonPresenterMenues();
 }
 $('#menuTitle').html(hostname);
