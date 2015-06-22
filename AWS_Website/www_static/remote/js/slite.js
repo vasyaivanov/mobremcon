@@ -23,6 +23,39 @@ var interactionType = NONE;
 // disable image dragging for all images
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
+currentSlide.addEventListener('touchstart', touchStart, false);
+currentSlide.addEventListener('touchmove', touchMove, false);
+currentSlide.addEventListener('touchend', touchEnd, false);
+
+function touchStart(event) {
+    event.preventDefault();
+    if(LASER === interactionType) {
+        socket.emit('laserOn', {slideID: getUrlParam("presentation")});
+    } else if (DRAW === interactionType) {
+        // recalculate offsets in case window size has changed
+        xOffset = currentSlide.offsetLeft;
+        yOffset = currentSlide.offsetTop;
+        slideWidth = currentSlide.offsetWidth,
+        slideHeight = currentSlide.offsetHeight;
+        var xPercent = calcOffset(event.pageX, xOffset, slideWidth);
+        var yPercent = calcOffset(event.pageY, yOffset, slideHeight);
+        //console.log("xPercent: " + xPercent);
+        //console.log("yPercent: " + yPercent);
+        socket.emit('drawStart',{x:xPercent,
+                                 y:yPercent , slideID: getUrlParam("presentation")});
+    }
+};
+
+function touchEnd(event) {
+    event.preventDefault();
+    if (LASER === interactionType) {
+        socket.emit('laserOff');
+    } else if (DRAW === interactionType) {
+        socket.emit('drawStop');
+    }
+};
+
+
 // Functions that handle moving to the next slide and updating notes
 function prevSlide() {
     socket.emit('mymessage', { my:102, slide:currSlideNum, slideID: getUrlParam("presentation") });
@@ -36,18 +69,18 @@ function nextSlide() {
 };
 
 function thumbnails() {
-    var elements    = document.querySelectorAll('#otherSlides button');
+    var elements    = document.querySelectorAll('#navButtons div');
     // add event listener for each button
     for (var i = 0, l = elements.length; i < l; i++) {
         var element = elements[i];
         element.setAttribute('slide_num', i);
-        var url = document.getElementById("URLSlides").value;
+        /*var url = document.getElementById("URLSlides").value;
         //element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
         if (url === '' || url.length != 2) {
             element.style.backgroundImage = '';
         } else {
             element.style.backgroundImage = "url(../" + url + "/thumbnails/img" + (i+1) + ".png)";
-        }
+        }*/
         // each event will be logged to the virtual console
         element.addEventListener("mousedown", function(e) {
                                      var slide_num = parseInt(this.getAttribute('slide_num'));
