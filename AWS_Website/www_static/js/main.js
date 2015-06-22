@@ -214,11 +214,25 @@ $(document).ready(function () {
     $('#createPresentation').click(function(){
 		window.location = window.location + "editor";
     });
+	
+	replaceDomainName();
 
     if(navigator.userAgent.match(/(iPhone|iPad)/i)) {
 		//$('.uploadfile').css('display', 'none');
    };
 });
+
+function replaceDomainName() {
+	var hostname = window.location.hostname;
+	if( hostname.indexOf("www") == 0){
+		hostname = hostname.substring(4);
+	}
+	var element = $("#aboutOurProduct");
+	var htmlBody = element.html();
+	htmlBody = htmlBody.replace(/Slite/g, hostname);
+	element.html(htmlBody);
+	//str = str.replace(/Slite&#8482;/g, hostname);
+}
 
 function delSlide(slideId) {
 	deleteSlide(slideId);
