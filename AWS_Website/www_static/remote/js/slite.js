@@ -70,17 +70,18 @@ function nextSlide() {
 
 function thumbnails() {
     var elements    = document.querySelectorAll('#navButtons div');
+    /*
     // add event listener for each button
     for (var i = 0, l = elements.length; i < l; i++) {
         var element = elements[i];
         element.setAttribute('slide_num', i);
-        /*var url = document.getElementById("URLSlides").value;
+        var url = document.getElementById("URLSlides").value;
         //element.style.backgroundImage = "url(./" + url + "/thumbnails/img" + (i+1) + ".png)";
         if (url === '' || url.length != 2) {
             element.style.backgroundImage = '';
         } else {
             element.style.backgroundImage = "url(../" + url + "/thumbnails/img" + (i+1) + ".png)";
-        }*/
+        }
         // each event will be logged to the virtual console
         element.addEventListener("mousedown", function(e) {
                                      var slide_num = parseInt(this.getAttribute('slide_num'));
@@ -88,7 +89,7 @@ function thumbnails() {
                                      $("#notes").text(notesArray[currSlideNum]);
                                      socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
                                  }, false);
-    }
+    }*/
 }
 
 function changeURL() {
@@ -189,17 +190,17 @@ head.appendChild(script);
 
 function getUrlParam(sParam)
 {
-	var sPageURL = window.location.search.substring(1); // get query string without ? 
+	var sPageURL = window.location.search.substring(1); // get query string without ?
 	var sURLVariables = sPageURL.split('&');
-	for (var i = 0; i < sURLVariables.length; i++) 
+	for (var i = 0; i < sURLVariables.length; i++)
 	{
 		var sParameterName = sURLVariables[i].split('=');
-		if (sParameterName[0] == sParam) 
+		if (sParameterName[0] == sParam)
 		{
 			return sParameterName[1];
 		}
 	}
-} 
+}
 
 function populateHash(){
 	var presentationHash = getUrlParam("presentation");
