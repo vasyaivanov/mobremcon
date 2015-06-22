@@ -117,13 +117,13 @@ function touchMove(event) {
                         { x:xTouch - xOffset,
                           y:yTouch - yOffset,
                           width:slideWidth,
-                          height:slideHeight , slideID: $('#URLSlides').val() });
+                          height:slideHeight , slideID: getUrlParam("presentation") });
             break;
         }
         case DRAW: {
             socket.emit('drawCoords',
                         { x:xPercent,
-                          y:yPercent , slideID: $('#URLSlides').val()});
+                          y:yPercent , slideID: getUrlParam("presentation")});
             break;
         }
         default: {
