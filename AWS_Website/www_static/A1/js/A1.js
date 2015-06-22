@@ -792,7 +792,7 @@ if (!isFile) {
     
     socket.on('news', function (data) {
         if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
-            var button = data.hello - 1;
+		var button = data.hello - 1;
 			var slider = $(".royalSlider").data('royalSlider');
             console.log(button);                  
             slider.goTo(data.slide);            
