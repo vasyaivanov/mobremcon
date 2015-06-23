@@ -101,21 +101,44 @@ $(document).ready(function() {
     $("#join").attr('disabled', 'disabled');
   }
 
-  var randomNumber=Math.floor(Math.random()*1001);
-  socket.emit("joinserver", "Guest_"+randomNumber, "desktop");
-  toggleNameForm();
-  toggleChatWindow();
-  $("#msg").focus();
-
-  var roomName = getUrlParam("presentation");
-  socket.emit("check", roomName, function(data) {
-    roomExists = data.result;
-     if (!roomExists)
-        socket.emit("createRoom", roomName);
-      else     
-        socket.emit("joinRoom", roomName);
+  //enter screen
+  $("#nameForm").submit(function() {
+    var name = $("#name").val();
+    var device = "desktop";
+    if (navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
+      device = "mobile";
+    }
+    if (name === "" || name.length < 2) {
+      $("#errors").empty();
+      $("#errors").append("Please enter a name");
+      $("#errors").show();
+    } else {
+      toggleNameForm();
+      toggleChatWindow();
+      $("#msg").focus();
+      socket.emit("joinserver", name, device, function(data) {
+        var roomName = getUrlParam("presentation");
+        socket.emit("check", roomName, function(data) {
+          roomExists = data.result;
+          if (!roomExists)
+            socket.emit("createRoom", roomName);
+          else     
+            socket.emit("joinRoom", roomName);
+        });
+      });
+    }
   });
-  socket.emit("createRoom", roomName);
+
+  $("#name").keypress(function(e){
+    var name = $("#name").val();
+    if(name.length < 2) {
+      $("#join").attr('disabled', 'disabled'); 
+    } else {
+      $("#errors").empty();
+      $("#errors").hide();
+      $("#join").removeAttr('disabled');
+    }
+  });
 
   //main chat screen
   $("#chatForm").submit(function() {

@@ -403,7 +403,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		});
 	});
 
-    socket.on("joinserver", function(name, device) {
+    socket.on("joinserver", function(name, device, fn) {
         var exists = false;
         var ownerRoomID = inRoomID = null;
 
@@ -432,6 +432,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.emit("joined"); //extra emit for GeoLocation
             sockets.push(socket);
         }
+        fn({});
     });
 
     socket.on("getOnlinePeople", function(fn) {
