@@ -364,7 +364,7 @@ app.use(function (req, res, next) {
 	} 
 	else if(req.url == "/A1/") {
 		 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
-		 res.render(indexPathname, {title: "A1", presenter: 1});
+		 res.render(indexPathname, {title: "A1", presenter: 1, password: 0});
 		console.log(indexPathname);
 	}
     else {
@@ -616,7 +616,7 @@ router.get('/remote/index.html', function (req, res){
 			});
 		}
 		else if(hashId == "A1") {
-			 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: "A1"});
+			 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: "A1", password: ""});
 		}
 		else {
 			res.redirect('/');			
