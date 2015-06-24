@@ -427,7 +427,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             module.parent.exports.io.sockets.emit("update", people[socket.id].name + " is online.")
             sizePeople = _.size(people);
             sizeRooms = _.size(rooms);
-            module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
+            //module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
             socket.emit("roomList", {rooms: rooms, count: sizeRooms});
             socket.emit("joined"); //extra emit for GeoLocation
             sockets.push(socket);
@@ -511,10 +511,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.join(socket.room);
             people[socket.id].owns = id;
             people[socket.id].inroom = id;
+            people[socket.id].roomName = name;
             room.addPerson(socket.id);
             //socket.emit("update", "Welcome to " + room.name + ".");
             socket.emit("sendRoomID", {id: id});
             chatHistory[socket.room] = [];
+            module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
         } else {
             socket.emit("update", "You have already created a room.");
         }
@@ -556,7 +558,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         socket.room = room.name;
                         socket.join(socket.room);
                         user = people[socket.id];
+                        people[socket.id].roomName = room.name;
                         module.parent.exports.io.sockets.in(socket.room).emit("update", user.name + " has connected to " + room.name + " room.");
+                        module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
                         //socket.emit("update", "Welcome to " + room.name + ".");
                         socket.emit("sendRoomID", {id: id});
                         var keys = _.keys(chatHistory);

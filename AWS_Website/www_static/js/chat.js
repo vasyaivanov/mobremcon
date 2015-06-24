@@ -330,7 +330,7 @@ socket.on("history", function(data) {
   });
 
   socket.on("update-people", function(data){
-    //var peopleOnline = [];
+    var peopleOnline = 0;
     $("#people").empty();
     $('#people').append("<li class=\"list-group-item active\">People online <span class=\"badge\">"+data.count+"</span></li>");
     $.each(data.people, function(a, obj) {
@@ -339,8 +339,12 @@ socket.on("history", function(data) {
       } else {
         html = "<img class=\"flag flag-"+obj.country+"\"/>";
       }
-      $('#people').append("<li class=\"list-group-item\"><span>" + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");
-      //peopleOnline.push(obj.name);
+      if (obj.roomName === getUrlParam("presentation"))
+      {
+        peopleOnline++;
+        $('#people').append("<li class=\"list-group-item\"><span>" + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");
+      }
+       
     });
 
     /*var whisper = $("#whisper").prop('checked');
