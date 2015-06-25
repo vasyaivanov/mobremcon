@@ -829,10 +829,13 @@ if (!isFile) {
     socket.on('checkSlidePassword-client', function (data) {
 		if(data.result == 1) {
 			showHidePasswordCheckOverlay();
-		}
+		}else{
+            alert("Wrong Password");
+        }
     });
 	
     socket.on('broadcastVideoChat', function (data) {
+        alert("JD: video chat is broadcasted");
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastVideoChat received');
         if (data.open === isVideoChatOn) return;

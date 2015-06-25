@@ -399,7 +399,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			if(sfound == 1 && data.password == spassword) {
 				socket.emit('checkSlidePassword-client',{result: 1});
 				console.log('Password is correct');
-			}
+			}else{
+                socket.emit('checkSlidePassword-client',{result: 2});
+                console.log('Password is not correct');
+            }
 		});
 	});
 
