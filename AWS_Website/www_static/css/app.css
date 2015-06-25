@@ -11,6 +11,7 @@
   height: 200px;
   margin-left: 12px;
   overflow: scroll;
+  z-index: 1;
 }
 .final {
   font-color: #000;
@@ -24,5 +25,12 @@
 }
 
 #people .list-group-item {
-  height: 30px;
+  height: 100%;
+  z-index: 10;
+}
+
+#peopleDiv {
+  width: 40%;
+  float: right;
+  overflow-y: scroll;
 }
