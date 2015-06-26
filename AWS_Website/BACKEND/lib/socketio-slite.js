@@ -61,7 +61,7 @@ function purge(s, action) {
     if (people[s.id].inroom) { //user is in a room
     var room = rooms[people[s.id].inroom]; //check which room user is in.
         if (action === "disconnect") {
-            module.parent.exports.io.sockets.emit("update", people[s.id].name + " has disconnected from the server.");
+            //module.parent.exports.io.sockets.emit("update", people[s.id].name + " has disconnected from the server.");
             if (_.contains((room.people), s.id)) {
                 var personIndex = room.people.indexOf(s.id);
                 room.people.splice(personIndex, 1);
@@ -515,6 +515,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             people[socket.id].owns = id;
             people[socket.id].inroom = id;
             people[socket.id].roomName = name;
+            people[socket.id].socketId = socket.id;
             room.addPerson(socket.id);
             //socket.emit("update", "Welcome to " + room.name + ".");
             socket.emit("sendRoomID", {id: id});
@@ -539,7 +540,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
          if (socket.id === room.owner) {
             purge(socket, "removeRoom");
         } else {
-                    socket.emit("update", "Only the owner can remove a room.");
+            socket.emit("update", "Only the owner can remove a room.");
         }
     });
 
@@ -562,6 +563,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         socket.join(socket.room);
                         user = people[socket.id];
                         people[socket.id].roomName = room.name;
+                        people[socket.id].socketId = socket.id;
                         //module.parent.exports.io.sockets.in(socket.room).emit("update", user.name + " has connected to " + room.name + " room.");
                         module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
                         //socket.emit("update", "Welcome to " + room.name + ".");

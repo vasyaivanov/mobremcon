@@ -343,7 +343,14 @@ socket.on("history", function(data) {
         html = "<img class=\"flag flag-"+obj.country+"\"/>";
       }
       if (obj.roomName === getUrlParam("presentation"))
-        $('#people').append("<li class=\"list-group-item\"><span>" + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");       
+      {
+        if (obj.socketId === socket.id) {
+          s = "<li class=\"list-group-item\"><span class='text-danger'>"
+        } else {
+          s = "<li class=\"list-group-item\"><span class='text-success'>"
+        }
+        $('#people').append(s + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");       
+      }
     });
 
     /*var whisper = $("#whisper").prop('checked');
@@ -358,7 +365,12 @@ socket.on("history", function(data) {
   });
 
   socket.on("chat", function(person, msg) {
-    $("#msgs").append("<li><strong><span class='text-success'>" + person.name + "</span></strong>: " + msg + "</li>");
+    if (person.socketId === socket.id) {
+      s = "<li><strong><span class='text-danger'>"
+    } else {
+      s = "<li><strong><span class='text-success'>"
+    }
+    $("#msgs").append(s + person.name + "</span></strong>: " + msg + "</li>");
     //clear typing field
      $("#"+person.name+"").remove();
      clearTimeout(timeout);
