@@ -426,8 +426,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.emit("exists", {msg: "The username already exists, please pick another one.", proposedName: proposedName});
         } else {
             people[socket.id] = {"name" : name, "owns" : ownerRoomID, "inroom": inRoomID, "device": device};
-            socket.emit("update", "You have connected to the server.");
-            module.parent.exports.io.sockets.emit("update", people[socket.id].name + " is online.")
+            //socket.emit("update", "You have connected to the server.");
+            //module.parent.exports.io.sockets.emit("update", people[socket.id].name + " is online.")
             sizePeople = _.size(people);
             sizeRooms = _.size(rooms);
             //module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
@@ -562,7 +562,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         socket.join(socket.room);
                         user = people[socket.id];
                         people[socket.id].roomName = room.name;
-                        module.parent.exports.io.sockets.in(socket.room).emit("update", user.name + " has connected to " + room.name + " room.");
+                        //module.parent.exports.io.sockets.in(socket.room).emit("update", user.name + " has connected to " + room.name + " room.");
                         module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
                         //socket.emit("update", "Welcome to " + room.name + ".");
                         socket.emit("sendRoomID", {id: id});

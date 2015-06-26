@@ -331,8 +331,11 @@ socket.on("history", function(data) {
 
   socket.on("update-people", function(data){
     var peopleOnline = 0;
+    $.each(data.people, function(a, obj) {
+      if (obj.roomName === getUrlParam("presentation")) peopleOnline++; // count people in this room
+    });
     $("#people").empty();
-    $('#people').append("<li class=\"list-group-item active\">People online <span class=\"badge\">"+data.count+"</span></li>");
+    $('#people').append("<li class=\"list-group-item active\">People online <span class=\"badge\">"+peopleOnline+"</span></li>");
     $.each(data.people, function(a, obj) {
       if (!("country" in obj)) {
         html = "";
@@ -340,11 +343,7 @@ socket.on("history", function(data) {
         html = "<img class=\"flag flag-"+obj.country+"\"/>";
       }
       if (obj.roomName === getUrlParam("presentation"))
-      {
-        peopleOnline++;
-        $('#people').append("<li class=\"list-group-item\"><span>" + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");
-      }
-       
+        $('#people').append("<li class=\"list-group-item\"><span>" + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");       
     });
 
     /*var whisper = $("#whisper").prop('checked');
