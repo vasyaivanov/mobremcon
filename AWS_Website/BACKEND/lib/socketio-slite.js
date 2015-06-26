@@ -478,7 +478,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 var whisperTo = whisperStr[1];
                 var whisperMsg = whisperStr[2];
                 socket.emit("whisper", {name: "You"}, whisperMsg);
-                module.parent.exports.io.sockets.socket(whisperId).emit("whisper", people[socket.id], whisperMsg);
+                module.parent.exports.io.to(whisperId).emit("whisper", people[socket.id], whisperMsg);
             } else {
                 socket.emit("update", "Can't find " + whisperTo);
             }
