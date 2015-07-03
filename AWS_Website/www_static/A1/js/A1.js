@@ -835,7 +835,7 @@ if (!isFile) {
     });
 	
     socket.on('broadcastVideoChat', function (data) {
-        alert("JD: video chat is broadcasted");
+        //alert("JD: video chat is broadcasted");
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastVideoChat received');
         if (data.open === isVideoChatOn) return;
