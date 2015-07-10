@@ -94,7 +94,7 @@ function thumbnails() {
 
 function changeURL() {
 	alert(location.port);
-    var newUrl = 'http://' + document.location.hostname + ':' + location.port + '/remote/index.html?presentation=' + document.getElementById("URLSlides").value;
+    var newUrl = 'https://' + document.location.hostname + ':' + location.port + '/remote/index.html?presentation=' + document.getElementById("URLSlides").value;
     //location.href = newUrl; // redirect to a new url with ?presentation= query string
     location.replace(newUrl);
 }
@@ -105,7 +105,7 @@ function isLocalhost() {
 }
 
 function setIFrameUrl(hash){
-    var newUrl = 'http://' + document.location.hostname + ':' + location.port + '/' + hash;
+    var newUrl = 'https://' + document.location.hostname + ':' + location.port + '/' + hash;
     var iFrame = document.getElementById('theIframe');
 	iFrame.src = newUrl;
 	if(isLocalhost()){
@@ -117,7 +117,7 @@ function setIFrameUrl(hash){
 function onSlideLoaded() {
     currSlideNum = 0;
     $("#notes").text(notesArray[currSlideNum]);
-    socket = io.connect(document.location.hostname + ':1337');
+    socket = io.connect(document.location.hostname);
     socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
     thumbnails(); // thumbnails have to match the slides
 }
