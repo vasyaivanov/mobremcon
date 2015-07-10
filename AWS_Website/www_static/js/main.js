@@ -28,7 +28,7 @@ $(document).ready(function () {
     }
 
     var HTML5_UPLOADER = false;
-    var socket = io.connect(document.location.hostname);
+    var socket = io.connect(document.location.hostname + ':' + location.port);
      
     function setUploadMessage(title) {
         progressLabel.text(title);

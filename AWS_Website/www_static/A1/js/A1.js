@@ -773,7 +773,7 @@ function getClearUrl() {
 
 var socket;
 if (!isFile) {
-    socket = io.connect(document.location.hostname);
+    socket = io.connect(document.location.hostname + ':' + location.port);
     
     socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
