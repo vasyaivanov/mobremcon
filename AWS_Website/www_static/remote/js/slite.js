@@ -105,7 +105,11 @@ function isLocalhost() {
 }
 
 function setIFrameUrl(hash){
-    var newUrl = 'https://' + document.location.hostname + ':' + location.port + '/' + hash;
+
+      var protocolUrl = (location.protocol == 'https:') ? 'https://' : 'http://';
+
+      var newUrl = protocolUrl + document.location.hostname + ':' + location.port + '/' + hash;
+
     var iFrame = document.getElementById('theIframe');
 	iFrame.src = newUrl;
 	if(isLocalhost()){
