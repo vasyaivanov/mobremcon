@@ -100,6 +100,43 @@ function showHideComments() {
     showHideMenu(true);
 }
 
+var isScreensharingOn = false;
+function showHideScreensharing() {
+    if (!isScreensharingOn) {
+		//todo: JD: put here logic to open or not chat
+        
+        isScreensharingOn = true;
+    } else {
+        // remove the video window on closing the panel
+        //var videosContainer = document.getElementById('videos-container');
+        //if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
+
+        isScreensharingOn = false;
+    }
+    
+    if (isAPresenter) {
+        socket.emit("presenterScreensharing", {open: isScreensharingOn, hash: currentHash});
+    }
+
+    var label = $("#screensharingOpenCloseLabel");
+    if (label.html() == "") {
+        $("#screensharingOpenCloseLabel").html("Close");
+    } else {
+        $("#screensharingOpenCloseLabel").html("");
+    }
+
+    $("#screensharing").slideToggle();
+    /*
+		$("#screensharing").css('overflow-x','hidden');
+		$("#screensharing").css('overflow-y','scroll');
+		*/
+		
+	toggleMainWindow();
+	showHideMenu(true);
+}
+
+
+
 var isVideoChatOn = false;
 function showHideVideoChat() {
     if (!isVideoChatOn) {
@@ -428,6 +465,9 @@ $('#submitCheckPassword').click(function () {
 $('#videochatpanel').click(function () {
     showHideVideoChat();
 });
+$('#closescreensharing').click(function () {
+    showHideScreensharing();
+});
 $('#closevideo').click(function () {
     showHideVideoChat();
     config.attachStream && config.attachStream.stop();
@@ -469,6 +509,7 @@ $('#slide').css('overflow','hidden');
 // Documentation - https://github.com/muaz-khan/WebRTC-Experiment/tree/master/video-conferencing
 
 var _channelHash = "9WDXH6OH-6K73NMI";
+
 var config = {
     openSocket: function (config) {
         //var channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g , '');
@@ -565,6 +606,7 @@ var config = {
     }
 };
 
+
 function setupNewRoomButtonClickHandler() {
     btnSetupNewRoom.disabled = true;
     document.getElementById('conference-name').disabled = true;
@@ -610,7 +652,7 @@ function captureUserMedia(callback, failure_callback) {
 }
 
 var conferenceUI;
-if(!isFile) conferenceUI = conference(config);
+//if(!isFile) conferenceUI = conference(config);
 
 /* UI specific */
 var videosContainer = document.getElementById('videos-container') || document.body;
@@ -841,4 +883,5 @@ if (!isFile) {
         if (data.open === isVideoChatOn) return;
         showHideVideoChat();
     });
+	
 }
