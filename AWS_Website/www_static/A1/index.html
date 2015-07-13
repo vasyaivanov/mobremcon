@@ -20,6 +20,9 @@
     </script>-->
 
 	<script>
+		var presenter = "<%= presenter %>"; 
+		var title = "<%= title %>";
+		var presentationPassword = "<%= password %>";
 	</script>
 	
     <link rel="stylesheet" href="../css/videochat/videochat-style.css">
@@ -139,52 +142,6 @@
 	<div id="chatPanel"></div>
 	<div id="personalNotesPanel"></div>
 
-	<div id="screensharing">
-		<h1><div class="closescreensharing" id="closescreensharing">x</div></h1>
-        <article>
-            <!-- just copy this <section> and next script -->
-            <section class="experiment">                
-                <section id="shareYourScreen">
-                    <span>
-                        Private ?? <a href="/Pluginfree-Screen-Sharing/" target="_blank" title="Open this link for private screen sharing!"><code><strong id="unique-token-screensharing">#123456789</strong></code></a>
-                    </span>
-                    <input type="text" id="room-name" placeholder="Your Name" disabled>
-                    <button id="share-screen-screensharing" class="setup" disabled>Share Your Screen</button>
-                </section>
-                
-                <!-- list of all available broadcasting rooms -->
-                <table style="width: 100%;" id="rooms-list"></table>
-                
-                <!-- local/remote videos container -->
-                <div id="videos-container-screensharing"></div>
-            </section>
-			
-			
-			 <section class="experiment">
-                <h2 id="prerequisites">
-                    <a href="#prerequisites">Prerequisites</a>
-                </h2>
-                <ol>
-                    <li>
-                        Chrome? 
-                        <a href="https://chrome.google.com/webstore/detail/screen-capturing/ajhifddimkapgcifgcodmmfdlknahffk" target="_blank">Install chrome extension</a>.
-                        <button onclick="!!navigator.webkitGetUserMedia && !!window.chrome && !!chrome.webstore && !!chrome.webstore.install && chrome.webstore.install('https://chrome.google.com/webstore/detail/ajhifddimkapgcifgcodmmfdlknahffk', function() {location.reload();})" id="install-button" style="padding: 0;background: none;height: 61px;vertical-align: middle;cursor:pointer;">
-                            <img src="https://www.webrtc-experiment.com/images/btn-install-chrome-extension.png" alt="Add to Chrome">
-                        </button>
-                         / <a href="https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture">Source Code</a>
-                    </li>
-                    
-                    <li>
-                        Firefox? <a href="https://www.webrtc-experiment.com/store/firefox-extension/enable-screen-capturing.xpi">Install Firefox Extension</a> / <a href="https://github.com/muaz-khan/Firefox-Extensions/tree/master/enable-screen-capturing">Source Code</a>
-                    </li>
-                </ol>
-            </section>
-        </article>
-        
-	</div>
-	<!-- commits.js is useless for you! -->
-        <script src="https://cdn.webrtc-experiment.com/commits.js" async> </script>
-	
 	<div id="videochatpanel"></div>
 	<div id="videochat">
 		<h1><div class="closevideo" id="closevideo"></div></h1>
@@ -222,7 +179,6 @@
 				  <li><a href="javascript:showRemote()" id="menuRemote">Remote Control (live)</a></li>
 				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span>Chat</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span>Live Video</a></li>
-				  <li><a href="javascript:showHideScreensharing()" id="menuOpenVideoChat"><span id='screensharingOpenCloseLabel'></span>Screen Share</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
                   <li><a href="javascript:shareFacebook()" id="shareFacebook">Share on Facebook</a></li>
 				  <li><a href="javascript:shareTwitter()" id="shareTwitter">Share on Twitter</a></li>
@@ -246,11 +202,9 @@
     <script class="rs-file" src="../js/jquery.royalslider.min.js"></script>
     <script src="../js/jquery.infinitescroll.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-	
-	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ajhifddimkapgcifgcodmmfdlknahffk">
-        
+
     <!-- Lev: This script controls the laser dot -->
-    <!--<script defer src="../js/LASER_RECEIVER.js"></script>-->
+    <script defer src="../js/LASER_RECEIVER.js"></script>
 
     <!-- VideoChat Javascript -->
     <script>
@@ -258,11 +212,10 @@
         document.createElement('footer');
     </script>
 
-    <!-- scripts used for video-conferencing and screen sharing -->
-    <!--<script src="../js/videochat/firebase.js"> </script>--<
+    <!-- scripts used for video-conferencing -->
+    <script src="../js/videochat/firebase.js"> </script>
     <script src="../js/videochat/RTCPeerConnection-v1.5.js"> </script>
-    <!--<script src="../js/videochat/conference.js"> </script>-->
-	<!--<script src='https://cdn.webrtc-experiment.com/firebase.js'> </script>-->
+    <script src="../js/videochat/conference.js"> </script>
 
     <!-- script used to stylize video element -->
     <script src="../js/videochat/getMediaElement.js"> </script>
@@ -278,10 +231,6 @@
     </script>
     <script src="../A1/js/A1.js"></script>
     <script src="../A1/js/notes.js"></script>
-	
-	<script src='https://cdn.webrtc-experiment.com/firebase.js'> </script>
-	<script src="../js/conferenceScreensharing.js"> </script>
-	<script src="../js/screensharing.js"> </script>
     <!-- end VideoChat Javascript -->
 
     <!--<script>
