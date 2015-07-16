@@ -102,25 +102,6 @@ function captureUserMediaScreenSharing(callback, extensionAvailable) {
 			googLeakyBucket: true
 		}]
 	};
-
-	// try to check if extension is installed.
-	if(isChrome && isWebRTCExperimentsDomain && typeof extensionAvailable == 'undefined' && DetectRTCScreensharing.screen.chromeMediaSource != 'desktop') {
-		DetectRTCScreensharing.screen.isChromeExtensionAvailable(function(available) {
-			captureUserMediaScreenSharing(callback, available);
-		});
-		return;
-	}
-	
-	if(isChrome && isWebRTCExperimentsDomain && DetectRTCScreensharing.screen.chromeMediaSource == 'desktop' && !DetectRTCScreensharing.screen.sourceId) {
-		DetectRTCScreensharing.screen.getSourceId(function(error) {
-			if(error && error == 'PermissionDeniedError') {
-				alert('PermissionDeniedError: User denied to share content of his screen.');
-			}
-			
-			captureUserMediaScreenSharing(callback);
-		});
-		return;
-	}
 	
 	// for non-www.webrtc-experiment.com domains
 	if(isChrome && !isWebRTCExperimentsDomain && !DetectRTCScreensharing.screen.sourceId) {
@@ -365,7 +346,9 @@ var DetectRTCScreensharing = {};
 })();
 
 DetectRTCScreensharing.screen.getChromeExtensionStatus(function(status) {
+	//alert("JD: status = "+status);
 	if(status == 'installed-enabled') {
+		$("#screensharing_install_extension").css("display","none");
 		if(document.getElementById('install-button')) {
 			document.getElementById('install-button').parentNode.innerHTML = '<strong>Great!</strong> <a href="https://chrome.google.com/webstore/detail/screen-capturing/ajhifddimkapgcifgcodmmfdlknahffk" target="_blank">Google chrome extension</a> is installed.';
 		}

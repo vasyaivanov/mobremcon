@@ -142,7 +142,9 @@ var isScreensharingOn = false;
 function showHideScreensharing() {
     if (!isScreensharingOn) {
 		//todo: JD: put here logic to open or not chat
-        
+		if(isPresenter()){
+			$('#share-screen-screensharing').trigger("click");
+		}
         isScreensharingOn = true;
     } else {
         // remove the video window on closing the panel

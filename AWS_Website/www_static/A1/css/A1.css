@@ -101,6 +101,10 @@
 			-ms-filter: "FlipH";
 		}
 		
+		#shareYourScreen{
+			display: none;
+		}
+		
 		#video-gallery {
 		  /* position: absolute;
 		  left:5%;
