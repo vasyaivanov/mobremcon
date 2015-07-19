@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>E2998D5D-8441-4701-9FFA-257317AB0366</string>
 	<key>IDESourceControlProjectName</key>
-	<string>RemoteControl</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>A66C7BD6DD1537E9CCD88BE7142D71918B517F1D</key>
 		<string>https://github.com/vasyaivanov/mobremcon.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BACKEND/FRONTEND/RemoteControl.xcodeproj</string>
+	<string>BACKEND/FRONTEND/RemoteControl.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>A66C7BD6DD1537E9CCD88BE7142D71918B517F1D</key>
