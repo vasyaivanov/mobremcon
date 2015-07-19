@@ -697,10 +697,15 @@ if (!isFile) {
     });
 	
     socket.on('broadcastVideoChat', function (data) {
-        //alert("JD: video chat is broadcasted");
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastVideoChat received');
         if (data.open === isVideoChatOn) return;
         showHideVideoChat();
+    });
+	socket.on('broadcastScreensharing', function (data) {
+        if (data.hash !== currentHash || isAPresenter) return;
+        console.log('broadcastScreensharing received');
+        if (data.open === isVideoChatOn) return;
+        showHideScreensharing();
     });
 }
