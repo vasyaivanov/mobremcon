@@ -339,6 +339,7 @@ function disableNonPresenterMenues() {
 	disableMenuItem("#menuRemote");
 	disableMenuItem("#menuOpenVideoChat");
 	disableMenuItem("#menuPassword");
+	disableMenuItem("#menuOpenScreensharing");
 }
 
 function isInIFrame(){
