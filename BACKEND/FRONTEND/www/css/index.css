@@ -88,17 +88,8 @@ left: 10%;
 }
 
 #prev {
-    width: 200px;
-    height: 100px;
-    position: fixed;
     left: 0px;
     bottom: 0px;
-    background-color: lightskyblue;
-    background-image: url('../img/buttonPrev.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    
 }
 
 #prev:active {
@@ -106,16 +97,8 @@ left: 10%;
 }
 
 #next {
-    width: 200px;
-    height: 100px;
-    position: fixed;
     right: 0px;
     bottom: 0px;
-    background-color: lightskyblue;
-    background-image: url('../img/buttonNext.png');
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
     
 }
 
@@ -132,7 +115,7 @@ left: 10%;
 
 #laser {
     color: black;
-    background-image: url('../img/buttonLaser.png');
+    /*background-image: url('../img/buttonLaser.png');*/
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -140,7 +123,7 @@ left: 10%;
 
 #draw {
     color: black;
-    background-image: url('../img/buttonDraw.png');
+    /*background-image: url('../img/buttonDraw.png');*/
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -149,7 +132,7 @@ left: 10%;
 
 #speech {
     color: black;
-    background-image: url('../img/buttonSpeech.png');
+    /*background-image: url('../img/buttonSpeech.png');*/
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -157,15 +140,26 @@ left: 10%;
 
 
 .buttons {
+    float: left;
     display: inline-block;
     height: 80px;
-    width: 80px;
+    width: 18%;
+    font-size: 45px;
+    font-weight: bold;
+    border-width: 8px;
+    border-style: solid;
+    border-color: blue;
+    border-radius: 25px;
+      background: -webkit-linear-gradient(white, blue); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(white, blue); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(white, blue); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(white, blue); /* Standard syntax */
 }
 
 .buttons_div {
     position: absolute;
     z-index: 100;
-    left: 30%;
+    width: 100%;
     bottom: 0px;
 }
 
