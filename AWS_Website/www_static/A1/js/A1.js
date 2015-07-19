@@ -143,7 +143,7 @@ function showHideScreensharing() {
     if (!isScreensharingOn) {
 		if(isPresenter()){
 			$('#share-screen-screensharing').trigger("click");
-		}
+		} 
         isScreensharingOn = true;
     } else {
         // remove the video window on closing the panel

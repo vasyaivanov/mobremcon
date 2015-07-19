@@ -602,5 +602,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' videoChat in ' + data.hash);
         module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
     });
+    socket.on('presenterScreensharing', function (data) {
+        console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
+        module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
+    });
 
 }); // module.parent.exports.io.sockets.on('connection' ...
