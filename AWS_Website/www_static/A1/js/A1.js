@@ -141,7 +141,6 @@ function showHideVideoChat() {
 var isScreensharingOn = false;
 function showHideScreensharing() {
     if (!isScreensharingOn) {
-		//todo: JD: put here logic to open or not chat
 		if(isPresenter()){
 			$('#share-screen-screensharing').trigger("click");
 		}
@@ -503,6 +502,27 @@ if( !isAPresenter ) {
 $('#menuTitle').html(hostname);
 $('#slide').css('overflow','hidden');
 //renderMenuForIFrame(); //for when inside remote control
+
+var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+if(isAPresenter){
+	if (navigator.mozGetUserMedia) {
+		$('#install_chrome_extension').css("display","none");
+	}else if(isChrome){
+		$('#install_firefox_extension').css("display","none");
+	}else{
+		$('#install_firefox_extension').css("display","none");
+		$('#install_chrome_extension').html("<b>Screensharing is available ONLY for Chrome and Firefox browsers.</b>");
+	}
+}else{
+	$('#install_chrome_extension').css("display","none");
+	$('#install_firefox_extension').css("display","none");
+}
+if(!navigator.mozGetUserMedia && !isChrome){
+	$('#install_firefox_extension').css("display","none");
+		$('#install_chrome_extension').html("<b>Screensharing is available ONLY for Chrome and Firefox browsers.</b>");
+}
+
 
 var _channelHash = "9WDXH6OH-6K73NMI";
 

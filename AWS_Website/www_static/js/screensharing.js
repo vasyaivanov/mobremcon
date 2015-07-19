@@ -103,6 +103,25 @@ function captureUserMediaScreenSharing(callback, extensionAvailable) {
 		}]
 	};
 	
+	// try to check if extension is installed.
+	if(isChrome && isWebRTCExperimentsDomain && typeof extensionAvailable == 'undefined' && DetectRTCScreensharing.screen.chromeMediaSource != 'desktop') {
+		DetectRTCScreensharing.screen.isChromeExtensionAvailable(function(available) {
+			captureUserMediaScreenSharing(callback, available);
+		});
+		return;
+	}
+	
+	if(isChrome && isWebRTCExperimentsDomain && DetectRTCScreensharing.screen.chromeMediaSource == 'desktop' && !DetectRTCScreensharing.screen.sourceId) {
+		DetectRTCScreensharing.screen.getSourceId(function(error) {
+			if(error && error == 'PermissionDeniedError') {
+				alert('PermissionDeniedError: User denied to share content of his screen.');
+			}
+			
+			captureUserMediaScreenSharing(callback);
+		});
+		return;
+	}
+	
 	// for non-www.webrtc-experiment.com domains
 	if(isChrome && !isWebRTCExperimentsDomain && !DetectRTCScreensharing.screen.sourceId) {
 		window.addEventListener('message', function (event) {
@@ -184,7 +203,7 @@ var conferenceUIScreensharing = conferenceScreensharing(configScreensharing);
 
 /* UI specific */
 var videosContainerScreensharing = document.getElementById("videos-container-screensharing") || document.body;
-var roomsListScreensharing = document.getElementById('rooms-list-screensharing-screensharing');
+var roomsListScreensharing = document.getElementById('rooms-list-screensharing');
 
 document.getElementById('share-screen-screensharing').onclick = function() {
 	var roomName = document.getElementById('room-name') || { };
