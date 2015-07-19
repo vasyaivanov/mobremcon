@@ -32,10 +32,11 @@
     "wrench": "^1.5.8",
     "xml2js": "^0.4.5",
     "moment": "^2.10",
-	"du": "^0.1.0",
-	"node-bing-api": "",
-	"mongoose-simple-random": "",
-	"request": ""
+    "du": "^0.1.0",
+    "node-bing-api": "",
+    "mongoose-simple-random": "",
+    "request": "",
+    "paypal-ipn": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

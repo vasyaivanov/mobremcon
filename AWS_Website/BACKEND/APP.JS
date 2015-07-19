@@ -22,8 +22,9 @@ var express = require('express')
   , maxSlidesCount = 5
   , maxSlidesSize = 10485760
   , maxSlideUploadSize = 5242880
-  , sessionIdCookie = "sliteCurrUser";
-
+  , sessionIdCookie = "sliteCurrUser"
+  , paypalIpn = require('paypal-ipn');
+  
 var app = express();
 module.exports.app = app;
 module.exports.maxSlideUploadSize = maxSlideUploadSize;
@@ -403,6 +404,28 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
         });
     }
 })
+
+
+router.post('/paypal', function (req, res, next) {
+
+console.log(req.body);
+    
+paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
+    console.log(msg);
+});
+
+});
+
+
+
+
+router.get('/paypal', function (req, res, next) {
+	console.log('Paypal request');
+	console.log(req.query);
+	res.send('Test paypal');
+});
+
+
 
 function setUserSession(req, res, callback) {
 	//console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
