@@ -201,7 +201,6 @@ function showHideInsertVideoSlideOverlay() {
     showHideMenu(true);
 }
 
-
 var isHelpOverlayOn = false;
 function showHideHelpOverlay() {
     if (!isHelpOverlayOn) {
@@ -210,6 +209,18 @@ function showHideHelpOverlay() {
     } else {
         $('#helpOverlay').fadeOut(400);
         isHelpOverlayOn = false;
+    }
+    showHideMenu(true);
+}
+
+var isRenamePresentationOverlayOn = false;
+function showHideRenamePresentationOverlay() {
+    if (!isRenamePresentationOverlayOn) {
+        $('#renamePresentationOverlay').fadeIn(400);
+        isRenamePresentationOverlayOn = true;
+    } else {
+        $('#renamePresentationOverlay').fadeOut(400);
+        isRenamePresentationOverlayOn = false;
     }
     showHideMenu(true);
 }
@@ -452,6 +463,9 @@ $('#closeInsertVideoSlideOverlay').click(function () {
 });
 $('#closeHelpOverlay').click(function () {
     showHideHelpOverlay();
+});
+$('#closeRenamePresentationOverlay').click(function () {
+    showHideRenamePresentationOverlay();
 });
 $('#closePasswordCreateOverlay').click(function () {
     showHidePasswordCreateOverlay();
