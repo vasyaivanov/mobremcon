@@ -168,6 +168,10 @@
                     <input type="text" id="room-name" placeholder="Your Name" disabled>
                     <button id="share-screen-screensharing" class="setup" disabled>Share Your Screen</button>
                 </section>
+				
+				<section id="pleaseWaitForScreenSharing">
+					<!--<div><b>Please wait while presenter is loading screen sharing ...</b></div>-->
+				</section>
                 
                 <!-- list of all available broadcasting rooms -->
                 <table style="width: 100%;" id="rooms-list-screensharing"></table>
@@ -291,15 +295,18 @@
         var slite = '/HASH_TEMPLATE/';
         var staticSlides = 13;
     </script>
+	
+	
+	<script src='https://cdn.webrtc-experiment.com/firebase.js'> </script>
+	<script src="../js/conferenceScreensharing.js"> </script>
+	<script src="../js/screensharing.js"> </script>
+	
     <script src="../A1/js/A1.js"></script>
     <script src="../A1/js/notes.js"></script>
 	
 	<script src="../js/videochat.js"> </script>	
 	
 	
-	<script src='https://cdn.webrtc-experiment.com/firebase.js'> </script>
-	<script src="../js/conferenceScreensharing.js"> </script>
-	<script src="../js/screensharing.js"> </script>
 	
     <!-- end VideoChat Javascript -->
 

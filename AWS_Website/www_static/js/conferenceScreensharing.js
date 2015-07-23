@@ -287,7 +287,10 @@ var conferenceScreensharing = function(config) {
                 userToken: self.userToken,
                 joinUser: _config.joinUser
             });
-        }
+        },
+		leave: function() {
+			leave();
+		}
     };
 };
 

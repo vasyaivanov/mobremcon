@@ -123,7 +123,7 @@ function showHideVideoChat() {
 
     var label = $("#videoChatOpenCloseLabel");
     if (label.html() == "") {
-        $("#videoChatOpenCloseLabel").html("Close");
+        $("#videoChatOpenCloseLabel").html("Close ");
     } else {
         $("#videoChatOpenCloseLabel").html("");
     }
@@ -146,9 +146,12 @@ function showHideScreensharing() {
 		} 
         isScreensharingOn = true;
     } else {
-        // remove the video window on closing the panel
-        //var videosContainer = document.getElementById('videos-container');
-        //if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
+        // remove screensharing window on closing the panel
+		conferenceUIScreensharing.leave();
+        var screensharingContainer = document.getElementById('videos-container-screensharing');
+        if (screensharingContainer.firstChild){
+			screensharingContainer.removeChild(screensharingContainer.firstChild);
+		}
 
         isScreensharingOn = false;
     }
@@ -159,7 +162,7 @@ function showHideScreensharing() {
 
     var label = $("#screensharingOpenCloseLabel");
     if (label.html() == "") {
-        $("#screensharingOpenCloseLabel").html("Close");
+        $("#screensharingOpenCloseLabel").html("Close ");
     } else {
         $("#screensharingOpenCloseLabel").html("");
     }
@@ -720,7 +723,7 @@ if (!isFile) {
 	socket.on('broadcastScreensharing', function (data) {
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastScreensharing received');
-        if (data.open === isVideoChatOn) return;
+        if (data.open === isScreensharingOn) return;
         showHideScreensharing();
     });
 }

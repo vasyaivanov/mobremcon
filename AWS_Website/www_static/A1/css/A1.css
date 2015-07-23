@@ -428,6 +428,10 @@
 		  display: none;
 		}
 		
+		#pleaseWaitForScreenSharing {
+			display: none;
+		}
+		
 		#renamePresentationOverlay {
 		  opacity:    0.9; 
 		  background: black; 

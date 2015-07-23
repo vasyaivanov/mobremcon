@@ -28,6 +28,7 @@ var configScreensharing = {
 	},
 	onRoomFound: function(room) {
 		//alert("JD: room found");
+		$("#pleaseWaitForScreenSharing").show().delay(2000).fadeOut();
 		$("#rooms-list-screensharing").css("display","none");
 		$("#shareYourScreen").css("display","none");
 		conferenceUIScreensharing.joinRoom({
@@ -199,7 +200,7 @@ function captureUserMediaScreenSharing(callback, extensionAvailable) {
 }
 
 /* on page load: get public rooms */
-var conferenceUIScreensharing = conferenceScreensharing(configScreensharing);
+conferenceUIScreensharing = conferenceScreensharing(configScreensharing);
 
 /* UI specific */
 var videosContainerScreensharing = document.getElementById("videos-container-screensharing") || document.body;
