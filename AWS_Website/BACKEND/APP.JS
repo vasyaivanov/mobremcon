@@ -281,100 +281,121 @@ app.use(function (req, res, next) {
 		});	
     });
 	
+	var customHash = req.url.substring(1);
 	
-	
-    var match = req.url.match(slitesRegMW);
-    if (match) {                                                        // if hash found in url
-        if (req.url[req.url.length - 1] === '/') {
-            req.url = req.url.slice(0, -1);
-            //console.log("removed trailing slash");
-        }
-        //console.log('URL: "' + req.url + '"');
-        var slashPos = req.url.indexOf('/', 1);
-        //console.log('slashPos: ' + slashPos);
-        var wwwSlites = path.join(www_dir, slitesDir);                  // www/slites/
-        var hash = req.url.substring(1);
-        var afterHash = '';                                             // all that is after hash
-        if (slashPos !== -1) {                                          // something after second slash
-            hash = req.url.substring(1, slashPos);
-            afterHash = req.url.substring(slashPos + 1).trim();
-        }
-        //console.log('hash: ' + hash);
-        //console.log('afterHash: ' + afterHash);
-        
-        if (afterHash === '' ||
-            afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
-            var indexPathname = path.join(wwwSlites,
-                                          hash,
-                                          'index.html');                // www/slites/hash/index.html
-            //console.log('RENDERING HTML: ' + indexPathname);
-			// Check slide in DB
+	Slide.findOne({scid : customHash, paypalPayed: 1 }).exec(function (err, doc) {
+		if( doc ) {
+			var url = "/" + doc.sid
+			res.set('Content-Type', 'text/html');
+			var output = " \
+			<html> \
+			<head> \
+			<title></title> \
+			</head> \
+			<body style='scrolling:no;'> \
+			<iframe src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
+			</iframe> \
+			</body>";
+			res.send(output);
+		}
+		else {
+			var match = req.url.match(slitesRegMW);
+			if (match) {                                                        // if hash found in url
+				if (req.url[req.url.length - 1] === '/') {
+					req.url = req.url.slice(0, -1);
+					//console.log("removed trailing slash");
+				}
+				//console.log('URL: "' + req.url + '"');
+				var slashPos = req.url.indexOf('/', 1);
+				//console.log('slashPos: ' + slashPos);
+				var wwwSlites = path.join(www_dir, slitesDir);                  // www/slites/
+				var hash = req.url.substring(1);
+				var afterHash = '';                                             // all that is after hash
+				if (slashPos !== -1) {                                          // something after second slash
+					hash = req.url.substring(1, slashPos);
+					afterHash = req.url.substring(slashPos + 1).trim();
+				}
+				//console.log('hash: ' + hash);
+				//console.log('afterHash: ' + afterHash);
+				
+				if (afterHash === '' ||
+					afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
+					var indexPathname = path.join(wwwSlites,
+												  hash,
+												  'index.html');                // www/slites/hash/index.html
+					//console.log('RENDERING HTML: ' + indexPathname);
+					// Check slide in DB
 
-			slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword) {
-				if(sfound == 1) {
-					res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0  });					
+					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl) {
+						if(sfound == 1) {
+							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed ? 1:0, customurl: scustomurl });					
+						}
+						else {
+							console.log( "Slide was not found" );
+							res.redirect('/');
+						}
+					});
+				} else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
+					//console.log('jpg: ' + afterHash);
+					var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
+					var jpgOptions = { lastModified: true, maxAge: 0 };
+					if (extTsPos !== -1) {
+						afterHash = afterHash.substring(0, extTsPos + 4);
+						//console.log('ts-truncated jpg: ' + afterHash);
+						jpgOptions.lastModified = false;
+					}
+					
+					var jpgPathname = path.join(wwwSlites, hash, afterHash);    // www/slites/hash/img*.jpg
+					//console.log('filePathname: ' + jpgPathname);
+					res.sendFile(jpgPathname, jpgOptions, function (err) {
+						if (err) {
+							console.log(err + ' sending img file: ' + jpgPathname);
+						}
+					});
+				} else if (hash && afterHash.match(/download\s*(\/?|\\)?$/i)) {
+					var hashPath = path.join(wwwSlites, hash);
+					console.log('Downloading presentation from: ', hashPath);
+					socketIoSlite.getHashPresentation(hash, function (err, fileName) {
+						if (err) {
+							console.error(err);
+						} else {
+							var fileOptions = { lastModified: true, maxAge: 0 };
+							var fileToSend = path.join(hashPath, fileName);
+							console.log("Sending presentation: " + fileToSend);
+							res.sendFile(fileToSend, fileOptions, function (err) {
+								if (err) {
+									console.log('Error while sending presentation file:' + fileToSend, err);
+								}
+							});
+						}
+					});
+				} else {                                                    // all other files from www_static folder
+					console.log('Arbitrary hash file: ' + afterHash);
+					var fileOptions = { lastModified: true, maxAge: 0 };
+					var hashPath = path.join(wwwSlites, hash);
+					var fileToSend = path.join(hashPath, afterHash);
+					//console.log('filePathname: ' + filePathname);
+					res.sendFile(fileToSend, fileOptions, function (err) {
+						if (err) {
+							console.log(err + ' sending arbitrary file: ' + fileToSend);
+						}
+					});
 				}
-				else {
-					console.log( "Slide was not found" );
-					res.redirect('/');
-				}
-			});
-        } else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
-            //console.log('jpg: ' + afterHash);
-            var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
-            var jpgOptions = { lastModified: true, maxAge: 0 };
-            if (extTsPos !== -1) {
-                afterHash = afterHash.substring(0, extTsPos + 4);
-                //console.log('ts-truncated jpg: ' + afterHash);
-                jpgOptions.lastModified = false;
-            }
-            
-            var jpgPathname = path.join(wwwSlites, hash, afterHash);    // www/slites/hash/img*.jpg
-            //console.log('filePathname: ' + jpgPathname);
-            res.sendFile(jpgPathname, jpgOptions, function (err) {
-                if (err) {
-                    console.log(err + ' sending img file: ' + jpgPathname);
-                }
-            });
-        } else if (hash && afterHash.match(/download\s*(\/?|\\)?$/i)) {
-            var hashPath = path.join(wwwSlites, hash);
-            console.log('Downloading presentation from: ', hashPath);
-            socketIoSlite.getHashPresentation(hash, function (err, fileName) {
-                if (err) {
-                    console.error(err);
-                } else {
-                    var fileOptions = { lastModified: true, maxAge: 0 };
-                    var fileToSend = path.join(hashPath, fileName);
-                    console.log("Sending presentation: " + fileToSend);
-                    res.sendFile(fileToSend, fileOptions, function (err) {
-                        if (err) {
-                            console.log('Error while sending presentation file:' + fileToSend, err);
-                        }
-                    });
-                }
-            });
-        } else {                                                    // all other files from www_static folder
-            console.log('Arbitrary hash file: ' + afterHash);
-            var fileOptions = { lastModified: true, maxAge: 0 };
-            var hashPath = path.join(wwwSlites, hash);
-            var fileToSend = path.join(hashPath, afterHash);
-            //console.log('filePathname: ' + filePathname);
-            res.sendFile(fileToSend, fileOptions, function (err) {
-                if (err) {
-                    console.log(err + ' sending arbitrary file: ' + fileToSend);
-                }
-            });
-        }
-        //console.log('\n');
-	} 
-	else if(req.url == "/A1/") {
-		 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
-		 res.render(indexPathname, {title: "A1", presenter: 1, password: 0});
-		console.log(indexPathname);
-	}
-    else {
-        next();
-    }
+				//console.log('\n');
+			} 
+			else if(req.url == "/A1/") {
+				 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
+				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0});
+				console.log(indexPathname);
+			}
+			else {
+				next();
+			}			
+		}
+	});
+
+	
+
 });
 
 // ROUTES
@@ -415,18 +436,27 @@ router.post('/paypal', function (req, res, next) {
 console.log(req.body);
     
 paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
-    console.log(msg);
+    if(msg == "VERIFIED") {
+		Slide.update({  uid : req.body.option_selection1}, { $set: { paypalTransaction: req.body.txn_id, paypalPayed: 1 }}).exec();
+	}
 });
 
 });
-
-
-
 
 router.get('/paypal', function (req, res, next) {
-	console.log('Paypal request');
-	console.log(req.query);
-	res.send('Test paypal');
+	if(req.query.tx) {
+		Slide.findOne({paypalTransaction : req.query.tx }).exec(function (err, doc) {
+			if( doc ) {
+				res.redirect('/' + doc.scid);
+			} else {
+				res.send('Can\'t find payment. Please reload page.');
+			}
+		});
+	}
+	else {
+		res.send('Can\'t find payment. Please reload page.');
+	}
+
 });
 
 
@@ -612,10 +642,10 @@ slideCheckPresenter = function(hashId, callback) {
 			if( doc ) {
 				console.log("Slide was found");
 				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title,doc.password);
+				callback(1,slidePresenter,doc.title,doc.password, doc.paypalPayed, doc.scid);
 			} else {
 				console.log("Slide was not found");
-				callback(0,0,"","");
+				callback(0,0,"","", 0, "");
 			}
 		});	
 }

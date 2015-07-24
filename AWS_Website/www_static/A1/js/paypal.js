@@ -1,19 +1,37 @@
 var paypal = new Object(); 
 
+if(payed == 1) {
+	$("#renameHashButton").hide();
+	$("#renameHashButtonPayed").show();
+	$("#paypalNewHash").val(customurl);
+	$("#paypalRenameNotice").hide();
+}
+
  $( "#paypalNewHash" ).keyup(function() {
 	paypal.renamePresCheck($( "#paypalNewHash" ).val());
 });
 
 socket.on('renameHash-client', function (data) {
+	console.log(data);
 	if(currentHash == data.slideId) {
 		if(data.available == 1) {
 			$("#newHashRes").html("<font color='green'>This name is available!</font>");
 			if(data.start == 1) {
 				if(data.newHashName) {
-					console.log("Redirect to paypal");
-					$("#paypalRenameOn1").val(currentHash);
-					$("#paypalRenameOn2").val(data.newHashName);
-					$("#paypalNewHashForm").submit();
+					if(data.payed == 0) {
+						$("#paypalRenameOn1").val(currentHash);
+						$("#paypalRenameOn2").val(data.newHashName);
+						$("#paypalNewHashForm").submit();
+					}
+					else {
+						if(isInIFrame() == true) {
+							parent.window.location.href="/" + data.newHashName;							
+						}
+						else {
+							window.location.href="/" + data.newHashName;	
+						}
+
+					}
 					showHideRenamePresentationOverlay();
 				}
 			}

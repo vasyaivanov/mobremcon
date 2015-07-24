@@ -2,7 +2,6 @@ var isFile = RegExp(/^file:.*/i).test(document.location.href);
 var currentHash = getCurrentHash();
 var isAPresenter = isPresenter();
 
-
 function isMobile() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
@@ -568,7 +567,14 @@ jQuery(document).ready(function ($) {
 		 item.show();
     }
     if ( typeof title !== 'undefined' ) {
-        document.title = title;
+		if(isInIFrame() == true) {
+			parent.document.title = title;
+		}
+		else {
+			document.title = title;
+		}
+		
+
     }
     
     $('#video-gallery').royalSlider({

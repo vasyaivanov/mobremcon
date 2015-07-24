@@ -322,19 +322,20 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
     socket.on('renameHash-server', function (data) {
         console.log("Check slide: " + data.slideId);
-		module.parent.exports.slideCheckPresenter(data.slideId, function(sfound, spresenter, stitle, spassword) {
+		module.parent.exports.slideCheckPresenter(data.slideId, function(sfound, spresenter, stitle, spassword, spayed) {
 				if(spresenter == 1 && sfound == 1) {
 					module.parent.exports.SlideScheme.findOne({scid : data.newHashName }, function (err, doc) {
+						var payed = spayed ? 1 : 0;
 						if (!doc){
 							if(data.start == 1) {
-								module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: 0 }}).exec();
+								module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: payed }}).exec();
 							}
-							socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName});
+							socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: payed});
 						}
 						else {
 							var available = 0;
-							if(doc.sid == data.slideId) {available = 1;console.log("TTTT");}
-							socket.emit('renameHash-client', {slideId: data.slideId, available : available, start: (data.start == 1) ? 1:0, newHashName: data.newHashName});
+							if(doc.sid == data.slideId) {available = 1;}
+							socket.emit('renameHash-client', {slideId: data.slideId, available : available, /*start: (data.start == 1) ? 1:0,*/ newHashName: data.newHashName});
 						}
 					});
 
