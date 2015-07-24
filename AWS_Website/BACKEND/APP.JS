@@ -72,6 +72,7 @@ module.exports.NoteScheme = Note;
 var slidesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
+  scid: { type: String},
   title: { type: String}, 
   size: { type: Number}, 
   tmp: {type: String},
@@ -81,7 +82,10 @@ var slidesSchema = mongoose.Schema({
   desc: { type: String },
   site: { type: String },
   keywords: { type: String },
-  password: { type: String }
+  password: { type: String },
+  paypalTransaction: { type: String },
+  paypalTmpExp: { type: Date },
+  paypalPayed: { type: String }
 });
 
 slidesSchema.plugin(mongooserand);

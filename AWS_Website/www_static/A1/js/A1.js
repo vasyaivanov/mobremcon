@@ -354,6 +354,7 @@ function disableNonPresenterMenues() {
 	disableMenuItem("#menuOpenVideoChat");
 	disableMenuItem("#menuPassword");
 	disableMenuItem("#menuOpenScreensharing");
+	disableMenuItem("#menuRenamePresentation");
 }
 
 function isInIFrame(){
