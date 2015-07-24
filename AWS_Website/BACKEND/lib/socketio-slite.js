@@ -325,17 +325,16 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		module.parent.exports.slideCheckPresenter(data.slideId, function(sfound, spresenter, stitle, spassword, spayed) {
 				if(spresenter == 1 && sfound == 1) {
 					module.parent.exports.SlideScheme.findOne({scid : data.newHashName }, function (err, doc) {
-						var payed = spayed ? 1 : 0;
 						if (!doc){
 							if(data.start == 1) {
-								module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: payed }}).exec();
+								module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: spayed }}).exec();
 							}
-							socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: payed});
+							socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: spayed});
 						}
 						else {
 							var available = 0;
 							if(doc.sid == data.slideId) {available = 1;}
-							socket.emit('renameHash-client', {slideId: data.slideId, available : available, /*start: (data.start == 1) ? 1:0,*/ newHashName: data.newHashName});
+							socket.emit('renameHash-client', {slideId: data.slideId, available : available,  newHashName: data.newHashName});
 						}
 					});
 

@@ -328,7 +328,7 @@ app.use(function (req, res, next) {
 
 					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl) {
 						if(sfound == 1) {
-							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed ? 1:0, customurl: scustomurl });					
+							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl });					
 						}
 						else {
 							console.log( "Slide was not found" );
@@ -433,11 +433,9 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
 
 router.post('/paypal', function (req, res, next) {
 
-console.log(req.body);
-    
 paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
     if(msg == "VERIFIED") {
-		Slide.update({  uid : req.body.option_selection1}, { $set: { paypalTransaction: req.body.txn_id, paypalPayed: 1 }}).exec();
+		Slide.update({  sid : req.body["option_selection1"]}, { $set: { paypalTransaction: req.body["txn_id"], paypalPayed: 1 }}).exec();
 	}
 });
 
@@ -445,7 +443,7 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 
 router.get('/paypal', function (req, res, next) {
 	if(req.query.tx) {
-		Slide.findOne({paypalTransaction : req.query.tx }).exec(function (err, doc) {
+		Slide.findOne({paypalTransaction : req.query.tx.toUpperCase() }).exec(function (err, doc) {
 			if( doc ) {
 				res.redirect('/' + doc.scid);
 			} else {
@@ -642,7 +640,7 @@ slideCheckPresenter = function(hashId, callback) {
 			if( doc ) {
 				console.log("Slide was found");
 				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title,doc.password, doc.paypalPayed, doc.scid);
+				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid);
 			} else {
 				console.log("Slide was not found");
 				callback(0,0,"","", 0, "");
