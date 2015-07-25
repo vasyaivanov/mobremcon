@@ -282,7 +282,7 @@ app.use(function (req, res, next) {
     });
 	
 	var customHash = req.url.substring(1);
-	
+
 	Slide.findOne({scid : customHash, paypalPayed: 1 }).exec(function (err, doc) {
 		if( doc ) {
 			var url = "/" + doc.sid

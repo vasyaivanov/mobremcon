@@ -321,6 +321,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     });
 
     socket.on('renameHash-server', function (data) {
+		// db.slides.find({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: new Date(ISODate()-1*60000) } })
+		var delPaypalTimeoutDate = new Date(new Date() - 10*60000).toISOString();
+		module.parent.exports.SlideScheme.update({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: delPaypalTimeoutDate } }, { $set: { scid: null, paypalTmpExp: null, paypalPayed: 0 }}).exec();
         console.log("Check slide: " + data.slideId);
 		module.parent.exports.slideCheckPresenter(data.slideId, function(sfound, spresenter, stitle, spassword, spayed) {
 				if(spresenter == 1 && sfound == 1) {
