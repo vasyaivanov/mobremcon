@@ -432,6 +432,10 @@
 			display: none;
 		}
 		
+		#paypalNewHash {
+			width: auto;
+		}
+		
 		#renamePresentationOverlay {
 		  opacity:    0.9; 
 		  background: black; 
