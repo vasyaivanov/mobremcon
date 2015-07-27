@@ -448,14 +448,20 @@ router.get('/paypal', function (req, res, next) {
 	if(req.query.tx) {
 		Slide.findOne({paypalTransaction : req.query.tx.toUpperCase() }).exec(function (err, doc) {
 			if( doc ) {
-				res.redirect('/' + doc.scid);
+				var url = '/' + doc.scid;
+				if(doc.site) {url = 'http://' + doc.site + url}
+				res.redirect(url);
 			} else {
 				res.send('Can\'t find payment. Please reload page.');
 			}
 		});
 	}
 	else {
-		res.send('Can\'t find payment. Please reload page.');
+		var str = " \
+			Redirecting to site... \
+			<meta http-equiv=\"refresh\" content=\"10\" /> \
+		";
+		res.send(str);
 	}
 
 });
