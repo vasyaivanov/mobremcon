@@ -482,6 +482,9 @@ $('#submitCheckPassword').click(function () {
 $('#videochatpanel').click(function () {
     showHideVideoChat();
 });
+if(isVideoChatOpen){
+    showHideVideoChat();    
+}
 $('#closevideo').click(function () {
     showHideVideoChat();
     config.attachStream && config.attachStream.stop();
@@ -489,6 +492,9 @@ $('#closevideo').click(function () {
 $('#closescreensharing').click(function () {
     showHideScreensharing();
 });
+if(isScreensharingOpen){
+    showHideScreensharing();    
+}
 $('#submitInsertVideoSlide').click(function () {
     submitInsertVideoSlide();
 });

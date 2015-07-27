@@ -85,7 +85,9 @@ var slidesSchema = mongoose.Schema({
   password: { type: String },
   paypalTransaction: { type: String },
   paypalTmpExp: { type: Date },
-  paypalPayed: { type: String }
+  paypalPayed: { type: String },
+  isVideoChatOpen: { type: Boolean },
+  isScreensharingOpen: { type: Boolean }
 });
 
 slidesSchema.plugin(mongooserand);
@@ -326,9 +328,10 @@ app.use(function (req, res, next) {
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
 
-					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl) {
+					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen) {
 						if(sfound == 1) {
-							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl });					
+							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
+							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen });					
 						}
 						else {
 							console.log( "Slide was not found" );
@@ -640,7 +643,7 @@ slideCheckPresenter = function(hashId, callback) {
 			if( doc ) {
 				console.log("Slide was found");
 				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid);
+				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, doc.isVideoChatOpen, doc.isScreensharingOpen);
 			} else {
 				console.log("Slide was not found");
 				callback(0,0,"","", 0, "");
