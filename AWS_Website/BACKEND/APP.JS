@@ -649,7 +649,7 @@ slideCheckPresenter = function(hashId, callback) {
 			if( doc ) {
 				console.log("Slide was found");
 				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, doc.isVideoChatOpen, doc.isScreensharingOpen);
+				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "", (doc.isScreensharingOpen) ? 1 : "");
 			} else {
 				console.log("Slide was not found");
 				callback(0,0,"","", 0, "");
