@@ -1,4 +1,8 @@
+var socket;
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
+if (!isFile) {
+    socket = io.connect(document.location.hostname + ':' + location.port);
+}
 var currentHash = getCurrentHash();
 var isAPresenter = isPresenter();
 
@@ -44,7 +48,7 @@ function showHidePersonalNotes() {
     } else {
         $("#personalNotesOpenCloseLabel").html("");
     }
-	$('#personalNotesArea').focus();	
+	$('#personalNotesArea').focus();
     showHideMenu(true);
 }
 
@@ -69,15 +73,15 @@ function toggleMainWindow() {
 		//reduce main window
         $(".rsContainer").css("float", "right");
 		$(".rsContainer").animate({ "width": "77%", "clear": "both" },300);
-        //$(".rsContainer").css({ "width": "77%", "clear": "both" });		
+        //$(".rsContainer").css({ "width": "77%", "clear": "both" });
 		$(".navButtonPrev").animate({"left":"25%"},300);
 		$(".navButton").animate({"padding-top":"15%"},300);
 	}
-	
+
 	if( (!isCommentsOpen && !isVideoChatOn) ){
 		//put main window back to full size
         $(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-        //$(".rsContainer").css({ "width": "100%", "clear": "both" });		
+        //$(".rsContainer").css({ "width": "100%", "clear": "both" });
 		$(".navButtonPrev").animate({"left":"0%"},300);
 		$(".navButton").animate({"padding-top":"30%"},300);
 	}
@@ -115,7 +119,7 @@ function showHideVideoChat() {
 
         isVideoChatOn = false;
     }
-    
+
     if (isAPresenter) {
         socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: currentHash});
     }
@@ -132,7 +136,7 @@ function showHideVideoChat() {
 		$("#videochat").css('overflow-x','hidden');
 		$("#videochat").css('overflow-y','scroll');
 		*/
-		
+
 	toggleMainWindow();
 	showHideMenu(true);
 }
@@ -142,7 +146,7 @@ function showHideScreensharing() {
     if (!isScreensharingOn) {
 		if(isPresenter()){
 			$('#share-screen-screensharing').trigger("click");
-		} 
+		}
         isScreensharingOn = true;
     } else {
         // remove screensharing window on closing the panel
@@ -154,7 +158,7 @@ function showHideScreensharing() {
 
         isScreensharingOn = false;
     }
-    
+
     if (isAPresenter) {
         socket.emit("presenterScreensharing", {open: isScreensharingOn, hash: currentHash});
     }
@@ -171,7 +175,7 @@ function showHideScreensharing() {
 		$("#screensharing").css('overflow-x','hidden');
 		$("#screensharing").css('overflow-y','scroll');
 		*/
-		
+
 	toggleMainWindow();
 	showHideMenu(true);
 }
@@ -337,7 +341,7 @@ function showRemote() {
         newUrl += ':8081';
     }*/
     newUrl += "/remote/index.html?presentation=" + pathName;
-    window.open(newUrl, "popupWindow", "width=1160, height=850, scrollbars=no"); 
+    window.open(newUrl, "popupWindow", "width=1160, height=850, scrollbars=no");
 	showHideMenu(true);
 }
 
@@ -360,7 +364,7 @@ function isInIFrame(){
 	return (self!=top);
 }
 
-function renderMenuForIFrame(){	
+function renderMenuForIFrame(){
 	if(isInIFrame()){
 		$('#sliteWatermak').css({
 			"height": "60px",
@@ -380,7 +384,7 @@ function isLocalhost() {
 	return (pathName && location.indexOf("file") === 0);
 }
 
-function isPresenter() { 
+function isPresenter() {
 	 //returns true if there is a 'remote' word in the url
     //if (!parent || !parent.document) return false;
     //var pathName = parent.document.location.pathname;
@@ -391,7 +395,7 @@ function isPresenter() {
 }
 
 function canBePresenter() {
-	if( typeof presenter !== 'undefined') { 
+	if( typeof presenter !== 'undefined') {
 		var result = presenter > 0 ? true : false;
 		var location = document.location + "";
 		if(location && location.indexOf("file") === 0){ //localhost case
@@ -413,7 +417,7 @@ function getPresentationInRemote() {
 
 function submitInsertVideoSlide() {
 	var result;
-	
+
 	var val = $('#insertVideoSlideValue').val();
 	if(val){
 		if(val.match(/^[a-z0-9]+$/i)){
@@ -435,7 +439,7 @@ function submitInsertVideoSlide() {
 	}else{
 		alert("Your youtube url or id is wrong. Please see example above");
 	}
-	
+
 	showHideInsertVideoSlideOverlay();
 }
 
@@ -483,7 +487,7 @@ $('#videochatpanel').click(function () {
     showHideVideoChat();
 });
 if(isVideoChatOpen){
-    showHideVideoChat();    
+    showHideVideoChat();
 }
 $('#closevideo').click(function () {
     showHideVideoChat();
@@ -493,7 +497,7 @@ $('#closescreensharing').click(function () {
     showHideScreensharing();
 });
 if(isScreensharingOpen){
-    showHideScreensharing();    
+    showHideScreensharing();
 }
 $('#submitInsertVideoSlide').click(function () {
     submitInsertVideoSlide();
@@ -515,7 +519,7 @@ if( hostname.indexOf("www") == 0){
 	hostname = hostname.substring(4);
 }
 if(presentationPassword == 1) {
-    showHidePasswordCheckOverlay();    
+    showHidePasswordCheckOverlay();
 }
 if( isMobile() ) {
 	$("#sliteWatermak").css("display","none");
@@ -579,10 +583,10 @@ jQuery(document).ready(function ($) {
 		else {
 			document.title = title;
 		}
-		
+
 
     }
-    
+
     $('#video-gallery').royalSlider({
         arrowsNav: false,
         fadeinLoadedSlide: true,
@@ -664,17 +668,16 @@ function getClearUrl() {
     return url;
 }
 
-var socket;
 if (!isFile) {
-    socket = io.connect(document.location.hostname + ':' + location.port);
-    
+    //socket = io.connect(document.location.hostname + ':' + location.port);
+
     socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
             document.location.replace(getClearUrl() + '/' + data.fileName);
         }
     });
-    
+
     socket.on('ccBroadcast', function (data) {
         $('#closedCaptioningPanel').hide();
         $('#closedCaptioningPanel').html(data.hello);
@@ -682,13 +685,13 @@ if (!isFile) {
     });
 
 
-    
+
     socket.on('news', function (data) {
         if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
 		var button = data.hello - 1;
 			var slider = $(".royalSlider").data('royalSlider');
-            console.log(button);                  
-            slider.goTo(data.slide);            
+            console.log(button);
+            slider.goTo(data.slide);
             switch (button) {
                 case -102: {
                     slider.goTo(0);
@@ -714,11 +717,11 @@ if (!isFile) {
                     slider.playVideo();
                 }
             }
-            
+
             socket.emit('my other event', { my: 'data' });
         }
     });
-	
+
     socket.on('checkSlidePassword-client', function (data) {
 		if(data.result == 1) {
 			showHidePasswordCheckOverlay();
@@ -726,7 +729,7 @@ if (!isFile) {
             alert("Wrong Password");
         }
     });
-	
+
     socket.on('broadcastVideoChat', function (data) {
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastVideoChat received');
