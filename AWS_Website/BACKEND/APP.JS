@@ -1,4 +1,4 @@
-var express = require('express')
+ var express = require('express')
   , logger = require('morgan')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
@@ -388,7 +388,7 @@ app.use(function (req, res, next) {
 			} 
 			else if(req.url == "/A1/") {
 				 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
-				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0});
+				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0, payed:  0 , customurl: "", isVideoChatOpen: false, isScreensharingOpen: false});
 				console.log(indexPathname);
 			}
 			else {
