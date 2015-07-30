@@ -13,7 +13,6 @@ if(payed == 1) {
 
 socket.on('renameHash-client', function (data) {
 	var domainAvailableMessage = "<font color='green'>This name is available!</font>";
-	console.log(data);
 	if(currentHash == data.slideId) {
 		if(data.available == 1) {
 			if($("#newHashRes").html() != domainAvailableMessage){
@@ -57,7 +56,6 @@ paypal.renamePresCheck = function (str) {
 			return 1;
 		}
 		else {
-			$("#newHashRes").html("");
 			socket.emit('renameHash-server', {slideId: currentHash, newHashName: str});
 			return 0;
 		}
