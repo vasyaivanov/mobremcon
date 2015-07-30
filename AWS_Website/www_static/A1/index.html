@@ -20,10 +20,10 @@
     </script>-->
 
 	<script>
-		var presenter = "<%= presenter %>"; 
+		var presenter = <%= presenter %>; 
 		var title = "<%= title %>";
 		var presentationPassword = "<%= password %>";
-		var payed = "<%= payed %>";
+		var payed = <%= payed %>;
 		var customurl = "<%= customurl %>";
 		var isVideoChatOpen = "<%= isVideoChatOpen %>";
 		var isScreensharingOpen = "<%= isScreensharingOpen %>"
@@ -122,7 +122,7 @@
 				<div id="renameHashDialog">
 						<div style="font-size:22px;">Choose URL for this presentation <span style="font-size:16px"></span></div> 
 						<div style="font-size:16px;" id="paypalRenameNotice">One time cost only 0.99$</div>
-						<input type="text" name="paypalNewHash" id="paypalNewHash" size="10" maxlength="10" /> </br>
+						<input type="text" name="paypalNewHash" id="paypalNewHash" size="10"/> </br>
 						<div id="newHashRes"></div>
 						<input type="image" id="renameHashButton" src="https://www.paypal.com/en_AU/i/btn/btn_buynow_LG.gif" onclick="paypal.renameHashStart()"> <br>
 						<input type="button" id="renameHashButtonPayed" value="Change URL"  onclick="paypal.renameHashStart()" style="display: none"> <br>
@@ -303,9 +303,8 @@
     <script> hljs.initHighlightingOnLoad();</script>
 
     <script>
-        var number_of_slides = 'NUM_SLIDES_TEMPLATE';
-        var slite = '/HASH_TEMPLATE/';
-        var staticSlides = 13;
+        var number_of_slides = <%= slidesNum %>;
+        var slite = "/<%= hash %>/";
     </script>
 	
 	<!--<script src='https://cdn.webrtc-experiment.com/firebase.js'> </script>-->

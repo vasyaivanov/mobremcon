@@ -232,7 +232,34 @@ module.exports.convert = function (pathName, origName, socket, opt, callback) {
                         console.log('Unwatched gaze');
                     }
                     slite.setFilename(hashDir, uploadFileTitle + '.' + CONVERSION_FORMAT, numSlides, origName);
-                    slite.generateHtml(function (err) {
+
+					// Saving slide to DB
+					var titleS = origName;
+					titleS = titleS.replace(/\.[^/.]+$/, "");
+					titleS = titleS.replace(/\_/, " ");
+					if(opt.stitle) {
+						titleS = opt.stitle;
+					}
+					
+					module.parent.exports.readSlideSize(hashDir, function(sizec) {
+						var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides});
+						addSlide.save(function(err, saved) {
+							if(err) {console.error('Can\'t insert a new Slide ' + err);}
+							else {
+								if(opt.noSocketRet != 1) {
+									socket.emit("slitePrepared", { dir: slite.dir, hash: slite.hashValue, slides: slite.num_slides, fileName: initialFileName });
+								}
+								else {
+									callback(1);
+								}							
+							}
+						}
+					);
+						
+					});
+					
+			
+                    /*slite.generateHtml(function (err) {
                         if (err) {
                             sliteError(err, hashDir);
                             return;
@@ -274,9 +301,9 @@ module.exports.convert = function (pathName, origName, socket, opt, callback) {
                             }
                             console.log('RENAMED file: ' + uploadFullFileName + ' to:' + origFullFileName);
                         }); 
-                    });
+                    });*/
                 };
-                        
+				
                 if (numSlides === 0 || isNaN(numSlides) || !numSlides) {
                     fs.readFile(convertedHtml, 'utf8', function (err, data) {
                         if (err) {
@@ -303,30 +330,14 @@ module.exports.convert = function (pathName, origName, socket, opt, callback) {
                             }
                         }
                         console.log('NUM SLIDES from html: ' + numSlides);
-		
+			
                         finish();
                     }); // fs.readFile ...
                 } else {
                     finish();
                 }
                 //return;
-				
-				// Saving slide to DB
-				var titleS = origName;
-				titleS = titleS.replace(/\.[^/.]+$/, "");
-				titleS = titleS.replace(/\_/, " ");
-				if(opt.stitle) {
-					titleS = opt.stitle;
-				}
-				console.log("----------------");
-				module.parent.exports.readSlideSize(hashDir, function(sizec) {
-					var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords});
-					addSlide.save(function(err, saved) {
-						if(err) console.error('Can\'t insert a new note: ' + err);
-					}
-				);
-					
-				});
+		
 
                 // delete presentation in UPLOAD dir
             }); // exec ...

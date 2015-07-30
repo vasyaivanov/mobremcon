@@ -85,9 +85,10 @@ var slidesSchema = mongoose.Schema({
   password: { type: String },
   paypalTransaction: { type: String },
   paypalTmpExp: { type: Date },
-  paypalPayed: { type: String },
+  paypalPayed: { type: Number, max: 1 },
   isVideoChatOpen: { type: Boolean },
-  isScreensharingOpen: { type: Boolean }
+  isScreensharingOpen: { type: Boolean },
+  slidesNum: {type: Number}
 });
 
 slidesSchema.plugin(mongooserand);
@@ -322,16 +323,15 @@ app.use(function (req, res, next) {
 				
 				if (afterHash === '' ||
 					afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
-					var indexPathname = path.join(wwwSlites,
-												  hash,
-												  'index.html');                // www/slites/hash/index.html
+					//var indexPathname = path.join(wwwSlites, hash, 'index.html');                // www/slites/hash/index.html
+					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
 
-					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen) {
+					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
 						if(sfound == 1) {
 							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
-							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen });					
+							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash });					
 						}
 						else {
 							console.log( "Slide was not found" );
@@ -388,7 +388,7 @@ app.use(function (req, res, next) {
 			} 
 			else if(req.url == "/A1/") {
 				 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
-				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0, payed:  0 , customurl: "", isVideoChatOpen: "", isScreensharingOpen: ""});
+				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0, payed:  0 , customurl: "", isVideoChatOpen: "", isScreensharingOpen: "", slidesNum: 13 , hash: "HASH_TEMPLATE"});
 				console.log(indexPathname);
 			}
 			else {
@@ -649,7 +649,7 @@ slideCheckPresenter = function(hashId, callback) {
 			if( doc ) {
 				console.log("Slide was found");
 				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "", (doc.isScreensharingOpen) ? 1 : "");
+				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "", (doc.isScreensharingOpen) ? 1 : "", (doc.slidesNum > 0) ? doc.slidesNum : 1);
 			} else {
 				console.log("Slide was not found");
 				callback(0,0,"","", 0, "");

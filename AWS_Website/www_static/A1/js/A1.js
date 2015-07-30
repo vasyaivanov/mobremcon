@@ -627,7 +627,6 @@ jQuery(document).ready(function ($) {
     var staticSlite = (slite === '/HASH_TEMPLATE/');
     if (staticSlite) {
         slite = '';
-        number_of_slides = staticSlides;
     }
     for (var slide = 1; slide <= number_of_slides; ++slide) {
         var slide_html_path = slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
