@@ -12,10 +12,13 @@ if(payed == 1) {
 });
 
 socket.on('renameHash-client', function (data) {
+	var domainAvailableMessage = "<font color='green'>This name is available!</font>";
 	console.log(data);
 	if(currentHash == data.slideId) {
 		if(data.available == 1) {
-			$("#newHashRes").html("<font color='green'>This name is available!</font>");
+			if($("#newHashRes").html() != domainAvailableMessage){
+				$("#newHashRes").html(domainAvailableMessage);
+			}
 			if(data.start == 1) {
 				if(data.newHashName) {
 					if(data.payed == 0) {
@@ -37,7 +40,10 @@ socket.on('renameHash-client', function (data) {
 			}
 		}
 		else {
-			$("#newHashRes").html("<font color='red'>This name is't available :(. Try another one</font>");			
+			var domainNotAvailableMessage = "<font color='red'>This name is't available :(. Try another one</font>";
+			if($("#newHashRes").html() != domainNotAvailableMessage){
+				$("#newHashRes").html("<font color='red'>This name is't available :(. Try another one</font>");	
+			}		
 		}
 	}
 });
