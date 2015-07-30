@@ -285,7 +285,7 @@ app.use(function (req, res, next) {
 	
 	var customHash = req.url.substring(1);
 
-	Slide.findOne({scid : customHash, paypalPayed: 1 }).exec(function (err, doc) {
+	Slide.findOne({scid : { $regex : new RegExp("^" + customHash + "$" , "i") }, paypalPayed: 1 }).exec(function (err, doc) {
 		if( doc ) {
 			var url = "/" + doc.sid
 			res.set('Content-Type', 'text/html');

@@ -327,7 +327,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         console.log("Check slide: " + data.slideId);
 		module.parent.exports.slideCheckPresenter(data.slideId, function(sfound, spresenter, stitle, spassword, spayed) {
 				if(spresenter == 1 && sfound == 1) {
-					module.parent.exports.SlideScheme.findOne({scid : data.newHashName, site: socket.handshake.headers.host }, function (err, doc) {
+					module.parent.exports.SlideScheme.findOne({scid : { $regex : new RegExp("^" + data.newHashName + "$" , "i") }, site: socket.handshake.headers.host }, function (err, doc) {
 						if (!doc){
 							if(data.start == 1) {
 								module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: spayed }}).exec();
