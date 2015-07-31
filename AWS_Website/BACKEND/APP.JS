@@ -687,6 +687,14 @@ router.get('/remote/index.html', function (req, res){
 		}
 });
 
+router.get('/clearcash', function (req, res){
+	console.log(req.header('x-forwarded-for'))
+	if(req.query.password == "LetsClearItup") {
+		res.send("Cleaning cash...");
+		deleteOldHashFolders();
+	}
+});
+
 app.use('/', router);
 
 //app.use(express.static(www_dir));
@@ -747,4 +755,43 @@ var socketIoSlite = require("./lib/socketio-slite.js").setDir(www_dir, slitesDir
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/signin.html');
+}
+
+module.exports.deleteFolderRecursive = function(path) {
+	if( fs.existsSync(path)) {
+		fs.readdirSync(path).forEach(function(file,index){
+		  var curPath = path + "/" + file;
+		  if(fs.lstatSync(curPath).isDirectory()) {
+			deleteFolderRecursive(curPath);
+		  } else {
+			fs.unlinkSync(curPath);
+		  }
+		});
+		fs.rmdirSync(path);
+	}
+}
+
+function deleteOldHashFolders() {
+	var hashPath = path.join(www_dir, slitesDir);
+	// Clear old folders
+	fs.readdirSync(hashPath).forEach(function (folder, index) {
+		Slide.findOne({sid: folder }, function (err, slidesDoc) {
+				if(!slidesDoc) module.exports.deleteFolderRecursive(path.join(hashPath, folder));
+		});
+	});
+	// Clear notes
+	Slide.find({}, function (err, slidesDoc) {
+		var documents = new Array;
+		slidesDoc.forEach(function(doc) {
+			documents.push(doc.sid);
+		});
+		Note.find({sid: {$nin : documents}}, function (nerr, notesDoc) {
+			var docsToDelete = new Array;
+			notesDoc.forEach(function(nDoc) {
+				if(nDoc.sid!='A1') {
+					nDoc.remove();
+				}
+			});
+		});
+	});
 }

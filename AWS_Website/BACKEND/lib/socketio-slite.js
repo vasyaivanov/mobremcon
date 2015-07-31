@@ -206,26 +206,15 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
     }
 
-	var deleteFolderRecursive = function(path) {
-		if( fs.existsSync(path)) {
-			fs.readdirSync(path).forEach(function(file,index){
-			  var curPath = path + "/" + file;
-			  if(fs.lstatSync(curPath).isDirectory()) { // recurse
-				deleteFolderRecursive(curPath);
-			  } else { // delete file
-				fs.unlinkSync(curPath);
-			  }
-			});
-			fs.rmdirSync(path);
-		}
-	}
-	
     socket.on('server-deleteSlide', function (data) {
 		var hashPath = path.join(www_dir, slitesDir, data.sid);
 		module.parent.exports.SlideScheme.remove({ uid: module.parent.exports.currentUserId, sid: data.sid }, function(err) {
 			if (!err) {
-					deleteFolderRecursive(hashPath);
-					socket.emit("client-deleteSlide", {sid: data.sid});
+					module.parent.exports.deleteFolderRecursive(hashPath);
+					module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err) {
+						console.log('Deleting notes.....');
+						socket.emit("client-deleteSlide", {sid: data.sid});
+					});
 			}
 			else {
 					console.log("Can't delete the slide" + data.sid);
