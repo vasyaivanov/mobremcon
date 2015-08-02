@@ -127,11 +127,11 @@ $('#speech').click(function() {
     if (SPEECH === interactionType) {
         speechRecognizer.cleanup();
         interactionType = NONE;
-        $('#speech').css("background-image", "url(./img/buttonSpeech.png)");
+        $('#speech').removeClass("buttons_on").addClass("buttons_off");
     } else {
         console.log("Recognize speech");
         speechRecognizer.initialize( function(r){printSpeechResult(r)}, function(e){printSpeechResult(e)} );
         interactionType = SPEECH;
-        $('#speech').css("background-image", "url(./img/buttonSpeech_inverse.png)");
+        $('#speech').removeClass("button_off").addClass("buttons_on");
     }
 });

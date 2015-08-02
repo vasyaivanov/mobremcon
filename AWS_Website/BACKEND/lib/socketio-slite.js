@@ -256,8 +256,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
     //socket.emit('news', { hello: 0 });
     socket.on('mymessage', function (data) {
-        console.log("JD received data: " + data);
-        console.log(data.my);
+        console.log("JD: received news from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
         module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: data.slideID });
 		//module.parent.exports.io.sockets.emit('news',clients);
 		//socket.emit('news', { hello: 1 });
