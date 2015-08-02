@@ -487,8 +487,8 @@ function setUserSession(req, res, callback) {
 		if((req.user) /*&& (req.user._id != req.cookies[sessionIdCookie])*/) {
 			//console.log("Setting new user id");
 			oldUserId = req.cookies[sessionIdCookie];
-			if(req.user._id != req.cookies[sessionIdCookie]) {
-				res.cookie(sessionIdCookie, req.user._id, { expires: expDate });
+			if(req.user._id.toString() != req.cookies[sessionIdCookie]) {
+				res.cookie(sessionIdCookie, req.user._id.toString(), { expires: expDate });
 			}
 			// Update user Notes
 			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}).exec();
