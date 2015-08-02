@@ -64,8 +64,8 @@ function changeURL() {
     }
 	//if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
     //else socket = io.connect('http://slite.elasticbeanstalk.com:1337');
-    socket = io.connect(url + ':1337');
-    var iFrameUrl = url + ':8081/' + document.getElementById("URLSlides").value;
+    socket = io.connect(url);
+    var iFrameUrl = url + '/' + document.getElementById("URLSlides").value;
     document.getElementById('theIframe').src = iFrameUrl;
     currSlideNum = 0;
     $("#notes").text(notesArray[currSlideNum]);

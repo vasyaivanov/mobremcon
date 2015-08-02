@@ -578,7 +578,8 @@ jQuery(document).ready(function ($) {
     }
     if ( typeof title !== 'undefined' ) {
 		if(isInIFrame() == true) {
-			parent.document.title = title;
+      //Temporary disabled, error in mobile app
+			//parent.document.title = title;
 		}
 		else {
 			document.title = title;
