@@ -475,7 +475,7 @@ function setUserSession(req, res, callback) {
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
 		var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
-		var newUserId = (req.user) ? req.user._id : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
+		var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
 		//console.log("New user ID: " + newUserId);
 		//console.log("Setting new session cookie");
 		res.cookie(sessionIdCookie, newUserId, { expires: expDate });
