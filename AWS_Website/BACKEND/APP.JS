@@ -24,7 +24,7 @@
   , maxSlideUploadSize = 5242880
   , sessionIdCookie = "sliteCurrUser"
   , paypalIpn = require('paypal-ipn');
-  
+
 var app = express();
 module.exports.app = app;
 module.exports.maxSlideUploadSize = maxSlideUploadSize;
@@ -73,8 +73,8 @@ var slidesSchema = mongoose.Schema({
   uid: { type: String},
   sid: { type: String},
   scid: { type: String},
-  title: { type: String}, 
-  size: { type: Number}, 
+  title: { type: String},
+  size: { type: Number},
   tmp: {type: String},
   created: { type: Date },
   crawled: { type: String,  default: 0 },
@@ -136,10 +136,10 @@ var User = mongoose.model('User', userSchema);
 
 function addUser(username, password, password_confirm, email, callback) {
    console.log("MA: new user2: " + username + " " + password + " " + email);
-	
+
   // Seed a user
   var user = new User({ username: username, email: email, password: password });
-  
+
    if(password != password_confirm) {
     	console.log("Password confirm error");
     	callback(4)
@@ -148,7 +148,7 @@ function addUser(username, password, password_confirm, email, callback) {
   user.save(function(err) {
     if(err) {
 	var err_code = 0;
-	
+
 	if (err.err.indexOf("username") > 0 ) {
 	    err_code = 1;
 	}
@@ -160,7 +160,7 @@ function addUser(username, password, password_confirm, email, callback) {
 	}
 
 	callback(err_code);
-	
+
     } else {
      console.log('user: ' + user.username + " saved.");
      callback(0);
@@ -249,7 +249,7 @@ var getUserUploadStatus = function (userId, callback) {
 		if( docs ) {
 			var slidesMB = 0;
 			for(i=0;i<docs.length;i++) {
-				slidesMB = slidesMB + docs[i].size;		
+				slidesMB = slidesMB + docs[i].size;
 			}
 			if(docs.length >= maxSlidesCount) {
 				callback(1);
@@ -281,9 +281,9 @@ app.use(function (req, res, next) {
 		module.exports.currentUserId =  userId;
 		getUserUploadStatus(userId, function(userAccess) {
 				module.exports.noUploadForUser = userAccess;
-		});	
+		});
     });
-	
+
 	var customHash = req.url.substring(1);
 
 	Slide.findOne({scid : { $regex : new RegExp("^" + customHash + "$" , "i") }, paypalPayed: 1 }).exec(function (err, doc) {
@@ -320,18 +320,18 @@ app.use(function (req, res, next) {
 				}
 				//console.log('hash: ' + hash);
 				//console.log('afterHash: ' + afterHash);
-				
+
 				if (afterHash === '' ||
 					afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
 					//var indexPathname = path.join(wwwSlites, hash, 'index.html');                // www/slites/hash/index.html
-					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
+					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
 
 					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
 						if(sfound == 1) {
 							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
-							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash });					
+							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash });
 						}
 						else {
 							console.log( "Slide was not found" );
@@ -347,7 +347,7 @@ app.use(function (req, res, next) {
 						//console.log('ts-truncated jpg: ' + afterHash);
 						jpgOptions.lastModified = false;
 					}
-					
+
 					var jpgPathname = path.join(wwwSlites, hash, afterHash);    // www/slites/hash/img*.jpg
 					//console.log('filePathname: ' + jpgPathname);
 					res.sendFile(jpgPathname, jpgOptions, function (err) {
@@ -385,19 +385,19 @@ app.use(function (req, res, next) {
 					});
 				}
 				//console.log('\n');
-			} 
+			}
 			else if(req.url == "/A1/") {
-				 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html'); 
+				 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0, payed:  0 , customurl: "", isVideoChatOpen: "", isScreensharingOpen: "", slidesNum: 13 , hash: "HASH_TEMPLATE"});
 				console.log(indexPathname);
 			}
 			else {
 				next();
-			}			
+			}
 		}
 	});
 
-	
+
 
 });
 
@@ -452,16 +452,16 @@ router.get('/paypal', function (req, res, next) {
 				if(doc.site) {url = 'http://' + doc.site + url}
 				res.redirect(url);
 			} else {
-				res.send('Can\'t find payment. Please reload page.');
+        var str = " \
+    			Processing payment... \
+    			<meta http-equiv=\"refresh\" content=\"10\" /> \
+    		";
+    		res.send(str);
 			}
 		});
 	}
 	else {
-		var str = " \
-			Redirecting to site... \
-			<meta http-equiv=\"refresh\" content=\"10\" /> \
-		";
-		res.send(str);
+    res.redirect('/');
 	}
 
 });
@@ -518,7 +518,7 @@ router.get(rootRegExp, function (req, res){
 	Slide.findRandom({site: req.headers.host}, {}, {limit: 10},function(err, result) {
 	  if (!err) {
 		var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
-		
+
 		for(i=0;i<result.length;i++) {
 			returnRes += '<li><a href="/'+ result[i].sid +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
 			//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
@@ -532,19 +532,19 @@ router.get(rootRegExp, function (req, res){
 	  }
 	});
   }
-  
 
-  
-  
+
+
+
   getUserUploadStatus(module.exports.currentUserId, function(userAccess) {
 	 getRandomSlides(Slide,function(randomSlides) {
-		res.render(path.join(www_dir, www_static_dir, indexHtml), { 
+		res.render(path.join(www_dir, www_static_dir, indexHtml), {
 			user: req.user,
 			noUploadForUser: userAccess,
 			randomSlides:  randomSlides
 		});
 	 });
- 
+
   });
 });
 
@@ -553,7 +553,7 @@ router.get('/account.html', ensureAuthenticated, function (req, res){
 });
 
 router.get('/signup.html', function (req, res){
-    //console.log('get /login');	
+    //console.log('get /login');
     res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req,  error: 0});
 });
 
@@ -564,7 +564,7 @@ router.post('/signup.html', function (req, res){
   if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA=1');
   else
   {
-    addUser(req.body.username, req.body.password, req.body.password1,  req.body.email, 
+    addUser(req.body.username, req.body.password, req.body.password1,  req.body.email,
 	function (error_code) {
 	    if(error_code > 0) {
 		// Error codes: 1 - user exists, 2 - email exists, 3 - other DB errors, 4 - Passwords are different
@@ -654,21 +654,21 @@ slideCheckPresenter = function(hashId, callback) {
 				console.log("Slide was not found");
 				callback(0,0,"","", 0, "");
 			}
-		});	
+		});
 }
 
 module.exports.slideCheckPresenter = slideCheckPresenter;
 
 router.get('/remote/index.html', function (req, res){
-	
+
 		var hashId = req.query.presentation;
 
 		console.log(hashId);
-		
+
 		var slitesReg = "[0-9a-zA-Z]{4}";
 		var slitesRegMW = new RegExp('^' + slitesReg + '$');
 		var match = hashId.match(slitesRegMW);
-		
+
 		if(match) {
 			slideCheckPresenter(hashId, function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
@@ -676,14 +676,14 @@ router.get('/remote/index.html', function (req, res){
 				}
 				else {
 					res.redirect('/');
-				}			
+				}
 			});
 		}
 		else if(hashId == "A1") {
 			 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: "A1", password: ""});
 		}
 		else {
-			res.redirect('/');			
+			res.redirect('/');
 		}
 });
 
