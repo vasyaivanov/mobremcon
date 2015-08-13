@@ -23,17 +23,17 @@
 
                 <form class="m-form-signin" role="form" action="/signin.html" method="post">
                     <h1>Sign in</h1>
-		    <% if (request.param("REG_OK") == 1) { %>
+		    <% if (request.query.REG_OK == 1) { %>
 				<h4 style="color: #FF0000">Congrats! You have registered. Enter your password to log in.</h4>
 		    <% } %>
 
-		    <% if (request.param("ERROR_AUTH") == 1) { %>
-				<h4 style="color: #FF0000">The user name or password is incorrect.</h4>
+		    <% if (request.query.ERROR_AUTH == 1) { %>
+				<h4 style="color: #FF0000">The email or password is incorrect.</h4>
 		    <% } %>
 
                     <div class="form-group">
-                        <label for="Username">Username</label>
-                        <input type="text" class="form-control" name="username" placeholder="Enter username" value="<%= request.param('username') %>">
+                        <label for="Username">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.query.email %>">
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control" name="password" placeholder="Password">
@@ -107,9 +107,8 @@
           </nav>
     </div>
 
-        
+        <script src="/socket.io/socket.io.js"></script>
 		<script src="js/jquery-2.1.3.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/jquery-2.1.3.min.js"><\/script>')</script>
         <script src="js/bootstrap.js"></script>
         <script src="js/main.js"></script>
     </body>

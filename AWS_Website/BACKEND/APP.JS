@@ -39,8 +39,7 @@ db.once('open', function callback() {
 
 // User Schema
 var userSchema = mongoose.Schema({
-  username: { type: String, required: true, unique: true, lowercase: true, trim: true},
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true},
   password: { type: String, required: true},
 });
 
@@ -134,25 +133,23 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 var User = mongoose.model('User', userSchema);
 
-function addUser(username, password, password_confirm, email, callback) {
-   console.log("MA: new user2: " + username + " " + password + " " + email);
+function addUser(password, email, callback) {
+   console.log("MA: new user2: " + password + " " + email);
 
   // Seed a user
-  var user = new User({ username: username, email: email, password: password });
+  var user = new User({ email: email, password: password });
 
-   if(password != password_confirm) {
+   /*if(password != password_confirm) {
     	console.log("Password confirm error");
     	callback(4)
    }
- else {
+ else {*/
   user.save(function(err) {
     if(err) {
+		console.log("DB ERRORRRR +++++++++ " + err);
 	var err_code = 0;
 
-	if (err.err.indexOf("username") > 0 ) {
-	    err_code = 1;
-	}
-	else if( err.err.indexOf("email") > 0 ) {
+	if( err.err.indexOf("email") > 0 ) {
 	    err_code = 2;
 	}
 	else {
@@ -162,11 +159,11 @@ function addUser(username, password, password_confirm, email, callback) {
 	callback(err_code);
 
     } else {
-     console.log('user: ' + user.username + " saved.");
+     console.log('user: ' + user.email + " saved.");
      callback(0);
     }
   });
-}
+
 
 }
 
@@ -182,9 +179,13 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-passport.use(new LocalStrategy(function(username, password, done) {
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    session: true
+  }, function(username, password, done) {
   username = username.toLowerCase();
-  User.findOne({ username: username }, function(err, user) {
+  User.findOne({ email: username }, function(err, user) {
     if (err) { return done(err); }
     if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
     user.comparePassword(password, function(err, isMatch) {
@@ -560,11 +561,11 @@ router.get('/signup.html', function (req, res){
 
 router.post('/signup.html', function (req, res){
   //console.log('post /signup');
-  console.log("MA: new user: " + req.body.username + " " + req.body.password + " " + req.body.email);
-  if( !req.body.username || !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA=1');
+  console.log("MA: new user: " + req.body.password + " " + req.body.email);
+  if( !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA=1');
   else
   {
-    addUser(req.body.username, req.body.password, req.body.password1,  req.body.email,
+    addUser(req.body.password, req.body.email,
 	function (error_code) {
 	    if(error_code > 0) {
 		// Error codes: 1 - user exists, 2 - email exists, 3 - other DB errors, 4 - Passwords are different
@@ -574,7 +575,7 @@ router.post('/signup.html', function (req, res){
 	    }
 	    else {
 		console.log("User has registered");
-		res.redirect('/signin.html?username=' + req.body.username + '&REG_OK=1');
+		res.redirect('/signin.html?email=' + req.body.email + '&REG_OK=1');
 	    }
 	}
     );
@@ -600,8 +601,9 @@ router.get('/letscrawl.html', function (req, res){
 	}
 });
 
-router.post('/signin.html',
-  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?ERROR_AUTH=1' }));
+router.post('/signin.html', 
+  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?ERROR_AUTH=1' })
+);
 
 router.get('/logout', function (req, res){
   //console.log('get /logout');

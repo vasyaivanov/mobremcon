@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title><% if (user) { %> <%= user.username %> <%} %> WEB PRESENTATIONS (live)</title>
+    <title><% if (user) { %> <%= user.email %> <%} %> WEB PRESENTATIONS (live)</title>
     <meta name="title" content="Live online presentations" />
     <meta name="description" content="Free online web presentations. Social chat, video presentation, personal presentation notes, password protection and much more." />
     <meta name="keywords" content="web presentations, web presentation, presentation, powerpoint, free, free online presentation, free presentation, slide, slides, free slides, powerpoint replacement">
@@ -94,7 +94,7 @@
                     	<li><a href="signin.html" data-index="three" class="glyphicon glyphicon-user">Sign in</a></li>
 			<li><a href="signup.html" data-index="four" class="glyphicon glyphicon-user">Sign up</a></li>
                     <% } else { %>
-			<li><a href="/account.html" data-index="three" class="glyphicon glyphicon-user"> Hello, <%= user.username %>.</a></li>
+			<li><a href="/my.html" data-index="three" class="glyphicon glyphicon-user"> Hello, <%= user.email %>.</a></li>
 			<li><a href="/logout" data-index="three" class="glyphicon glyphicon-user">Sign out</a></li>
                     <% } %>
             </ul>
