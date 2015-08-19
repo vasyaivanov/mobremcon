@@ -121,7 +121,7 @@ function showHideVideoChat() {
     }
 
     if (isAPresenter) {
-        socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: currentHash});
+		socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: currentHash});
     }
 
     var label = $("#videoChatOpenCloseLabel");
@@ -486,7 +486,8 @@ $('#submitCheckPassword').click(function () {
 $('#videochatpanel').click(function () {
     showHideVideoChat();
 });
-if(isVideoChatOpen){
+
+if(isVideoChatOpen == 1){
     showHideVideoChat();
 }
 $('#closevideo').click(function () {
@@ -496,7 +497,7 @@ $('#closevideo').click(function () {
 $('#closescreensharing').click(function () {
     showHideScreensharing();
 });
-if(isScreensharingOpen){
+if(isScreensharingOpen == 1){
     showHideScreensharing();
 }
 $('#submitInsertVideoSlide').click(function () {
@@ -625,9 +626,10 @@ jQuery(document).ready(function ($) {
             navigateByCenterClick: true
         }
     });
-    var staticSlite = (slite === '/HASH_TEMPLATE/');
+    var staticSlite = (slite === '/HASH_TEMPLATE/' || slite === '/<%= hash %>/');
     if (staticSlite) {
         slite = '';
+		number_of_slides = 13;
     }
     for (var slide = 1; slide <= number_of_slides; ++slide) {
         var slide_html_path = slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
