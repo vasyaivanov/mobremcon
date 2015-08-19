@@ -499,13 +499,19 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 socket.emit("update", "Can't find " + whisperTo);
             }
         } else {
+			var newMsg = new module.parent.exports.chatSchema({uid: module.parent.exports.currentUserId,sid: socket.room.toLowerCase(), msg: msg, name: people[socket.id].name});
+			newMsg.save(function(err, saved) {
+				if(err) console.error('Can\'t insert a new chat: ' + err);
+			});
+			
             module.parent.exports.io.sockets.in(socket.room).emit("chat", people[socket.id], msg);
             socket.emit("isTyping", false);
-            if (_.size(chatHistory[socket.room]) > 10) {
+			
+            /*if (_.size(chatHistory[socket.room]) > 10) {
                 chatHistory[socket.room].splice(0,1);
             } else {
                 chatHistory[socket.room].push(people[socket.id].name + ": " + msg);
-            }
+            }*/
         }
     });
 
@@ -535,8 +541,17 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             room.addPerson(socket.id);
             //socket.emit("update", "Welcome to " + room.name + ".");
             socket.emit("sendRoomID", {id: id});
-            chatHistory[socket.room] = [];
+            //chatHistory[socket.room] = [];
             module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
+			
+			module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
+				module.parent.exports.chatSchema.find({sid: socket.room.toLowerCase() }, 'name msg' , function (err, docs) {
+					if (docs.length){
+						socket.emit("history", docs);
+					}
+				}).sort({created: 1}).skip(totaldocs - 10);
+			});
+			
         } else {
             socket.emit("update", "You have already created a room.");
         }
@@ -584,10 +599,20 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
                         //socket.emit("update", "Welcome to " + room.name + ".");
                         socket.emit("sendRoomID", {id: id});
-                        var keys = _.keys(chatHistory);
+						
+						module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
+							module.parent.exports.chatSchema.find({sid: socket.room.toLowerCase() }, 'name msg' , function (err, docs) {
+								if (docs.length){
+									socket.emit("history", docs);
+								}
+							}).sort({created: 1}).skip(totaldocs - 10);
+						});
+
+                        /*var keys = _.keys(chatHistory);
                         if (_.contains(keys, socket.room)) {
                             socket.emit("history", chatHistory[socket.room]);
-                        }
+                        }*/
+
                     }
                 }
             }

@@ -67,6 +67,26 @@ var Note = mongoose.model('note', notesSchema);
 
 module.exports.NoteScheme = Note;
 
+
+// Chat
+var chatSchema = mongoose.Schema({
+  uid: { type: String},
+  sid: { type: String},
+  name: { type: String},
+  msg: { type: String},
+  created: { type: Date }
+});
+
+chatSchema.pre('save', function(next){
+  now = new Date();
+  this.created = now;
+  next();
+});
+
+var Chat = mongoose.model('chat', chatSchema);
+
+module.exports.chatSchema = Chat;
+
 // SlidesDB
 var slidesSchema = mongoose.Schema({
   uid: { type: String},

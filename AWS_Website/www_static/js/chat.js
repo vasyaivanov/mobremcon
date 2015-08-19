@@ -318,7 +318,7 @@ socket.on("history", function(data) {
   if (data.length !== 0) {
     $("#msgs").append("<li><strong><span class='text-warning'>Last 10 messages:</li>");
     $.each(data, function(data, msg) {
-      $("#msgs").append("<li><span class='text-warning'>" + msg + "</span></li>");
+      $("#msgs").append("<li><span class='text-warning'>" + msg.name + ': ' + msg.msg + "</span></li>");
     });
   } else {
     $("#msgs").append("<li><strong><span class='text-warning'>No past messages in this room.</li>");
