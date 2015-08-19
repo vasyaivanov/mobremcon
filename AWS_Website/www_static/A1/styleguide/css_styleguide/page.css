@@ -1,0 +1,70 @@
+.boxBorder {
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+}
+
+.allColors {
+  display: inline-block;
+}
+
+.eachBox {
+  width: 100px;
+  height: 100px;
+}
+
+.colorStyle {
+  text-align: center;
+}
+
+.nav {
+  position: absolute;
+  float: left;
+  width: 10%;
+}
+
+a {
+  color: #428bca;
+}
+
+.pageInfo {
+  float: right;
+  width: 80%;
+}
+
+#intro, #colors, #typography, #buttons, #icons, #form {
+  height: 400px;
+}
+
+#intro {
+  padding-top: 0;
+}
+
+#colors, #typography, #buttons, #icons, #form {
+  border-top: 1px solid #ccc;
+  padding-top: 150px;
+}
+
+.header, .footer {
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+}
+.header
+{
+  top: 0;
+}
+.footer
+{
+  bottom: 0;
+}
+
+.titleSize {
+  font-size: 24px;
+  font-weight: bold;
+  color: #428bca;
+}
+
+.link:hover {
+  color: #3cb0fd;
+}

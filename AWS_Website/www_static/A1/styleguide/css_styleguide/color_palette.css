@@ -1,0 +1,36 @@
+
+.white {
+  width: 100px;
+  height: 100px;
+  background: #ffffff;
+}
+
+.blue {
+  width: 100px;
+  height: 100px;
+  background: #428bca;
+}
+
+.lightBlue {
+  width: 100px;
+  height: 100px;
+  background: #3cb0fd;
+}
+
+.gray {
+  width: 100px;
+  height: 100px;
+  background: #909396;
+}
+
+.lightGray {
+  width: 100px;
+  height: 100px;
+  background: #bababa;
+}
+
+.black {
+  width: 100px;
+  height: 100px;
+  background: #000000;
+}
