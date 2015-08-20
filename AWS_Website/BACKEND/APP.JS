@@ -786,10 +786,17 @@ module.exports.deleteFolderRecursive = function(path) {
 		  if(fs.lstatSync(curPath).isDirectory()) {
 			module.exports.deleteFolderRecursive(curPath);
 		  } else {
-			fs.unlinkSync(curPath);
+			fs.unlink(curPath, function (err) {
+			   if (err) console.log("Can't delete file " + err);
+			  console.log(curPath + 'successfully deleted');
+			});
 		  }
 		});
-		fs.rmdirSync(path);
+		
+		fs.rmdir(path, function (err) {
+		  if (err) console.log("Can't delete folder " + err);
+			console.log(path + 'successfully deleted');
+		});
 	}
 }
 
