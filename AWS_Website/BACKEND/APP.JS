@@ -784,7 +784,7 @@ module.exports.deleteFolderRecursive = function(path) {
 		fs.readdirSync(path).forEach(function(file,index){
 		  var curPath = path + "/" + file;
 		  if(fs.lstatSync(curPath).isDirectory()) {
-			deleteFolderRecursive(curPath);
+			module.exports.deleteFolderRecursive(curPath);
 		  } else {
 			fs.unlinkSync(curPath);
 		  }
