@@ -36,7 +36,7 @@
     }
 
     .cmn-video-demo4__content--header h2 {
-        font-family: "Roboto Slab", serif;
+        font-family: 'Raleway', sans-serif;
         font-size: 30px;
     }
 
@@ -48,7 +48,7 @@
         display: inline-block;
         margin: 0;
         padding: 10px 20px;
-        font-family: "Roboto Slab", serif;
+        font-family: 'Raleway', sans-serif;
         border: solid 1px #fff;
         -webkit-transition: background 0.3s, color 0.3s, text-shadow 0.3s;
         -moz-transition: background 0.3s, color 0.3s, text-shadow 0.3s;
@@ -70,7 +70,7 @@
     .cmn-video-demo4__content--main h2 {
         margin: 0 0 10px 0;
         color: #fff;
-        font-family: "Roboto Slab", serif;
+        font-family: 'Raleway', sans-serif;
         font-size: 24px;
     }
 
@@ -158,7 +158,7 @@ html, body {
 
 body, input, select, textarea {
     color: rgba(255, 255, 255, 0.75);
-    font-family: "Roboto", Helvetica, sans-serif;
+    font-family: 'Raleway', sans-serif;
     font-size: 15pt;
     font-weight: 100;
     line-height: 1.75em;
@@ -263,7 +263,7 @@ blockquote {
 code {
     background: rgba(255, 255, 255, 0.075);
     border-radius: 4px;
-    font-family: "Courier New", monospace;
+    font-family: 'Raleway', sans-serif;
     font-size: 0.9em;
     margin: 0 0.25em;
     padding: 0.25em 0.65em;
@@ -271,7 +271,7 @@ code {
 
 pre {
     -webkit-overflow-scrolling: touch;
-    font-family: "Courier New", monospace;
+    font-family: 'Raleway', sans-serif;
     font-size: 0.9em;
     margin: 0 0 2em 0;
 }
@@ -713,7 +713,7 @@ body.landing {
     body.landing:before {
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
-        font-family: FontAwesome;
+        font-family: 'Raleway', sans-serif;
         font-style: normal;
         font-weight: normal;
         text-transform: none !important;
@@ -906,7 +906,7 @@ textarea {
     .select-wrapper:before {
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
-        font-family: FontAwesome;
+        font-family: 'Raleway', sans-serif;
         font-style: normal;
         font-weight: normal;
         text-transform: none !important;
@@ -1080,7 +1080,7 @@ input[type="radio"] {
     .icon:before {
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
-        font-family: FontAwesome;
+        ffont-family: 'Raleway', sans-serif;
         font-style: normal;
         font-weight: normal;
         text-transform: none !important;
@@ -1097,7 +1097,7 @@ input[type="radio"] {
         .icon.alt:before {
             -moz-osx-font-smoothing: grayscale;
             -webkit-font-smoothing: antialiased;
-            font-family: FontAwesome;
+           font-family: 'Raleway', sans-serif;
             font-style: normal;
             font-weight: normal;
             text-transform: none !important;
@@ -1131,7 +1131,7 @@ input[type="radio"] {
             .icon.major.alt:before {
                 -moz-osx-font-smoothing: grayscale;
                 -webkit-font-smoothing: antialiased;
-                font-family: FontAwesome;
+                font-family: 'Raleway', sans-serif;
                 font-style: normal;
                 font-weight: normal;
                 text-transform: none !important;
@@ -2205,7 +2205,7 @@ body.is-touch #banner {
 /* uploadDialog */
 .uploadDialog {
     position: fixed;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Raleway', sans-serif;
     top: 0;
     right: 0;
     bottom: 0;
