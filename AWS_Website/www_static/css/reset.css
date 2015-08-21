@@ -16,7 +16,7 @@ time, mark, audio, video {
   border: 0;
   font-size: 100%;
   vertical-align: baseline;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
   
 article, aside, details, figcaption, figure, 
@@ -310,7 +310,8 @@ FLOATING MENU
 
 
     body {
-  font-family: 'Open Sans','Helvetica Neue', Arial, sans-serif;
+  /*font-family: 'Open Sans','Helvetica Neue', Arial, sans-serif;*/
+  font-family: 'Raleway', sans-serif;
   font-size: 14px;
   color: #111;
   line-height: 21px;
@@ -380,7 +381,8 @@ blockquote {
 }
 pre,
 code {
-  font-family: Consolas,"Liberation Mono",Courier,monospace;
+  /*font-family: Consolas,"Liberation Mono",Courier,monospace;*/
+  font-family: 'Raleway', sans-serif;
   font-size: 12px;
   line-height: 1.4;
 }
@@ -679,7 +681,8 @@ padding: 0 20px 20px;
 
 .new-template {
   text-align: left;
-  font-family: Arial, sans-serif;
+  /*font-family: Arial, sans-serif;*/
+  font-family: 'Raleway', sans-serif;
   color: white;
   font-size: 10px;
   padding: 1px 5px 1px;
