@@ -593,21 +593,30 @@
 				margin-top:5px;
 				margin-right:3px;
 				cursor:pointer;
-				color: #fff;
+				/*color: #fff;
 				border: 1px solid #AEAEAE;
 				border-radius: 30px;
 				background: #605F61;
-				font-size: 31px;
+				font-size: 31px;*/
 				display: inline-block;
-				line-height: 0px;
+				/*line-height: 0px;
 				padding: 11px 3px; 
 				text-decoration: none;	
-				opacity: 0.6
+				opacity: 0.6*/
+			  width: 30px;
+			  height: 30px;
+			  background: url(../img/close.svg);
+			  background-size: 30px 30px;
+			  opacity: 0.7;
 			}
 
-			.closevideo:before {
-				content: "×";
+			.closevideo:hover {
+				opacity: 1;
 			}
+
+			/*.closevideo:before {
+				content: "×";
+			}*/
 			
 			.startTemporaryPopup{
 				display: none;
