@@ -310,7 +310,8 @@
 	    	display: none;
 	    }
 		
-		.panelTitle{  
+		.panelTitle{
+			top:2%;
 			position: absolute;
 			left: 10%;
 			font-size:14px;
