@@ -1,69 +1,11 @@
-.close {
-  -webkit-border-radius: 14;
-  -moz-border-radius: 14;
-  border-radius: 14px;
-  font-family: 'Varela Round', sans-serif;
-  font-size: 15px;
-  background: #bababa;
-  padding: 4px 8px 4px 8px;
-  text-decoration: none;
-  border-width: 0px;
+.close { 
+  cursor:pointer;
+  width: 30px;
+  height: 30px;
+  background: url(../images/close.svg);
+  opacity: 0.35
 }
 
 .close:hover {
-  background: #bababa;
-  background-image: -webkit-linear-gradient(top, #bababa, #909396);
-  background-image: -moz-linear-gradient(top, #bababa, #909396);
-  background-image: -ms-linear-gradient(top, #bababa, #909396);
-  background-image: -o-linear-gradient(top, #bababa, #909396);
-  background-image: linear-gradient(to bottom, #bababa, #909396);
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.btnJoin{
-  -webkit-border-radius: 8;
-  -moz-border-radius: 8;
-  border-radius: 8px;
-  font-family: 'Varela Round', sans-serif;
-  color: #ffffff;
-  font-size: 20px;
-  background: #428bca;
-  padding: 8px 16px 8px 16px;
-  text-decoration: none;
-  border-width: 0px;
-}
-
-.btnJoin:hover {
-  background: #3cb0fd;
-  background-image: -webkit-linear-gradient(top, #3cb0fd, #428bca);
-  background-image: -moz-linear-gradient(top, #3cb0fd, #428bca);
-  background-image: -ms-linear-gradient(top, #3cb0fd, #428bca);
-  background-image: -o-linear-gradient(top, #3cb0fd, #428bca);
-  background-image: linear-gradient(to bottom, #3cb0fd, #428bca);
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.btnUpload {
-  background: #fee76b;
-  background-image: -webkit-linear-gradient(top, #fee76b, #fdb13c);
-  background-image: -moz-linear-gradient(top, #fee76b, #fdb13c);
-  background-image: -ms-linear-gradient(top, #fee76b, #fdb13c);
-  background-image: -o-linear-gradient(top, #fee76b, #fdb13c);
-  background-image: linear-gradient(to bottom, #fee76b, #fdb13c);
-  -webkit-border-radius: 28;
-  -moz-border-radius: 28;
-  border-radius: 28px;
-  text-shadow: 2px 2px 7px #666666;
-  font-family: 'Varela Round', sans-serif;
-  padding: 10px 20px 10px 20px;
-  text-decoration: none;
-  border-width: 0px;
-}
-
-.btnUpload:hover {
-  background: #fee76b;
-  text-decoration: none;
-  cursor: pointer;
+  opacity: 0.6
 }
