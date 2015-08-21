@@ -3,11 +3,12 @@
   width: 30px;
   height: 30px;
   background: url(../images/close.svg);
-  opacity: 0.35
+  background-size: 30px 30px;
+  opacity: 0.7;
 }
 
 .close:hover {
-  opacity: 0.6
+  opacity: 1;
 }
 
 .menu { 
@@ -17,11 +18,11 @@
   background: url(../images/menu-icon.svg);
   background-size: 30px 30px;
   background-repeat: no-repeat;
-  opacity: 0.35
+  opacity: 0.7;
 }
 
 .menu:hover {
-  opacity: 0.6
+  opacity: 1;
 }
 
 .join {
