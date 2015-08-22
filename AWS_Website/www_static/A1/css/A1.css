@@ -36,6 +36,12 @@
 			text-decoration:none;
 		}
 
+		#primary_nav_wrap ul a:hover
+		{
+			color:#7badd9;
+			cursor: pointer;
+		}
+
 		#primary_nav_wrap ul li
 		{
 			position:relative;
