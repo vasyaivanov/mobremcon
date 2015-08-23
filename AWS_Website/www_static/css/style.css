@@ -173,10 +173,11 @@ a {
     border-bottom: dotted 1px;
     color: #3d21f8;
     text-decoration: none;
+    text-shadow: 1px 1px #000000;
 }
 
     a:hover {
-        color: #3d21f8 !important;
+        color: #7badd9 !important;
         border-bottom-color: transparent;
     }
 
