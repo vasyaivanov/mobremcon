@@ -71,7 +71,6 @@ module.exports.convert = function (pathName, origName, socket, opt, callback) {
         var data = {};
         data.error = true;
         socket.emit("sliteConversionError", data);
-		callback(2);
     }
     
     console.log("JD: in converter");
@@ -85,7 +84,8 @@ module.exports.convert = function (pathName, origName, socket, opt, callback) {
                     console.error('Error deleting: ' + pathName + err);
                 }
             });
-            return;
+            callback(2);
+			return;
         }
         var uploadFileTitle = 'img0';
         var uploadFileName = uploadFileTitle + extention;
