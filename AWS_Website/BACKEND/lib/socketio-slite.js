@@ -257,10 +257,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     //socket.emit('news', { hello: 0 });
     socket.on('mymessage', function (data) {
         console.log("JD: received news from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
-        module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: data.slideID });
-		//module.parent.exports.io.sockets.emit('news',clients);
-		//socket.emit('news', { hello: 1 });
-
+		// WE MUST TO CHECK USER FOR PRESENTER VAR!!!
+		module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+			if(docs){module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: docs.sid });};
+		});
     });
 	
 	socket.on('notes-server', function (data) {
