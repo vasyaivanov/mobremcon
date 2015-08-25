@@ -41,6 +41,7 @@ db.once('open', function callback() {
 var userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true},
   password: { type: String, required: true},
+  role: {type: Number}
 });
 
 
@@ -300,6 +301,11 @@ app.use(function (req, res, next) {
 
     setUserSession(req,res,function(userId) {
 		module.exports.currentUserId =  userId;
+
+		readUserRights(userId, function(res) {
+			module.exports.userRole = res;
+		})
+		
 		getUserUploadStatus(userId, function(userAccess) {
 				module.exports.noUploadForUser = userAccess;
 		});
@@ -536,7 +542,7 @@ router.get(rootRegExp, function (req, res){
 
   // Paint index page random slides
   function getRandomSlides(Slide, callback) {
-	Slide.findRandom({site: req.headers.host}, {}, {limit: 10},function(err, result) {
+	Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
 	  if (!err) {
 		var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
@@ -822,5 +828,13 @@ function deleteOldHashFolders() {
 				}
 			});
 		});
+	});
+}
+
+
+function readUserRights(userId, callback) {
+	User.findOne({_id: mongoose.mongo.ObjectID(userId) }, function (err, userDoc) {
+		if(userDoc) {callback(userDoc.role > 0 ? userDoc.role : 0)}
+		else {callback(0)}
 	});
 }
