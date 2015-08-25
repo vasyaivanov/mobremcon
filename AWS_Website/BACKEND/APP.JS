@@ -302,9 +302,14 @@ app.use(function (req, res, next) {
     setUserSession(req,res,function(userId) {
 		module.exports.currentUserId =  userId;
 
-		readUserRights(userId, function(res) {
-			module.exports.userRole = res;
-		})
+		if(req.user) {
+			readUserRights(userId, function(res) {
+				module.exports.userRole = res;
+			});
+		}
+		else {
+			module.exports.userRole = 0;
+		}
 		
 		getUserUploadStatus(userId, function(userAccess) {
 				module.exports.noUploadForUser = userAccess;
@@ -358,7 +363,7 @@ app.use(function (req, res, next) {
 					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
 						if(sfound == 1) {
 							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
-							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash });
+							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
 						}
 						else {
 							console.log( "Slide was not found" );
@@ -415,7 +420,7 @@ app.use(function (req, res, next) {
 			}
 			else if(req.url == "/A1/") {
 				 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
-				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0, payed:  0 , customurl: "", isVideoChatOpen: "", isScreensharingOpen: "", slidesNum: 13 , hash: "HASH_TEMPLATE"});
+				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0, payed:  0 , customurl: "", isVideoChatOpen: "", isScreensharingOpen: "", slidesNum: 13 , hash: "HASH_TEMPLATE", role: 0});
 				console.log(indexPathname);
 			}
 			else {

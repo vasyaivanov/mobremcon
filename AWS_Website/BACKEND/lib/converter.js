@@ -240,9 +240,9 @@ module.exports.convert = function (pathName, origName, socket, opt, callback) {
 					if(opt.stitle) {
 						titleS = opt.stitle;
 					}
-					
+								
 					module.parent.exports.readSlideSize(hashDir, function(sizec) {
-						var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides});
+						var addSlide = new opt.SlidesScheme({uid: opt.userSessionId,sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides, paypalPayed: (module.parent.exports.userRole == 1 ? 1 : 0)});
 						addSlide.save(function(err, saved) {
 							if(err) {console.error('Can\'t insert a new Slide ' + err);}
 							else {
