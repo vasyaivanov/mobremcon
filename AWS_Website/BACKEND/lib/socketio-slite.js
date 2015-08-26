@@ -17,7 +17,7 @@ function resetElapsedTime() {
     start = process.hrtime();
 }
 
-function elapsedTime(note) { 
+function elapsedTime(note) {
     var precision = 0; // 0 decimal places
     var elapsed = process.hrtime(start)[1] / 1000000;
                                                            // divide by a million to get nano to milliseconds
@@ -82,7 +82,7 @@ function purge(s, action) {
                 module.parent.exports.io.sockets.emit("update", people[s.id].name + " has left the room.");
                 s.leave(room.name);
             }
-        }   
+        }
     } else {
         //The user isn't in a room, but maybe he just disconnected, handle the scenario:
         if (action === "disconnect") {
@@ -92,7 +92,7 @@ function purge(s, action) {
             module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
             var o = _.findWhere(sockets, {'id': s.id});
             sockets = _.without(sockets, o);
-        }       
+        }
     }
 }
 
@@ -131,7 +131,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log('DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
     });
-        
+
     var uploadDir = path.join(www_dir, "UPLOAD/");
     function uploadStarted(name){
         resetElapsedTime();
@@ -155,7 +155,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     function uploadComplete(name, origName) {
         converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: module.parent.exports.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: module.parent.exports.userAuth, ssite: socket.handshake.headers.host});
     }
-	
+
     if (HTML5_UPLOADER) {
         socket.on('uploadStarted', function (data) {
             console.log('uploadStarted event', data);
@@ -168,7 +168,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		uploader.dir = uploadDir;
 		uploader.listen(socket);
 		uploader.maxFileSize = module.parent.exports.maxSlideUploadSize;
-	
+
         uploader.on("start", function (event) {
 				console.log();
 				uploadStarted(event.file.name);
@@ -177,7 +177,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		uploader.on("progress", function (event) {
 			uploadProgress(event.file.pathName);
 		});
-		
+
 		uploader.on("complete", function (event) {
 			if(module.parent.exports.noUploadForUser == 1) {
 				fs.unlink(event.file.pathName, function (err) {
@@ -197,11 +197,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			}
 
 		});
-		
-		
+
+
 		uploader.on("error", function (event) {
 			//console.log(JSON.stringify(event));
-			uploadError(0, JSON.stringify(event));		
+			uploadError(0, JSON.stringify(event));
 		});
 
     }
@@ -221,7 +221,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			}
 		});
 	});
-	
+
     socket.on('pollStarted', function (data) {
         console.log("JD: received from remote this data: " + JSON.stringify(data));
         pollStatisticsArray = new Array();
@@ -262,9 +262,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			if(docs){module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: docs.sid });};
 		});
     });
-	
+
 	socket.on('notes-server', function (data) {
-		
+
 		//module.exports.userAuth
 		var slideId = data.slideId.replace(/[^a-zA-Z0-9]/g,"");
 		var slidePath = www_dir + slitesDir + '/' + slideId + '/';
@@ -297,10 +297,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 					if(data.init == 1 && docs.length) {
 						console.log("Notes initializing, returning note...");
 						socket.emit('notes-client', {slideId: slideId, noteText: docs[0].note});
-					}					
+					}
 				});
-			
-				
+
+
 				/*else {
 					console.log("Note socket received data: " + data.noteText);
 				}*/
@@ -339,8 +339,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			}
 		);
     });
-	
-	
+
+
     //socket.emit('cc', { hello: 0 });
     socket.on('cc', function (data) {
         console.log("-------------- JD: received CLOSED CAPTIONING: " + data);
@@ -391,11 +391,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     });
 
     socket.on('insertVideoId', function (data) {
-        console.log("insertVideoId, youtube hash: " + data.video_hash + " into the slite: " + data.slite_hash 
+        console.log("insertVideoId, youtube hash: " + data.video_hash + " into the slite: " + data.slite_hash
             + " slide number " + data.curr_slide);
         prepare_slite.youTube(data.video_hash, data.slite_hash, data.curr_slide);
     });
-	
+
     socket.on('updatePassword', function (data) {
         console.log("updatePassword to: " + data.password + " currentHash=" + data.currentHash);
 		module.parent.exports.slideCheckPresenter(data.currentHash, function(sfound, spresenter, stitle, spassword) {
@@ -473,7 +473,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         if (typeof people[socket.id] !== "undefined")
             module.parent.exports.io.sockets.in(socket.room).emit("isTyping", {isTyping: data, person: people[socket.id].name});
     });
-    
+
     socket.on("send", function(msg) {
         //process.exit(1);
         var re = /^[w]:.*:/;
@@ -492,7 +492,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                             socket.emit("update", "You can't whisper to yourself.");
                         }
                         break;
-                    } 
+                    }
                 }
             }
             if (found && socket.id !== whisperId) {
@@ -508,10 +508,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			newMsg.save(function(err, saved) {
 				if(err) console.error('Can\'t insert a new chat: ' + err);
 			});
-			
+
             module.parent.exports.io.sockets.in(socket.room).emit("chat", people[socket.id], msg);
             socket.emit("isTyping", false);
-			
+
             /*if (_.size(chatHistory[socket.room]) > 10) {
                 chatHistory[socket.room].splice(0,1);
             } else {
@@ -548,15 +548,15 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.emit("sendRoomID", {id: id});
             //chatHistory[socket.room] = [];
             module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
-			
+
 			module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
 				module.parent.exports.chatSchema.find({sid: socket.room.toLowerCase() }, 'name msg' , function (err, docs) {
-					if (docs.length){
+					if (docs){
 						socket.emit("history", docs);
 					}
 				}).sort({created: 1}).skip(totaldocs - 10);
 			});
-			
+
         } else {
             socket.emit("update", "You have already created a room.");
         }
@@ -607,7 +607,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 						
 						module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
 							module.parent.exports.chatSchema.find({sid: socket.room.toLowerCase() }, 'name msg' , function (err, docs) {
-								if (docs.length){
+								if (docs){
 									socket.emit("history", docs);
 								}
 							}).sort({created: 1}).skip(totaldocs - 10);
