@@ -339,7 +339,7 @@
 
 	   #personalNotes{
 	    position: absolute;
-	    bottom: 0px;
+	    bottom: -35px;
 	   	z-index: 2;
 			right: 0px;
 	   	display: none;			
