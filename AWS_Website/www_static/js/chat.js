@@ -162,7 +162,7 @@ $(document).ready(function() {
     if (e.which !== 13) {
       if (typing === false && myRoomID !== null && $("#msg").is(":focus")) {
         typing = true;
-        socket.emit("typing", true);
+        //socket.emit("typing", true);
       } else {
         clearTimeout(timeout);
         timeout = setTimeout(timeoutFunction, 5000);
