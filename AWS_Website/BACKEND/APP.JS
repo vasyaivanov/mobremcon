@@ -273,10 +273,10 @@ var getUserUploadStatus = function (userId, callback) {
 			for(i=0;i<docs.length;i++) {
 				slidesMB = slidesMB + docs[i].size;
 			}
-			if(docs.length >= maxSlidesCount) {
+			if(docs.length >= maxSlidesCount && module.exports.userRole == 0) {
 				callback(1);
 			}
-			else if(slidesMB >= maxSlidesSize) {
+			else if(slidesMB >= maxSlidesSize && module.exports.userRole == 0) {
 				callback(1);
 			}
 			else {
