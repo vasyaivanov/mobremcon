@@ -315,7 +315,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         console.log("Check slide: " + data.slideId);
 		module.parent.exports.slideCheckPresenter(data.slideId, function(sfound, spresenter, stitle, spassword, spayed) {
 				if(spresenter == 1 && sfound == 1) {
-					if(data.newHashName.length > 10) {
+					if(data.newHashName.length > 30) {
 						socket.emit('renameHash-client', {slideId: data.slideId, available : 0});
 					}
 					else {
@@ -549,13 +549,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             //chatHistory[socket.room] = [];
             module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
 
-			module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
+			//module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
 				module.parent.exports.chatSchema.find({sid: socket.room.toLowerCase() }, 'name msg' , function (err, docs) {
 					if (docs){
 						socket.emit("history", docs);
 					}
-				}).sort({created: 1}).skip(totaldocs - 10);
-			});
+				});//.sort({created: 1}).skip(totaldocs - 10);
+			//});
 
         } else {
             socket.emit("update", "You have already created a room.");
@@ -605,13 +605,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         //socket.emit("update", "Welcome to " + room.name + ".");
                         socket.emit("sendRoomID", {id: id});
 						
-						module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
+						//module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
 							module.parent.exports.chatSchema.find({sid: socket.room.toLowerCase() }, 'name msg' , function (err, docs) {
 								if (docs){
 									socket.emit("history", docs);
 								}
-							}).sort({created: 1}).skip(totaldocs - 10);
-						});
+							});//.sort({created: 1}).skip(totaldocs - 10);
+						//});
 
                         /*var keys = _.keys(chatHistory);
                         if (_.contains(keys, socket.room)) {
