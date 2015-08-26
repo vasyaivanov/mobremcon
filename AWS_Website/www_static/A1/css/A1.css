@@ -364,7 +364,8 @@
 		.paper {
 			margin: 0;
 			display: block;
-			font: 10pt Arial, sans-serif;    
+			font-size: 10pt; 
+			font-family: 'Yanone Kaffeesatz', sans-serif;   
 			line-height: 20px;
 			padding-top: 50px;
 			padding-left: 10.5%;
@@ -375,7 +376,9 @@
 			overflow-y: auto;
 		}
 		.paper:first-line {
-			font: 20pt Arial, sans-serif;
+			/*font: 20pt Arial, sans-serif;*/
+			font-size: 20pt;
+			font-family: 'Yanone Kaffeesatz', sans-serif;
 			line-height: 33px;
 			vertical-align: baseline;
 		}
@@ -609,7 +612,7 @@
 			.closevideo{
 				float:right;
 				margin-top:5px;
-				margin-right:3px;
+				margin-right:3px !important;
 				cursor:pointer;
 				/*color: #fff;
 				border: 1px solid #AEAEAE;
