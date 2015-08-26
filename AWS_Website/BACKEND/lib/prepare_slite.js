@@ -82,13 +82,13 @@ exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, ca
     initCache(callback);
 }
 
-var Slite = function (socket, callback) {
+var Slite = function (sliteParams, callback) {
     var self = this;
 
     this.maxNumTries = 10;
     this.count = 0;
     this.hashValue = null;
-    this.socket = socket;
+    this.params = sliteParams;
 
     if (!cacheReady) {
         var msg = 'Cache not ready';
@@ -112,12 +112,20 @@ var Slite = function (socket, callback) {
     });
   }
 
-Slite.prototype.setFilename = function (dir, filename, num_slides, origName) {
-    this.dir = dir;
-    this.filename = filename;
+Slite.prototype.setParams = function (params) {
+    this.params = params;
+};
+
+Slite.prototype.getParams = function () {
+    return this.params;
+};
+
+Slite.prototype.setNumSlides = function (num_slides) {
     this.num_slides = num_slides;
-    this.origName = origName;
-    console.log("SLITE file: " + path.join(this.dir, this.filename) + " Slides:" + this.num_slides);
+};
+
+Slite.prototype.getNumSlides = function () {
+    return this.num_slides;
 };
 
 Slite.prototype.getHash = function ()
@@ -145,8 +153,8 @@ Slite.prototype.generateHtml = function (callback) {
             var data_replaced1 = data.replace('NUM_SLIDES_TEMPLATE', self.num_slides);
             var data_replaced2 = data_replaced1.replace('HASH_TEMPLATE', self.hashValue);
 			// Deleted 05/18/15, Konstantin R. - Now title generates from DB
-            //var title_replaced = data_replaced2.replace('TITLE', self.origName);
-            fs.writeFile(path.join(self.dir, indexHtml), data_replaced2, function (err) {
+            //var title_replaced = data_replaced2.replace('TITLE', self.params.origName);
+            fs.writeFile(path.join(self.getHashDir(), indexHtml), data_replaced2, function (err) {
                 if (err) {
                     callback('Error writing ' + indexHtml + ' '  + err);
                 } else {
@@ -209,6 +217,16 @@ Slite.prototype.deleteHash = function (deleteFolder, callback) {
         });
     }
 };
+
+Slite.prototype.getHashDir = function () {
+    var self = this;
+    return path.join(www_dir, slitesDir, self.hashValue);
+}
+
+Slite.prototype.getUploadFullFileName = function () {
+    var self = this;
+    return path.join(self.getHashDir(), self.params.uploadFileName);
+}
    
 exports.youTube = function (youtube_hash, slite_hash, curr_slide) {
     fs.readFile(path.join(www_dir, staticDir, "A1/youtube_tmpl.html"), "utf8", function (err, data) {
@@ -227,7 +245,6 @@ exports.youTube = function (youtube_hash, slite_hash, curr_slide) {
         }
     });
 };
-
 
 module.exports.cache = cache;
 module.exports.Slite = Slite;
