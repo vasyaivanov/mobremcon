@@ -317,6 +317,7 @@ app.use(function (req, res, next) {
     });
 
 	var customHash = req.url.substring(1);
+	customHash = customHash.replace(/^\?/,"");
 
 	Slide.findOne({scid : { $regex : new RegExp("^" + customHash + "$" , "i") }, paypalPayed: 1 }).exec(function (err, doc) {
 		if( doc ) {
