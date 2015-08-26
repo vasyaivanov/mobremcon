@@ -1,6 +1,6 @@
 ﻿		body{
 			/* background-color:rgba(0,0,255,0.3); */
-			font-family: 'Raleway', sans-serif;
+			font-family: 'Yanone Kaffeesatz', sans-serif;
 		}
 		
 		.grayedOut {
@@ -66,6 +66,10 @@
 			background:#fff;
 			padding:0
 		}
+
+		/*.menuSubmenu {
+			z-index: 3;
+		}*/
 
 		#primary_nav_wrap ul ul li
 		{
@@ -304,10 +308,16 @@
 
 	    #comments{
 			background-color: white;
-			border-style: ridge;
-			border-width: 2px;
-			border-radius: 25px;
-			border-color: lightblue;
+			/*border-style: ridge;*/
+			/*border-style: solid;
+    	border-color: #e6e5e5;
+			border-width: 2px;*/
+			/*box-shadow: 2px 2px 2px 2px #e6e5e5;*/
+			-webkit-box-shadow: 6px -4px 17px 0px rgba(196,196,196,1);
+			-moz-box-shadow: 6px -4px 17px 0px rgba(196,196,196,1);
+			box-shadow: 6px -4px 17px 0px rgba(196,196,196,1);
+			/*border-radius: 25px;*/
+			/*border-color: lightblue;*/
 			opacity: 1;
 	    	position: absolute;
 	    	bottom: 0px;
@@ -698,7 +708,7 @@
 				-webkit-border-radius: 18;
 				-moz-border-radius: 18;
 				border-radius: 18px;
-				font-family: 'Raleway', sans-serif;
+				font-family: 'Yanone Kaffeesatz', sans-serif;
 				color: #ffffff;
 				font-size: 16px;
 				padding: 10px 20px 10px 20px;
