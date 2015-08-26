@@ -264,7 +264,7 @@ blockquote {
 code {
     background: rgba(255, 255, 255, 0.075);
     border-radius: 4px;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
     font-size: 0.9em;
     margin: 0 0.25em;
     padding: 0.25em 0.65em;
@@ -272,7 +272,7 @@ code {
 
 pre {
     -webkit-overflow-scrolling: touch;
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Yanone Kaffeesatz', sans-serif;
     font-size: 0.9em;
     margin: 0 0 2em 0;
 }
@@ -714,7 +714,7 @@ body.landing {
     body.landing:before {
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
         font-style: normal;
         font-weight: normal;
         text-transform: none !important;
@@ -907,7 +907,7 @@ textarea {
     .select-wrapper:before {
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
         font-style: normal;
         font-weight: normal;
         text-transform: none !important;
@@ -1081,7 +1081,7 @@ input[type="radio"] {
     .icon:before {
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
-        ffont-family: 'Raleway', sans-serif;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
         font-style: normal;
         font-weight: normal;
         text-transform: none !important;
@@ -1098,7 +1098,7 @@ input[type="radio"] {
         .icon.alt:before {
             -moz-osx-font-smoothing: grayscale;
             -webkit-font-smoothing: antialiased;
-           font-family: 'Raleway', sans-serif;
+            font-family: 'Yanone Kaffeesatz', sans-serif;
             font-style: normal;
             font-weight: normal;
             text-transform: none !important;
@@ -1132,7 +1132,7 @@ input[type="radio"] {
             .icon.major.alt:before {
                 -moz-osx-font-smoothing: grayscale;
                 -webkit-font-smoothing: antialiased;
-                font-family: 'Raleway', sans-serif;
+                font-family: 'Yanone Kaffeesatz', sans-serif;
                 font-style: normal;
                 font-weight: normal;
                 text-transform: none !important;
