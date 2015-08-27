@@ -16,7 +16,7 @@ var XML_PATH = 'xml'
   , UPLOAD_FILE_TITLE = 'img0'
   , MAX_QUEUE_LENGTH = 10000
   , WIDTH = 1280
-  , COMPRESSION = 85
+  , COMPRESSION = 90
   , DEBUG = false;
 
 var queue = new Queue.Queue(MAX_QUEUE_LENGTH);  // global queue for conversion
