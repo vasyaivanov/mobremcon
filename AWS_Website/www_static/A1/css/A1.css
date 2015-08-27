@@ -1,6 +1,10 @@
-﻿		body{
+﻿		body {
 			/* background-color:rgba(0,0,255,0.3); */
 			font-family: 'Yanone Kaffeesatz', sans-serif;
+		}
+
+		.fa-1 {
+			color: #c4c4c4;
 		}
 
 		.grayedOut {
@@ -202,18 +206,31 @@
 			}
 		}
 
-		#sliteWatermak{
+		#sliteWatermak {
 			font-size: 20px;
 			z-index: 6;
 			position: fixed;
 			right: 20px;
 			top: 0px;
 			filter: alpha(opacity=40);
-			z-index: 2;
 			cursor: pointer;
 			vertical-align: top;
+		}
+
+		#sliteTitle {
+			vertical-align:top;
 			color: white;
 			text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+		}
+
+		#sliteMenu {
+			vertical-align:top
+			color: #c4c4c4;
+			/*text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;*/
+		}
+
+		#sliteMenu:hover {
+			color: #7badd9;
 		}
 
 	    #redDot {
