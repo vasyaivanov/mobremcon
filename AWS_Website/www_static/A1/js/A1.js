@@ -112,11 +112,12 @@ function showHideVideoChat() {
             $("#setup-new-room").trigger("click");
         }
         isVideoChatOn = true;
+		$("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
     } else {
         // remove the video window on closing the panel
         //var videosContainer = document.getElementById('videos-container');
-        if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
-
+        //if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
+		$("#videoframe").attr("src","");
         isVideoChatOn = false;
     }
 
@@ -144,18 +145,10 @@ function showHideVideoChat() {
 var isScreensharingOn = false;
 function showHideScreensharing() {
     if (!isScreensharingOn) {
-		if(isPresenter()){
-			$('#share-screen-screensharing').trigger("click");
-		}
+		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);		
         isScreensharingOn = true;
     } else {
-        // remove screensharing window on closing the panel
-		conferenceUIScreensharing.leave();
-        var screensharingContainer = document.getElementById('videos-container-screensharing');
-        if (screensharingContainer.firstChild){
-			screensharingContainer.removeChild(screensharingContainer.firstChild);
-		}
-
+		$("#screensharingiframe").attr("src","");
         isScreensharingOn = false;
     }
 
@@ -492,7 +485,7 @@ if(isVideoChatOpen == 1){
 }
 $('#closevideo').click(function () {
     showHideVideoChat();
-    config.attachStream && config.attachStream.stop();
+	//config.attachStream && config.attachStream.stop();
 });
 $('#closescreensharing').click(function () {
     showHideScreensharing();
@@ -742,6 +735,7 @@ if (!isFile) {
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastScreensharing received');
         if (data.open === isScreensharingOn) return;
-        showHideScreensharing();
+		setTimeout(function(){showHideScreensharing();},10000);
+		
     });
 }

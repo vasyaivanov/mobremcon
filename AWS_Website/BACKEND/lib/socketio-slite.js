@@ -663,5 +663,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             }
         );
     });
+	
+	
+	socket.on('sharing-server', function (data) {
+		module.parent.exports.SlideScheme.findOne({sid : data.hash }).exec(function (err, doc) {
+			if( doc ) {
+				socket.emit('sharing-client', {moderatorId: doc.uid})
+			}
+		});
+    });
 
-}); // module.parent.exports.io.sockets.on('connection' ...
+}); 

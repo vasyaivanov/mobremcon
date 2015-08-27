@@ -693,6 +693,36 @@ slideCheckPresenter = function(hashId, callback) {
 
 module.exports.slideCheckPresenter = slideCheckPresenter;
 
+router.get('/screensharing.html', function (req, res){
+		var hashId = req.query.presentation;
+			slideCheckPresenter(hashId, function(sfound, spresenter, stitle, spassword) {
+				if(sfound == 1 && spresenter == 1) {
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: module.exports.currentUserId});
+				}
+				else if(sfound == 1 && spresenter == 0) {
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: module.exports.currentUserId});
+				}
+				else {
+					res.send("No slide")
+				}
+			});
+});
+
+router.get('/video.html', function (req, res){
+		var hashId = req.query.presentation;
+			slideCheckPresenter(hashId, function(sfound, spresenter, stitle, spassword) {
+				if(sfound == 1 && spresenter == 1) {
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: module.exports.currentUserId});
+				}
+				else if(sfound == 1 && spresenter == 0) {
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: module.exports.currentUserId});
+				}
+				else {
+					res.send("No slide")
+				}
+			});
+});
+
 router.get('/remote/index.html', function (req, res){
 
 		var hashId = req.query.presentation;

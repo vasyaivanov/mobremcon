@@ -1,0 +1,48 @@
+<html>
+<head>
+<script src="https://cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<style>
+audio {
+	display: none;
+}
+video {
+	display: block;
+    width: 90%;
+}
+</style>
+<script>
+
+var MODERATOR_CHANNEL_ID = 'slite'; // channel-id
+var MODERATOR_SESSION_ID = '<%= hash %>-screen';    // room-id
+var MODERATOR_ID         = '<%= userId%>';    // user-id
+var MODERATOR_SESSION    = {         // media-type
+	audio: true,
+	screen: true
+};
+var MODERATOR_EXTRA      = {};       // empty extra-data
+
+var moderator     = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
+moderator.autoCloseEntireSession = true;
+moderator.session = MODERATOR_SESSION;
+moderator.userid  = MODERATOR_ID;
+moderator.extra   = MODERATOR_EXTRA;
+
+function startSession() {
+	moderator.open({
+		dontTransmit: true,
+		sessionid:    MODERATOR_SESSION_ID
+	});
+}
+function stopSession() {
+	moderator.close();
+}
+
+</script>
+</head>
+<body onload="startSession()">
+
+<!--a onclick="startSession();">Start</a-->
+<!--a onclick="stopSession();">Stop</a-->
+</body>
+</html>
