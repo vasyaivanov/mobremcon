@@ -357,18 +357,35 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         console.log("X: " + data.x + ", " + "Y: " + data.y);
 
         // send coordinates on to the display (RECEIVER_POWERPOINT.html)
-        socket.broadcast.emit('moveLaser', data);
+        module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+          if(docs){
+            data.slideID = docs.sid;
+            socket.broadcast.emit('moveLaser', data);
+          };
+        });
+        //socket.broadcast.emit('moveLaser', data);
     });
 
     socket.on('drawCoords', function (data) {
         console.log("draw coords received");
         console.log("X: " + data.x + ", " + "Y: " + data.y);
-        socket.broadcast.emit('drawCoords', data);
+        module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+          if(docs){
+            data.slideID = docs.sid;
+            socket.broadcast.emit('drawCoords', data);
+          };
+        });
     });
 
     socket.on('laserOn', function (data) {
         console.log("laser on");
-        socket.broadcast.emit('laserOn', data);
+        module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+          if(docs){
+            data.slideID = docs.sid;
+            socket.broadcast.emit('laserOn', data);
+          };
+        });
+        //socket.broadcast.emit('laserOn', data);
     });
 
     socket.on('laserOff', function () {
@@ -382,7 +399,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
     socket.on('drawStart', function (data) {
         console.log("drawstart");
-        socket.broadcast.emit('drawStart', data);
+        module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+          if(docs){
+            data.slideID = docs.sid;
+            socket.broadcast.emit('drawStart', data);
+          };
+        });
+        //socket.broadcast.emit('drawStart', data);
     });
 
     socket.on('drawStop', function () {
@@ -604,7 +627,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         module.parent.exports.io.sockets.emit("update-people", {people: people, count: sizePeople});
                         //socket.emit("update", "Welcome to " + room.name + ".");
                         socket.emit("sendRoomID", {id: id});
-						
+
 						//module.parent.exports.chatSchema.count({sid: socket.room.toLowerCase()}, function (err, totaldocs) {
 							module.parent.exports.chatSchema.find({sid: socket.room.toLowerCase() }, 'name msg' , function (err, docs) {
 								if (docs){
@@ -663,8 +686,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             }
         );
     });
-	
-	
+
+
 	socket.on('sharing-server', function (data) {
 		module.parent.exports.SlideScheme.findOne({sid : data.hash }).exec(function (err, doc) {
 			if( doc ) {
@@ -673,4 +696,4 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		});
     });
 
-}); 
+});
