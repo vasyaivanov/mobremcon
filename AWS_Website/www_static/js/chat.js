@@ -86,11 +86,15 @@ $(document).ready(function() {
     event.preventDefault();
   });
 
-  /*$("#conversation").bind("DOMSubtreeModified",function() {
-    $("#conversation").animate({
-        scrollTop: $("#conversation")[0].scrollHeight
-      });
-  });*/
+$('#msg').keypress(function(event){
+
+var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		$("#conversation").animate({
+			scrollTop: $("#conversation")[0].scrollHeight
+		});
+	}
+});
 
   $("#main-chat-screen").hide();
   $("#errors").hide();
@@ -323,6 +327,9 @@ socket.on("history", function(data) {
   } else {
     $("#msgs").append("<li><strong><span class='text-warning'>No past messages in this room.</li>");
   }
+  
+$( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
+
 });
 
   socket.on("update", function(msg) {
