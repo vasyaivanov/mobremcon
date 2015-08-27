@@ -515,7 +515,6 @@ function setUserSession(req, res, callback) {
 		callback(newUserId);
 	   }
 	   else {
-		//console.log("User id is " + req.cookies[sessionIdCookie]);
 		// User loged in, but has older, random generated id
 		if((req.user) /*&& (req.user._id != req.cookies[sessionIdCookie])*/) {
 			//console.log("Setting new user id");
@@ -524,9 +523,19 @@ function setUserSession(req, res, callback) {
 				res.cookie(sessionIdCookie, req.user._id.toString(), { expires: expDate });
 			}
 			// Update user Notes
-			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}).exec();
+			
+		
+			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
+				function (err, numAffected) {
+					if(err) console.log(err);
+					if(numAffected > 0) {console.log("Remaped notes: " + numAffected)}
+			});
 			// Update user slides
-			Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}).exec();
+			Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
+				function (err, numAffected) {
+					if(err) console.log(err);
+					if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
+			});
 			callback(req.user._id);
 		}
 		else {
