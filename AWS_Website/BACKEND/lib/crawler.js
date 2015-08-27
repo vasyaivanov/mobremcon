@@ -60,9 +60,9 @@ var addSuffixToSearch = "filetype:ppt";
 									if(!error) {
 										console.log("+++++++++++++++++++++++++++++++++++++++\nUploaded: " + data.filename);
 										converter.convert(path.join(uploadDir,data.filename), data.filename, module.parent.exports.io, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, SlidesScheme: dbSchema,  userAuth: 1, stitle: data.title, sdesc: data.desc, surl: data.url, scrawled: 1, noSocketRet: 1, ssite: data.host, skeywords: data.keywords},
-										function (data) {
+										null, function (err) { // onQueueCompleteCallback callback
 											uploader(a+1)
-											if(data == 1) {
+											if(!err) {
 												console.log("File converted\n+++++++++++++++++++++++++++++++++++++++++++");
 											}
 											else {

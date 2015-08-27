@@ -65,17 +65,17 @@ function toggleChatWindow() {
 
 function getUrlParam(sParam)
 {
-  var sPageURL = window.location.search.substring(1); // get query string without ? 
+  var sPageURL = window.location.search.substring(1); // get query string without ?
   var sURLVariables = sPageURL.split('&');
-  for (var i = 0; i < sURLVariables.length; i++) 
+  for (var i = 0; i < sURLVariables.length; i++)
   {
     var sParameterName = sURLVariables[i].split('=');
-    if (sParameterName[0] == sParam) 
+    if (sParameterName[0] == sParam)
     {
       return sParameterName[1];
     }
   }
-} 
+}
 
 $(document).ready(function() {
   //setup "global" variables first
@@ -86,17 +86,17 @@ $(document).ready(function() {
     event.preventDefault();
   });
 
-  $("#conversation").bind("DOMSubtreeModified",function() {
+  /*$("#conversation").bind("DOMSubtreeModified",function() {
     $("#conversation").animate({
         scrollTop: $("#conversation")[0].scrollHeight
       });
-  });
+  });*/
 
   $("#main-chat-screen").hide();
   $("#errors").hide();
   $("#name").focus();
-  $("#join").attr('disabled', 'disabled'); 
-  
+  $("#join").attr('disabled', 'disabled');
+
   if ($("#name").val() === "") {
     $("#join").attr('disabled', 'disabled');
   }
@@ -122,7 +122,7 @@ $(document).ready(function() {
           roomExists = data.result;
           if (!roomExists)
             socket.emit("createRoom", roomName);
-          else     
+          else
             socket.emit("joinRoom", roomName);
         });
       });
@@ -132,7 +132,7 @@ $(document).ready(function() {
   $("#name").keypress(function(e){
     var name = $("#name").val();
     if(name.length < 2) {
-      $("#join").attr('disabled', 'disabled'); 
+      $("#join").attr('disabled', 'disabled');
     } else {
       $("#errors").empty();
       $("#errors").hide();
@@ -162,7 +162,7 @@ $(document).ready(function() {
     if (e.which !== 13) {
       if (typing === false && myRoomID !== null && $("#msg").is(":focus")) {
         typing = true;
-        socket.emit("typing", true);
+        //socket.emit("typing", true);
       } else {
         clearTimeout(timeout);
         timeout = setTimeout(timeoutFunction, 5000);
@@ -218,7 +218,7 @@ $(document).ready(function() {
           $("#errors").empty();
           $("#errors").show();
           $("#errors").append("Room <i>" + roomName + "</i> already exists");
-        } else {      
+        } else {
         if (roomName.length > 0) { //also check for roomname
           socket.emit("createRoom", roomName);
           $("#errors").empty();
@@ -239,7 +239,7 @@ $(document).ready(function() {
     var roomID = $(this).attr("id");
     socket.emit("removeRoom", roomID);
     $("#createRoom").show();
-  }); 
+  });
 
   $("#leave").click(function() {
     var roomID = myRoomID;
@@ -271,7 +271,7 @@ $(document).ready(function() {
               $(this).prev('.tt-hint').addClass('hint-lg');
         });
       });
-      
+
       console.log(peopleOnline);
     } else {
       console.log('remove typeahead');
@@ -349,7 +349,7 @@ socket.on("history", function(data) {
         } else {
           s = "<li class=\"list-group-item\"><span class='text-success'>"
         }
-        $('#people').append(s + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");       
+        $('#people').append(s + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");
       }
     });
 
@@ -389,7 +389,7 @@ socket.on("history", function(data) {
   socket.on("roomList", function(data) {
     $("#rooms").text("");
     $("#rooms").append("<li class=\"list-group-item active\">List of rooms <span class=\"badge\">"+data.count+"</span></li>");
-     if (!jQuery.isEmptyObject(data.rooms)) { 
+     if (!jQuery.isEmptyObject(data.rooms)) {
       $.each(data.rooms, function(id, room) {
         var html = "<button id="+id+" class='joinRoomBtn btn btn-default btn-xs' >Join</button>" + " " + "<button id="+id+" class='removeRoomBtn btn btn-default btn-xs'>Remove</button>";
         $('#rooms').append("<li id="+id+" class=\"list-group-item\"><span>" + room.name + "</span> " + html + "</li>");

@@ -2,14 +2,14 @@
 			/* background-color:rgba(0,0,255,0.3); */
 			font-family: 'Yanone Kaffeesatz', sans-serif;
 		}
-		
+
 		.grayedOut {
 			opacity: 0.5;
 			filter: alpha(opacity=50);
 			background-color: #B0AAAA;
 			cursor: default;
 		}
-		
+
 		/* MENU */
 		#primary_nav_wrap
 		{
@@ -102,7 +102,7 @@
 		  width: 45px;
 		  opacity: 0.4;
 		}
-		
+
 		.leftCurtain{
 			left: 5px;;
 			-moz-transform: scaleX(-1);
@@ -112,11 +112,11 @@
 			filter: FlipH;
 			-ms-filter: "FlipH";
 		}
-		
+
 		#shareYourScreen{
 			display: none;
 		}
-		
+
 		#video-gallery {
 		  /* position: absolute;
 		  left:5%;
@@ -245,8 +245,8 @@
 			margin-left: 10px;
 	    	/*
 			background-color: #444444;
-  			background-image: -webkit-linear-gradient(top, #444444, #999999); 
-			background-image: linear-gradient(to bottom, #444444, #999999); 
+  			background-image: -webkit-linear-gradient(top, #444444, #999999);
+			background-image: linear-gradient(to bottom, #444444, #999999);
 			*/
 			border-color: lightblue;
 			border-radius: 25px;
@@ -258,7 +258,7 @@
 			overflow-x: hidden;
 			overflow-y: hidden;
 		}
-		
+
 		#videos-container{
 			margin-bottom: 10px;
 			margin-left: 5px;
@@ -273,7 +273,7 @@
   			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
   			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
 		}
-		
+
 		#screensharing{
 			position: fixed;
 			right: 0px;
@@ -284,11 +284,11 @@
 			display: none;
 			z-index: 1;
 		}
-		
+
 		#videos-container-screensharing > video {
 			width: 100%;
 		}
-		
+
 		.closescreensharing{
 				float:left;
 				margin-top:5px;
@@ -301,9 +301,9 @@
 				font-size: 31px;
 				display: inline-block;
 				line-height: 0px;
-				padding: 11px 3px; 
-				text-decoration: none;	
-				opacity: 0.6		
+				padding: 11px 3px;
+				text-decoration: none;
+				opacity: 0.6
 		}
 
 	    #comments{
@@ -325,8 +325,9 @@
 	    	width: 45%%;
 	    	height: 60%;
 	    	display: none;
+				z-index: 2;
 	    }
-		
+
 		.panelTitle{
 			top:2%;
 			position: absolute;
@@ -342,7 +343,7 @@
 	    bottom: -35px;
 	   	z-index: 2;
 			right: 0px;
-	   	display: none;			
+	   	display: none;
 			width: 50%;
 			-webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.4);
 			-moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.4);
@@ -352,8 +353,8 @@
 			border-color: lightblue;
 			border-radius: 25px;*/
 			right: 0px;
-	   	height: 500px;			
-			
+	   	height: 500px;
+
 			background-image:  -webkit-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -webkit-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -webkit-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -webkit-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
 			background-image:  -moz-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -moz-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -moz-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -moz-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
 			background-image:  -ms-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -ms-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -ms-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -ms-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
@@ -367,8 +368,8 @@
 		.paper {
 			margin: 0;
 			display: block;
-			font-size: 10pt; 
-			font-family: 'Yanone Kaffeesatz', sans-serif;   
+			font-size: 10pt;
+			font-family: 'Yanone Kaffeesatz', sans-serif;
 			line-height: 20px;
 			padding-top: 50px;
 			padding-left: 10.5%;
@@ -385,7 +386,7 @@
 			line-height: 33px;
 			vertical-align: baseline;
 		}
-		.paper:after {    
+		.paper:after {
 			content: '';
 			display: block;
 			width: 20px;
@@ -396,19 +397,19 @@
 			top: 40px;
 			left: 2%;
 			z-index: 10;
-			-webkit-box-shadow: 
-				inset 2px 2px 5px rgba(125,125,125,1),  
-				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),  
+			-webkit-box-shadow:
+				inset 2px 2px 5px rgba(125,125,125,1),
+				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),
 				2px 90.1em 5px rgba(255,255,255,1), 0px 90em rgba(125,125,125,.5),
 				2px 130.1em 5px rgba(255,255,255,1), 0px 130em rgba(125,125,125,.25);
-			-moz-box-shadow: 
-				inset 2px 2px 5px rgba(125,125,125,1),  
-				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),  
+			-moz-box-shadow:
+				inset 2px 2px 5px rgba(125,125,125,1),
+				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),
 				2px 90.1em 5px rgba(255,255,255,1), 0px 90em rgba(125,125,125,.5),
 				2px 130.1em 5px rgba(255,255,255,1), 0px 130em rgba(125,125,125,.25);
-			box-shadow: 
-				inset 2px 2px 5px rgba(125,125,125,1),  
-				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),  
+			box-shadow:
+				inset 2px 2px 5px rgba(125,125,125,1),
+				2px 50.1em 5px rgba(255,255,255,1), 0px 50em rgba(125,125,125,.75),
 				2px 90.1em 5px rgba(255,255,255,1), 0px 90em rgba(125,125,125,.5),
 				2px 130.1em 5px rgba(255,255,255,1), 0px 130em rgba(125,125,125,.25);
 		}
@@ -423,11 +424,12 @@
 	    	width: 50%;
 	    	height: 15px;
 	    	 background-color: #444444;
+				 z-index: 2;
   			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
   			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
 	    }
-		
-		
+
+
 
 	    #personalNotesPanel{
 			position: fixed;
@@ -440,61 +442,61 @@
   			background-image: -webkit-linear-gradient(top, #444444, #999999); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
   			background-image: linear-gradient(to bottom, #444444, #999999); /* Chrome 26, Firefox 16+, IE 10+, Opera */
 	    }
-		
+
 		#helpOverlay {
-		  opacity:    0.9; 
-		  background: black; 
+		  opacity:    0.9;
+		  background: black;
 		  width:      100%;
-		  height:     100%; 
+		  height:     100%;
 		  z-index:    10;
-		  top:        0; 
-		  left:       0; 
-		  position:   fixed; 
+		  top:        0;
+		  left:       0;
+		  position:   fixed;
 		  color: black;
 		  display: none;
 		}
-		
+
 		#pleaseWaitForScreenSharing {
 			display: none;
 		}
-		
+
 		#paypalNewHash {
 			width: auto;
 		}
-		
+
 		#renamePresentationOverlay {
-		  opacity:    0.9; 
-		  background: black; 
+		  opacity:    0.9;
+		  background: black;
 		  width:      100%;
-		  height:     100%; 
+		  height:     100%;
 		  z-index:    10;
-		  top:        0; 
-		  left:       0; 
-		  position:   fixed; 
+		  top:        0;
+		  left:       0;
+		  position:   fixed;
 		  color: black;
-		  display: none;		
+		  display: none;
 		}
-		
+
 		#renameHashButton {
 		  border-style: none;
 		  width: 120px;
 		  height: 30px;
 		}
-		
+
 		#renameHashDialog{
 			padding-top: 25%;
 			color: white;
 		}
 
 		#PasswordCreateOverlay {
-		  opacity:    0.9; 
-		  background: black; 
+		  opacity:    0.9;
+		  background: black;
 		  width:      100%;
-		  height:     100%; 
+		  height:     100%;
 		  z-index:    10;
-		  top:        0; 
-		  left:       0; 
-		  position:   fixed; 
+		  top:        0;
+		  left:       0;
+		  position:   fixed;
 		  color: black;
 		  display: none;
 		}
@@ -505,13 +507,13 @@
 		}
 
 		#PasswordCheckOverlay {
-		  background: black; 
+		  background: black;
 		  width:      100%;
-		  height:     100%; 
+		  height:     100%;
 		  z-index:    10;
-		  top:        0; 
-		  left:       0; 
-		  position:   fixed; 
+		  top:        0;
+		  left:       0;
+		  position:   fixed;
 		  color: black;
 		  display: none;
 		}
@@ -520,20 +522,20 @@
 			padding-top:25%;
 			color: white;
 		}
-		
+
 		#insertVideoSlideOverlay {
-		  opacity:    0.9; 
-		  background: black; 
+		  opacity:    0.9;
+		  background: black;
 		  width:      100%;
-		  height:     100%; 
+		  height:     100%;
 		  z-index:    10;
-		  top:        0; 
-		  left:       0; 
-		  position:   fixed; 
+		  top:        0;
+		  left:       0;
+		  position:   fixed;
 		  color: black;
 		  display: none;
 		}
-		
+
 		#insertVideoSlide{
 			padding-top:100px;
 			color: white;
@@ -548,7 +550,7 @@
 	    iframe * img{
 	    	width: 100%;
 	    }
-		
+
 
 
 		/* VideoChat  */
@@ -611,7 +613,7 @@
 				font-size: 40px;
 				line-height: 40px;
 			}
-			
+
 			.closevideo{
 				float:right;
 				margin-top:5px;
@@ -624,8 +626,8 @@
 				font-size: 31px;*/
 				display: inline-block;
 				/*line-height: 0px;
-				padding: 11px 3px; 
-				text-decoration: none;	
+				padding: 11px 3px;
+				text-decoration: none;
 				opacity: 0.6*/
 			  width: 30px;
 			  height: 30px;
@@ -641,7 +643,7 @@
 			/*.closevideo:before {
 				content: "×";
 			}*/
-			
+
 			.startTemporaryPopup{
 				display: none;
 				position: fixed;
@@ -652,7 +654,7 @@
 				border-radius: 25px;
 				padding: 10px;
 			}
-			
+
 			#closeExplanator{
 				position: absolute;
 				left: 50%;
@@ -662,29 +664,29 @@
 				text-align: center;
 				cursor: pointer;
 			}
-			
+
 			#videoChatExplanator{
 				top: 300px;
 				left: 20px;
 			}
-			
+
 			#wallChatExplanator{
 				transform: rotate(45deg);
 				bottom: 200px;
 				left: 400px;
 			}
-			
+
 			#menuExplanator{
 				transform: rotate(-60deg);
 				right: 5px;
 				top: 180px;
 			}
-			
+
 			#urlExplanator{
 				left: 5px;
 				top: 10px;
 			}
-			
+
 			input.rounded {
 
 				border: 1px solid #ccc;
@@ -701,9 +703,9 @@
 			}
 
 			input.rounded:focus {
-			  border-color: #339933;  
+			  border-color: #339933;
 			}
-			
+
 			.btn {
 				background: #3498db;
 				background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
@@ -730,8 +732,8 @@
 				background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
 				text-decoration: none;
 				}
-				
-				
+
+
 /*  NEXT, PREV buttons */
 .navButton{
 	/*background-color: rgb(181, 181, 181);

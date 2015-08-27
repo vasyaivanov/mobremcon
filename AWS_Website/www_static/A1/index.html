@@ -28,6 +28,7 @@
 		var isVideoChatOpen = "<%= isVideoChatOpen %>";
 		var isScreensharingOpen = "<%= isScreensharingOpen %>"
 		</script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="../js/jquery-2.1.3.min.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="../css/videochat/videochat-style.css">
@@ -177,72 +178,12 @@
 
 		<div id="screensharing">
 		<h1><div class="closescreensharing" id="closescreensharing">x</div></h1>
-        <article>
-            <!-- just copy this <section> and next script -->
-            <section class="experiment" id="screensharing_top">
-                <section id="shareYourScreen">
-                    <span>
-                        Private ?? <a href="/Pluginfree-Screen-Sharing/" target="_blank" title="Open this link for private screen sharing!"><code><strong id="unique-token-screensharing">#123456789</strong></code></a>
-                    </span>
-                    <input type="text" id="room-name" placeholder="Your Name" disabled>
-                    <button id="share-screen-screensharing" class="setup" disabled>Share Your Screen</button>
-                </section>
-
-				<section id="pleaseWaitForScreenSharing">
-					<!--<div><b>Please wait while presenter is loading screen sharing ...</b></div>-->
-				</section>
-
-                <!-- list of all available broadcasting rooms -->
-                <table style="width: 100%;" id="rooms-list-screensharing"></table>
-
-                <!-- local/remote videos container -->
-                <div id="videos-container-screensharing"></div>
-            </section>
-
-
-			 <section class="experiment" id="screensharing_install_extension">
-                <h2 id="prerequisites">
-                    <a href="#prerequisites"></a>
-                </h2>
-                <ol>
-                    <li id="install_chrome_extension">
-                        <a href="https://chrome.google.com/webstore/detail/screen-capturing/ajhifddimkapgcifgcodmmfdlknahffk" target="_blank">Click <b>here</b> to install Chrome Presenter Extension (audience don't need it)</a>
-                    </li>
-
-                    <li id="install_firefox_extension">
-                        <a href="https://www.webrtc-experiment.com/store/firefox-extension/enable-screen-capturing.xpi">Click here to install Firefox Presenter Extension (audience don't need it)</a>
-                    </li>
-                </ol>
-            </section>
-        </article>
-
+		<iframe width="100%" height="100%" id="screensharingiframe"  scrolling="no"></iframe>
 	</div>
-	<!-- commits.js is useless for you! -->
-        <script src="https://cdn.webrtc-experiment.com/commits.js" async> </script>
-
-
 	<div id="videochatpanel"></div>
 	<div id="videochat">
 		<h1><div class="closevideo" id="closevideo"></div></h1>
-		<div id="clickallow" style='font-size:24px;padding-top:0px;'>click "Allow" above<b style='font-size:38'> &#8599;</b></div>
-		<article id="videochatMainContainer">
-			<!-- just copy this <section> and next script -->
-			<section class="experiment">
-				<section id="chatTop">
-					<span>
-						Private ?? <a href="/video-conferencing/" target="_blank" title="Open this link in new tab. Then your conference room will be private!"><code><strong id="unique-token">#123456789</strong></code></a>
-					</span>
-					<input type="text" id="conference-name">
-					<button id="setup-new-room" class="setup">Setup New Conference</button>
-				</section>
-
-				<!-- list of all available conferencing rooms -->
-				<table style="width: 100%;" id="rooms-list"></table>
-
-				<!-- local/remote videos container -->
-				<div id="videos-container"></div>
-			</section>
-		</article>
+		<iframe width="100%" height="100%" id="videoframe" src="/video.html" scrolling="no"></iframe>
 	</div>
 
 	<div class="startTemporaryPopup" id="videoChatExplanator">&#8592; click grey bar to open Video Chat</div>
@@ -280,8 +221,6 @@
 
     <script class="rs-file" src="../js/jquery.royalslider.min.js"></script>
     <script src="../js/jquery.infinitescroll.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-
     <!-- Lev: This script controls the laser dot -->
     <script defer src="../js/LASER_RECEIVER.js"></script>
 
@@ -290,18 +229,6 @@
         document.createElement('article');
         document.createElement('footer');
     </script>
-
-    <!-- scripts used for video-conferencing -->
-
-
-    <script src="../js/videochat/firebase.js"> </script>
-    <script src="../js/videochat/RTCPeerConnection-v1.5.js"> </script>
-	<script src="../js/videochat/conference.js"> </script>
-
-    <!-- script used to stylize video element -->
-    <script src="../js/videochat/getMediaElement.js"> </script>
-
-
 
     <!-- syntax highlighter -->
     <script src="../js/highlight.pack.js"></script>
@@ -312,14 +239,9 @@
         var slite = "/<%= hash %>/";
     </script>
 
-	<!--<script src='https://cdn.webrtc-experiment.com/firebase.js'> </script>-->
-	<script src="../js/conferenceScreensharing.js"> </script>
-	<script src="../js/screensharing.js"> </script>
-
     <script src="../A1/js/A1.js"></script>
     <script src="../A1/js/notes.js"></script>
     <script src="../A1/js/paypal.js"></script>
-	<script src="../js/videochat.js"> </script>
 
     <!-- end VideoChat Javascript -->
 
