@@ -732,10 +732,16 @@ if (!isFile) {
         showHideVideoChat();
     });
 	socket.on('broadcastScreensharing', function (data) {
+
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastScreensharing received');
         if (data.open === isScreensharingOn) return;
-		setTimeout(function(){showHideScreensharing();},10000);
+		if(data.open == false) {
+			showHideScreensharing()
+		}
+		else {
+			setTimeout(function(){showHideScreensharing();},10000);
+		}
 		
     });
 }
