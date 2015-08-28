@@ -62,7 +62,7 @@ function sliteError(slite, err, onSliteCompleteCallback) {
     }
     var data = {};
     data.error = true;
-    slite.getSocket().emit("sliteConversionError", data);
+    slite.getParams().socket.emit("sliteConversionError", data);
     onSliteCompleteCallback && onSliteCompleteCallback(err);
 }
 
@@ -96,7 +96,7 @@ module.exports.convert = function (pathName, origName, socket, opt, onSliteCompl
                     console.error('Error deleting: ' + pathName + err);
                 }
             });
-            callback(2);
+            //callback(2);
 			return;
         }
         var uploadFullFileName = slite.getUploadFullFileName();
