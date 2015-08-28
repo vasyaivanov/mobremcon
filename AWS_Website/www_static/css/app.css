@@ -14,7 +14,7 @@
   margin: 0px;
   height: 200px;
   margin-left: 12px;
-  overflow: scroll;
+  overflow-y: scroll;
   z-index: 1;
   height: 99%;
 }
