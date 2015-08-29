@@ -121,7 +121,7 @@ function showHideVideoChat() {
         isVideoChatOn = false;
     }
 
-    if (isAPresenter) {
+    if (isAPresenter && isVideoChatOn == false) {
 		socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: currentHash});
     }
 
