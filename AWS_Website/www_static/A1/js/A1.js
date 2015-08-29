@@ -152,7 +152,7 @@ function showHideScreensharing() {
         isScreensharingOn = false;
     }
 
-    if (isAPresenter) {
+    if (isAPresenter && isScreensharingOn == false) {
         socket.emit("presenterScreensharing", {open: isScreensharingOn, hash: currentHash});
     }
 
@@ -740,7 +740,7 @@ if (!isFile) {
 			showHideScreensharing()
 		}
 		else {
-			setTimeout(function(){showHideScreensharing();},10000);
+			showHideScreensharing();
 		}
 		
     });
