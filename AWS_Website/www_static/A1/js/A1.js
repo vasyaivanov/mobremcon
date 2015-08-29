@@ -106,11 +106,6 @@ function showHideComments() {
 var isVideoChatOn = false;
 function showHideVideoChat() {
     if (!isVideoChatOn) {
-        if ($("#join-button").length) {
-            $("#join-button").trigger("click");
-        } else {
-            $("#setup-new-room").trigger("click");
-        }
         isVideoChatOn = true;
 		$("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
     } else {
@@ -145,7 +140,7 @@ function showHideVideoChat() {
 var isScreensharingOn = false;
 function showHideScreensharing() {
     if (!isScreensharingOn) {
-		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);		
+		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
         isScreensharingOn = true;
     } else {
 		$("#screensharingiframe").attr("src","");
@@ -481,7 +476,7 @@ $('#videochatpanel').click(function () {
 });
 
 if(isVideoChatOpen == 1){
-    showHideVideoChat();
+    setTimeout(function(){showHideVideoChat()},2000);
 }
 $('#closevideo').click(function () {
     showHideVideoChat();
@@ -742,6 +737,6 @@ if (!isFile) {
 		else {
 			showHideScreensharing();
 		}
-		
+
     });
 }
