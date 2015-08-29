@@ -18,6 +18,8 @@
 
         <!-- font -->
         <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz' rel='stylesheet' type='text/css'>
+        <!-- font icons -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     </head>
     <body style='background-image: url(img/Slite_Background.jpg);'>
@@ -92,16 +94,16 @@
                         <ul class="nav navbar-nav navbar-right">
                           <li class="link-signin">
                             <% if (!user) { %>
-                              <a href="signin.html"><span class="glyphicon glyphicon-user"></span> Sign in</a>
+                              <a href="signin.html"><span class="fa fa-sign-in"></span> Sign in</a>
                             <% } else { %>
-                              <a href="/account.html"><span class="glyphicon glyphicon-user"></span> Hello, <%= user.username %>.</a>
+                              <a href="/account.html"><span class="fa fa-user"></span> Hello, <%= user.username %>.</a>
                             <% } %> 
                           </li>
                           <li class="link-signin">
                             <% if (!user) { %> 
-                              <a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+                              <a href="signup.html"><span class="fa fa-user-plus"></span> Sign up</a>
                             <% } else { %>
-                              <a href="/logout"><span class="glyphicon glyphicon-user"></span> Sign out.</a>
+                              <a href="/logout"><span class="fa fa-sign-out"></span> Sign out.</a>
                             <% } %>
                           </li>
                         </ul>

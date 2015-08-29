@@ -159,7 +159,7 @@ html, body {
 body, input, select, textarea {
     color: rgba(255, 255, 255, 0.75);
     font-family: 'Yanone Kaffeesatz', sans-serif;
-    font-size: 15pt;
+    font-size: 15px;
     font-weight: 100;
     line-height: 1.75em;
 }

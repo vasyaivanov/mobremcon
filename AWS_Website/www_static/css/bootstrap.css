@@ -1429,12 +1429,15 @@ textarea {
 
 /* line 48, ../sass/bootstrap/_scaffolding.scss */
 a {
-  color: #428bca;
+  /*color: #428bca;*/
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
+  text-shadow: 1px 1px #000000;
 }
 /* line 53, ../sass/bootstrap/_scaffolding.scss */
 a:hover, a:focus {
-  color: #2a6496;
+  /*color: #2a6496;*/
+  color: #7badd9;
   text-decoration: underline;
 }
 /* line 58, ../sass/bootstrap/_scaffolding.scss */
