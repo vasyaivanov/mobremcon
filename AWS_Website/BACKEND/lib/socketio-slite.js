@@ -669,7 +669,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
     socket.on('presenterVideoChat', function (data) {
         console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + 'data.open=' + data.open + ' videoChat in ' + data.hash);
-        module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
+        module.parent.exports.slideCheckPresenter(data.hash, function(sfound, spresenter, stitle, spassword) {
+    				if(spresenter == 1 && sfound == 1) {
+                module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
+            }
+        });
         module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: true},
             function (err, numAffected) {
                 if(numAffected > 0) {console.log("isVideoChatOpen set to " + data.open + " numAffected: " + numAffected)}
@@ -679,7 +683,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     });
     socket.on('presenterScreensharing', function (data) {
         console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
-        module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
+        module.parent.exports.slideCheckPresenter(data.hash, function(sfound, spresenter, stitle, spassword) {
+    				if(spresenter == 1 && sfound == 1) {
+                module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
+            }
+        });
         module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isScreensharingOpen: data.open}}, {upsert: true},
             function (err, numAffected) {
                 if(numAffected > 0) {console.log("isScreensharingOpen set to " + data.open + " numAffected: " + numAffected)}

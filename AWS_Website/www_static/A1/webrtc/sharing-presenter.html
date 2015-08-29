@@ -2,6 +2,7 @@
 <head>
 <script src="https://cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <style>
 audio {
 	display: none;
@@ -12,7 +13,7 @@ video {
 }
 </style>
 <script>
-
+var socket = io.connect(document.location.hostname + ':' + location.port);
 var MODERATOR_CHANNEL_ID = 'slite'; // channel-id
 var MODERATOR_SESSION_ID = '<%= hash %>-screen';    // room-id
 var MODERATOR_ID         = '<%= userId%>';    // user-id
@@ -28,6 +29,17 @@ moderator.session = MODERATOR_SESSION;
 moderator.userid  = MODERATOR_ID;
 moderator.extra   = MODERATOR_EXTRA;
 
+moderator.onstream = function(event) {
+	if(event.isScreen) {
+		socket.emit("presenterScreensharing", {open: true, hash: '<%= hash %>'});
+		$( "#screensharing" ).append(event.mediaElement);
+	}
+	
+	if (event.isAudio) {
+		$( "#audiosharing" ).append(event.mediaElement);
+	}
+};
+
 function startSession() {
 	moderator.open({
 		dontTransmit: true,
@@ -41,6 +53,9 @@ function stopSession() {
 </script>
 </head>
 <body onload="startSession()">
+<div id="screensharing"></div>
+<div id="audiosharing"></div>
+
 <section class="experiment" id="screensharing_install_extension">
 	<h2 id="prerequisites">
 		<a href="#prerequisites"></a>
