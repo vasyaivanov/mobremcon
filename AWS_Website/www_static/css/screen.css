@@ -16,7 +16,8 @@ body {
   /* background-color: #010352; */
   font-family: 'Yanone Kaffeesatz', sans-serif;
   background-color: black;
-  /* background-image: url("../img/Slite_Background.jpg"); */
+  background-image: url("../img/Slite_Background.jpg");
+
 }
 
 /* line 25, ../sass/screen.scss */
