@@ -376,7 +376,6 @@ app.use(function (req, res, next) {
 					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
-
 					slideCheckPresenter(hash, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
 						if(sfound == 1) {
 							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
@@ -691,18 +690,23 @@ readSlideSize = function(path_to_slide, callback) {
 module.exports.readSlideSize = readSlideSize;
 
 router.get('/my.html', function (req, res){
+	if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
 		return Slide.find({uid : module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
-        if( !err ) {
-            res.render(path.join(www_dir,www_static_dir , 'my.html'), {
-              slides: docs,
-			  request: req,
-			  user: req.user,
-			  moment: moment
-            });
-        } else {
-            return console.log( err );
-        }
-    });
+			if( !err ) {
+				res.render(path.join(www_dir,www_static_dir , 'my.html'), {
+				  slides: docs,
+				  request: req,
+				  user: req.user,
+				  moment: moment
+				});
+			} else {
+				return console.log( err );
+			}
+		});
+	}
+	else {
+		res.redirect('/my.html');
+	}
 });
 // Render remote control
 
