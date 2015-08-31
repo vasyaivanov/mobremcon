@@ -9,9 +9,10 @@ var url = require('url')
   , uuid = require('node-uuid')
   , SLITE_EXT = '.jpg'
   , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$')
+  , session = require('express-session')
+  , cookieParser = require('cookie-parser')
   , HTML5_UPLOADER = false;
 var start = process.hrtime();
-
 
 function resetElapsedTime() {
     start = process.hrtime();
@@ -124,6 +125,8 @@ function getHashPresentation(hash, next){
 
 
 module.parent.exports.io.sockets.on('connection', function (socket) {
+    var userSession = module.parent.exports.UserData[module.parent.exports.getCookie(socket.handshake.headers.cookie,module.parent.exports.sessionIdCookie)];
+
     if (pollAnswerArray.length > 0) {
         pollUpdate();
     }
@@ -153,7 +156,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         socket.emit("sliteConversionError", data);
     }
     function uploadComplete(name, origName) {
-        converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: module.parent.exports.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: module.parent.exports.userAuth, ssite: socket.handshake.headers.host});
+        converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: userSession.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: userSession.userAuth, ssite: socket.handshake.headers.host});
     }
 
     if (HTML5_UPLOADER) {
@@ -208,7 +211,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
     socket.on('server-deleteSlide', function (data) {
 		var hashPath = path.join(www_dir, slitesDir, data.sid);
-		module.parent.exports.SlideScheme.remove({ uid: module.parent.exports.currentUserId, sid: data.sid }, function(err) {
+		module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
 			if (!err) {
 					module.parent.exports.deleteFolderRecursive(hashPath);
 					module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err) {
@@ -265,14 +268,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
 	socket.on('notes-server', function (data) {
 
-		//module.exports.userAuth
 		var slideId = data.slideId.replace(/[^a-zA-Z0-9]/g,"");
 		var slidePath = www_dir + slitesDir + '/' + slideId + '/';
-		var tmpNote = module.exports.userAuth ? 0 : 1;
+		var tmpNote = userSession.userAuth ? 0 : 1;
 		if(slideId == "A1") {
 			slidePath = www_dir + module.parent.exports.www_static_dir + '/' + slideId;
 		}
-		var currentUserId = module.parent.exports.currentUserId;
+		var currentUserId = userSession.currentUserId;
 
 	    if(fs.existsSync(slidePath) == true) {
 			//console.log('Slide was found');
@@ -313,7 +315,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		var delPaypalTimeoutDate = new Date(new Date() - 10*60000).toISOString();
 		module.parent.exports.SlideScheme.update({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: delPaypalTimeoutDate } }, { $set: { scid: null, paypalTmpExp: null, paypalPayed: 0 }}).exec();
         console.log("Check slide: " + data.slideId);
-		module.parent.exports.slideCheckPresenter(data.slideId, function(sfound, spresenter, stitle, spassword, spayed) {
+		module.parent.exports.slideCheckPresenter(data.slideId, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
 				if(spresenter == 1 && sfound == 1) {
 					if(data.newHashName.length > 30) {
 						socket.emit('renameHash-client', {slideId: data.slideId, available : 0});
@@ -421,7 +423,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
     socket.on('updatePassword', function (data) {
         console.log("updatePassword to: " + data.password + " currentHash=" + data.currentHash);
-		module.parent.exports.slideCheckPresenter(data.currentHash, function(sfound, spresenter, stitle, spassword) {
+		module.parent.exports.slideCheckPresenter(data.currentHash, userSession.currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(spresenter == 1 && sfound == 1) {
 					module.parent.exports.SlideScheme.find({ sid: data.currentHash }, function (err, docs) {
 						console.log(docs);
@@ -439,7 +441,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     });
 
 	socket.on('checkSlidePassword-server', function (data) {
-		module.parent.exports.slideCheckPresenter(data.hash, function(sfound, spresenter, stitle, spassword) {
+		module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
 			if(sfound == 1 && data.password == spassword) {
 				socket.emit('checkSlidePassword-client',{result: 1});
 				console.log('Password is correct');
@@ -527,7 +529,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 socket.emit("update", "Can't find " + whisperTo);
             }
         } else {
-			var newMsg = new module.parent.exports.chatSchema({uid: module.parent.exports.currentUserId,sid: socket.room.toLowerCase(), msg: msg, name: people[socket.id].name});
+			var newMsg = new module.parent.exports.chatSchema({uid: userSession.currentUserId,sid: socket.room.toLowerCase(), msg: msg, name: people[socket.id].name});
 			newMsg.save(function(err, saved) {
 				if(err) console.error('Can\'t insert a new chat: ' + err);
 			});
@@ -668,22 +670,26 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     });
 
     socket.on('presenterVideoChat', function (data) {
+        console.log(module.parent.exports.session);
         console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + 'data.open=' + data.open + ' videoChat in ' + data.hash);
-        module.parent.exports.slideCheckPresenter(data.hash, function(sfound, spresenter, stitle, spassword) {
+        module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
+          console.log('Presenter: ' + spresenter + ' ' + sfound)
     				if(spresenter == 1 && sfound == 1) {
-                module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
+              module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: true},
+                  function (err, numAffected) {
+                      if(numAffected > 0) {
+                        module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
+                        console.log("isVideoChatOpen set to " + data.open + " numAffected: " + numAffected)}
+                  }
+              );
+
             }
         });
-        module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: true},
-            function (err, numAffected) {
-                if(numAffected > 0) {console.log("isVideoChatOpen set to " + data.open + " numAffected: " + numAffected)}
-            }
-        );
 
     });
     socket.on('presenterScreensharing', function (data) {
         console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
-        module.parent.exports.slideCheckPresenter(data.hash, function(sfound, spresenter, stitle, spassword) {
+        module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId, function(sfound, spresenter, stitle, spassword) {
     				if(spresenter == 1 && sfound == 1) {
                 module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
             }
