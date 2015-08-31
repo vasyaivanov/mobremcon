@@ -19,7 +19,7 @@
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
   , ioPort = 1337
-  , maxSlidesCount = 2
+  , maxSlidesCount = 5
   , maxSlidesSize = 10485760
   , maxSlideUploadSize = 5242880
   , sessionIdCookie = "sliteCurrUser"
