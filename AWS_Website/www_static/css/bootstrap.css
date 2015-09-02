@@ -3740,6 +3740,9 @@ select[multiple].input-sm,
   font-size: 18px;
   line-height: 1.33;
   border-radius: 6px;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 /* line 75, ../sass/bootstrap/mixins/_forms.scss */
