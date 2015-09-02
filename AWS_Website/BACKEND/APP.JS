@@ -29,6 +29,8 @@ var app = express();
 module.exports.app = app;
 module.exports.maxSlideUploadSize = maxSlideUploadSize;
 
+module.exports.sessionIdCookie = sessionIdCookie;
+
 
 mongoose.connect('localhost', 'test');
 var db = mongoose.connection;
@@ -273,10 +275,10 @@ var getUserUploadStatus = function (userId, callback) {
 			for(i=0;i<docs.length;i++) {
 				slidesMB = slidesMB + docs[i].size;
 			}
-			if(docs.length >= maxSlidesCount && module.exports.userRole == 0) {
+			if(docs.length >= maxSlidesCount && module.exports.UserData[userId].userRole == 0) {
 				callback(1);
 			}
-			else if(slidesMB >= maxSlidesSize && module.exports.userRole == 0) {
+			else if(slidesMB >= maxSlidesSize && module.exports.UserData[userId].userRole == 0) {
 				callback(1);
 			}
 			else {
@@ -289,31 +291,45 @@ var getUserUploadStatus = function (userId, callback) {
 	});
 }
 
+// Auth array
+module.exports.UserData = {};
+
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
-    if(req.user) {
-		module.exports.userAuth = 1;
-    }
-    else {
-		module.exports.userAuth = 0;
-    }
+    //REMAP
+    //module.exports.userAuth = 1;
+
 
     setUserSession(req,res,function(userId) {
-		module.exports.currentUserId =  userId;
+      module.exports.UserData[userId] = {};
+      module.exports.UserData[userId].currentUserId = userId
+      // Remap
+		//module.exports.currentUserId =  userId;
 
 		if(req.user) {
+			module.exports.UserData[userId].userAuth = 1;
 			readUserRights(userId, function(res) {
-				module.exports.userRole = res;
+				// Remap
+				//module.exports.userRole = res;
+				module.exports.UserData[userId].userRole = res;
 			});
 		}
 		else {
-			module.exports.userRole = 0;
+      //Remap
+			//module.exports.userRole = 0;
+		  module.exports.UserData[userId].userAuth = 0;
+		  module.exports.UserData[userId].userRole = 0;
 		}
-		
+
 		getUserUploadStatus(userId, function(userAccess) {
-				module.exports.noUploadForUser = userAccess;
+			module.exports.UserData[userId].noUploadForUser = userAccess;
+			// REMAP
+			//module.exports.noUploadForUser = userAccess;
 		});
+
+
+
     });
 
 	var customHash = req.url.substring(1);
@@ -360,17 +376,21 @@ app.use(function (req, res, next) {
 					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
-
-					slideCheckPresenter(hash, function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
-						if(sfound == 1) {
-							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
-							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
-						}
-						else {
-							console.log( "Slide was not found" );
-							res.redirect('/');
-						}
-					});
+					if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
+						slideCheckPresenter(hash, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
+							if(sfound == 1) {
+								console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
+								res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
+							}
+							else {
+								console.log( "Slide was not found" );
+								res.redirect('/');
+							}
+						});
+					}
+					else {
+						res.redirect('/' + hash);
+					}
 				} else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
 					//console.log('jpg: ' + afterHash);
 					var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
@@ -509,22 +529,22 @@ function setUserSession(req, res, callback) {
 	   if(!(req.cookies[sessionIdCookie])) {
 		var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
 		var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
-		//console.log("New user ID: " + newUserId);
+		//console.log("-------------New user ID: " + newUserId);
 		//console.log("Setting new session cookie");
 		res.cookie(sessionIdCookie, newUserId, { expires: expDate });
 		callback(newUserId);
 	   }
 	   else {
 		// User loged in, but has older, random generated id
-		if((req.user) /*&& (req.user._id != req.cookies[sessionIdCookie])*/) {
-			//console.log("Setting new user id");
+		if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
+			//console.log("-----------Setting new user id");
 			oldUserId = req.cookies[sessionIdCookie];
 			if(req.user._id.toString() != req.cookies[sessionIdCookie]) {
 				res.cookie(sessionIdCookie, req.user._id.toString(), { expires: expDate });
 			}
 			// Update user Notes
-			
-		
+
+
 			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
 				function (err, numAffected) {
 					if(err) console.log(err);
@@ -539,14 +559,14 @@ function setUserSession(req, res, callback) {
 			callback(req.user._id);
 		}
 		else {
-			//console.log("User is set");
+			//console.log("-------------User is set");
 			callback(req.cookies[sessionIdCookie]);
 		}
 		// Else - User  doesn't need any changes
 	   }
 	//console.log("------------------------ ");
 }
-
+// Index page
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -575,19 +595,22 @@ router.get(rootRegExp, function (req, res){
 	});
   }
 
+// Check 
+if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
+	getUserUploadStatus(module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
+		 getRandomSlides(Slide,function(randomSlides) {
+			res.render(path.join(www_dir, www_static_dir, indexHtml), {
+				user: req.user,
+				noUploadForUser: userAccess,
+				randomSlides:  randomSlides
+			});
+		 });
 
-
-
-  getUserUploadStatus(module.exports.currentUserId, function(userAccess) {
-	 getRandomSlides(Slide,function(randomSlides) {
-		res.render(path.join(www_dir, www_static_dir, indexHtml), {
-			user: req.user,
-			noUploadForUser: userAccess,
-			randomSlides:  randomSlides
-		});
-	 });
-
-  });
+	  });
+}
+else {
+	res.redirect('/');
+}
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){
@@ -642,7 +665,7 @@ router.get('/letscrawl.html', function (req, res){
 	}
 });
 
-router.post('/signin.html', 
+router.post('/signin.html',
   passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?ERROR_AUTH=1' })
 );
 
@@ -672,44 +695,53 @@ readSlideSize = function(path_to_slide, callback) {
 module.exports.readSlideSize = readSlideSize;
 
 router.get('/my.html', function (req, res){
-	return Slide.find({uid : module.exports.currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
-        if( !err ) {
-            res.render(path.join(www_dir,www_static_dir , 'my.html'), {
-              slides: docs,
-			  request: req,
-			  user: req.user,
-			  moment: moment
-            });
-        } else {
-            return console.log( err );
-        }
-    });
+	if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
+		return Slide.find({uid : module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
+			if( !err ) {
+				res.render(path.join(www_dir,www_static_dir , 'my.html'), {
+				  slides: docs,
+				  request: req,
+				  user: req.user,
+				  moment: moment
+				});
+			} else {
+				return console.log( err );
+			}
+		});
+	}
+	else {
+		res.redirect('/my.html');
+	}
 });
 // Render remote control
 
-slideCheckPresenter = function(hashId, callback) {
+slideCheckPresenter = function(hashId, currentUserId , callback) {
+	if(currentUserId) {
 		Slide.findOne({sid : hashId }).exec(function (err, doc) {
 			if( doc ) {
-				console.log("Slide was found");
-				var slidePresenter = (doc.uid == module.exports.currentUserId) ? 1 : 0;
+				var slidePresenter = (doc.uid == currentUserId) ? 1 : 0;
 				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "", (doc.isScreensharingOpen) ? 1 : "", (doc.slidesNum > 0) ? doc.slidesNum : 1);
 			} else {
-				console.log("Slide was not found");
+				//console.log("Slide was not found");
 				callback(0,0,"","", 0, "");
 			}
 		});
+	}
+	else {
+				callback(0,0,"","", 0, "");		
+	}
 }
 
 module.exports.slideCheckPresenter = slideCheckPresenter;
 
 router.get('/screensharing.html', function (req, res){
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, function(sfound, spresenter, stitle, spassword) {
+			slideCheckPresenter(hashId, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: module.exports.currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else if(sfound == 1 && spresenter == 0) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: module.exports.currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
 					res.send("No slide")
@@ -719,12 +751,12 @@ router.get('/screensharing.html', function (req, res){
 
 router.get('/video.html', function (req, res){
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, function(sfound, spresenter, stitle, spassword) {
+			slideCheckPresenter(hashId, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: module.exports.currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else if(sfound == 1 && spresenter == 0) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: module.exports.currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
 					res.send("No slide")
@@ -743,7 +775,7 @@ router.get('/remote/index.html', function (req, res){
 		var match = hashId.match(slitesRegMW);
 
 		if(match) {
-			slideCheckPresenter(hashId, function(sfound, spresenter, stitle, spassword) {
+			slideCheckPresenter(hashId, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
 					 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: stitle, password: spassword});
 				}
@@ -843,7 +875,7 @@ module.exports.deleteFolderRecursive = function(path) {
 			});
 		  }
 		});
-		
+
 		fs.rmdir(path, function (err) {
 		  if (err) console.log("Can't delete folder " + err);
 			console.log(path + 'successfully deleted');
@@ -882,4 +914,9 @@ function readUserRights(userId, callback) {
 		if(userDoc) {callback(userDoc.role > 0 ? userDoc.role : 0)}
 		else {callback(0)}
 	});
+}
+
+module.exports.getCookie = function (cookie, cookiename) {
+  var cookiestring=RegExp(""+cookiename+"[^;]+").exec(cookie);
+  return unescape(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
 }
