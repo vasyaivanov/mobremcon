@@ -363,11 +363,11 @@
 
 	   #personalNotes{
 	    position: absolute;
-	    bottom: -35px;
+	    bottom: 0px;
 	   	z-index: 2;
 			right: 0px;
 	   	display: none;
-			width: 50%;
+			width: 29%;
 			-webkit-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.4);
 			-moz-box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.4);
 			box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.4);
@@ -376,7 +376,7 @@
 			border-color: lightblue;
 			border-radius: 25px;*/
 			right: 0px;
-	   	height: 500px;
+	   	height: 60%;
 
 			background-image:  -webkit-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -webkit-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -webkit-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -webkit-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
 			background-image:  -moz-linear-gradient(left, rgba(255,85,91, .2), rgba(255,85,91, .2)), -moz-linear-gradient(left, rgba(255,85,91, .8), rgba(255,85,91, .8)), -moz-linear-gradient(top, white 0px, white 69px, rgba(255,255,255,0) 70px), -moz-repeating-linear-gradient(white 0px, white 18px, #A6FFED 19px, white 20px);
