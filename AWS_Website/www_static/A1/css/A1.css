@@ -656,7 +656,7 @@
 			  height: 30px;
 			  background: url(../img/close.svg);
 			  background-size: 30px 30px;
-			  opacity: 0.7;
+			  /*opacity: 0.7;*/
 			  z-index: 6;
 			}
 
