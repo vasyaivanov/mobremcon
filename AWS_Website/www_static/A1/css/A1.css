@@ -335,7 +335,7 @@
 			position: absolute;
 			left: 10%;
 			font-size:14px;
-			font-weight: bold;
+			/*font-weight: bold;*/
 			color: #c4c4c4;
 			width: 80%;
 		}
