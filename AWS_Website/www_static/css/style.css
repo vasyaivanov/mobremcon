@@ -170,7 +170,7 @@ a {
     -o-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
     -ms-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
     transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
-    border-bottom: dotted 1px;
+    /*border-bottom: dotted 1px;*/
     color: #3d21f8;
     text-decoration: none;
     text-shadow: 1px 1px #000000;
