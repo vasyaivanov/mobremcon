@@ -259,6 +259,7 @@
 			line-height: normal;
 			overflow-x: hidden;
 			overflow-y: hidden;
+			background-color: white;
 		}
 
 		#videos-container{
@@ -641,7 +642,7 @@
 
 			.closeLiveVideo {
 				position: absolute;
-				right: 1%;
+				right: 0%;
 				z-index: 999999 !important;
 			}
 
