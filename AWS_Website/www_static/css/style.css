@@ -1975,7 +1975,7 @@ body.landing .dropotron.level-0 {
 }
 
 #header {
-    background: rgba(39, 40, 51, 0.965);
+    /*background: rgba(39, 40, 51, 0.965);*/
     box-shadow: 0 0 0.25em 0 rgba(0, 0, 0, 0.25);
     cursor: default;
     height: 3.5em;
