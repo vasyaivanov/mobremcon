@@ -138,24 +138,6 @@
 
 /* Basic */
 
-
-html, body {
-    /*background: #1c1d26;*/
-}
-
-/*body.is-loading *, body.is-loading *:before, body.is-loading *:after {
-		-moz-animation: none !important;
-		-webkit-animation: none !important;
-		-o-animation: none !important;
-		-ms-animation: none !important;
-		animation: none !important;
-		-moz-transition: none !important;
-		-webkit-transition: none !important;
-		-o-transition: none !important;
-		-ms-transition: none !important;
-		transition: none !important;
-	}*/
-
 body, input, select, textarea {
     color: rgba(255, 255, 255, 0.75);
     font-family: 'Lato', sans-serif;
@@ -198,7 +180,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #ffffff;
     font-weight: 300;
     line-height: 1em;
-    margin: 0 0 1em 0;
+    /*margin: 0 0 1em 0;*/
 }
 
     h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
