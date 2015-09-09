@@ -1060,6 +1060,13 @@ input[type="radio"] {
     position: relative;
 }
 
+/*.fa-envelope:hover {
+        color: #7badd9;
+        background: #7badd9;
+}*/
+
+
+
     .icon:before {
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
@@ -1090,6 +1097,9 @@ input[type="radio"] {
             color: #1c1d26 !important;
             text-shadow: 1px 0 0 #ffffff, -1px 0 0 #ffffff, 0 1px 0 #ffffff, 0 -1px 0 #ffffff;
         }
+    .fa-envelope-o:before {
+        content: yellow;
+    }
 
     .icon.major {
         background: #272833;

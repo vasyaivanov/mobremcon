@@ -44,6 +44,7 @@
 		{
 			color:#7badd9;
 			cursor: pointer;
+			background: rgba(196,196,196, 0.15);
 		}
 
 		#primary_nav_wrap ul li
@@ -65,15 +66,18 @@
 		{
 			display:none;
 			position: fixed;
-			top: 30px;
-			right: 0px;
+			top: 32px;
+			right: 1px;
 			background:#fff;
 			padding:0
 		}
 
-		/*.menuSubmenu {
-			z-index: 3;
-		}*/
+		.menuSubmenu {
+			/*z-index: 3;*/
+			border: 1px solid rgba(0,0,0,.15);
+			-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+     	box-shadow: 0 6px 12px rgba(0,0,0,.175); 
+		}
 
 		#primary_nav_wrap ul ul li
 		{
@@ -81,13 +85,10 @@
 			width:200px
 		}
 
-		#primary_nav_wrap ul ul a
-		{
-			line-height:120%;
-			padding:10px 15px;
-			border: 1px;
-			border-color: rgb(236, 232, 232);
-			border-style: solid;
+		#primary_nav_wrap ul ul a {
+			display: block;
+			
+			padding: 4px 20px;
 		}
 
 		#primary_nav_wrap ul ul ul
