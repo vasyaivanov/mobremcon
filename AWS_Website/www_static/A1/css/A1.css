@@ -79,6 +79,36 @@
      	box-shadow: 0 6px 12px rgba(0,0,0,.175); 
 		}
 
+
+		.social:hover > .socialF, .social:active > .socialF { 
+			visibility: visible; 
+		}
+
+		.social:hover > .socialT, .social:active > .socialT { 
+			visibility: visible; 
+		}
+
+
+		.socialF {
+			visibility: hidden;
+			top: 8px;
+			position: absolute;
+			right:60%;
+			z-index: 99;
+			padding: 0 !important;
+		}
+
+		.socialT {
+			visibility: hidden;
+			top: 8px;
+			position: absolute;
+			right: 50%;
+			z-index: 99;
+			padding: 0 !important;
+		}
+
+
+
 		#primary_nav_wrap ul ul li
 		{
 			float:none;

@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="../css/videochat/videochat-style.css">
     <link rel="stylesheet" href="../css/jquery-ui.min.css">
     <link class="rs-file" href="../css/royalslider.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../css/index1.css">
+	  <link rel="stylesheet" type="text/css" href="../css/index1.css">
     <!-- preview-related stylesheets -->
     <link href="../css/reset.css" rel="stylesheet">
     <link href="../css/github.css" rel="stylesheet">
@@ -43,6 +43,8 @@
     <link class="rs-file" href="../A1/css/A1.css" rel="stylesheet">
      <!-- font   -->
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 
 <body> <!--onresize="resizeCanvas()">-->
@@ -202,14 +204,19 @@
 	<nav id="primary_nav_wrap">
 		<ul>
 			<li><a href="#"></a>
-				<ul class="menuSubmenu dropdown-menu">
+				<ul class="menuSubmenu">
 				  <li><a href="javascript:showRemote()" id="menuRemote">Remote Control (live)</a></li>
 				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span>Chat</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span>Live Video</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
 				  <li><a href="javascript:showHideScreensharing()" id="menuOpenScreensharing"><span id='screensharingOpenCloseLabel'></span>Screen Share</a></li>
-          <li><a href="javascript:shareFacebook()" id="shareFacebook">Share on Facebook</a></li>
-				  <li><a href="javascript:shareTwitter()" id="shareTwitter">Share on Twitter</a></li>
+          <li class="social"><a href="#">Share</a>
+            <a href="javascript:shareFacebook()"  title="Facebook" class="socialF fa fa-facebook-square fa-lg"></a>
+            <a href="javascript:shareTwitter()"  title="Twitter" class="socialT fa fa-twitter-square fa-lg"></a>
+          </li>
+            
+         <!--  <li><a href="javascript:shareFacebook()" id="shareFacebook">Share on Facebook</a></li>
+				  <li><a href="javascript:shareTwitter()" id="shareTwitter">Share on Twitter</a></li> -->
 				  <li><a href="javascript:downloadPresentation()" id="downloadPresentation">Download Presentation</a></li>
 				  <!--<li><a href="javascript:showHideInsertVideoSlideOverlay()" id="menuInsertVideoSlide">Insert Video Slide</a></li>-->
 				  <li><a href="javascript:showHidePasswordCreateOverlay()" id="menuPassword">Protect With Password</a></li>
