@@ -277,7 +277,7 @@
     	z-index: 2;
     	left: 0px;
 			top: 0px;
-    	width: 29%;
+    	width: 25.5%;
     	height: 40%;
     	display: none;
     	border: 1px solid rgba(0,0,0,.15);
@@ -356,7 +356,7 @@
     	position: absolute;
     	bottom: 0px;
 			left: 0px;
-    	width: 29% !important;
+    	width: 25.5% !important;
     	height: 60%;
     	display: none;
 			z-index: 2;
@@ -373,7 +373,7 @@
 		}
 
 	   #personalNotes{
-	    position: absolute;
+	    position:com absolute;
 	    bottom: 0px;
 	   	z-index: 2;
 			right: 0px;
