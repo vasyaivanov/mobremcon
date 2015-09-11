@@ -5,6 +5,12 @@
     width: 100%;
     height: 95%;
 }
+
+/*chat sign up "your name"*/
+.commentsInput {
+  width: 90% !important;
+}
+
 .main {
   padding-top: 10px;
   text-align: center;
