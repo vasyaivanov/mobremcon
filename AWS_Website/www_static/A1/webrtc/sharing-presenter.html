@@ -52,24 +52,51 @@ function stopSession() {
 
 </script>
 </head>
-<body onload="startSession()">
+<body onload="">
 <div id="screensharing"></div>
 <div id="audiosharing"></div>
 
-<section class="experiment" id="screensharing_install_extension">
-	<h2 id="prerequisites">
-		<a href="#prerequisites"></a>
-	</h2>
-	<ol>
-		<li id="install_chrome_extension">
-			<a href="https://chrome.google.com/webstore/detail/screen-capturing/ajhifddimkapgcifgcodmmfdlknahffk" target="_blank">Click <b>here</b> to install Chrome Presenter Extension (audience don't need it)</a>
-		</li>
+<ul>
+	<li id="install_chrome_extension" style="display: none">
+		<a href="https://chrome.google.com/webstore/detail/screen-capturing/ajhifddimkapgcifgcodmmfdlknahffk" target="_blank">Click <b>here</b> to install Chrome Presenter Extension (audience don't need it)</a>
+	</li>
 
-		<li id="install_firefox_extension">
-			<a href="https://www.webrtc-experiment.com/store/firefox-extension/enable-screen-capturing.xpi">Click here to install Firefox Presenter Extension (audience don't need it)</a>
-		</li>
-	</ol>
-</section>
+	<li id="install_firefox_extension" style="display: none">
+		<a href="https://www.webrtc-experiment.com/store/firefox-extension/enable-screen-capturing.xpi">Click here to install Firefox Presenter Extension (audience don't need it)</a>
+	</li>
+</ul>
+
+<script>
+var getChromeExtensionStatus = function (callback) {
+	if (!!navigator.mozGetUserMedia) return callback('not-chrome');
+	
+	var extensionid = 'ajhifddimkapgcifgcodmmfdlknahffk';
+
+	var image = document.createElement('img');
+	image.src = 'chrome-extension://' + extensionid + '/icon.png';
+	image.onload = function () {
+		callback('installed-enabled');
+	};
+	image.onerror = function () {
+		callback('not-installed');
+	};
+}
+
+getChromeExtensionStatus(function(result) {
+	if(result == 'not-installed') {
+		$('#install_chrome_extension').show();
+	}
+	else if(result == 'installed-enabled') {
+		startSession();
+	}
+	else {
+		alert('You should use Chrome browser');
+	}
+});
+
+</script>
+
+
 
 <!--a onclick="startSession();">Start</a-->
 <!--a onclick="stopSession();">Stop</a-->
