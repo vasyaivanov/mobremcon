@@ -130,7 +130,7 @@ Slite.prototype.getNumSlides = function () {
 
 Slite.prototype.getHash = function ()
 {
-    var hashLen = 4;
+	var hashLen = this.params.opt.hashSize;
     var time = process.hrtime()[0] // get unique number
 	  , salt = Math.floor(Math.random() * Math.pow(hashLen - 1, Math.random() * (hashLen - 1))) % 36// get variable length prefix
 	  , hash = '';

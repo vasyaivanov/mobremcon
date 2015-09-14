@@ -242,7 +242,9 @@ console.log('www_dir: ' + www_dir);
 
 // hash redirection
 var slitesDir = "slites";
-var slitesReg = "[0-9a-zA-Z]{4}";
+var slitesHashLen = 10;
+module.exports.slitesHashLen = slitesHashLen;
+var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 
 // configure Express
 app.set('port', appPort || process.env.PORT);
@@ -769,9 +771,9 @@ router.get('/remote/index.html', function (req, res){
 
 		var hashId = req.query.presentation;
 
-		console.log(hashId);
+		console.log(slitesReg);
 
-		var slitesReg = "[0-9a-zA-Z]{4}";
+
 		var slitesRegMW = new RegExp('^' + slitesReg + '$');
 		var match = hashId.match(slitesRegMW);
 
