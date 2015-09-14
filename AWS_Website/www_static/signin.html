@@ -49,14 +49,14 @@
                         <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.query.email %>">
                     </div>
                     <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label> <!--a href="#">(forgot password)</a-->
                         <input type="password" class="form-control" name="password" placeholder="Password">
-                        <label for="exampleInputPassword1">Password</label> <a href="#">(forgot password)</a>
-                    </div>
-                    <div class="checkbox">
-                        <label>
+                    </div> <input type="checkbox">
+                    <!--div class="checkbox">
+                       
                           <input type="checkbox"> Remember me
-                        </label>
-                    </div>
+                        
+                    </div-->
                     <input type="submit" value="Sign In" class="btn btn-default"/>
                 </form>
             </div>
@@ -65,7 +65,8 @@
         <header id="header">
           <nav id="nav">
               <ul id="navigation" class="clearfix">
-                <li><a href="/" class='menuLink' id='menuAbout'>Upload</a></li>
+                <li><a href="/" class='menuLink' id='menuAbout'>Home</a></li>
+				<li><a href="/" class='menuLink' id='menuAbout'>Upload</a></li>
                 <li><a href="/#one" class='menuLink' id='menuAbout'>About</a></li>
                 <li><a href="/#four" class='menuLink' id='menuContact'>Contact</a></li>
                 <% if (!user) { %>
