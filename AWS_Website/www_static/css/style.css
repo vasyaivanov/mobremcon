@@ -2188,6 +2188,10 @@ body.is-touch #banner {
     font-size: 16px;
 }
 
+.menuLinkNoScroll{
+    font-size: 16px;
+}
+
 #headerLogo {
     height: 40px; 
     left: 0; 
