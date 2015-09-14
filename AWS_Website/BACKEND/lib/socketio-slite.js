@@ -262,7 +262,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         console.log("JD: received news from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
 		// WE MUST TO CHECK USER FOR PRESENTER VAR!!!
 		module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-			if(docs){module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: docs.sid });};
+			if(docs){
+				module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: docs.sid});
+			}
+			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
+				if(userSession.userRole == 1) {
+					module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: 'A1'});
+				}
+			}
 		});
     });
 
@@ -364,6 +371,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             data.slideID = docs.sid;
             socket.broadcast.emit('moveLaser', data);
           };
+			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
+				if(userSession.userRole == 1) {
+					socket.broadcast.emit('moveLaser', data);
+				}
+			}
         });
         //socket.broadcast.emit('moveLaser', data);
     });
@@ -375,7 +387,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           if(docs){
             data.slideID = docs.sid;
             socket.broadcast.emit('drawCoords', data);
-          };
+          }
+			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
+				if(userSession.userRole == 1) {
+					socket.broadcast.emit('drawCoords', data);
+				}
+			}
         });
     });
 
@@ -385,7 +402,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           if(docs){
             data.slideID = docs.sid;
             socket.broadcast.emit('laserOn', data);
-          };
+          }
+			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
+				if(userSession.userRole == 1) {
+					socket.broadcast.emit('laserOn', data);
+				}
+			}
         });
         //socket.broadcast.emit('laserOn', data);
     });
@@ -405,9 +427,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           if(docs){
             data.slideID = docs.sid;
             socket.broadcast.emit('drawStart', data);
-          };
+          }
+			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
+				if(userSession.userRole == 1) {
+					socket.broadcast.emit('drawStart', data);
+				}
+			}
         });
-        //socket.broadcast.emit('drawStart', data);
     });
 
     socket.on('drawStop', function () {

@@ -260,7 +260,6 @@ app.use(methodOverride());
 app.use(session({
     secret: 'abrakadabra',
     resave: false,
-	cookie: {maxAge: 1000},
     saveUninitialized: false
 }));
 // Initialize Passport!  Also use passport.session() middleware, to support
