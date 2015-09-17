@@ -90,6 +90,22 @@ var Chat = mongoose.model('chat', chatSchema);
 
 module.exports.chatSchema = Chat;
 
+
+// Billing
+
+var billingSchema =  mongoose.Schema({
+  txn_id: { type: String, trim: true},
+  account_type: {type: String, trim: true},
+  uid: {type: String, trim: true},
+  payment_gross: {type: Boolean, trim: true},
+  payment_status: {type: String, trim: true},
+  payment_date: {type: Date}
+});
+
+billingSchema.index({txn_id: 1, payment_status: 1, payment_gross: 1}, {unique: true});
+
+var Billing = mongoose.model('billing', billingSchema);
+
 // SlidesDB
 var slidesSchema = mongoose.Schema({
   uid: { type: String},
@@ -493,7 +509,23 @@ router.post('/paypal', function (req, res, next) {
 
 paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
     if(msg == "VERIFIED") {
-		Slide.update({  sid : req.body["option_selection1"]}, { $set: { paypalTransaction: req.body["txn_id"], paypalPayed: 1 }}).exec();
+		var accountType = ["Silver", "Gold"];
+		if(accountType.indexOf(req.body["option_selection1"]) > 0) {
+			//if(req.body["payment_status"] == "Completed") {
+				var billing_add = new Billing({txn_id: req.body["txn_id"], account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
+				billing_add.save(function(err, saved) {
+					if(err) console.error('Can\'t add billing info' + err);
+				});				
+			//}
+			//else if(req.body["payment_status"] == "Refunded") {
+				
+			//}
+
+			
+		}
+		else {
+			Slide.update({  sid : req.body["option_selection1"]}, { $set: { paypalTransaction: req.body["txn_id"], paypalPayed: 1 }}).exec();
+		}
 	}
 });
 
