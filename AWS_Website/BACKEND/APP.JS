@@ -97,7 +97,7 @@ var billingSchema =  mongoose.Schema({
   txn_id: { type: String, trim: true},
   account_type: {type: String, trim: true},
   uid: {type: String, trim: true},
-  payment_gross: {type: Boolean, trim: true},
+  payment_gross: {type: String, trim: true},
   payment_status: {type: String, trim: true},
   payment_date: {type: Date}
 });
@@ -507,12 +507,19 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
 
 router.post('/paypal', function (req, res, next) {
 
+res.send("Received");
+
 paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
     if(msg == "VERIFIED") {
 		var accountType = ["Silver", "Gold"];
 		if(accountType.indexOf(req.body["option_selection1"]) > 0) {
+			var txnId = req.body["parent_txn_id"] ? req.body["parent_txn_id"] : req.body["txn_id"];
+
+			console.log("Paypal data received: " + txnId + " - Type: " + req.body["payment_status"]);
+
+			
 			//if(req.body["payment_status"] == "Completed") {
-				var billing_add = new Billing({txn_id: req.body["txn_id"], account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
+				var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
 				billing_add.save(function(err, saved) {
 					if(err) console.error('Can\'t add billing info' + err);
 				});				
