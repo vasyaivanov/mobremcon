@@ -242,7 +242,7 @@ console.log('www_dir: ' + www_dir);
 
 // hash redirection
 var slitesDir = "slites";
-var slitesHashLen = 10;
+var slitesHashLen = 4;
 module.exports.slitesHashLen = slitesHashLen;
 var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 
