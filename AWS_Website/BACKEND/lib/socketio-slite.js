@@ -370,7 +370,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           if(docs){
             data.slideID = docs.sid;
             socket.broadcast.emit('moveLaser', data);
-          };
+          }
 			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
 				if(userSession.userRole == 1) {
 					socket.broadcast.emit('moveLaser', data);
