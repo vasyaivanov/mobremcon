@@ -664,7 +664,7 @@ if (!isFile) {
     socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
-            document.location.replace(getClearUrl() + '/' + data.fileName);
+			window.open(getClearUrl() + '/' + data.fileName);
         }
     });
 
