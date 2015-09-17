@@ -320,7 +320,6 @@ socket.on("joined", function() {
 
 socket.on("history", function(data) {
   if (data.length !== 0) {
-    //$("#msgs").append("<li><strong><span class='text-warning'>Last 10 messages:</li>");
     $.each(data, function(data, msg) {
       $("#msgs").append("<li><span class='text-warning'>" + msg.name + ': ' + msg.msg + "</span></li>");
     });
@@ -382,6 +381,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
      $("#"+person.name+"").remove();
      clearTimeout(timeout);
      timeout = setTimeout(timeoutFunction, 0);
+	 $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
   });
 
   socket.on("whisper", function(person, msg) {
@@ -409,11 +409,24 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
   socket.on("sendRoomID", function(data) {
     myRoomID = data.id;
   });
+  
+  socket.on("reconnect", function(data) {
+	setTimeout(function() {
+		toggleChatWindow();
+		toggleNameForm();
+		$("#msgs").empty();
+		$("#msg").removeAttr('disabled');
+		$("#send").removeAttr('disabled');
+		$("#nameForm").submit();
+	}, 60000);
+  });
 
   socket.on("disconnect", function(){
-    $("#msgs").append("<li><strong><span class='text-warning'>The server is not available</span></strong></li>");
-    $("#msg").attr("disabled", "disabled");
-    $("#send").attr("disabled", "disabled");
+    $("#msgs").append("<li><strong><span class='text-warning'>Our chat server is not available. Reconnecting...</span></strong></li>");
+	
+	$( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
+    $("#msg").attr("disabled", "true");
+    $("#send").attr("disabled", "true");
   });
 
 });

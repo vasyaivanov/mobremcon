@@ -853,7 +853,7 @@ var server = app.listen(app.get('port'), function () {
 //require('socket.io').of().listen(server); // additional socket.io server to serve /socket.io/ requests
 
 // SOCKET.IO LISTEN
-var io = require('socket.io').listen((appPort === ioPort ? server : http), { log: true });
+var io = require('socket.io').listen((appPort === ioPort ? server : http), { log: true});
 
 module.exports.io = io;
 

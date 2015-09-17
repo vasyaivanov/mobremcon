@@ -132,6 +132,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     }
     console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
     socket.on('disconnect', function () {
+        if (typeof people[socket.id] !== "undefined") { //this handles the refresh of the name screen
+            purge(socket, "disconnect");
+        }
         console.log('DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
     });
 
@@ -526,11 +529,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     });
 
     socket.on("send", function(msg) {
-        //process.exit(1);
         var re = /^[w]:.*:/;
         var whisper = re.test(msg);
         var whisperStr = msg.split(":");
         var found = false;
+		
         if (whisper) {
             var whisperTo = whisperStr[1];
             var keys = Object.keys(people);
@@ -555,29 +558,18 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 socket.emit("update", "Can't find " + whisperTo);
             }
         } else {
-			var newMsg = new module.parent.exports.chatSchema({uid: userSession.currentUserId,sid: socket.room.toLowerCase(), msg: msg, name: people[socket.id].name});
-			newMsg.save(function(err, saved) {
-				if(err) console.error('Can\'t insert a new chat: ' + err);
-			});
-
+			if (typeof userSession !== "undefined" && typeof socket !== "undefined") { 
+				var newMsg = new module.parent.exports.chatSchema({uid: userSession.currentUserId,sid: socket.room.toLowerCase(), msg: msg, name: people[socket.id].name});
+				newMsg.save(function(err, saved) {
+					if(err) console.error('Can\'t insert a new chat: ' + err);
+				});
+			}
             module.parent.exports.io.sockets.in(socket.room).emit("chat", people[socket.id], msg);
             socket.emit("isTyping", false);
-
-            /*if (_.size(chatHistory[socket.room]) > 10) {
-                chatHistory[socket.room].splice(0,1);
-            } else {
-                chatHistory[socket.room].push(people[socket.id].name + ": " + msg);
-            }*/
         }
     });
 
-    socket.on("disconnect", function() {
-        if (typeof people[socket.id] !== "undefined") { //this handles the refresh of the name screen
-            purge(socket, "disconnect");
-        }
-    });
-
-    //Room functions
+   //Room functions
     socket.on("createRoom", function(name) {
         if (people[socket.id].inroom) {
             //socket.emit("update", "You are in a room. Please leave it first to create your own.");
@@ -634,7 +626,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     socket.on("joinRoom", function(roomName) {
         if (typeof people[socket.id] !== "undefined") {
             var room = _.find(rooms, function(room) {return (room.name === roomName)} );
-            var id = room.id;
+			var id = room.id;
             if (socket.id === room.owner) {
                 socket.emit("update", "You are the owner of this room and you have already been joined.");
             } else {
