@@ -517,7 +517,7 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 
 			console.log("Paypal data received: " + txnId + " - Type: " + req.body["payment_status"]);
 
-			
+		
 			//if(req.body["payment_status"] == "Completed") {
 				var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
 				billing_add.save(function(err, saved) {
@@ -615,7 +615,7 @@ router.get(rootRegExp, function (req, res){
   res.header("Expires", 0);
 
   var totalSlides = 0;
-
+ 
   // Paint index page random slides
   function getRandomSlides(Slide, callback) {
 	Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
