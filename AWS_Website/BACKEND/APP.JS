@@ -186,9 +186,7 @@ function addUser(password, email, callback) {
   user.save(function(err) {
     if(err) {
 		console.log("DB ERRORRRR +++++++++ " + err);
-	var err_code = 0;
-
-	if( err.err.indexOf("email") > 0 ) {
+	if( err.code === 11000 ) {
 	    err_code = 2;
 	}
 	else {
