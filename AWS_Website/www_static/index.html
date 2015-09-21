@@ -93,12 +93,18 @@
                 <li><a href="#three" data-index="three" class="menuLink">Company</a></li>
                 <li><a href="#four" data-index="four" class="menuLink">Contact</a></li>
                     <% if (!user) { %>
+						<li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
 						<li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
                     	<li><a href="signin.html" class="menuLinkNoScroll">Sign in</a></li>
 						<li><a href="signup.html" class="menuLinkNoScroll">Sign up</a></li>
                     <% } else { %>
-			<li><a href="/my.html" data-index="three" class="menuLinkNoScroll">My presentations</a></li>
-			<li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
+						<% if (userRole < 2) { %>
+							<li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
+						<% } else { %>
+							<li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Manage subscription</a></li>
+						<% } %>			
+						<li><a href="/my.html" data-index="three" class="menuLinkNoScroll">My presentations</a></li>
+						<li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
                     <% } %>
             </ul>
         </nav>

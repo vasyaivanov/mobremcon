@@ -641,7 +641,8 @@ if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
 			res.render(path.join(www_dir, www_static_dir, indexHtml), {
 				user: req.user,
 				noUploadForUser: userAccess,
-				randomSlides:  randomSlides
+				randomSlides:  randomSlides,
+				userRole: module.exports.UserData[req.cookies[sessionIdCookie]].userRole
 			});
 		 });
 
@@ -665,20 +666,25 @@ router.get('/signup.html', function (req, res){
 router.post('/signup.html', function (req, res){
   //console.log('post /signup');
   console.log("MA: new user: " + req.body.password + " " + req.body.email);
-  if( !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA=1');
+  if( !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA=1&' + 'SUBSCRIBE=' + req.body.subscribe);
   else
   {
     addUser(req.body.password, req.body.email,
 	function (error_code) {
 	    if(error_code > 0) {
-		// Error codes: 1 - user exists, 2 - email exists, 3 - other DB errors, 4 - Passwords are different
-		console.log("Reg error code: " + error_code);
-		//res.redirect('/signup.html?err=' + error_code);
+			// Error codes: 1 - user exists, 2 - email exists, 3 - other DB errors, 4 - Passwords are different
 	        res.render(path.join(www_dir,www_static_dir , '/signup.html'), { user: req.user, error: error_code, request: req })
 	    }
 	    else {
-		console.log("User has registered");
-		res.redirect('/signin.html?email=' + req.body.email + '&REG_OK=1');
+            passport.authenticate('local')(req, res, function () {
+				if(req.body.subscribe == 1) {
+					res.redirect('/subscription.html');
+				}
+				else {
+					res.redirect('/');
+				}
+            })
+				//res.redirect('/signin.html?email=' + req.body.email + '&REG_OK=1&' + 'SUBSCRIBE=' + req.body.subscribe);
 	    }
 	}
     );
@@ -752,6 +758,17 @@ router.get('/my.html', function (req, res){
 		res.redirect('/my.html');
 	}
 });
+
+
+router.get('/subscription.html', function (req, res){
+	res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
+	  request: req,
+	  user: req.user,
+	  moment: moment,
+	  userRole: module.exports.UserData[req.cookies[sessionIdCookie]].userRole
+	});
+});
+
 // Render remote control
 
 slideCheckPresenter = function(hashId, currentUserId , callback) {

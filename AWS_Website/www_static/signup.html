@@ -35,6 +35,7 @@
         <section class="middle">
             <div class="container-fluid">
                 <form class="m-form-signin" role="form" action="/signup.html" method="post">
+					<input type="hidden" name="subscribe" value="<%= request.param("SUBSCRIBE") %>">
                     <h1>Sign Up</h1>
               		   <%  if (error == 2) { %>
               				<h4 style="color: #FF0000">Email <i><%= request.param('email') %></i> has already registered. Please try another one.</h4>

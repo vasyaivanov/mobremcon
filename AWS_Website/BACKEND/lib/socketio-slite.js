@@ -269,7 +269,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 				module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: docs.sid});
 			}
 			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
-				if(userSession.userRole == 1) {
+				if(userSession.userRole == 10) {
 					module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: 'A1'});
 				}
 			}
@@ -375,7 +375,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('moveLaser', data);
           }
 			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
-				if(userSession.userRole == 1) {
+				if(userSession.userRole == 10) {
 					socket.broadcast.emit('moveLaser', data);
 				}
 			}
@@ -392,7 +392,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('drawCoords', data);
           }
 			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
-				if(userSession.userRole == 1) {
+				if(userSession.userRole == 10) {
 					socket.broadcast.emit('drawCoords', data);
 				}
 			}
@@ -407,7 +407,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('laserOn', data);
           }
 			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
-				if(userSession.userRole == 1) {
+				if(userSession.userRole == 10) {
 					socket.broadcast.emit('laserOn', data);
 				}
 			}
@@ -432,7 +432,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('drawStart', data);
           }
 			else if(data.slideID == 'A1' && (typeof userSession !== "undefined")) {
-				if(userSession.userRole == 1) {
+				if(userSession.userRole == 10) {
 					socket.broadcast.emit('drawStart', data);
 				}
 			}
