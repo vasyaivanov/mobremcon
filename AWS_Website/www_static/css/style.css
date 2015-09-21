@@ -2192,6 +2192,10 @@ body.is-touch #banner {
     font-size: 16px;
 }
 
+.menuLinkNoScrollRed{
+    font-size: 18px;
+}
+
 #headerLogo {
     height: 40px; 
     left: 0; 
