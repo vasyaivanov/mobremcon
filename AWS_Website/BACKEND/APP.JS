@@ -92,7 +92,6 @@ module.exports.chatSchema = Chat;
 
 
 // Billing
-
 var billingSchema =  mongoose.Schema({
   txn_id: { type: String, trim: true},
   account_type: {type: String, trim: true},
@@ -105,6 +104,17 @@ var billingSchema =  mongoose.Schema({
 billingSchema.index({txn_id: 1, payment_status: 1, payment_gross: 1}, {unique: true});
 
 var Billing = mongoose.model('billing', billingSchema);
+
+
+// User subscription
+var subscriptionSchema =  mongoose.Schema({
+  sid: { type: String, trim: true},
+  end_date: {type: Date}
+});
+
+subscriptionSchema.index({sid: 1}, {unique: true});
+
+var Subscription = mongoose.model('billing', subscriptionSchema);
 
 // SlidesDB
 var slidesSchema = mongoose.Schema({
@@ -178,12 +188,19 @@ function addUser(password, email, callback) {
   // Seed a user
   var user = new User({ email: email, password: password });
 
+  var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+  if(re.test(email) == false) {
+	  callback(3);
+  }
+  else {
+  //callback(4);
+  
    /*if(password != password_confirm) {
     	console.log("Password confirm error");
     	callback(4)
    }
  else {*/
-  user.save(function(err) {
+   user.save(function(err) {
     if(err) {
 		console.log("DB ERRORRRR +++++++++ " + err);
 	if( err.code === 11000 ) {
@@ -200,6 +217,8 @@ function addUser(password, email, callback) {
      callback(0);
     }
   });
+  
+ }
 
 
 }
@@ -517,13 +536,13 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 
 		
 			//if(req.body["payment_status"] == "Completed") {
-				var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
-				billing_add.save(function(err, saved) {
-					if(err) console.error('Can\'t add billing info' + err);
-				});				
+			var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
+			billing_add.save(function(err, saved) {
+				if(err) console.error('Can\'t add billing info' + err);
+			});				
 			//}
 			//else if(req.body["payment_status"] == "Refunded") {
-				
+
 			//}
 
 			
@@ -672,7 +691,7 @@ router.post('/signup.html', function (req, res){
     addUser(req.body.password, req.body.email,
 	function (error_code) {
 	    if(error_code > 0) {
-			// Error codes: 1 - user exists, 2 - email exists, 3 - other DB errors, 4 - Passwords are different
+			// Error codes: 1 - user exists, 2 - email exists, 3 - wrong email,  4 - other DB errors, 5 - Passwords are different
 	        res.render(path.join(www_dir,www_static_dir , '/signup.html'), { user: req.user, error: error_code, request: req })
 	    }
 	    else {

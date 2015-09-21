@@ -56,19 +56,25 @@
 					<td>Silver<br>
 					The same as our Basic plan + you can get your own domain on PREZERA, example: john.prezera.com<br>
 					Plus you would able to get custom names for your presentaitons for free! Example: john.prezera.com/MyPresentation<br>
-					5$/year
+					5$/month<br>
+					<% if (!user) { %>
+						<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?SUBSCRIBE=1'">
+					<% } %>
 					</td>
 					</tr>
 					<tr>
 					<td>Gold<br>
 					The same as our Silver plan + unlimited presentations + 100mb of space<br>
-					10$/year					
+					10$/month<br>
+					<% if (!user) { %>
+						<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?SUBSCRIBE=1'">
+					<% } %>		
 					</td>
 					</tr>
 					<tr>
 					<td>Platinum<br>
 					Own your own server!<br>
-					Ask us about the price: <a href="mailto:contactus@prezera.com">contactus@prezera.com</a>
+					Ask us about the price: <a href="mailto:contactus@prezera.com">contactus@prezera.com</a><br>
 					</td>
 					<tr>
 					</table>
