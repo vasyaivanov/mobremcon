@@ -699,7 +699,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           				if(spresenter == 1 && sfound == 1) {
                     module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: true},
                         function (err, numAffected) {
-                            if(numAffected > 0) {
+                            if(!err) {
                               module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
                               console.log("isVideoChatOpen set to " + data.open + " numAffected: " + numAffected)}
                         }
@@ -713,14 +713,16 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
               module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId, function(sfound, spresenter, stitle, spassword) {
           				if(spresenter == 1 && sfound == 1) {
-                      module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
+                    module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isScreensharingOpen: data.open}}, {upsert: true},
+                        function (err, numAffected) {
+                            if(!err) {
+                              module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
+                              console.log("isScreensharingOpen set to " + data.open + " numAffected: " + numAffected)
+                            }
+                        }
+                    );
                   }
               });
-              module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isScreensharingOpen: data.open}}, {upsert: true},
-                  function (err, numAffected) {
-                      if(numAffected > 0) {console.log("isScreensharingOpen set to " + data.open + " numAffected: " + numAffected)}
-                  }
-              );
           });
 
 
