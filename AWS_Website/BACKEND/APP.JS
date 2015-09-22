@@ -205,7 +205,7 @@ function addUser(password, email, callback) {
   }
   else {
   //callback(4);
-  
+
    /*if(password != password_confirm) {
     	console.log("Password confirm error");
     	callback(4)
@@ -228,7 +228,7 @@ function addUser(password, email, callback) {
      callback(0);
     }
   });
-  
+
  }
 
 
@@ -321,10 +321,10 @@ var getUserUploadStatus = function (userId, callback) {
 			for(i=0;i<docs.length;i++) {
 				slidesMB = slidesMB + docs[i].size;
 			}
-			if(docs.length >= rolesRestrictions[module.exports.UserData[userId].userRole].maxSlidesCount) {
+			if(docs.length >= rolesRestrictions[UserData[userId].userRole].maxSlidesCount) {
 				callback(1);
 			}
-			else if(slidesMB >= rolesRestrictions[module.exports.UserData[userId].userRole].maxSlidesSize) {
+			else if(slidesMB >= rolesRestrictions[UserData[userId].userRole].maxSlidesSize) {
 				callback(1);
 			}
 			else {
@@ -338,45 +338,34 @@ var getUserUploadStatus = function (userId, callback) {
 }
 
 // Auth array
-module.exports.UserData = {};
+var UserData = {};
 
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
-    //REMAP
-    //module.exports.userAuth = 1;
-
-
     setUserSession(req,res,function(userId) {
-      module.exports.UserData[userId] = {};
-      module.exports.UserData[userId].currentUserId = userId
-      // Remap
-		//module.exports.currentUserId =  userId;
+      UserData[userId] = {};
+      UserData[userId].currentUserId = userId
 
 		if(req.user) {
-			module.exports.UserData[userId].userAuth = 1;
+			UserData[userId].userAuth = 1;
 			readUserRights(userId, function(res) {
-				// Remap
-				//module.exports.userRole = res;
-				module.exports.UserData[userId].userRole = res;
+				UserData[userId].userRole = res;
 			});
 		}
 		else {
-      //Remap
-			//module.exports.userRole = 0;
-		  module.exports.UserData[userId].userAuth = 0;
-		  module.exports.UserData[userId].userRole = 0;
+		  UserData[userId].userAuth = 0;
+		  UserData[userId].userRole = 0;
 		}
 
 		getUserUploadStatus(userId, function(userAccess) {
-			module.exports.UserData[userId].noUploadForUser = userAccess;
-			// REMAP
-			//module.exports.noUploadForUser = userAccess;
+			UserData[userId].noUploadForUser = userAccess;
+      module.exports.UserData = UserData;
 		});
 
-
-
     });
+
+
 
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
@@ -423,7 +412,7 @@ app.use(function (req, res, next) {
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
 					if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
-						slideCheckPresenter(hash, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
+						slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
 							if(sfound == 1) {
 								console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
 								res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
@@ -550,14 +539,14 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 				var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
 				billing_add.save(function(err, saved) {
 					if(err) console.error('Can\'t add billing info' + err);
-				});				
+				});
 				//}
 				//else if(req.body["payment_status"] == "Refunded") {
 
 				//}
 			}
 
-			
+
 		}
 		else {
 			Slide.update({  sid : req.body["option_selection1"]}, { $set: { paypalTransaction: req.body["txn_id"], paypalPayed: 1 }}).exec();
@@ -644,7 +633,7 @@ router.get(rootRegExp, function (req, res){
   res.header("Expires", 0);
 
   var totalSlides = 0;
- 
+
   // Paint index page random slides
   function getRandomSlides(Slide, callback) {
 	Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
@@ -665,15 +654,15 @@ router.get(rootRegExp, function (req, res){
 	});
   }
 
-// Check 
+// Check
 if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
-	getUserUploadStatus(module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
+	getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
 		 getRandomSlides(Slide,function(randomSlides) {
 			res.render(path.join(www_dir, www_static_dir, indexHtml), {
 				user: req.user,
 				noUploadForUser: userAccess,
 				randomSlides:  randomSlides,
-				userRole: module.exports.UserData[req.cookies[sessionIdCookie]].userRole
+				userRole: UserData[req.cookies[sessionIdCookie]].userRole
 			});
 		 });
 
@@ -772,7 +761,7 @@ module.exports.readSlideSize = readSlideSize;
 
 router.get('/my.html', function (req, res){
 	if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
-		return Slide.find({uid : module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
+		return Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
 			if( !err ) {
 				res.render(path.join(www_dir,www_static_dir , 'my.html'), {
 				  slides: docs,
@@ -792,12 +781,17 @@ router.get('/my.html', function (req, res){
 
 
 router.get('/subscription.html', function (req, res){
-	res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
-	  request: req,
-	  user: req.user,
-	  moment: moment,
-	  userRole: module.exports.UserData[req.cookies[sessionIdCookie]].userRole
-	});
+  if (typeof UserData[req.cookies[sessionIdCookie]] == "undefined") {
+    // Initiliaze session
+    res.redirect('/subscription.html');
+  } else {
+    res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
+  	  request: req,
+  	  user: req.user,
+  	  moment: moment,
+  	  userRole: UserData[req.cookies[sessionIdCookie]].userRole
+  	});
+  }
 });
 
 // Render remote control
@@ -815,7 +809,7 @@ slideCheckPresenter = function(hashId, currentUserId , callback) {
 		});
 	}
 	else {
-				callback(0,0,"","", 0, "");		
+				callback(0,0,"","", 0, "");
 	}
 }
 
@@ -823,12 +817,12 @@ module.exports.slideCheckPresenter = slideCheckPresenter;
 
 router.get('/screensharing.html', function (req, res){
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
+			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else if(sfound == 1 && spresenter == 0) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
 					res.send("No slide")
@@ -838,12 +832,12 @@ router.get('/screensharing.html', function (req, res){
 
 router.get('/video.html', function (req, res){
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
+			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else if(sfound == 1 && spresenter == 0) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
 					res.send("No slide")
@@ -862,7 +856,7 @@ router.get('/remote/index.html', function (req, res){
 		var match = hashId.match(slitesRegMW);
 
 		if(match) {
-			slideCheckPresenter(hashId, module.exports.UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
+			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
 					 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: stitle, password: spassword});
 				}
