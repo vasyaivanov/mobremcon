@@ -750,6 +750,7 @@ router.post('/signin.html',
 
 router.get('/logout', function (req, res){
   //console.log('get /logout');
+  delete UserData[req.user._id];
   req.logout();
   req.session.destroy(function (err) {
     if (err) {
