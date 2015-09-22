@@ -1,5 +1,5 @@
 /*
- *                      Copyright (C) 2013 Shane Carr
+ *                 Copyright (C) 2015 Shane Carr and others
  *                               X11 License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -8,10 +8,10 @@
  * the rights to use, copy, modify, merge, publish, distribute, sublicense,
  * and/or sell copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,7 +19,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- * 
+ *
  * Except as contained in this notice, the names of the authors or copyright
  * holders shall not be used in advertising or otherwise to promote the sale,
  * use or other dealings in this Software without prior written authorization
@@ -32,13 +32,24 @@
  * @implements EventTarget
  * @param {SocketIO} socket The current Socket.IO connection.
  */
-window.SocketIOFileUpload = function(socket){
+(function (scope, name, factory) {
+	if (typeof define === "function" && define.amd) {
+		define(name, factory);
+	}
+	else if (typeof module === 'object' && module.exports) {
+        	module.exports = factory();
+	}
+	else {
+		scope[name] = factory();
+	}
+}(this, "SocketIOFileUpload", function () {
+ return function (socket) {
 	"use strict";
 
 	var self = this; // avoids context issues
 
 	// Check for compatibility
-	if(!window.File || !window.FileReader){
+	if (!window.File || !window.FileReader) {
 		throw new Error("Socket.IO File Upload: Browser Not Supported");
 	}
 
@@ -47,6 +58,8 @@ window.SocketIOFileUpload = function(socket){
 	self.fileInputElementId = "siofu_input";
 	self.useText = false;
 	self.serializedOctets = false;
+	self.useBuffer = true;
+	self.chunkSize = 1024 * 100; // 100kb default chunk size
 
 	/**
 	 * Private method to dispatch a custom event on the instance.
@@ -55,11 +68,11 @@ window.SocketIOFileUpload = function(socket){
 	 *                             to be attached to the event object.
 	 * @return {boolean} false if any callback returned false; true otherwise
 	 */
-	var _dispatch = function(eventName, properties){
+	var _dispatch = function (eventName, properties) {
 		var evnt = document.createEvent("Event");
 		evnt.initEvent(eventName, false, false);
-		for(var prop in properties){
-			if(properties.hasOwnProperty(prop)){
+		for (var prop in properties) {
+			if (properties.hasOwnProperty(prop)) {
 				evnt[prop] = properties[prop];
 			}
 		}
@@ -71,16 +84,16 @@ window.SocketIOFileUpload = function(socket){
 	 * events have been unbound.  Inspired by Backbone.js.
 	 */
 	var _listenedReferences = [];
-	var _listenTo = function(object, eventName, callback, bubble){
+	var _listenTo = function (object, eventName, callback, bubble) {
 		object.addEventListener(eventName, callback, bubble);
 		_listenedReferences.push(arguments);
 	};
-	var _stopListeningTo = function(object, eventName, callback, bubble){
-		if(object.removeEventListener){
+	var _stopListeningTo = function (object, eventName, callback, bubble) {
+		if (object.removeEventListener) {
 			object.removeEventListener(eventName, callback, bubble);
 		}
 	};
-	var _stopListening = function(){
+	var _stopListening = function () {
 		for (var i = _listenedReferences.length - 1; i >= 0; i--) {
 			_stopListeningTo.apply(this, _listenedReferences[i]);
 		};
@@ -92,40 +105,59 @@ window.SocketIOFileUpload = function(socket){
 	 * @param  {File} file A W3C File object
 	 * @return {void}
 	 */
-	var _loadOne = function(file){
+	var _loadOne = function (file) {
+		// First check for file size
+		if (self.maxFileSize !== null && file.size > self.maxFileSize) {
+			_dispatch("error", {
+				file: file,
+				message: "Attempt by client to upload file exceeding the maximum file size",
+				code: 1
+			});
+			return;
+		}
+
 		// Dispatch an event to listeners and stop now if they don't want
 		// this file to be uploaded.
 		var evntResult = _dispatch("start", {
 			file: file
 		});
-		if(!evntResult) return;
+		if (!evntResult) return;
 
 		// Scope variables
 		var reader = new FileReader(),
-			transmitPos = 0,
 			id = uploadedFiles.length,
 			useText = self.useText,
+			offset = 0,
 			newName;
+		if (reader._realReader) reader = reader._realReader; // Support Android Crosswalk
 		uploadedFiles.push(file);
 
+		// Calculate chunk size
+		var chunkSize = self.chunkSize;
+		if (chunkSize >= file.size || chunkSize <= 0) chunkSize = file.size;
+
 		// Private function to handle transmission of file data
-		var transmitPart = function(loaded){
-			var content;
-			if(useText){
-				content = reader.result.slice(transmitPos, loaded);
-			}else{
-				try{
-					var uintArr = new Uint8Array(reader.result, transmitPos, loaded);
+		var transmitPart = function (start, end, content) {
+			var isBase64 = false;
+			if (!useText) {
+				try {
+					var uintArr = new Uint8Array(content);
 
 					// Support the transmission of serialized ArrayBuffers
 					// for experimental purposes, but default to encoding the
 					// transmission in Base 64.
-					if(self.serializedOctets){
+					if (self.serializedOctets) {
 						content = uintArr;
-					}else{
+					}
+					else if (self.useBuffer) {
+						content = uintArr.buffer;
+					}
+					else {
+						isBase64 = true;
 						content = _uint8ArrayToBase64(uintArr);
 					}
-				}catch(error){
+				}
+				catch (error) {
 					socket.emit("siofu_done", {
 						id: id,
 						interrupt: true
@@ -135,92 +167,115 @@ window.SocketIOFileUpload = function(socket){
 			}
 			socket.emit("siofu_progress", {
 				id: id,
-				start: transmitPos,
-				end: loaded,
+				size: file.size,
+				start: start,
+				end: end,
 				content: content,
-				base64: !self.serializedOctets
+				base64: isBase64
 			});
-			transmitPos = loaded;
-		};
+		}
 
-		// Listen to the "progress" event.  Transmit parts of files
-		// as soon as they are ready.
-		// 
-		// As of version 0.2.0, the "progress" event is not yet
-		// reliable enough for production.  Please see Stack Overflow
-		// question #16713386.
-		// 
-		// To compensate, we will not process any of the "progress"
-		// events until event.loaded >= event.total.
-		_listenTo(reader, "progress", function(event){
-			// would call transmitPart(event.loaded) here
-		});
-
-		// When the file is fully loaded, tell the server.
-		_listenTo(reader, "load", function(event){
-			transmitPart(event.loaded);
+		// Callback when tranmission is complete.
+		var transmitDone = function () {
 			socket.emit("siofu_done", {
 				id: id
 			});
-			_dispatch("load", {
+		}
+
+		// Load a "chunk" of the file from offset to offset+chunkSize.
+		// 
+		// Note that FileReader has its own "progress" event.  However,
+		// it has not proven to be reliable enough for production. See
+		// Stack Overflow question #16713386.
+		// 
+		// To compensate, we will manually load the file in chunks of a
+		// size specified by the user in the uploader.chunkSize property.
+		var processChunk = function () {
+			var chunk = file.slice(offset, Math.min(offset+chunkSize, file.size));
+			if (useText) {
+				reader.readAsText(chunk);
+			}
+			else {
+				reader.readAsArrayBuffer(chunk);
+			}
+		}
+
+		// Callback for when the reader has completed a load event.
+		var loadCb = function (event) {
+			// Transmit the newly loaded data to the server and emit a client event
+			var bytesLoaded = Math.min(offset+chunkSize, file.size);
+			transmitPart(offset, bytesLoaded, event.target.result);
+			_dispatch("progress", {
 				file: file,
-				reader: reader,
+				bytesLoaded: bytesLoaded,
 				name: newName
 			});
-		});
+
+			// Get ready to send the next chunk
+			offset += chunkSize;
+			if (offset < file.size) {
+				// Read in the next chunk
+				processChunk();
+			}
+			else {
+				// All done!
+				transmitDone();
+				_dispatch("load", {
+					file: file,
+					reader: reader,
+					name: newName
+				});
+			}
+		};
+		_listenTo(reader, "load", loadCb);
 
 		// Listen for an "error" event.  Stop the transmission if one is received.
-		_listenTo(reader, "error", function(){
+		_listenTo(reader, "error", function () {
 			socket.emit("siofu_done", {
 				id: id,
 				interrupt: true
 			});
+			_stopListeningTo(reader, "load", loadCb);
 		});
 
 		// Do the same for the "abort" event.
-		_listenTo(reader, "abort", function(){
+		_listenTo(reader, "abort", function () {
 			socket.emit("siofu_done", {
 				id: id,
 				interrupt: true
 			});
+			_stopListeningTo(reader, "load", loadCb);
 		});
 
 		// Transmit the "start" message to the server.
 		socket.emit("siofu_start", {
 			name: file.name,
 			mtime: file.lastModifiedDate,
+			meta: file.meta,
+			size: file.size,
 			encoding: useText ? "text" : "octet",
 			id: id
 		});
 
 		// To avoid a race condition, we don't want to start transmitting to the
 		// server until the server says it is ready.
-		var readyCallback;
-		if(useText){
-			readyCallback = function(_newName){
-				reader.readAsText(file);
-				newName = _newName;
-			};
-		}else{
-			readyCallback = function(_newName){
-				reader.readAsArrayBuffer(file);
-				newName = _newName;
-			};
-		}
+		var readyCallback = function (_newName) {
+			newName = _newName;
+			processChunk();
+		};
 		readyCallbacks.push(readyCallback);
-
 	};
 
 	/**
 	 * Private function to load the file into memory using the HTML5 FileReader object
 	 * and then transmit that file through Socket.IO.
-	 * 
+	 *
 	 * @param  {FileList} files An array of files
 	 * @return {void}
 	 */
-	var _load = function(files){
+	var _load = function (files) {
 		// Iterate through the array of files.
-		for(var i=0; i<files.length; i++){
+		for (var i = 0; i < files.length; i++) {
 			// Evaluate each file in a closure, because we will need a new
 			// instance of FileReader for each file.
 			_loadOne(files[i]);
@@ -232,9 +287,9 @@ window.SocketIOFileUpload = function(socket){
 	 * during the file selection process.
 	 * @return {void}
 	 */
-	var _getInputElement = function(){
+	var _getInputElement = function () {
 		var inpt = document.getElementById(self.fileInputElementId);
-		if(!inpt){
+		if (!inpt) {
 			inpt = document.createElement("input");
 			inpt.setAttribute("type", "file");
 			inpt.setAttribute("id", self.fileInputElementId);
@@ -247,24 +302,32 @@ window.SocketIOFileUpload = function(socket){
 	/**
 	 * Private function to remove an HTMLInputElement created by this instance
 	 * of SIOFU.
-	 * 
+	 *
 	 * @return {void}
 	 */
-	var _removeInputElement = function(){
+	var _removeInputElement = function () {
 		var inpt = document.getElementById(self.fileInputElementId);
-		if(inpt){
+		if (inpt) {
 			inpt.parentNode.removeChild(inpt);
 		}
 	};
 
 	var _baseFileSelectCallback = function (files) {
-		if(files.length > 0){
-			var evntResult = _dispatch("choose", {
-				files: files
-			});
-			if(evntResult){
-				_load(files);
-			}
+		if (files.length === 0) return;
+
+		// Ensure existence of meta property on each file
+		for (var i = 0; i < files.length; i++) {
+			if(!files[i].meta) files[i].meta = {};
+		}
+
+		// Dispatch the "choose" event
+		var evntResult = _dispatch("choose", {
+			files: files
+		});
+
+		// If the callback didn't return false, continue with the upload
+		if (evntResult) {
+			_load(files);
 		}
 	};
 
@@ -273,32 +336,48 @@ window.SocketIOFileUpload = function(socket){
 	 * @param  {Event} event The file input change event
 	 * @return {void}
 	 */
-	var _fileSelectCallback = function(event){
+	var _fileSelectCallback = function (event) {
 		var files = event.target.files || event.dataTransfer.files;
 		event.preventDefault();
 		_baseFileSelectCallback(files);
 	};
 
+
 	/**
-	 * Use a submitButton to upload files from the field given
-	 * @param {HTMLInputElement} submitButton the button that the user has to click to start the upload
-	 * @param {HTMLInputElement} input the field with the data to upload
-	 *
+	 * Submit files at arbitrary time
+	 * @param {FileList} files Files received form the input element.
 	 * @return {void}
 	 */
-	this.listenOnSubmit = function(submitButton, input){
-		if(!input.files) return;
-		_listenTo(submitButton, "click", function () { _baseFileSelectCallback(input.files); }, false);
+	this.submitFiles = function (files) {
+		if (files) {
+			_baseFileSelectCallback(files);
+		}
 	};
 
 	/**
 	 * Use a submitButton to upload files from the field given
-	 * @param {HTMLInputElement} submitButton the button that the user has to click to start the upload
+	 * @param {HTMLInputElement} submitButton the button that the user has to
+	 *                           click to start the upload
+	 * @param {HTMLInputElement} input the field with the data to upload
+	 *
+	 * @return {void}
+	 */
+	this.listenOnSubmit = function (submitButton, input) {
+		if (!input.files) return;
+		_listenTo(submitButton, "click", function () {
+			_baseFileSelectCallback(input.files);
+		}, false);
+	};
+
+	/**
+	 * Use a submitButton to upload files from the field given
+	 * @param {HTMLInputElement} submitButton the button that the user has to
+	 *                           click to start the upload
 	 * @param {Array} array an array of fields with the files to upload
 	 *
 	 * @return {void}
 	 */
-	this.listenOnArraySubmit = function(submitButton, array){
+	this.listenOnArraySubmit = function (submitButton, array) {
 		for (var index in array) {
 			this.listenOnSubmit(submitButton, array[index]);
 		}
@@ -307,11 +386,11 @@ window.SocketIOFileUpload = function(socket){
 	/**
 	 * Use a file input to activate this instance of the file uploader.
 	 * @param  {HTMLInputElement} inpt The input element (e.g., as returned by
-	 *                                 document.getElementById("yourId") )
+	 *                                 document.getElementById("yourId"))
 	 * @return {void}
 	 */
-	this.listenOnInput = function(inpt){
-		if(!inpt.files) return;
+	this.listenOnInput = function (inpt) {
+		if (!inpt.files) return;
 		_listenTo(inpt, "change", _fileSelectCallback, false);
 	};
 
@@ -323,10 +402,10 @@ window.SocketIOFileUpload = function(socket){
 	 *                           be processed by the instance.
 	 * @return {void}
 	 */
-	this.listenOnDrop = function(div){
+	this.listenOnDrop = function (div) {
 		// We need to preventDefault on the dragover event in order for the
 		// drag-and-drop operation to work.
-		_listenTo(div, "dragover", function(event){
+		_listenTo(div, "dragover", function (event) {
 			event.preventDefault();
 		}, false);
 
@@ -339,10 +418,10 @@ window.SocketIOFileUpload = function(socket){
 	 *
 	 * This method works in all current browsers except Firefox, though Opera
 	 * requires that the input element be visible.
-	 * 
+	 *
 	 * @return {void}
 	 */
-	this.prompt = function(){
+	this.prompt = function () {
 		var inpt = _getInputElement();
 
 		// Listen for the "change" event on the file input element.
@@ -364,12 +443,13 @@ window.SocketIOFileUpload = function(socket){
 	 * IMPORTANT: To finish the memory relief process, set all external
 	 * references to this instance of SIOFU (including the reference used to
 	 * call this destroy function) to null.
-	 * 
+	 *
 	 * @return {void}
 	 */
-	this.destroy = function(){
+	this.destroy = function () {
 		_stopListening();
 		_removeInputElement();
+		callbacks = {}, uploadedFiles = [], readyCallbacks = [];
 	};
 
 	/**
@@ -380,8 +460,8 @@ window.SocketIOFileUpload = function(socket){
 	 *                              event as an argument when the event occurs.
 	 * @return {void}
 	 */
-	this.addEventListener = function(eventName, callback){
-		if(!callbacks[eventName]) callbacks[eventName] = [];
+	this.addEventListener = function (eventName, callback) {
+		if (!callbacks[eventName]) callbacks[eventName] = [];
 		callbacks[eventName].push(callback);
 	};
 
@@ -391,10 +471,10 @@ window.SocketIOFileUpload = function(socket){
 	 * @param  {Function} callback  Listener function to remove.
 	 * @return {boolean}            true if callback removed; false otherwise
 	 */
-	this.removeEventListener = function(eventName, callback){
-		if(!callbacks[eventName]) return false;
-		for(var i=0; i<callbacks[eventName].length; i++){
-			if(callbacks[eventName][i] === callback){
+	this.removeEventListener = function (eventName, callback) {
+		if (!callbacks[eventName]) return false;
+		for (var i = 0; i < callbacks[eventName].length; i++) {
+			if (callbacks[eventName][i] === callback) {
 				callbacks[eventName].splice(i, 1);
 				return true;
 			}
@@ -407,13 +487,13 @@ window.SocketIOFileUpload = function(socket){
 	 * @param  {Event} evnt The event to dispatch.
 	 * @return {boolean} false if any callback returned false; true otherwise
 	 */
-	this.dispatchEvent = function(evnt){
+	this.dispatchEvent = function (evnt) {
 		var eventCallbacks = callbacks[evnt.type];
-		if(!eventCallbacks) return true;
+		if (!eventCallbacks) return true;
 		var retVal = true;
-		for(var i=0; i<eventCallbacks.length; i++){
+		for (var i = 0; i < eventCallbacks.length; i++) {
 			var callbackResult = eventCallbacks[i](evnt);
-			if(callbackResult === false){
+			if (callbackResult === false) {
 				retVal = false;
 			}
 		}
@@ -430,11 +510,11 @@ window.SocketIOFileUpload = function(socket){
 	 *
 	 * Adapted for SocketIOFileUpload.
 	 */
-	var _uint8ArrayToBase64 = function(bytes) {
+	var _uint8ArrayToBase64 = function (bytes) {
 		var i, len = bytes.buffer.byteLength, base64 = "",
 			chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-		for (i = 0; i < len; i+=3) {
+		for (i = 0; i < len; i += 3) {
 			base64 += chars[bytes[i] >> 2];
 			base64 += chars[((bytes[i] & 3) << 4) | (bytes[i + 1] >> 4)];
 			base64 += chars[((bytes[i + 1] & 15) << 2) | (bytes[i + 2] >> 6)];
@@ -443,7 +523,8 @@ window.SocketIOFileUpload = function(socket){
 
 		if ((len % 3) === 2) {
 			base64 = base64.substring(0, base64.length - 1) + "=";
-		} else if (len % 3 === 1) {
+		}
+		else if (len % 3 === 1) {
 			base64 = base64.substring(0, base64.length - 2) + "==";
 		}
 
@@ -451,15 +532,24 @@ window.SocketIOFileUpload = function(socket){
 	};
 	// END OTHER LIBRARIES
 
-	// CONSTRUCTOR: Listen to the "complete" and "ready" messages on the socket.
-	socket.on("siofu_ready", function(data){
+	// CONSTRUCTOR: Listen to the "complete", "ready", and "error" messages
+	// on the socket.
+	_listenTo(socket, "siofu_ready", function (data) {
 		readyCallbacks[data.id](data.name);
 	});
-	socket.on("siofu_complete", function(data){
+	_listenTo(socket, "siofu_complete", function (data) {
 		_dispatch("complete", {
 			file: uploadedFiles[data.id],
 			detail: data.detail,
 			success: data.success
 		});
 	});
-};
+	_listenTo(socket, "siofu_error", function (data) {
+		_dispatch("error", {
+			file: uploadedFiles[data.id],
+			message: data.message,
+			code: 0
+		});
+	});
+ }
+}));
