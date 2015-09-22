@@ -88,7 +88,8 @@
         </h1>-->
         <nav id="nav">
             <ul id="navigation" class="clearfix">
-                <li><a href="#one" data-index="one" class="menuLink">Product</a></li>
+                <li><a href="#banner" data-index="one" class="menuLink">Upload</a></li>
+				<li><a href="#one" data-index="one" class="menuLink">Product</a></li>
                 <li><a href="#two" data-index="two" class="menuLink">How it works</a></li>
                 <li><a href="#three" data-index="three" class="menuLink">Company</a></li>
                 <li><a href="#four" data-index="four" class="menuLink">Contact</a></li>
@@ -98,7 +99,7 @@
                     	<li><a href="signin.html" class="menuLinkNoScroll">Sign in</a></li>
 						<li><a href="signup.html" class="menuLinkNoScroll">Sign up</a></li>
                     <% } else { %>
-						<% if (userRole < 2) { %>
+						<% if (userRole == 0) { %>
 							<li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
 						<% } else { %>
 							<li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Manage subscription</a></li>
