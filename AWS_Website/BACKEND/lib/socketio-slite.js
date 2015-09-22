@@ -173,8 +173,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         var uploader = new SocketIOFileUploadServer();
 		uploader.dir = uploadDir;
 		uploader.listen(socket);
-		uploader.maxFileSize = module.parent.exports.maxSlideUploadSize;
-
+		if(typeof userSession !== "undefined") {
+			uploader.maxFileSize = module.parent.exports.rolesRestrictions[userSession.userRole].maxSlideSize;
+		}
+		else {
+			
+		}
+		
         uploader.on("start", function (event) {
 				console.log();
 				uploadStarted(event.file.name);
@@ -185,7 +190,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		});
 
 		uploader.on("complete", function (event) {
-			if(module.parent.exports.noUploadForUser == 1) {
+			if(userSession.noUploadForUser == 1) {
 				fs.unlink(event.file.pathName, function (err) {
 					uploadError(1, "");
 				});
@@ -206,7 +211,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
 
 		uploader.on("error", function (event) {
-			//console.log(JSON.stringify(event));
 			uploadError(0, JSON.stringify(event));
 		});
 
@@ -731,5 +735,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			}
 		});
     });
+	
+	
+	socket.on('server-userRestrictions', function (data) {
+		if(typeof userSession !== "undefined") {
+			socket.emit('client-userRestrictions',{maxFileSize: module.parent.exports.rolesRestrictions[userSession.userRole].maxSlideSize});
+		}
+	});
 
 });

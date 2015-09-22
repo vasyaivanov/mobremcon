@@ -3,7 +3,7 @@ $(document).ready(function () {
         var url = [location.protocol, '//', location.host, location.pathname].join('');
         return url;
     }
-    
+ 
     function getClearHost() {
         var url = [location.protocol, '//', location.host].join('');
         return url;
@@ -29,7 +29,9 @@ $(document).ready(function () {
 
     var HTML5_UPLOADER = false;
     var socket = io.connect(document.location.hostname + ':' + location.port);
-     
+
+	socket.emit("server-userRestrictions");
+	
     function setUploadMessage(title) {
         progressLabel.text(title);
     }
@@ -122,48 +124,39 @@ $(document).ready(function () {
             alert("Your Browser Doesn't Support The File API Please Update Your Browser");
         }
     } else {
-        // Initialize instances:
-        var siofu = new SocketIOFileUpload(socket);
-			// Configure the three ways that SocketIOFileUpload can read files:
-			//document.getElementById("upload_btn").addEventListener("click", siofu.prompt, false);
-			//siofu.listenOnSubmit(document.getElementById("upload_btn"), document.getElementById("upload_input"));
-
-			// Check if user possible to upload ppt 
-
+		socket.on("client-userRestrictions", function (loadData) {
+			var siofu = new SocketIOFileUpload(socket);
 			siofu.chunkSize = 100 * 1024;
+			siofu.maxFileSize = loadData.maxFileSize;
 			siofu.listenOnInput(document.getElementById("uploadPresentation"));		
-			//siofu.listenOnDrop(document.getElementById("file_drop"));
 
 			siofu.addEventListener("choose", function(event){
 				console.log("Upload file(s) chosen: " + event.files[0].name);
 				openUploadDialog('Uploading: ' + event.files[0].name);
 			});
 				
-			// Do something when a file upload started:
 			siofu.addEventListener("start", function(event){
 				console.log("Upload started: " + event.file.name);
 			});
 
-			// Do something when a file upload is finished:
 			siofu.addEventListener("complete", function(event){
 				console.log("Upload successful: " + event.file.name);
 				setUploadMessage('Converting presentation...');
 			});
 			
-			
 			siofu.addEventListener("error", function(event){
-				console.log("Upload failed: " + event.file.pathName);
-				var data;
+				var data = [];
 				data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
+				if(event.code == 1) {
+					data.msg = "File is too big for upload."
+				}
 				data.error = true;
 				data.percentage = 100;
 				updateProgress(data);
 				setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
-			});	
-
-					// Do something when a file upload fails:
-
-    } // if(HTML5_UPLOADER) .. else ..
+			});
+		});
+    } 
     
 	socket.on("uploadProgress", function (data) {
         var msg = "Upload Progress";

@@ -19,16 +19,11 @@
   , SALT_WORK_FACTOR = 10
   , appPort = 8081
   , ioPort = 1337
-  , maxSlidesCount = 5
-  , maxSlidesSize = 10485760
-  , maxSlideUploadSize = 5242880
   , sessionIdCookie = "sliteCurrUser"
   , paypalIpn = require('paypal-ipn');
 
 var app = express();
 module.exports.app = app;
-module.exports.maxSlideUploadSize = maxSlideUploadSize;
-
 module.exports.sessionIdCookie = sessionIdCookie;
 
 
@@ -114,7 +109,7 @@ var subscriptionSchema =  mongoose.Schema({
 
 subscriptionSchema.index({sid: 1}, {unique: true});
 
-var Subscription = mongoose.model('billing', subscriptionSchema);
+var Subscription = mongoose.model('subscription', subscriptionSchema);
 
 // SlidesDB
 var slidesSchema = mongoose.Schema({
@@ -136,6 +131,8 @@ var slidesSchema = mongoose.Schema({
   paypalPayed: { type: Number, max: 1 },
   isVideoChatOpen: { type: Boolean },
   isScreensharingOpen: { type: Boolean },
+  isOnlinePresentation: { type: String,  default: 0,  max: 1 },
+  hidden: { type: String,  default: 0 , max: 1},
   slidesNum: {type: Number}
 });
 
@@ -155,6 +152,20 @@ slidesSchema.index({uid: 1, sid: 1}, {unique: true});
 var Slide = mongoose.model('slide', slidesSchema);
 
 module.exports.SlideScheme = Slide;
+
+// Users roles
+var rolesRestrictions = [];
+// Basic account
+rolesRestrictions[0] = {maxSlidesCount: 3, maxSlidesSize: 10485760, maxSlideSize: 5242880, rename: 0, domain: 0};
+// Silver account
+rolesRestrictions[1] = {maxSlidesCount: 3, maxSlidesSize: 10485760, maxSlideSize: 5242880, rename: 1, domain: 1};
+// Gold account
+rolesRestrictions[2] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlideSize: 104857600, rename: 1, domain: 1};
+// Admin account
+rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlideSize: 104857600, rename: 1, domain: 1};
+
+module.exports.rolesRestrictions = rolesRestrictions;
+
 
 // Bcrypt middleware
 userSchema.pre('save', function(next) {
@@ -310,10 +321,10 @@ var getUserUploadStatus = function (userId, callback) {
 			for(i=0;i<docs.length;i++) {
 				slidesMB = slidesMB + docs[i].size;
 			}
-			if(docs.length >= maxSlidesCount && module.exports.UserData[userId].userRole == 0) {
+			if(docs.length >= rolesRestrictions[module.exports.UserData[userId].userRole].maxSlidesCount) {
 				callback(1);
 			}
-			else if(slidesMB >= maxSlidesSize && module.exports.UserData[userId].userRole == 0) {
+			else if(slidesMB >= rolesRestrictions[module.exports.UserData[userId].userRole].maxSlidesSize) {
 				callback(1);
 			}
 			else {
