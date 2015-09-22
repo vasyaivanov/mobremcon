@@ -103,20 +103,20 @@ function showHideComments() {
     showHideMenu(true);
 }
 
-var isVideoChatOn = false;
+var isVideoChatOn = 0;
 function showHideVideoChat() {
     if (!isVideoChatOn) {
-        isVideoChatOn = true;
+        isVideoChatOn = 1;
 		$("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
     } else {
         // remove the video window on closing the panel
         //var videosContainer = document.getElementById('videos-container');
         //if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
 		$("#videoframe").attr("src","");
-        isVideoChatOn = false;
+        isVideoChatOn = 0;
     }
 
-    if (isAPresenter && isVideoChatOn == false) {
+    if (isAPresenter && isVideoChatOn == 0) {
 		socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: currentHash});
     }
 
@@ -137,17 +137,17 @@ function showHideVideoChat() {
 	showHideMenu(true);
 }
 
-var isScreensharingOn = false;
+var isScreensharingOn = 0;
 function showHideScreensharing() {
     if (!isScreensharingOn) {
 		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
-        isScreensharingOn = true;
+        isScreensharingOn = 1;
     } else {
 		$("#screensharingiframe").attr("src","");
-        isScreensharingOn = false;
+        isScreensharingOn = 0;
     }
 
-    if (isAPresenter && isScreensharingOn == false) {
+    if (isAPresenter && isScreensharingOn == 0) {
         socket.emit("presenterScreensharing", {open: isScreensharingOn, hash: currentHash});
     }
 

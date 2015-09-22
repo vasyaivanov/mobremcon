@@ -93,7 +93,9 @@ var billingSchema =  mongoose.Schema({
   uid: {type: String, trim: true},
   payment_gross: {type: String, trim: true},
   payment_status: {type: String, trim: true},
-  payment_date: {type: Date}
+  payment_date: {type: Date},
+  activated: {type: Number, default: 0 }
+  
 });
 
 billingSchema.index({txn_id: 1, payment_status: 1, payment_gross: 1}, {unique: true});
@@ -113,12 +115,12 @@ var Subscription = mongoose.model('subscription', subscriptionSchema);
 
 // SlidesDB
 var slidesSchema = mongoose.Schema({
-  uid: { type: String},
-  sid: { type: String},
+  uid: { type: String, required: true},
+  sid: { type: String, required: true},
   scid: { type: String},
   title: { type: String},
-  size: { type: Number},
-  tmp: {type: String},
+  size: { type: Number, required: true},
+  tmp: {type: String, default: 1},
   created: { type: Date },
   crawled: { type: String,  default: 0 },
   url: {type: String},
@@ -128,11 +130,11 @@ var slidesSchema = mongoose.Schema({
   password: { type: String },
   paypalTransaction: { type: String },
   paypalTmpExp: { type: Date },
-  paypalPayed: { type: Number, max: 1 },
-  isVideoChatOpen: { type: Boolean },
-  isScreensharingOpen: { type: Boolean },
-  isOnlinePresentation: { type: String,  default: 0,  max: 1 },
-  hidden: { type: String,  default: 0 , max: 1},
+  paypalPayed: { type: Number, max: 1, default: 0,  },
+  isVideoChatOpen: { type: Number,  default: 0,  max: 1 },
+  isScreensharingOpen: { type: Number,  default: 0,  max: 1 },
+  isOnlinePresentation: { type: Number,  default: 0,  max: 1 },
+  hidden: { type: Number,  default: 0 , max: 1},
   slidesNum: {type: Number}
 });
 
@@ -813,7 +815,7 @@ slideCheckPresenter = function(hashId, currentUserId , callback) {
 		Slide.findOne({sid : hashId }).exec(function (err, doc) {
 			if( doc ) {
 				var slidePresenter = (doc.uid == currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "", (doc.isScreensharingOpen) ? 1 : "", (doc.slidesNum > 0) ? doc.slidesNum : 1);
+				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "0", (doc.isScreensharingOpen) ? 1 : "0", (doc.slidesNum > 0) ? doc.slidesNum : 1);
 			} else {
 				//console.log("Slide was not found");
 				callback(0,0,"","", 0, "");

@@ -31,7 +31,7 @@ moderator.extra   = MODERATOR_EXTRA;
 
 moderator.onstream = function(event) {
 	if(event.isScreen) {
-		socket.emit("presenterScreensharing", {open: true, hash: '<%= hash %>'});
+		socket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
 		$( "#screensharing" ).append(event.mediaElement);
 	}
 	

@@ -28,7 +28,7 @@ moderator.extra   = MODERATOR_EXTRA;
 
 moderator.onstream = function(event) {
 	if(event.isVideo) {
-		socket.emit("presenterVideoChat", {open: true, hash: '<%= hash %>'});
+		socket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
 		$( "#videosharing" ).append(event.mediaElement);
 	}
 	

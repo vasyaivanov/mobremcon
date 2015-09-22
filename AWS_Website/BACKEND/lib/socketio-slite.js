@@ -217,9 +217,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
       			if (!err) {
       					module.parent.exports.deleteFolderRecursive(hashPath);
-      					module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err) {
+      					module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
       						console.log('Deleting notes.....');
-      						socket.emit("client-deleteSlide", {sid: data.sid});
+							module.parent.exports.chatSchema.remove({ sid: data.sid }, function(err2) {
+								console.log('Deleting chats...');
+								socket.emit("client-deleteSlide", {sid: data.sid});
+							});
+      						
       					});
       			}
       			else {
