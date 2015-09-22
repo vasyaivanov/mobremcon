@@ -91,7 +91,7 @@ var billingSchema =  mongoose.Schema({
   txn_id: { type: String, trim: true},
   account_type: {type: String, trim: true},
   uid: {type: String, trim: true},
-  payment_gross: {type: String, trim: true},
+  payment_gross: {type: Number},
   payment_status: {type: String, trim: true},
   payment_date: {type: Date},
   activated: {type: Number, default: 0 }
@@ -105,8 +105,8 @@ var Billing = mongoose.model('billing', billingSchema);
 
 // User subscription
 var subscriptionSchema =  mongoose.Schema({
-  sid: { type: String, trim: true},
-  end_date: {type: Date}
+  sid: { type: String, trim: true, required: true},
+  end_date: {type: Date, required: true}
 });
 
 subscriptionSchema.index({sid: 1}, {unique: true});
@@ -156,7 +156,7 @@ var Slide = mongoose.model('slide', slidesSchema);
 module.exports.SlideScheme = Slide;
 
 // Users roles
-var rolesRestrictions = [];
+var rolesRestrictions = {};
 // Basic account
 rolesRestrictions[0] = {maxSlidesCount: 3, maxSlidesSize: 10485760, maxSlideSize: 5242880, rename: 0, domain: 0};
 // Silver account
@@ -167,6 +167,12 @@ rolesRestrictions[2] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlid
 rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlideSize: 104857600, rename: 1, domain: 1};
 
 module.exports.rolesRestrictions = rolesRestrictions;
+
+var Plans = {
+	'1': {desc: 'Silver', price: 5, role: 1},
+	'2': {desc: 'Gold', price: 10, role: 2},
+	'3': {desc: 'GoldUpgrade', price: 5, role: 2}
+};
 
 
 // Bcrypt middleware
@@ -540,6 +546,7 @@ router.post('/paypal', function (req, res, next) {
 
 res.send("Received");
 
+
 paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
     if(msg == "VERIFIED") {
 		var accountType = ["NA", "Silver", "Gold"];
@@ -554,6 +561,19 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 				billing_add.save(function(err, saved) {
 					if(err) console.error('Can\'t add billing info' + err);
 				});
+				
+				if(req.body.item_number == 3) {
+					
+					
+				}
+				
+				var dateG = new Date(req.body["payment_date"]);
+				dateG.setFullYear(dateG.getFullYear()+1);
+				Subscription.update({ uid: req.body["option_selection2"] }, {$set: { uid : req.body["option_selection2"], end_date: dateG }}, {upsert: true},
+					function (err, numAffected) {
+
+					}
+				);
 				//}
 				//else if(req.body["payment_status"] == "Refunded") {
 
@@ -571,6 +591,21 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 });
 
 router.get('/paypal', function (req, res, next) {
+	
+
+Billing.aggregate([
+        { $group: {
+            _id: '$uid',
+            markAvg: { $avg: '$payment_gross'}
+        }}
+    ], function (err, results) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(results);
+        }
+    });
+	
 	if(req.query.tx) {
 		Slide.findOne({paypalTransaction : req.query.tx.toUpperCase() }).exec(function (err, doc) {
 			if( doc ) {
