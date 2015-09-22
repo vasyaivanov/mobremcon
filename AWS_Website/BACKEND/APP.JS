@@ -339,6 +339,7 @@ var getUserUploadStatus = function (userId, callback) {
 
 // Auth array
 var UserData = {};
+module.exports.UserData = {};
 
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
@@ -360,12 +361,23 @@ app.use(function (req, res, next) {
 
 		getUserUploadStatus(userId, function(userAccess) {
 			UserData[userId].noUploadForUser = userAccess;
-      module.exports.UserData = UserData;
+			//if(!module.exports.UserData[userId]) {
+				// Set user session
+				UserData[userId].expire = new Date(new Date().getTime() + 86400000);
+				module.exports.UserData[userId] = UserData[userId];
+				
+				// Clear old sessions
+				for (k in UserData) {
+				  var dateComp = new Date();
+				  if(dateComp > UserData[k].expire) {
+						console.log(UserData[k]);
+						delete UserData[k];
+				  }
+				}
+				
+			//}
 		});
-
     });
-
-
 
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
