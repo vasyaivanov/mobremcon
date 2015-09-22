@@ -12,6 +12,7 @@ if(payed == 1) {
 });
 
 socket.on('renameHash-client', function (data) {
+	console.log(data);
 	var domainAvailableMessage = "<font color='green'>This name is available!</font>";
 	if(currentHash == data.slideId) {
 		if(data.available == 1) {

@@ -528,22 +528,23 @@ res.send("Received");
 
 paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
     if(msg == "VERIFIED") {
-		var accountType = ["Silver", "Gold"];
+		var accountType = ["NA", "Silver", "Gold"];
 		if(accountType.indexOf(req.body["option_selection1"]) > 0) {
 			var txnId = req.body["parent_txn_id"] ? req.body["parent_txn_id"] : req.body["txn_id"];
 
 			console.log("Paypal data received: " + txnId + " - Type: " + req.body["payment_status"]);
 
-		
-			//if(req.body["payment_status"] == "Completed") {
-			var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
-			billing_add.save(function(err, saved) {
-				if(err) console.error('Can\'t add billing info' + err);
-			});				
-			//}
-			//else if(req.body["payment_status"] == "Refunded") {
+			if(req.body["payment_status"]) {
+				//if(req.body["payment_status"] == "Completed") {
+				var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
+				billing_add.save(function(err, saved) {
+					if(err) console.error('Can\'t add billing info' + err);
+				});				
+				//}
+				//else if(req.body["payment_status"] == "Refunded") {
 
-			//}
+				//}
+			}
 
 			
 		}

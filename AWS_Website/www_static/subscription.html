@@ -46,34 +46,66 @@
 					<tr>
 					<td>Basic<br>
 					You can use PREZERA absolutely for free!<br>
-					Also you don't need to register, if you use only one laptop.<br>
+					You don't need to register, if you use only one laptop.<br>
 					Keep your data safe in the cloud!<br>
 					You can upload up to <b>3</b> slides and <b>10mb</b>.<br>
-					Also you can buy a custom name for your slide only for 99c!
+					You can also buy a custom name for your slide only for 99c!
 					</td>
 					</tr>
 					<tr>
 					<td>Silver<br>
 					The same as our Basic plan + you can get your own domain on PREZERA, example: john.prezera.com<br>
-					Plus you would able to get custom names for your presentaitons for free! Example: john.prezera.com/MyPresentation<br>
-					5$/month<br>
+					Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br>
+					5$/year<br>
 					<% if (!user) { %>
 						<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?SUBSCRIBE=1'">
+					<% } else { %>
+						<% if (userRole == 2) { %>
+							<!--input type="button" value="Downgrade to this plan" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
+						<% } else if (userRole == 1)  { %>
+							Your current plan!
+						<% } else { %>
+							<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
+							<input type="hidden" name="cmd" value="_s-xclick">
+							<input type="hidden" name="hosted_button_id" value="AK3X6WJ7VWYJS">
+							<input type="hidden" name="on0" value="Account">
+							<input type="hidden" name="on1" value="UserId">
+							<input type="hidden" name="os0" value="Silver">
+							<input type="hidden" name="os1" value="<%= user.id %>">
+							<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+							<input type="submit" value="Upgrade" class="btn btn-default">
+							</form>
+						<% } %>
 					<% } %>
-					</td>
+					</td> 
 					</tr>
 					<tr>
 					<td>Gold<br>
 					The same as our Silver plan + unlimited presentations + 100mb of space<br>
-					10$/month<br>
+					10$/year<br>
 					<% if (!user) { %>
 						<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?SUBSCRIBE=1'">
-					<% } %>		
+					<% } else { %>
+						<% if (userRole == 2) { %>
+							Your current plan!
+						<% } else { %>
+							<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
+							<input type="hidden" name="cmd" value="_s-xclick">
+							<input type="hidden" name="hosted_button_id" value="W8DTXXRCVJB6A">
+							<input type="hidden" name="on0" value="Account">
+							<input type="hidden" name="on1" value="UserId">
+							<input type="hidden" name="os0" value="Gold">
+							<input type="hidden" name="os1" value="<%= user.id %>">
+							<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+							<input type="submit" value="Upgrade" class="btn btn-default">
+							</form>
+						<% } %>
+					<% } %>	
 					</td>
 					</tr>
 					<tr>
 					<td>Platinum<br>
-					Own your own server!<br>
+					Get your own, private server!<br>
 					Ask us about the price: <a href="mailto:contactus@prezera.com">contactus@prezera.com</a><br>
 					</td>
 					<tr>
@@ -92,7 +124,7 @@
                 <li><a href="signin.html" data-index="three" class="">Sign in</a></li>
                 <li><a href="signup.html" data-index="four" class="">Sign up</a></li>
                 <% } else { %>
-                <li><a href="/my.html" data-index="three" class=""> Hello, <%= user.email %></a></li>
+                <li><a href="/my.html" data-index="three" class="">My presentations</a></li>
                 <li><a href="/logout" data-index="three" class="">Sign out</a></li>
                 <% } %>
               </ul>
