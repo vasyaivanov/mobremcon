@@ -38,9 +38,11 @@ db.once('open', function callback() {
 var userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true},
   password: { type: String, required: true},
-  role: {type: Number}
+  role: {type: Number},
+  domain: {type: String}
 });
 
+userSchema.index({email: 1}, {unique: true});
 
 // Notes
 var notesSchema = mongoose.Schema({
@@ -546,38 +548,40 @@ router.post('/paypal', function (req, res, next) {
 
 res.send("Received");
 
-
 paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) {
     if(msg == "VERIFIED") {
-		var accountType = ["NA", "Silver", "Gold"];
+		var accountType = ["NA", "Silver", "Gold", "Gold upgrade"];
 		if(accountType.indexOf(req.body["option_selection1"]) > 0) {
 			var txnId = req.body["parent_txn_id"] ? req.body["parent_txn_id"] : req.body["txn_id"];
 
 			console.log("Paypal data received: " + txnId + " - Type: " + req.body["payment_status"]);
 
 			if(req.body["payment_status"]) {
-				//if(req.body["payment_status"] == "Completed") {
 				var billing_add = new Billing({txn_id: txnId, account_type: req.body["option_selection1"], uid: req.body["option_selection2"], payment_gross: req.body["payment_gross"], payment_date: req.body["payment_date"], payment_status: req.body["payment_status"]});
 				billing_add.save(function(err, saved) {
 					if(err) console.error('Can\'t add billing info' + err);
 				});
-				
-				if(req.body.item_number == 3) {
+
+				if(req.body["payment_status"] == "Completed") {
+					var dateG = new Date(req.body["payment_date"]);
+					dateG.setFullYear(dateG.getFullYear()+1);
 					
+					if(req.body.item_number == 3) {
+						dateG = "$end_date";
+					}
+							
+					Subscription.update({ uid: req.body["option_selection2"] }, {$set: { uid : req.body["option_selection2"], end_date: dateG }}, {upsert: true},
+						function (err, numAffected) {console.log('Subscription: ' + numAffected)}
+					);
+					
+					User.update({ _id: mongoose.mongo.ObjectID(req.body["option_selection2"]) }, {$set: { role : Plans[req.body.item_number].role }}, {upsert: false},
+						function (err, numAffected) {console.log('Role changes: ' + numAffected)}
+					);
 					
 				}
-				
-				var dateG = new Date(req.body["payment_date"]);
-				dateG.setFullYear(dateG.getFullYear()+1);
-				Subscription.update({ uid: req.body["option_selection2"] }, {$set: { uid : req.body["option_selection2"], end_date: dateG }}, {upsert: true},
-					function (err, numAffected) {
+				else if(req.body["payment_status"] == "Refunded") {
 
-					}
-				);
-				//}
-				//else if(req.body["payment_status"] == "Refunded") {
-
-				//}
+				}
 			}
 
 
@@ -590,13 +594,17 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 
 });
 
+function changeAccount(userId) {
+	
+}
+
 router.get('/paypal', function (req, res, next) {
 	
 
 Billing.aggregate([
         { $group: {
             _id: '$uid',
-            markAvg: { $avg: '$payment_gross'}
+            balance: { $sum: '$payment_gross'}
         }}
     ], function (err, results) {
         if (err) {
@@ -607,6 +615,13 @@ Billing.aggregate([
     });
 	
 	if(req.query.tx) {
+
+		Billing.findOne({txn_id : req.query.tx }).exec(function (err, doc) {
+			if(doc) {
+				res.redirect("/account.html");
+			}
+		});
+	
 		Slide.findOne({paypalTransaction : req.query.tx.toUpperCase() }).exec(function (err, doc) {
 			if( doc ) {
 				var url = '/' + doc.scid;
@@ -835,12 +850,17 @@ router.get('/subscription.html', function (req, res){
     // Initiliaze session
     res.redirect('/subscription.html');
   } else {
-    res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
-  	  request: req,
-  	  user: req.user,
-  	  moment: moment,
-  	  userRole: UserData[req.cookies[sessionIdCookie]].userRole
-  	});
+   	Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, doc) {
+		var expire = "";
+		if(doc) {expire = doc.end_date}
+		res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
+		  request: req,
+		  user: req.user,
+		  moment: moment,
+		  userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+		  expire: expire
+		});
+	});
   }
 });
 
