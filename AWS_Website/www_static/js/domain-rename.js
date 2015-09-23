@@ -12,7 +12,7 @@ $(document).ready(function () {
 		domainRename.renameDomainStart();	
 	});
 	
-	if($("#showDomainData")) {
+	if($("#showDomainData").length) {
 		var domain = location.host;
 		domain = domain.replace(/^www\./,"");
 		$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url: https://" + $( "#domainNewName" ).val() + "." + domain +  "</font>" )
