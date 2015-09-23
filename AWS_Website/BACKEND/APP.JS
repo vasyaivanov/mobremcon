@@ -356,7 +356,6 @@ app.use(function (req, res, next) {
 		// Initialize new session
 		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
 		UserData[userId].currentUserId = userId
-
 		readUserRights(userId, function(res) {
 			if(req.user) {
 				UserData[userId].userAuth = 1;
@@ -797,7 +796,6 @@ router.post('/signin.html',
 
 router.get('/logout', function (req, res){
   //console.log('get /logout');
-  delete UserData[req.user._id];
   req.logout();
   req.session.destroy(function (err) {
     if (err) {
@@ -809,6 +807,7 @@ router.get('/logout', function (req, res){
     res.clearCookie('connect.sid', { path: '/' });
     console.log("MA: logout success ");
 	res.clearCookie(sessionIdCookie);
+	delete UserData[req.cookies[sessionIdCookie]];
     res.redirect('/');
   });
 });
@@ -1058,7 +1057,7 @@ function deleteOldHashFolders() {
 
 
 function readUserRights(userId, callback) {
-	User.findOne({_id: mongoose.mongo.ObjectID(userId) }, function (err, userDoc) {
+	User.findOne({_id: userId }, function (err, userDoc) {
 		if(userDoc) {callback(userDoc.role > 0 ? userDoc.role : 0)}
 		else {callback(0)}
 	});
