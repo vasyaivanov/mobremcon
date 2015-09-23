@@ -222,8 +222,10 @@ function replaceDomainName() {
 	}
 	var element = $("#aboutOurProduct");
 	var htmlBody = element.html();
-	htmlBody = htmlBody.replace(/Slite/g, hostname);
-	element.html(htmlBody);
+	if(typeof htmlBody !== 'undefined') {
+		htmlBody = htmlBody.replace(/Slite/g, hostname);
+		element.html(htmlBody);
+	}
 	//str = str.replace(/Slite&#8482;/g, hostname);
 }
 

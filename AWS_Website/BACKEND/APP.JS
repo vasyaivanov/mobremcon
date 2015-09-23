@@ -733,7 +733,7 @@ else {
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){
-    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user });
+    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user, userRestrictions: UserData[req.cookies[sessionIdCookie]].restrictions });
 });
 
 router.get('/signup.html', function (req, res){

@@ -23,6 +23,11 @@
       <script src="js/client.js"></script>
       <script src="js/main.js"></script>
       <script src="js/jquery.scrollTo.js"></script>
+	  <% if (userRestrictions.domain == 1) {%>
+	  <script>
+	  customDomain = 1;
+	  </script>
+	  <% } %>
 
 
       <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
