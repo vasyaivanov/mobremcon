@@ -97,7 +97,7 @@ var billingSchema =  mongoose.Schema({
   payment_status: {type: String, trim: true},
   payment_date: {type: Date},
   activated: {type: Number, default: 0 }
-  
+
 });
 
 billingSchema.index({txn_id: 1, payment_status: 1, payment_gross: 1}, {unique: true});
@@ -107,11 +107,11 @@ var Billing = mongoose.model('billing', billingSchema);
 
 // User subscription
 var subscriptionSchema =  mongoose.Schema({
-  sid: { type: String, trim: true, required: true},
+  uid: { type: String, trim: true, required: true},
   end_date: {type: Date, required: true}
 });
 
-subscriptionSchema.index({sid: 1}, {unique: true});
+subscriptionSchema.index({uid: 1}, {unique: true});
 
 var Subscription = mongoose.model('subscription', subscriptionSchema);
 
@@ -559,19 +559,19 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 				if(req.body["payment_status"] == "Completed") {
 					var dateG = new Date(req.body["payment_date"]);
 					dateG.setFullYear(dateG.getFullYear()+1);
-					
+
 					if(req.body.item_number == 3) {
 						dateG = "$end_date";
 					}
-							
+
 					Subscription.update({ uid: req.body["option_selection2"] }, {$set: { uid : req.body["option_selection2"], end_date: dateG }}, {upsert: true},
-						function (err, numAffected) {console.log('Subscription: ' + numAffected)}
+						function (err, numAffected) {console.log('Subscription: ' + numAffected + err)}
 					);
-					
+
 					User.update({ _id: mongoose.mongo.ObjectID(req.body["option_selection2"]) }, {$set: { role : Plans[req.body.item_number].role }}, {upsert: false},
-						function (err, numAffected) {console.log('Role changes: ' + numAffected)}
+						function (err, numAffected) {console.log('Role changes: ' + numAffected + err)}
 					);
-					
+
 				}
 				else if(req.body["payment_status"] == "Refunded") {
 
@@ -589,11 +589,11 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 });
 
 function changeAccount(userId) {
-	
+
 }
 
 router.get('/paypal', function (req, res, next) {
-	
+
 
 Billing.aggregate([
         { $group: {
@@ -607,7 +607,7 @@ Billing.aggregate([
             console.log(results);
         }
     });
-	
+
 	if(req.query.tx) {
 
 		Billing.findOne({txn_id : req.query.tx }).exec(function (err, doc) {
@@ -627,7 +627,7 @@ Billing.aggregate([
 					";
 					res.send(str);
 					}
-				});	
+				});
 			}
 		});
 	}
