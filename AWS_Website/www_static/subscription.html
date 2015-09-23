@@ -44,7 +44,7 @@
                     <h1>My subscription</h1>
 					<table width="100%" border="0">
 					
-					<!--% if(expire) { %-->
+					<% if(expire) { %>
 						Your plan is  
 						<% if(userRole == 2) { %>
 						<b>Gold</b>
@@ -55,6 +55,7 @@
 					After that date you have 5 days grace period, if you won't renew your account it will be switched to our Basic plan, that's absolutely free!<br>
 					We will notify you before this date.<br><br>
 					
+					<% } %>
 					
 					<!--% } else { %-->
 					
@@ -91,7 +92,7 @@
 								<input type="hidden" name="os0" value="Silver">
 								<input type="hidden" name="os1" value="<%= user.id %>">
 								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-								<input type="submit" value="Buy Silver plan" class="btn btn-default">
+								<input type="submit" value="Upgrade to Silver plan" class="btn btn-default">
 								</form>
 							<% } %>
 						<% } %>
@@ -115,7 +116,7 @@
 								<input type="hidden" name="os0" value="Gold upgrade">
 								<input type="hidden" name="os1" value="<%= user.id %>">
 								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-								<input type="submit" value="Upgrade from Silver to Gold - 5$" class="btn btn-default">
+								<input type="submit" value="Upgrade to Gold - 5$" class="btn btn-default">
 								</form>
 							<% } else { %>
 								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
@@ -126,7 +127,7 @@
 								<input type="hidden" name="os0" value="Gold">
 								<input type="hidden" name="os1" value="<%= user.id %>">
 								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-								<input type="submit" value="Buy Silver plan" class="btn btn-default">
+								<input type="submit" value="Upgrade to Gold plan" class="btn btn-default">
 								</form>
 							<% } %>
 						<% } %>	

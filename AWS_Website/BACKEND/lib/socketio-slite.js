@@ -174,7 +174,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               var uploader = new SocketIOFileUploadServer();
       		uploader.dir = uploadDir;
       		uploader.listen(socket);
-          uploader.maxFileSize = module.parent.exports.rolesRestrictions[userSession.userRole].maxSlideSize;
+			uploader.maxFileSize = userSession.restrictions.maxSlideSize;
 
               uploader.on("start", function (event) {
       				console.log();
@@ -740,7 +740,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
 
       	socket.on('server-userRestrictions', function (data) {
-      			socket.emit('client-userRestrictions',{maxFileSize: module.parent.exports.rolesRestrictions[userSession.userRole].maxSlideSize});
+      			socket.emit('client-userRestrictions',{maxFileSize: userSession.restrictions.maxSlideSize});
       	});
 
       }

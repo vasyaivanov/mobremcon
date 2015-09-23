@@ -168,8 +168,6 @@ rolesRestrictions[2] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlid
 // Admin account
 rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlideSize: 104857600, rename: 1, domain: 1};
 
-module.exports.rolesRestrictions = rolesRestrictions;
-
 var Plans = {
 	'1': {desc: 'Silver', price: 5, role: 1},
 	'2': {desc: 'Gold', price: 10, role: 2},
@@ -331,10 +329,10 @@ var getUserUploadStatus = function (userId, callback) {
 			for(i=0;i<docs.length;i++) {
 				slidesMB = slidesMB + docs[i].size;
 			}
-			if(docs.length >= rolesRestrictions[UserData[userId].userRole].maxSlidesCount) {
+			if(docs.length >= UserData[userId].restrictions.maxSlidesCount) {
 				callback(1);
 			}
-			else if(slidesMB >= rolesRestrictions[UserData[userId].userRole].maxSlidesSize) {
+			else if(slidesMB >= UserData[userId].restrictions.maxSlidesSize) {
 				callback(1);
 			}
 			else {
@@ -369,13 +367,14 @@ app.use(function (req, res, next) {
 		  UserData[userId].userRole = 0;
 		}
 
+		UserData[userId].restrictions = rolesRestrictions[UserData[userId].userRole];
+
 		getUserUploadStatus(userId, function(userAccess) {
 			UserData[userId].noUploadForUser = userAccess;
 			//if(!module.exports.UserData[userId]) {
 				// Set user session
 				UserData[userId].expire = new Date(new Date().getTime() + 86400000);
 				module.exports.UserData[userId] = UserData[userId];
-				
 				// Clear old sessions
 				for (k in UserData) {
 				  var dateComp = new Date();
@@ -620,19 +619,20 @@ Billing.aggregate([
 			if(doc) {
 				res.redirect("/account.html");
 			}
-		});
-	
-		Slide.findOne({paypalTransaction : req.query.tx.toUpperCase() }).exec(function (err, doc) {
-			if( doc ) {
-				var url = '/' + doc.scid;
-				if(doc.site) {url = 'http://' + doc.site + url}
-				res.redirect(url);
-			} else {
-        var str = " \
-    			Processing payment... \
-    			<meta http-equiv=\"refresh\" content=\"10\" /> \
-    		";
-    		res.send(str);
+			else {
+				Slide.findOne({paypalTransaction : req.query.tx.toUpperCase() }).exec(function (err, doc) {
+					if( doc ) {
+						var url = '/' + doc.scid;
+						if(doc.site) {url = 'http://' + doc.site + url}
+						res.redirect(url);
+					} else {
+				var str = " \
+						Processing payment... \
+						<meta http-equiv=\"refresh\" content=\"10\" /> \
+					";
+					res.send(str);
+					}
+				});	
 			}
 		});
 	}
