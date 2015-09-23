@@ -328,7 +328,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		// db.slides.find({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: new Date(ISODate()-1*60000) } })
       		var delPaypalTimeoutDate = new Date(new Date() - 10*60000).toISOString();
       		module.parent.exports.SlideScheme.update({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: delPaypalTimeoutDate } }, { $set: { scid: null, paypalTmpExp: null, paypalPayed: 0 }}).exec();
-              console.log("Check slide: " + data.slideId);
       		module.parent.exports.slideCheckPresenter(data.slideId, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
       				if(spresenter == 1 && sfound == 1) {
       					if(data.newHashName.length > 30) {
@@ -337,14 +336,16 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       					else {
       						module.parent.exports.SlideScheme.findOne({scid : { $regex : new RegExp("^" + data.newHashName + "$" , "i") }, site: socket.handshake.headers.host }, function (err, doc) {
       							if (!doc){
-      								if(data.start == 1) {
-      									//module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: spayed }}).exec();
+      								if(data.start == 1 && spayed == 1) {
       									module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: spayed }}, function(errU,docsU) {
       										if (!err) {
       											socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: spayed});
       										}
       									});
       								}
+									else {
+										socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: spayed});
+									}
       							}
       							else {
       								var available = 0;

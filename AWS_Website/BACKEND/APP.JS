@@ -376,7 +376,6 @@ app.use(function (req, res, next) {
 				for (k in UserData) {
 				  var dateComp = new Date();
 				  if(dateComp > UserData[k].expire) {
-						console.log(UserData[k]);
 						delete UserData[k];
 				  }
 				}
@@ -866,16 +865,14 @@ slideCheckPresenter = function(hashId, currentUserId , callback) {
 	if(currentUserId) {
 		Slide.findOne({sid : hashId }).exec(function (err, doc) {
 			if( doc ) {
-				var slidePresenter = (doc.uid == currentUserId) ? 1 : 0;
-				callback(1,slidePresenter,doc.title,doc.password, (doc.paypalPayed == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "0", (doc.isScreensharingOpen) ? 1 : "0", (doc.slidesNum > 0) ? doc.slidesNum : 1);
+				callback(1,(doc.uid == currentUserId) ? 1 : 0,doc.title,doc.password, (doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "0", (doc.isScreensharingOpen) ? 1 : "0", (doc.slidesNum > 0) ? doc.slidesNum : 1);
 			} else {
-				//console.log("Slide was not found");
 				callback(0,0,"","", 0, "");
 			}
 		});
 	}
 	else {
-				callback(0,0,"","", 0, "");
+		callback(0,0,"","", 0, "");
 	}
 }
 
