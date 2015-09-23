@@ -357,6 +357,7 @@ app.use(function (req, res, next) {
 	setUserSession(req,res,function(userId) {
 		// Initialize new session
 		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
+		if(req.user) UserData[userId].domain = req.user.domain
 		UserData[userId].currentUserId = userId
 		readUserRights(userId, function(res) {
 			if(req.user) {
@@ -735,7 +736,7 @@ else {
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){
-    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user, userRestrictions: UserData[req.cookies[sessionIdCookie]].restrictions });
+    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user, userData: UserData[req.cookies[sessionIdCookie]] });
 });
 
 router.get('/signup.html', function (req, res){

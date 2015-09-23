@@ -375,7 +375,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 						module.parent.exports.UserScheme.findOne({ domain : { $regex : new RegExp("^" + data.newDomainName + "$" , "i") } }, 
 							function (err, docs) {
 								if (!docs){
-									console.log(data.start);
 									if(data.start == 1) {
 										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
 											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
