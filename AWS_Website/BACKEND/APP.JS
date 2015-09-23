@@ -352,26 +352,24 @@ module.exports.UserData = {};
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
-    setUserSession(req,res,function(userId) {
-      UserData[userId] = {};
-      UserData[userId].currentUserId = userId
+	setUserSession(req,res,function(userId) {
+		// Initialize new session
+		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
+		UserData[userId].currentUserId = userId
 
-		if(req.user) {
-			UserData[userId].userAuth = 1;
-			readUserRights(userId, function(res) {
+		readUserRights(userId, function(res) {
+			if(req.user) {
+				UserData[userId].userAuth = 1;
 				UserData[userId].userRole = res;
-			});
-		}
-		else {
-		  UserData[userId].userAuth = 0;
-		  UserData[userId].userRole = 0;
-		}
-
-		UserData[userId].restrictions = rolesRestrictions[UserData[userId].userRole];
-
-		getUserUploadStatus(userId, function(userAccess) {
-			UserData[userId].noUploadForUser = userAccess;
-			//if(!module.exports.UserData[userId]) {
+				UserData[userId].restrictions = rolesRestrictions[res];
+			}
+			else {
+				UserData[userId].userAuth = 0;
+				UserData[userId].userRole = 0;
+				UserData[userId].restrictions = rolesRestrictions[0];
+			}
+			getUserUploadStatus(userId, function(userAccess) {
+				UserData[userId].noUploadForUser = userAccess;
 				// Set user session
 				UserData[userId].expire = new Date(new Date().getTime() + 86400000);
 				module.exports.UserData[userId] = UserData[userId];
@@ -383,8 +381,7 @@ app.use(function (req, res, next) {
 						delete UserData[k];
 				  }
 				}
-				
-			//}
+			});
 		});
     });
 
