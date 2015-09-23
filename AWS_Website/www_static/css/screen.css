@@ -132,6 +132,13 @@ body {
   padding-bottom: 10px;
 }
 
+
+/* line 137, ../sass/screen.scss */
+.m-subscription-center {
+  width: 350px;
+  margin: 0 auto;
+}
+
 /* line 137, ../sass/screen.scss */
 .m-form-signin {
   width: 350px;

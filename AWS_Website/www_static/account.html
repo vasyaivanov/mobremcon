@@ -24,12 +24,8 @@
       <script src="js/main.js"></script>
       <script src="js/jquery.scrollTo.js"></script>
 	  <% if (userRestrictions.domain == 1) {%>
-	  <script>
-	  customDomain = 1;
-	  </script>
+	<script src="js/domain-rename.js"></script>
 	  <% } %>
-
-
       <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
       <link rel="icon" href="favicon.ico" type="image/x-icon">
 
@@ -49,7 +45,19 @@
                     <h1>My account</h1>
 					<a href="/subscription.html">Manage subscription</a>
 					<table width="100%" border="0">
-
+					<% if (userRestrictions.domain == 1) {%>
+					<tr>
+					<td>
+					<div id="renameHashDialog" class="m-subscription-center">
+						<div style="font-size:22px;">Enter domain name<br>Example: john<br><span style="font-size:16px"></span></div>
+						<input type="text" name="domainNewName" id="domainNewName" size="30" maxlength="30"/> </br>
+						<div id="domainNewNameRes"></div>
+						<input type="button" id="renameDomainButton" value="Set domain name" disabled>
+					</div>
+					</td>
+					</tr>
+					<% } %>
+					
 					</table>
             </div>
         </section>

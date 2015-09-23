@@ -39,7 +39,7 @@ var userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true},
   password: { type: String, required: true},
   role: {type: Number},
-  domain: {type: String}
+  domain: {type: String, lowercase: true, unique: true}
 });
 
 userSchema.index({email: 1}, {unique: true});
@@ -200,6 +200,8 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 var User = mongoose.model('User', userSchema);
+
+module.exports.UserScheme = User;
 
 function addUser(password, email, callback) {
    console.log("MA: new user2: " + password + " " + email);

@@ -361,6 +361,44 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		);
           });
 
+          socket.on('renameDomain-server', function (data) {
+			// WWW is not allowed to rename
+			if(data.newDomainName.toLowerCase() == 'www') {
+				socket.emit('renameDomain-client', {available: 0,  newDomainName: data.newDomainName});
+			}
+			else {
+				if(userSession.restrictions.domain == 1) {
+					if(data.newDomainName.length > 30) {
+						socket.emit('renameDomain-client', {available : 0});
+					}
+					else {
+						module.parent.exports.UserScheme.findOne({ domain : { $regex : new RegExp("^" + data.newDomainName + "$" , "i") } }, 
+							function (err, docs) {
+								if (!docs){
+									console.log(data.start);
+									if(data.start == 1) {
+										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
+											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
+										});
+									}
+									else {
+										socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
+									}
+								}
+								else {
+									var available = 0;
+									if(docs._id == userSession.currentUserId) {available = 1;}
+									else {
+										console.log('Domain is not available...');
+									}
+									socket.emit('renameDomain-client', {available : available,  newDomainName: data.newDomainName});
+								}
+							}
+						);
+					}
+				}
+			}
+          });
 
           //socket.emit('cc', { hello: 0 });
           socket.on('cc', function (data) {
