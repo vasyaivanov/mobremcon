@@ -667,7 +667,7 @@ Billing.aggregate([
     });
 
 	if(req.query.tx) {
-		Billing.findOne({txn_id : req.query.tx[0] }).exec(function (err, doc) {
+		Billing.findOne({txn_id : req.query.tx }).exec(function (err, doc) {
 			if(doc) {
 				res.redirect("/account.html");
 			}
