@@ -704,7 +704,6 @@ function setUserSession(req, res, callback) {
 		if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
 			//console.log("-----------Setting new user id");
 			oldUserId = req.cookies[sessionIdCookie];
-			console.log(req.user._id.toString() + '!=' + req.cookies[sessionIdCookie]);
 			//res.clearCookie(sessionIdCookie, {  domain: '.' + domainClear });
 			res.cookie(sessionIdCookie, req.user._id.toString() /*, {  domain: '.' + domainClear ,  expires: expDate }*/);
 			
