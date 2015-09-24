@@ -304,7 +304,7 @@ var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 function redirectToWWW(req,res,next) {
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 	if(req.headers.host.split('.').length == 2) {
-		res.redirect('https://www.' + domainClear + req.url);
+		res.redirect(req.protocol + '://www.' + domainClear + req.url);
 	}
 	else {
 		next();
@@ -726,7 +726,7 @@ router.get(rootRegExp, function (req, res){
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 
 	if(req.headers.host.split('.').length > 3 && req.headers.host != 'local.school.portnov.com') {
-		res.redirect('https://www.' + domainClear);
+		res.redirect(req.protocol + '://www.' + domainClear);
 	}
 	else {
 	  var domainSplit = req.headers.host.split('.');
@@ -737,7 +737,7 @@ router.get(rootRegExp, function (req, res){
 				res.send("Your private domain is here");
 			}
 			else {
-				res.redirect('https://www.' + domainClear);
+				res.redirect(req.protocol + '://www.' + domainClear);
 			}
 		});
 	  }
