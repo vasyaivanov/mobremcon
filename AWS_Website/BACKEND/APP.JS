@@ -693,8 +693,6 @@ router.get(rootRegExp, function (req, res){
 
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 
-	
-	
 	if(req.headers.host.split('.').length > 3) {
 		res.redirect('https://www.' + domainClear);
 	}
@@ -703,6 +701,10 @@ router.get(rootRegExp, function (req, res){
 	  var domainSplit = req.headers.host.split('.');
 	  
 	  if(domainSplit.length == 3 && domainSplit[0] != 'www') {
+		  if(req.url != '/') {
+			  res.redirect('https://www.' + domainClear);
+		  }
+		  else {
 			User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 				if(docs) {
 					res.send("Your private domain is here");
@@ -711,9 +713,9 @@ router.get(rootRegExp, function (req, res){
 					res.redirect('https://www.' + domainClear);
 				}
 			});
+		  }
 	  }
 	  else {
-
 		res.header("Cache-Control", "no-cache, no-store, must-revalidate");
 		res.header("Pragma", "no-cache");
 		res.header("Expires", 0);
