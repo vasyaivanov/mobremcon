@@ -690,49 +690,78 @@ function setUserSession(req, res, callback) {
 // Index page
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
-  res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-  res.header("Pragma", "no-cache");
-  res.header("Expires", 0);
 
-  var totalSlides = 0;
+	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 
-  // Paint index page random slides
-  function getRandomSlides(Slide, callback) {
-	Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
-	  if (!err) {
-		var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
+	
+	
+	if(req.headers.host.split('.').length > 3) {
+		res.redirect('https://www.' + domainClear);
+	}
+	else {	
 
-		for(i=0;i<result.length;i++) {
-			returnRes += '<li><a href="/'+ result[i].sid +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
-			//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
-		}
-		returnRes += '</ul> \
-		<!-- SLIDE CAROUSEL --> \
-		<script type="text/javascript"> \
-			$( \'#carousel\' ).elastislide(); \
-		</script>'
-		callback(returnRes)
-	  }
-	});
-  }
-
-// Check
-if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
-	getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
-		 getRandomSlides(Slide,function(randomSlides) {
-			res.render(path.join(www_dir, www_static_dir, indexHtml), {
-				user: req.user,
-				noUploadForUser: userAccess,
-				randomSlides:  randomSlides,
-				userRole: UserData[req.cookies[sessionIdCookie]].userRole
+	  var domainSplit = req.headers.host.split('.');
+	  
+	  if(domainSplit.length == 3 && domainSplit[0] != 'www') {
+			User.findOne({ domain : domainSplit[0] }, function (err, docs) {
+				if(docs) {
+					res.send("Your private domain is here");
+				}
+				else {
+					res.redirect('https://www.' + domainClear);
+				}
 			});
-		 });
+	  }
+	  else {
 
-	  });
-}
-else {
-	res.redirect('/');
-}
+		res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+		res.header("Pragma", "no-cache");
+		res.header("Expires", 0);
+
+		var totalSlides = 0;
+
+		// Paint index page random slides
+		function getRandomSlides(Slide, callback) {
+		Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
+		  if (!err) {
+			var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
+
+			for(i=0;i<result.length;i++) {
+				returnRes += '<li><a href="/'+ result[i].sid +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
+				//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
+			}
+			returnRes += '</ul> \
+			<!-- SLIDE CAROUSEL --> \
+			<script type="text/javascript"> \
+				$( \'#carousel\' ).elastislide(); \
+			</script>'
+			callback(returnRes)
+		  }
+		});
+		}
+
+
+		// Check
+		if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
+			getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
+				 getRandomSlides(Slide,function(randomSlides) {
+					res.render(path.join(www_dir, www_static_dir, indexHtml), {
+						user: req.user,
+						noUploadForUser: userAccess,
+						randomSlides:  randomSlides,
+						userRole: UserData[req.cookies[sessionIdCookie]].userRole
+					});
+				 });
+
+			  });
+		}
+		else {
+			res.redirect('/');
+		}
+	}
+	
+	}
+
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){
