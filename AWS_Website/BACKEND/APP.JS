@@ -352,7 +352,58 @@ app.use(virtualHostSession);
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+// Set session
+app.use(function (req, res, next) {
+  setUserSession(req,res,function(userId) {
+		// Initialize new session
+		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
+		if(req.user) UserData[userId].domain = req.user.domain
+		UserData[userId].currentUserId = userId
+		readUserRights(userId, function(res) {
+			if(req.user) {
+				UserData[userId].userAuth = 1;
+				UserData[userId].userRole = res;
+				UserData[userId].restrictions = rolesRestrictions[res];
+			}
+			else {
+				UserData[userId].userAuth = 0;
+				UserData[userId].userRole = 0;
+				UserData[userId].restrictions = rolesRestrictions[0];
+			}
+			getUserUploadStatus(userId, function(userAccess) {
+				UserData[userId].noUploadForUser = userAccess;
+				// Set user session
+				UserData[userId].expire = new Date(new Date().getTime() + 86400000);
+				module.exports.UserData[userId] = UserData[userId];
+				// Clear old sessions
+				for (k in UserData) {
+				  var dateComp = new Date();
+				  if(dateComp > UserData[k].expire) {
+						delete UserData[k];
+				  }
+				}
+			});
+		});
+    });
+  next();
+});
 
+app.use(function (req, res, next) {
+	// If no session cookie - reset.
+	if(typeof req.cookies[sessionIdCookie] === 'undefined') {
+		if(req.headers.host) {
+			setUserSession(req,res,function(userId) {
+				res.redirect(req.url);
+			});
+		}
+		else {
+			res.redirect(req.url);
+		}
+	}
+	else {
+		next();
+	}
+});
 
 // Calculate user slides size sum & slides count
 var getUserUploadStatus = function (userId, callback) {
@@ -388,39 +439,6 @@ module.exports.UserData = {};
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
-
-	setUserSession(req,res,function(userId) {
-		// Initialize new session
-		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
-		if(req.user) UserData[userId].domain = req.user.domain
-		UserData[userId].currentUserId = userId
-		readUserRights(userId, function(res) {
-			if(req.user) {
-				UserData[userId].userAuth = 1;
-				UserData[userId].userRole = res;
-				UserData[userId].restrictions = rolesRestrictions[res];
-			}
-			else {
-				UserData[userId].userAuth = 0;
-				UserData[userId].userRole = 0;
-				UserData[userId].restrictions = rolesRestrictions[0];
-			}
-			getUserUploadStatus(userId, function(userAccess) {
-				UserData[userId].noUploadForUser = userAccess;
-				// Set user session
-				UserData[userId].expire = new Date(new Date().getTime() + 86400000);
-				module.exports.UserData[userId] = UserData[userId];
-				// Clear old sessions
-				for (k in UserData) {
-				  var dateComp = new Date();
-				  if(dateComp > UserData[k].expire) {
-						delete UserData[k];
-				  }
-				}
-			});
-		});
-    });
-
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 
@@ -465,21 +483,16 @@ app.use(function (req, res, next) {
 					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
-					if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
-						slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
-							if(sfound == 1) {
-								console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
-								res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
-							}
-							else {
-								console.log( "Slide was not found" );
-								res.redirect('/');
-							}
-						});
-					}
-					else {
-						res.redirect('/' + hash);
-					}
+					slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
+						if(sfound == 1) {
+							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
+							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
+						}
+						else {
+							console.log( "Slide was not found" );
+							res.redirect('/');
+						}
+					});
 				} else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
 					//console.log('jpg: ' + afterHash);
 					var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
@@ -773,23 +786,18 @@ router.get(rootRegExp, function (req, res){
 
 
 		// Check
-		if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
-			console.log(UserData[req.cookies[sessionIdCookie]]);
-			getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
-				 getRandomSlides(Slide,function(randomSlides) {
-					res.render(path.join(www_dir, www_static_dir, indexHtml), {
-						user: req.user,
-						noUploadForUser: userAccess,
-						randomSlides:  randomSlides,
-						userRole: UserData[req.cookies[sessionIdCookie]].userRole
-					});
-				 });
+		//console.log(UserData[req.cookies[sessionIdCookie]].currentUserId);
+		getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
+			 getRandomSlides(Slide,function(randomSlides) {
+				res.render(path.join(www_dir, www_static_dir, indexHtml), {
+					user: req.user,
+					noUploadForUser: userAccess,
+					randomSlides:  randomSlides,
+					userRole: UserData[req.cookies[sessionIdCookie]].userRole
+				});
+			 });
 
-			  });
-		}
-		else {
-			res.redirect('/');
-		}
+		  });
 	}
 
 	}
@@ -866,7 +874,7 @@ router.post('/signin.html',
       req.logIn(user, function(err) {
         if (err) { return next(err); }
         // Set new session after login is mandotary for middleware
-        setUserSession(req,res,function(userId) {console.log(userId)});
+        setUserSession(req,res,function(userId) {});
         return res.redirect(req.body.redirect ? req.body.redirect : '/');
       });
     })(req, res, next);
@@ -902,31 +910,22 @@ readSlideSize = function(path_to_slide, callback) {
 module.exports.readSlideSize = readSlideSize;
 
 router.get('/my.html', function (req, res){
-	if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
-		return Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
-			if( !err ) {
-				res.render(path.join(www_dir,www_static_dir , 'my.html'), {
-				  slides: docs,
-				  request: req,
-				  user: req.user,
-				  moment: moment
-				});
-			} else {
-				return console.log( err );
-			}
-		});
-	}
-	else {
-		res.redirect('/my.html');
-	}
+	return Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
+		if( !err ) {
+			res.render(path.join(www_dir,www_static_dir , 'my.html'), {
+			  slides: docs,
+			  request: req,
+			  user: req.user,
+			  moment: moment
+			});
+		} else {
+			return console.log( err );
+		}
+	});
 });
 
 
 router.get('/subscription.html', function (req, res){
-  if (typeof UserData[req.cookies[sessionIdCookie]] == "undefined") {
-    // Initiliaze session
-    res.redirect('/subscription.html');
-  } else {
    	Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, doc) {
 		var expire = "";
 		if(doc) {expire = doc.end_date}
@@ -938,7 +937,6 @@ router.get('/subscription.html', function (req, res){
 		  expire: expire
 		});
 	});
-  }
 });
 
 // Render remote control
@@ -993,9 +991,6 @@ router.get('/video.html', function (req, res){
 router.get('/remote/index.html', function (req, res){
 
 		var hashId = req.query.presentation;
-
-		console.log(slitesReg);
-
 
 		var slitesRegMW = new RegExp('^' + slitesReg + '$');
 		var match = hashId.match(slitesRegMW);
