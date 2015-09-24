@@ -42,7 +42,7 @@
         <section class="middle">
             <div class="container-fluid">
                 <form class="m-form-signin" role="form" action="/signup.html" method="post">
-					<input type="hidden" name="subscribe" value="<%= request.param("SUBSCRIBE") %>">
+                <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
                     <h1>Sign Up</h1>
               		   <%  if (error == 2) { %>
               				<h4 style="color: #FF0000">Email <i><%= request.param('email') %></i> has already registered. Please try another one.</h4>
@@ -52,14 +52,14 @@
               				<h4 style="color: #FF0000">DB error. Contact us, please.</h4>
               		   <%   } else if (error == 5) { %>
               				<h4 style="color: #FF0000">Password does not match the confirm password.</h4>
-              		   <%   } else if (request.param("NO_DATA") == 1) { %>
+              		   <%   } else if (error ==  1) { %>
               				<h4 style="color: #FF0000">Please fill out the registration form.</h4>
               		   <% } %>
 
                     <h2>Create your personal account </h2>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.param('email') %>">
+                        <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.body.email %>">
                     </div>
 
                     <div class="form-group">

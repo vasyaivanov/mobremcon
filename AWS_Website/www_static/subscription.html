@@ -43,9 +43,9 @@
             <div class="container-fluid">
                     <h1>My subscription</h1>
 					<table width="100%" border="0">
-					
+
 					<% if(expire) { %>
-						Your plan is  
+						Your plan is
 						<% if(userRole == 2) { %>
 						<b>Gold</b>
 						<% } else if (userRole == 1) { %>
@@ -54,11 +54,11 @@
 					, valid until  <%= moment(expire).format('MMMM DD, YYYY') %><br>
 					After that date you have 5 days grace period, if you won't renew your account it will be switched to our Basic plan, that's absolutely free!<br>
 					We will notify you before this date.<br><br>
-					
+
 					<% } %>
-					
+
 					<!--% } else { %-->
-					
+
 						<tr>
 						<td>Basic<br>
 						You can use PREZERA absolutely for free!<br>
@@ -77,7 +77,7 @@
 						Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br>
 						5$/year<br>
 						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?SUBSCRIBE=1'">
+							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html'">
 						<% } else { %>
 							<% if (userRole == 2) { %>
 								<!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
@@ -103,7 +103,7 @@
 						The same as our Silver plan + unlimited presentations + 100mb of space<br>
 						10$/year<br>
 						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?SUBSCRIBE=1'">
+							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html'">
 						<% } else { %>
 							<% if (userRole == 2) { %>
 								Your current plan!
@@ -130,7 +130,7 @@
 								<input type="submit" value="Upgrade to Gold plan" class="btn btn-default">
 								</form>
 							<% } %>
-						<% } %>	
+						<% } %>
 						</td>
 						</tr>
 					<!--% } %-->

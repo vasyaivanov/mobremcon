@@ -39,7 +39,7 @@ var userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true},
   password: { type: String, required: true},
   role: {type: Number},
-  domain: {type: String, lowercase: true, unique: true}
+  domain: {type: String, lowercase: true}
 });
 
 userSchema.index({email: 1}, {unique: true});
@@ -311,6 +311,24 @@ function redirectToWWW(req,res,next) {
 	}
 }
 
+// Autogenerate session for hosts
+var mwCache = Object.create(null);
+function virtualHostSession(req, res, next) {
+  var host = req.get('host');
+  var domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
+  var hostSession = mwCache[domainClear];
+  if (!hostSession) {
+    hostSession = mwCache[domainClear] = session({
+      secret: 'abrakadabra',
+      resave: false,
+      cookie: {domain: '.' + domainClear},
+      saveUninitialized: false
+    });
+  }
+  hostSession(req, res, next);
+}
+
+
 // configure Express
 app.set('port', appPort || process.env.PORT);
 app.set('view engine', 'ejs');//'html'
@@ -322,11 +340,13 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
-app.use(session({
+app.use(virtualHostSession);
+/*app.use(session({
     secret: 'abrakadabra',
     resave: false,
+    cookie: {domain: '.slite.loc'},
     saveUninitialized: false
-}));
+}));*/
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(flash());
@@ -358,6 +378,7 @@ var getUserUploadStatus = function (userId, callback) {
 	});
 }
 
+app.use(redirectToWWW);
 
 
 // Auth array
@@ -367,7 +388,7 @@ module.exports.UserData = {};
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
-	
+
 	setUserSession(req,res,function(userId) {
 		// Initialize new session
 		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
@@ -518,8 +539,6 @@ app.use(function (req, res, next) {
 		}
 	});
 });
-
-app.use(redirectToWWW);
 
 // ROUTES
 var router = express.Router();
@@ -706,12 +725,12 @@ router.get(rootRegExp, function (req, res){
 
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 
-	if(req.headers.host.split('.').length > 3) {
+	if(req.headers.host.split('.').length > 3 && req.headers.host != 'local.school.portnov.com') {
 		res.redirect('https://www.' + domainClear);
 	}
-	else {	
+	else {
 	  var domainSplit = req.headers.host.split('.');
-	  
+
 	  if(domainSplit.length == 3 && domainSplit[0] != 'www') {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
@@ -768,7 +787,7 @@ router.get(rootRegExp, function (req, res){
 			res.redirect('/');
 		}
 	}
-	
+
 	}
 
 });
@@ -778,15 +797,21 @@ router.get('/account.html', ensureAuthenticated, function (req, res){
 });
 
 router.get('/signup.html', function (req, res){
-    //console.log('get /login');
+  if(req.user) {
+    res.redirect('/');
+  }
+  else {
     res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req,  error: 0});
+  }
 });
 
 
 router.post('/signup.html', function (req, res){
-  //console.log('post /signup');
   console.log("MA: new user: " + req.body.password + " " + req.body.email);
-  if( !req.body.password || !req.body.email ) res.redirect('/signup.html?NO_DATA=1&' + 'SUBSCRIBE=' + req.body.subscribe);
+  var errorCode = 0;
+  if( !req.body.password || !req.body.email ) {
+    res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, request: req,  error: 1});
+  }
   else
   {
     addUser(req.body.password, req.body.email,
@@ -797,14 +822,8 @@ router.post('/signup.html', function (req, res){
 	    }
 	    else {
             passport.authenticate('local')(req, res, function () {
-				if(req.body.subscribe == 1) {
-					res.redirect('/subscription.html');
-				}
-				else {
-					res.redirect('/');
-				}
+					         res.redirect(req.body.redirect ? req.body.redirect : '/');
             })
-				//res.redirect('/signin.html?email=' + req.body.email + '&REG_OK=1&' + 'SUBSCRIBE=' + req.body.subscribe);
 	    }
 	}
     );
@@ -815,7 +834,12 @@ router.post('/signup.html', function (req, res){
 
 router.get('/signin.html', function (req, res){
     //console.log('get /login');
-    res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, message: req.flash('error'), request: req });
+    if(req.user) {
+      res.redirect('/');
+    }
+    else {
+      res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, ERROR_AUTH: 0, request: req });
+    }
 });
 
 
@@ -831,8 +855,19 @@ router.get('/letscrawl.html', function (req, res){
 });
 
 router.post('/signin.html',
-  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/signin.html?ERROR_AUTH=1' })
-);
+  function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      if (err) { return next(err); }
+      if (!user) { return res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, ERROR_AUTH: 1, request: req }); }
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        // Set new session after login is mandotary for middleware
+        setUserSession(req,res,function(userId) {});
+        return res.redirect(req.body.redirect ? req.body.redirect : '/');
+      });
+    })(req, res, next);
+});
+
 
 router.get('/logout', function (req, res){
   //console.log('get /logout');
