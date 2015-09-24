@@ -302,9 +302,15 @@ var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 
 // Auto redirect to WWW, if no subdomain
 function redirectToWWW(req,res,next) {
+	var saveDomains = ["","local.school.portnov.com", "slite-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com"];
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 	if(req.headers.host.split('.').length == 2) {
 		res.redirect(req.protocol + '://www.' + domainClear + req.url);
+	}
+	else if(req.headers.host.split('.').length > 3 && saveDomains.indexOf(req.headers.host) == 0) {
+		// Redirect if more than 3 subdomains
+		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+		res.redirect(req.protocol + '://www.' + domainClear);
 	}
 	else {
 		next();
@@ -354,6 +360,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 // Set session
 app.use(function (req, res, next) {
+
+if(req.method == "POST" && req.url == "/paypal") {
+	next();
+}
+else {
   setUserSession(req,res,function(userId) {
 		if(userId == 0) {
 			res.redirect(req.url);
@@ -391,6 +402,7 @@ app.use(function (req, res, next) {
 			});
 		}
     });
+}
 });
 
 /*app.use(function (req, res, next) {
@@ -734,13 +746,9 @@ router.get(rootRegExp, function (req, res){
 
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 
-	if(req.headers.host.split('.').length > 3 && req.headers.host != 'local.school.portnov.com') {
-		res.redirect(req.protocol + '://www.' + domainClear);
-	}
-	else {
-	  var domainSplit = req.headers.host.split('.');
+	var domainSplit = req.headers.host.split('.');
 
-	  if(domainSplit.length == 3 && domainSplit[0] != 'www') {
+	if(domainSplit.length == 3 && domainSplit[0] != 'www') {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
 				res.send("Your private domain is here");
@@ -749,8 +757,8 @@ router.get(rootRegExp, function (req, res){
 				res.redirect(req.protocol + '://www.' + domainClear);
 			}
 		});
-	  }
-	  else {
+	}
+	else {
 		res.header("Cache-Control", "no-cache, no-store, must-revalidate");
 		res.header("Pragma", "no-cache");
 		res.header("Expires", 0);
@@ -759,40 +767,33 @@ router.get(rootRegExp, function (req, res){
 
 		// Paint index page random slides
 		function getRandomSlides(Slide, callback) {
-		Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
-		  if (!err) {
-			var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
+			Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
+			  if (!err) {
+				var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
-			for(i=0;i<result.length;i++) {
-				returnRes += '<li><a href="/'+ result[i].sid +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
-				//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
-			}
-			returnRes += '</ul> \
-			<!-- SLIDE CAROUSEL --> \
-			<script type="text/javascript"> \
-				$( \'#carousel\' ).elastislide(); \
-			</script>'
-			callback(returnRes)
-		  }
-		});
+				for(i=0;i<result.length;i++) {
+					returnRes += '<li><a href="/'+ result[i].sid +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
+					//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
+				}
+				returnRes += '</ul> \
+				<!-- SLIDE CAROUSEL --> \
+				<script type="text/javascript"> \
+					$( \'#carousel\' ).elastislide(); \
+				</script>'
+				callback(returnRes)
+			  }
+			});
 		}
 
-		// Check
-		getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
-			 getRandomSlides(Slide,function(randomSlides) {
-				res.render(path.join(www_dir, www_static_dir, indexHtml), {
-					user: req.user,
-					noUploadForUser: userAccess,
-					randomSlides:  randomSlides,
-					userRole: UserData[req.cookies[sessionIdCookie]].userRole
-				});
-			 });
-
-		  });
+		getRandomSlides(Slide,function(randomSlides) {
+			res.render(path.join(www_dir, www_static_dir, indexHtml), {
+				user: req.user,
+				noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
+				randomSlides: randomSlides,
+				userRole: UserData[req.cookies[sessionIdCookie]].userRole
+			});
+		});
 	}
-
-	}
-
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){
