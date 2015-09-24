@@ -667,13 +667,12 @@ Billing.aggregate([
     });
 
 	if(req.query.tx) {
-
-		Billing.findOne({txn_id : req.query.tx }).exec(function (err, doc) {
+		Billing.findOne({txn_id : req.query.tx[0] }).exec(function (err, doc) {
 			if(doc) {
 				res.redirect("/account.html");
 			}
 			else {
-				Slide.findOne({paypalTransaction : req.query.tx.toUpperCase() }).exec(function (err, doc) {
+				Slide.findOne({paypalTransaction : req.query.tx }).exec(function (err, doc) {
 					if( doc ) {
 						var url = '/' + doc.scid;
 						if(doc.site) {url = 'http://' + doc.site + url}
