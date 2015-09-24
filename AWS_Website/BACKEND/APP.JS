@@ -301,13 +301,13 @@ module.exports.slitesHashLen = slitesHashLen;
 var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 
 // Auto redirect to WWW, if no subdomain
+var trustedDomains = ["","local.school.portnov.com", "slite-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com"];
 function redirectToWWW(req,res,next) {
-	var saveDomains = ["","local.school.portnov.com", "slite-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com"];
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 	if(req.headers.host.split('.').length == 2) {
 		res.redirect(req.protocol + '://www.' + domainClear + req.url);
 	}
-	else if(req.headers.host.split('.').length > 3 && saveDomains.indexOf(req.headers.host) == 0) {
+	else if(req.headers.host.split('.').length > 3 && trustedDomains.indexOf(req.headers.host) == 0) {
 		// Redirect if more than 3 subdomains
 		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 		res.redirect(req.protocol + '://www.' + domainClear);
@@ -748,7 +748,7 @@ router.get(rootRegExp, function (req, res){
 
 	var domainSplit = req.headers.host.split('.');
 
-	if(domainSplit.length == 3 && domainSplit[0] != 'www') {
+	if(domainSplit.length == 3 && domainSplit[0] != 'www' && trustedDomains.indexOf(req.headers.host) == 0) {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
 				res.send("Your private domain is here");
