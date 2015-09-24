@@ -355,55 +355,53 @@ app.use(passport.session());
 // Set session
 app.use(function (req, res, next) {
   setUserSession(req,res,function(userId) {
-		// Initialize new session
-		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
-		if(req.user) UserData[userId].domain = req.user.domain
-		UserData[userId].currentUserId = userId
-		readUserRights(userId, function(res) {
-			if(req.user) {
-				UserData[userId].userAuth = 1;
-				UserData[userId].userRole = res;
-				UserData[userId].restrictions = rolesRestrictions[res];
-			}
-			else {
-				UserData[userId].userAuth = 0;
-				UserData[userId].userRole = 0;
-				UserData[userId].restrictions = rolesRestrictions[0];
-			}
-			getUserUploadStatus(userId, function(userAccess) {
-				UserData[userId].noUploadForUser = userAccess;
-				// Set user session
-				UserData[userId].expire = new Date(new Date().getTime() + 86400000);
-				module.exports.UserData[userId] = UserData[userId];
-				// Clear old sessions
-				for (k in UserData) {
-				  var dateComp = new Date();
-				  if(dateComp > UserData[k].expire) {
-						delete UserData[k];
-				  }
-				}
-			});
-		});
-    });
-  next();
-});
-
-app.use(function (req, res, next) {
-	// If no session cookie - reset.
-	if(typeof req.cookies[sessionIdCookie] === 'undefined') {
-		if(req.headers.host) {
-			setUserSession(req,res,function(userId) {
-				res.redirect(req.url);
-			});
-		}
-		else {
+		if(userId == 0) {
 			res.redirect(req.url);
 		}
+		else {
+			// Initialize new session
+			if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
+			if(req.user) UserData[userId].domain = req.user.domain
+			UserData[userId].currentUserId = userId
+			readUserRights(userId, function(res) {
+				if(req.user) {
+					UserData[userId].userAuth = 1;
+					UserData[userId].userRole = res;
+					UserData[userId].restrictions = rolesRestrictions[res];
+				}
+				else {
+					UserData[userId].userAuth = 0;
+					UserData[userId].userRole = 0;
+					UserData[userId].restrictions = rolesRestrictions[0];
+				}
+				getUserUploadStatus(userId, function(userAccess) {
+					UserData[userId].noUploadForUser = userAccess;
+					// Set user session
+					UserData[userId].expire = new Date(new Date().getTime() + 86400000);
+					module.exports.UserData[userId] = UserData[userId];
+					next();
+					// Clear old sessions
+					for (k in UserData) {
+					  var dateComp = new Date();
+					  if(dateComp > UserData[k].expire) {
+							delete UserData[k];
+					  }
+					}
+				});
+			});
+		}
+    });
+});
+
+/*app.use(function (req, res, next) {
+	// If no session cookie - reset.
+	if(typeof req.cookies[sessionIdCookie] === 'undefined') {
+		res.redirect(req.url);
 	}
 	else {
 		next();
 	}
-});
+});*/
 
 // Calculate user slides size sum & slides count
 var getUserUploadStatus = function (userId, callback) {
@@ -693,27 +691,24 @@ function setUserSession(req, res, callback) {
 	var expDate = new Date(Number(new Date()) + 315360000000);
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
-		var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
-		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
-		var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
-		//console.log("-------------New user ID: " + newUserId);
-		//console.log("Setting new session cookie");
-		res.cookie(sessionIdCookie, newUserId, { /*domain: '.' + domainClear,*/ expires: expDate });
-		callback(newUserId);
+			var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
+			var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+			var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
+			//console.log("Setting new session cookie");
+			res.cookie(sessionIdCookie, newUserId/*, { domain: '.' + domainClear, expires: expDate }*/);
+			callback(0);
+			//callback(newUserId);
 	   }
 	   else {
 		// User loged in, but has older, random generated id
 		if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
 			//console.log("-----------Setting new user id");
 			oldUserId = req.cookies[sessionIdCookie];
-			if(req.user._id.toString() != req.cookies[sessionIdCookie]) {
-
-
-				res.cookie(sessionIdCookie, req.user._id.toString(), { /* domain: '.' + domainClear , */ expires: expDate });
-			}
+			console.log(req.user._id.toString() + '!=' + req.cookies[sessionIdCookie]);
+			//res.clearCookie(sessionIdCookie, {  domain: '.' + domainClear });
+			res.cookie(sessionIdCookie, req.user._id.toString() /*, {  domain: '.' + domainClear ,  expires: expDate }*/);
+			
 			// Update user Notes
-
-
 			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
 				function (err, numAffected) {
 					if(err) console.log(err);
@@ -725,15 +720,14 @@ function setUserSession(req, res, callback) {
 					if(err) console.log(err);
 					if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
 			});
-			callback(req.user._id);
+			// Send page reload
+			callback(0);
 		}
 		else {
 			//console.log("-------------User is set");
 			callback(req.cookies[sessionIdCookie]);
 		}
-		// Else - User  doesn't need any changes
 	   }
-	//console.log("------------------------ ");
 }
 // Index page
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
@@ -784,9 +778,7 @@ router.get(rootRegExp, function (req, res){
 		});
 		}
 
-
 		// Check
-		//console.log(UserData[req.cookies[sessionIdCookie]].currentUserId);
 		getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
 			 getRandomSlides(Slide,function(randomSlides) {
 				res.render(path.join(www_dir, www_static_dir, indexHtml), {
@@ -874,7 +866,7 @@ router.post('/signin.html',
       req.logIn(user, function(err) {
         if (err) { return next(err); }
         // Set new session after login is mandotary for middleware
-        setUserSession(req,res,function(userId) {});
+        //setUserSession(req,res,function(userId) {});
         return res.redirect(req.body.redirect ? req.body.redirect : '/');
       });
     })(req, res, next);
@@ -882,23 +874,17 @@ router.post('/signin.html',
 
 
 router.get('/logout', function (req, res){
-  //console.log('get /logout');
-  req.logout();
-  req.session.destroy(function (err) {
-    if (err) {
-      console.log("MA: logout error: " + err);
-      res.redirect('/logout');
-    }
-    // The response should indicate that the user is no longer authenticated.
-    //req.session.user = null;
-    res.clearCookie('connect.sid', { path: '/' });
-    console.log("MA: logout success ");
-	res.clearCookie(sessionIdCookie);
-	delete UserData[req.cookies[sessionIdCookie]];
-    // Set new session after login is mandotary for middleware
-    setUserSession(req,res,function(userId) {});
-    res.redirect('/');
-  });
+	req.logout();
+	req.session.destroy(function (err) {
+		if (err) {
+			console.log("MA: logout error: " + err);
+			res.redirect('/logout');
+		}
+		res.clearCookie('connect.sid', { path: '/' });
+		delete UserData[req.cookies[sessionIdCookie]];
+		res.clearCookie(sessionIdCookie);
+		res.redirect('/');
+	});
 });
 
 readSlideSize = function(path_to_slide, callback) {
