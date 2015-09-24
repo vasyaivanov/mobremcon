@@ -300,6 +300,17 @@ var slitesHashLen = 4;
 module.exports.slitesHashLen = slitesHashLen;
 var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 
+// Auto redirect to WWW, if no subdomain
+function redirectToWWW(req,res,next) {
+	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+	if(req.headers.host.split('.').length == 2) {
+		res.redirect('https://www.' + domainClear + req.url);
+	}
+	else {
+		next();
+	}
+}
+
 // configure Express
 app.set('port', appPort || process.env.PORT);
 app.set('view engine', 'ejs');//'html'
@@ -347,6 +358,8 @@ var getUserUploadStatus = function (userId, callback) {
 	});
 }
 
+
+
 // Auth array
 var UserData = {};
 module.exports.UserData = {};
@@ -354,6 +367,7 @@ module.exports.UserData = {};
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 app.use(function (req, res, next) {
+	
 	setUserSession(req,res,function(userId) {
 		// Initialize new session
 		if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
@@ -503,10 +517,9 @@ app.use(function (req, res, next) {
 			}
 		}
 	});
-
-
-
 });
+
+app.use(redirectToWWW);
 
 // ROUTES
 var router = express.Router();
@@ -697,23 +710,17 @@ router.get(rootRegExp, function (req, res){
 		res.redirect('https://www.' + domainClear);
 	}
 	else {	
-
 	  var domainSplit = req.headers.host.split('.');
 	  
 	  if(domainSplit.length == 3 && domainSplit[0] != 'www') {
-		  if(req.url != '/') {
-			  res.redirect('https://www.' + domainClear);
-		  }
-		  else {
-			User.findOne({ domain : domainSplit[0] }, function (err, docs) {
-				if(docs) {
-					res.send("Your private domain is here");
-				}
-				else {
-					res.redirect('https://www.' + domainClear);
-				}
-			});
-		  }
+		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
+			if(docs) {
+				res.send("Your private domain is here");
+			}
+			else {
+				res.redirect('https://www.' + domainClear);
+			}
+		});
 	  }
 	  else {
 		res.header("Cache-Control", "no-cache, no-store, must-revalidate");
