@@ -681,10 +681,11 @@ function setUserSession(req, res, callback) {
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
 		var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
+		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 		var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
 		//console.log("-------------New user ID: " + newUserId);
 		//console.log("Setting new session cookie");
-		res.cookie(sessionIdCookie, newUserId, { expires: expDate });
+		res.cookie(sessionIdCookie, newUserId, { /*domain: '.' + domainClear,*/ expires: expDate });
 		callback(newUserId);
 	   }
 	   else {
@@ -693,7 +694,9 @@ function setUserSession(req, res, callback) {
 			//console.log("-----------Setting new user id");
 			oldUserId = req.cookies[sessionIdCookie];
 			if(req.user._id.toString() != req.cookies[sessionIdCookie]) {
-				res.cookie(sessionIdCookie, req.user._id.toString(), { expires: expDate });
+
+
+				res.cookie(sessionIdCookie, req.user._id.toString(), { /* domain: '.' + domainClear , */ expires: expDate });
 			}
 			// Update user Notes
 
@@ -771,6 +774,7 @@ router.get(rootRegExp, function (req, res){
 
 		// Check
 		if(typeof req.cookies[sessionIdCookie] !== 'undefined' ) {
+			console.log(UserData[req.cookies[sessionIdCookie]]);
 			getUserUploadStatus(UserData[req.cookies[sessionIdCookie]].currentUserId, function(userAccess) {
 				 getRandomSlides(Slide,function(randomSlides) {
 					res.render(path.join(www_dir, www_static_dir, indexHtml), {
@@ -862,7 +866,7 @@ router.post('/signin.html',
       req.logIn(user, function(err) {
         if (err) { return next(err); }
         // Set new session after login is mandotary for middleware
-        setUserSession(req,res,function(userId) {});
+        setUserSession(req,res,function(userId) {console.log(userId)});
         return res.redirect(req.body.redirect ? req.body.redirect : '/');
       });
     })(req, res, next);
@@ -883,6 +887,8 @@ router.get('/logout', function (req, res){
     console.log("MA: logout success ");
 	res.clearCookie(sessionIdCookie);
 	delete UserData[req.cookies[sessionIdCookie]];
+    // Set new session after login is mandotary for middleware
+    setUserSession(req,res,function(userId) {});
     res.redirect('/');
   });
 });
