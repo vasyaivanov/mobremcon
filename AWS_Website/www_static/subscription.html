@@ -50,6 +50,8 @@
 						<b>Gold</b>
 						<% } else if (userRole == 1) { %>
 						<b>Silver</b>
+						<% } else if (userRole == 10) { %>
+            <b>Administrator</b>
 						<% } %>
 					, valid until  <%= moment(expire).format('MMMM DD, YYYY') %><br>
 					After that date you have 5 days grace period, if you won't renew your account it will be switched to our Basic plan, that's absolutely free!<br>
@@ -81,7 +83,7 @@
 						<% } else { %>
 							<% if (userRole == 2) { %>
 								<!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
-							<% } else if (userRole == 1)  { %>
+							<% } else if (userRole == 1 || userRole == 10)  { %>
 								Your current plan!
 							<% } else { %>
 								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
@@ -96,7 +98,7 @@
 								</form>
 							<% } %>
 						<% } %>
-						</td> 
+						</td>
 						</tr>
 						<tr>
 						<td>Gold<br>
@@ -105,7 +107,7 @@
 						<% if (!user) { %>
 							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html'">
 						<% } else { %>
-							<% if (userRole == 2) { %>
+							<% if (userRole == 2 || userRole == 10) { %>
 								Your current plan!
 							<% } else if (userRole == 1) { %>
 								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
