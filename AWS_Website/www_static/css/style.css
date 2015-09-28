@@ -146,6 +146,8 @@ body, input, select, textarea {
     line-height: 1.75em;
 }
 
+
+
 a {
     -moz-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
     -webkit-transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
@@ -2303,6 +2305,12 @@ body.is-touch #banner {
 
 .uploadfile :hover {
     cursor:pointer;
+}
+
+input.renameSlide {
+	width: 50px;
+display: inline-block;
+	font-size: 10px;
 }
 
 .uploadfile input[type="file"] {

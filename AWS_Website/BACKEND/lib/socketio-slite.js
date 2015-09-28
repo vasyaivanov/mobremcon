@@ -214,22 +214,25 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
           socket.on('server-deleteSlide', function (data) {
       		var hashPath = path.join(www_dir, slitesDir, data.sid);
-      		module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
-      			if (!err) {
-      					module.parent.exports.deleteFolderRecursive(hashPath);
-      					module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
-      						console.log('Deleting notes.....');
-							module.parent.exports.chatSchema.remove({ sid: data.sid }, function(err2) {
-								console.log('Deleting chats...');
-								socket.emit("client-deleteSlide", {sid: data.sid});
-							});
-      						
-      					});
-      			}
-      			else {
-      					console.log("Can't delete the slide" + data.sid);
-      			}
-      		});
+      		module.parent.exports.slideCheckPresenter(data.sid, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
+				if(spresenter == 1 && sfound == 1) {
+					module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
+						if (!err) {
+								module.parent.exports.deleteFolderRecursive(hashPath);
+								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
+									console.log('Deleting notes.....');
+									module.parent.exports.chatSchema.remove({ sid: data.sid }, function(err2) {
+										console.log('Deleting chats...');
+										socket.emit("client-deleteSlide", {sid: data.sid});
+									});
+								});
+						}
+						else {
+								console.log("Can't delete the slide" + data.sid);
+						}
+					});
+				}
+			});
       	});
 
           socket.on('pollStarted', function (data) {
