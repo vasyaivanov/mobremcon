@@ -700,13 +700,14 @@ function setUserSession(req, res, callback) {
 	//console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
 	var oldUserId = 0;
 	var expDate = new Date(Number(new Date()) + 315360000000);
+	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
 			var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
-			var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 			var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
 			//console.log("Setting new session cookie");
-			res.cookie(sessionIdCookie, newUserId/*, { domain: '.' + domainClear, expires: expDate }*/);
+			res.cookie(sessionIdCookie, newUserId, { domain: '.' + domainClear, expires: expDate });
 			callback(0);
 			//callback(newUserId);
 	   }
@@ -715,9 +716,8 @@ function setUserSession(req, res, callback) {
 		if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
 			//console.log("-----------Setting new user id");
 			oldUserId = req.cookies[sessionIdCookie];
-			//res.clearCookie(sessionIdCookie, {  domain: '.' + domainClear });
-			res.cookie(sessionIdCookie, req.user._id.toString() /*, {  domain: '.' + domainClear ,  expires: expDate }*/);
-			
+			res.cookie(sessionIdCookie, req.user._id.toString() , {  domain: '.' + domainClear, expires: expDate });
+
 			// Update user Notes
 			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
 				function (err, numAffected) {
@@ -747,10 +747,13 @@ router.get(rootRegExp, function (req, res){
 
 	var domainSplit = req.headers.host.split('.');
 
-	if(domainSplit.length == 3 && domainSplit[0] != 'www' && trustedDomains.indexOf(req.headers.host) == 0) {
+	if(domainSplit.length == 3 && domainSplit[0] != 'www'/* && trustedDomains.indexOf(req.headers.host) == 0*/) {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
-				res.send("Your private domain is here");
+				if(docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) {
+					console.log('Logged in');
+				}
+				res.render(path.join(www_dir,www_static_dir , 'domain.html'), { user: req.user , mainDomainGo: req.protocol + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear});
 			}
 			else {
 				res.redirect(req.protocol + '://www.' + domainClear);
@@ -836,7 +839,6 @@ router.post('/signup.html', function (req, res){
 });
 
 router.get('/signin.html', function (req, res){
-    //console.log('get /login');
     if(req.user) {
       res.redirect('/');
     }
@@ -881,7 +883,8 @@ router.get('/logout', function (req, res){
 		}
 		res.clearCookie('connect.sid', { path: '/' });
 		delete UserData[req.cookies[sessionIdCookie]];
-		res.clearCookie(sessionIdCookie);
+		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+		res.clearCookie(sessionIdCookie , {  domain: '.' + domainClear });
 		res.redirect('/');
 	});
 });

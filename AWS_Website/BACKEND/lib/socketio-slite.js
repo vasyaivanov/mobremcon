@@ -273,9 +273,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       				module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: docs.sid});
       			}
       			else if(data.slideID == 'A1') {
-      				if(userSession.userRole == 10) {
+      				//if(userSession.userRole == 10) {
       					module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: 'A1'});
-      				}
+      				//}
       			}
       		});
           });
@@ -421,9 +421,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   socket.broadcast.emit('moveLaser', data);
                 }
       			else if(data.slideID == 'A1') {
-      				if(userSession.userRole == 10) {
+      				//if(userSession.userRole == 10) {
       					socket.broadcast.emit('moveLaser', data);
-      				}
+      				//}
       			}
               });
               //socket.broadcast.emit('moveLaser', data);
@@ -438,9 +438,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   socket.broadcast.emit('drawCoords', data);
                 }
       			else if(data.slideID == 'A1') {
-      				if(userSession.userRole == 10) {
+      				//if(userSession.userRole == 10) {
       					socket.broadcast.emit('drawCoords', data);
-      				}
+      				//}
       			}
               });
           });
@@ -453,16 +453,16 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   socket.broadcast.emit('laserOn', data);
                 }
       			else if(data.slideID == 'A1') {
-      				if(userSession.userRole == 10) {
+      				//if(userSession.userRole == 10) {
       					socket.broadcast.emit('laserOn', data);
-      				}
+      				//}
       			}
               });
               //socket.broadcast.emit('laserOn', data);
           });
 
-          socket.on('laserOff', function () {
-              console.log("laser off");
+          socket.on('laserOff', function (data) {
+              console.log("laser off" + data);
               socket.broadcast.emit('laserOff');
           });
 
@@ -478,9 +478,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   socket.broadcast.emit('drawStart', data);
                 }
       			else if(data.slideID == 'A1') {
-      				if(userSession.userRole == 10) {
+      				//if(userSession.userRole == 10) {
       					socket.broadcast.emit('drawStart', data);
-      				}
+      				//}
       			}
               });
           });

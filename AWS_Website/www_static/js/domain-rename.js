@@ -15,7 +15,8 @@ $(document).ready(function () {
 	if($("#showDomainData").length) {
 		var domain = location.host;
 		domain = domain.replace(/^www\./,"");
-		$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url: https://" + $( "#domainNewName" ).val() + "." + domain +  "</font>" )
+		domain = "https://" + $( "#domainNewName" ).val() + "." + domain;
+		$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url:  <a href=\"" + domain +  "\">" + domain +  "</a></font>" )
 	}
 	
 	socket.on('renameDomain-client', function (data) {
@@ -29,7 +30,8 @@ $(document).ready(function () {
 			if(data.start == 1) {
 				var domain = location.host;
 				domain = domain.replace(/^www\./,"");
-				$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url: https://" + data.newDomainName + "." + domain +  "</font>" )
+				domain = "https://" + $( "#domainNewName" ).val() + "." + domain;
+				$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url: <a href=\"" + domain +  "\">" + domain +  "</a></font>" )
 			}
 		}
 		else {

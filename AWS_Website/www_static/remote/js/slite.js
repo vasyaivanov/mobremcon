@@ -49,9 +49,9 @@ function touchStart(event) {
 function touchEnd(event) {
     event.preventDefault();
     if (LASER === interactionType) {
-        socket.emit('laserOff');
+        socket.emit('laserOff', {slideID: getUrlParam("presentation")});
     } else if (DRAW === interactionType) {
-        socket.emit('drawStop');
+        socket.emit('drawStop', {slideID: getUrlParam("presentation")});
     }
 };
 
