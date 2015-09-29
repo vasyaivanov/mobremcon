@@ -160,7 +160,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               socket.emit("sliteConversionError", data);
           }
           function uploadComplete(name, origName) {
-              converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: userSession.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: userSession.userAuth, ssite: socket.handshake.headers.host, hashSize: module.parent.exports.slitesHashLen});
+              converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: userSession.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: userSession.userAuth, ssite: socket.handshake.headers.host, hashSize: module.parent.exports.slitesHashLen, domain: userSession.restrictions.domain, domainSet: userSession.domainSet});
           }
 
           if (HTML5_UPLOADER) {
@@ -333,7 +333,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		module.parent.exports.SlideScheme.update({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: delPaypalTimeoutDate } }, { $set: { scid: null, paypalTmpExp: null, paypalPayed: 0 }}).exec();
       		module.parent.exports.slideCheckPresenter(data.slideId, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
       				if(spresenter == 1 && sfound == 1) {
-      					if(data.newHashName.length > 30) {
+      					if(data.newHashName.length > 30 || data.newHashName.length < 5) {
       						socket.emit('renameHash-client', {slideId: data.slideId, available : 0});
       					}
       					else {

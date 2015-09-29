@@ -2308,8 +2308,8 @@ body.is-touch #banner {
 }
 
 input.renameSlide {
-	width: 50px;
-display: inline-block;
+	width: 200px;
+	display: inline-block;
 	font-size: 10px;
 }
 

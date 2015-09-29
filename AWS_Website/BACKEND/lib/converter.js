@@ -277,7 +277,8 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             
             module.parent.exports.readSlideSize(hashDir, function (sizec) {
                 if(DEBUG) {console.log("Read slite size: " + sizec);}
-                var addSlide = new opt.SlidesScheme({ uid: opt.userSessionId, sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides });
+				var domainSet = (opt.domain == 1 && opt.domainSet == 1) ? 1 : 0;
+                var addSlide = new opt.SlidesScheme({ uid: opt.userSessionId, sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides, domainSet: domainSet });
                 if(DEBUG) {
                     console.log("OTP: ");
                     console.log(opt);

@@ -47,11 +47,22 @@
 					<table width="500" border="0">
 					<% slides.forEach(function(slide){ %>
 						<tr id="slide_<%= slide.sid %>">
-						<td width="200"><a href="/<%= slide.sid %>"><img src="/<%= slide.sid %>/img0.jpg" width="50%"></a></td>
-						<td><a href="/<%= slide.sid %>"><%= slide.title %></a><br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br>
+						<td width="200"><img src="/<%= slide.sid %>/img0.jpg" width="50%"></td>
+						<% if (owner == 1) { %>
+							<td><a href="#" id="open_<%= slide.sid %>"><%= slide.title %></a><br>
+						<% } else { %>
+							<% if(slide.scid != null) { %>
+								<td><a href="/<%= slide.scid %>"><%= slide.title %></a><br>
+							<% } else { %>
+								<td><a href="/<%= slide.sid %>"><%= slide.title %></a><br>
+							<% } %>
+						<% } %>
+						Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br>
 						<% if (owner == 1) { %>
 							Slide URL: https://<%= clearDomain %>&nbsp;/&nbsp;<input type="text" class="renameSlide" id="rsid_<%= slide.sid %>" value="<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>"><div id="rresult_<%= slide.sid %>"></div>
 							<a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete slide</a>
+						<% } else { %>
+							<input style="display: none" type="text" class="renameSlide" id="rsid_<%= slide.sid %>" value="<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>">
 						<% } %>
 						</td>
 						</tr>
