@@ -306,12 +306,12 @@ var trustedDomains = ["","local.school.portnov.com", "slite-dev.elasticbeanstalk
 function redirectToWWW(req,res,next) {
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 	if(req.headers.host.split('.').length == 2) {
-		res.redirect(req.protocol + '://www.' + domainClear + req.url);
+		res.redirect(req.headers.x-forwarded-proto + '://www.' + domainClear + req.url);
 	}
 	else if(req.headers.host.split('.').length > 3 && trustedDomains.indexOf(req.headers.host) == 0) {
 		// Redirect if more than 3 subdomains
 		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
-		res.redirect(req.protocol + '://www.' + domainClear);
+		res.redirect(req.headers.x-forwarded-proto + '://www.' + domainClear);
 	}
 	else {
 		next();
@@ -468,7 +468,7 @@ app.use(function (req, res, next) {
 						if(docU) {
 							console.log(customHash)
 							if(req.headers.host.split('.')[0] == docU.domain) {
-								var url = req.protocol + "://" + domainClear + "/" + data.sid
+								var url = req.headers.x-forwarded-proto + "://" + domainClear + "/" + data.sid
 								res.set('Content-Type', 'text/html');
 								var output = " \
 								<html> \
@@ -802,11 +802,11 @@ router.get(rootRegExp, function (req, res){
 			if(docs) {
 				var owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
 				Slide.find({uid : docs._id }).sort({'created': 'desc'}).exec(function (err, docs) {
-					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: req.protocol + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
+					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: req.headers.x-forwarded-proto + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
 				});	
 			}
 			else {
-				res.redirect(req.protocol + '://www.' + domainClear);
+				res.redirect(req.headers.x-forwarded-proto + '://www.' + domainClear);
 			}
 		});
 	}
