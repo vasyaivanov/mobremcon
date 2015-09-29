@@ -119,7 +119,7 @@ var Subscription = mongoose.model('subscription', subscriptionSchema);
 var slidesSchema = mongoose.Schema({
   uid: { type: String, required: true},
   sid: { type: String, required: true},
-  scid: { type: String, lowercase: true},
+  scid: { type: String},
   title: { type: String},
   size: { type: Number, required: true},
   tmp: {type: String, default: 1},
@@ -461,10 +461,12 @@ app.use(function (req, res, next) {
 
 	if(customHash != '') {
 		Slide.find({ scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
+		//Slide.find({ scid : customHash , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
 			if(docs.length > 0) {
 				docs.forEach(function(data){
 					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
 						if(docU) {
+							console.log(customHash)
 							if(req.headers.host.split('.')[0] == docU.domain) {
 								var url = req.protocol + "://" + domainClear + "/" + data.sid
 								res.set('Content-Type', 'text/html');
@@ -500,7 +502,6 @@ app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 	var domainClear = 'www.' + req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
-
 	Slide.findOne( {scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, setDomain: 0 }).exec(function (err, doc) {
 		if(err) {console.log(err)}
 		if( doc ) {
