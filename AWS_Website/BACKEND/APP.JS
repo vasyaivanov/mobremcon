@@ -119,7 +119,7 @@ var Subscription = mongoose.model('subscription', subscriptionSchema);
 var slidesSchema = mongoose.Schema({
   uid: { type: String, required: true},
   sid: { type: String, required: true},
-  scid: { type: String},
+  scid: { type: String, lowercase: true},
   title: { type: String},
   size: { type: Number, required: true},
   tmp: {type: String, default: 1},
@@ -137,6 +137,7 @@ var slidesSchema = mongoose.Schema({
   isScreensharingOpen: { type: Number,  default: 0,  max: 1 },
   isOnlinePresentation: { type: Number,  default: 0,  max: 1 },
   hidden: { type: Number,  default: 0 , max: 1},
+  domainSet: {type: Number,  default: 0 , max: 1 },
   slidesNum: {type: Number}
 });
 
@@ -450,11 +451,58 @@ module.exports.UserData = {};
 
 // middleware do render slites files from /slites folders
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
+
+// Visualize custom domain slide
 app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 
-	Slide.findOne({scid : { $regex : new RegExp("^" + customHash + "$" , "i") }, paypalPayed: 1 }).exec(function (err, doc) {
+	var domainClear = 'www.' + req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+
+	if(customHash != '') {
+		Slide.find({ scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
+			if(docs.length > 0) {
+				docs.forEach(function(data){
+					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
+						if(docU) {
+							if(req.headers.host.split('.')[0] == docU.domain) {
+								var url = req.protocol + "://" + domainClear + "/" + data.sid
+								res.set('Content-Type', 'text/html');
+								var output = " \
+								<html> \
+								<head> \
+								<title></title> \
+								</head> \
+								<body style='scrolling:no;'> \
+								<iframe src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
+								</iframe> \
+								</body>";
+								res.send(output);
+							}
+							else {next();}
+						}
+						else {next();}
+					});
+				});
+			}
+			else {
+				next();
+			}
+		});
+	}
+	else {
+		next();
+	}
+});
+
+// Visualize slides
+app.use(function (req, res, next) {
+	var customHash = req.url.substring(1);
+	customHash = customHash.replace(/^\?/,"");
+	var domainClear = 'www.' + req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+
+	Slide.findOne( {scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, setDomain: 0 }).exec(function (err, doc) {
+		if(err) {console.log(err)}
 		if( doc ) {
 			var url = "/" + doc.sid
 			res.set('Content-Type', 'text/html');
@@ -495,9 +543,8 @@ app.use(function (req, res, next) {
 					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
-					slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum) {
-						if(sfound == 1) {
-							console.log("sisVideoChatOpen="+sisVideoChatOpen+" sisScreensharingOpen="+sisScreensharingOpen);
+					slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum, ssetDomain) {
+						if(sfound == 1) {							
 							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
 						}
 						else {
@@ -544,25 +591,23 @@ app.use(function (req, res, next) {
 					var fileOptions = { lastModified: true, maxAge: 0 };
 					var hashPath = path.join(wwwSlites, hash);
 					var fileToSend = path.join(hashPath, afterHash);
-					//console.log('filePathname: ' + filePathname);
 					res.sendFile(fileToSend, fileOptions, function (err) {
 						if (err) {
 							console.log(err + ' sending arbitrary file: ' + fileToSend);
 						}
 					});
 				}
-				//console.log('\n');
 			}
 			else if(req.url == "/A1/") {
 				 var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 				 res.render(indexPathname, {title: "A1", presenter: 1, password: 0, payed:  0 , customurl: "", isVideoChatOpen: "", isScreensharingOpen: "", slidesNum: 13 , hash: "HASH_TEMPLATE", role: 0});
-				console.log(indexPathname);
 			}
 			else {
 				next();
 			}
 		}
 	});
+	
 });
 
 // ROUTES
@@ -727,7 +772,9 @@ function setUserSession(req, res, callback) {
 					if(numAffected > 0) {console.log("Remaped notes: " + numAffected)}
 			});
 			// Update user slides
-			Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
+			var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;
+			console.log(domainSet);
+			Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet }}, {multi: true, upsert: false},
 				function (err, numAffected) {
 					if(err) console.log(err);
 					if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
@@ -753,7 +800,6 @@ router.get(rootRegExp, function (req, res){
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
 				var owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
-
 				Slide.find({uid : docs._id }).sort({'created': 'desc'}).exec(function (err, docs) {
 					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: req.protocol + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
 				});	
@@ -802,7 +848,7 @@ router.get(rootRegExp, function (req, res){
 });
 
 router.get('/account.html', ensureAuthenticated, function (req, res){
-    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user, userData: UserData[req.cookies[sessionIdCookie]] });
+    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user, userData: UserData[req.cookies[sessionIdCookie]], request: req });
 });
 
 router.get('/signup.html', function (req, res){
@@ -931,12 +977,11 @@ router.get('/subscription.html', function (req, res){
 });
 
 // Render remote control
-
 slideCheckPresenter = function(hashId, currentUserId , callback) {
 	if(currentUserId) {
 		Slide.findOne({sid : hashId }).exec(function (err, doc) {
 			if( doc ) {
-				callback(1,(doc.uid == currentUserId) ? 1 : 0,doc.title,doc.password, (doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "0", (doc.isScreensharingOpen) ? 1 : "0", (doc.slidesNum > 0) ? doc.slidesNum : 1);
+				callback(1,(doc.uid == currentUserId) ? 1 : 0,doc.title,doc.password, (doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "0", (doc.isScreensharingOpen) ? 1 : "0", (doc.slidesNum > 0) ? doc.slidesNum : 1, (doc.domainSet) ? 1 : 0);
 			} else {
 				callback(0,0,"","", 0, "");
 			}
