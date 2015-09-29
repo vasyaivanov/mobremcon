@@ -337,8 +337,20 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       						socket.emit('renameHash-client', {slideId: data.slideId, available : 0});
       					}
       					else {
-      						module.parent.exports.SlideScheme.findOne({scid : { $regex : new RegExp("^" + data.newHashName + "$" , "i") }, site: socket.handshake.headers.host }, function (err, doc) {
+							var domainClear = 'www.' + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0];
+							
+							var searchParams = {};
+							searchParams.scid = { $regex : new RegExp("^" + data.newHashName + "$" , "i") };
+							searchParams.site = domainClear;
+							
+							if(userSession.restrictions.domain == 1 && userSession.domainSet == 1) {
+								searchParams.uid = userSession.currentUserId;
+							}
+							
+      						module.parent.exports.SlideScheme.findOne( searchParams , function (err, doc) {
+      						//module.parent.exports.SlideScheme.findOne({scid : { $regex : new RegExp("^" + data.newHashName + "$" , "i") }, site: socket.handshake.headers.host }, function (err, doc) {
       							if (!doc){
+									console.log("NOT FOUND");
       								if(data.start == 1 && spayed == 1) {
       									module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: spayed }}, function(errU,docsU) {
       										if (!err) {
@@ -351,6 +363,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 									}
       							}
       							else {
+									console.log("FOUND");
       								var available = 0;
       								if(doc.sid == data.slideId) {available = 1;}
       								socket.emit('renameHash-client', {slideId: data.slideId, available : available,  newHashName: data.newHashName});

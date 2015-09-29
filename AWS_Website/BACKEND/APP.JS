@@ -379,11 +379,13 @@ else {
 					UserData[userId].userAuth = 1;
 					UserData[userId].userRole = res;
 					UserData[userId].restrictions = rolesRestrictions[res];
+					UserData[userId].domainSet = req.user.domain ? 1 : 0;
 				}
 				else {
 					UserData[userId].userAuth = 0;
 					UserData[userId].userRole = 0;
 					UserData[userId].restrictions = rolesRestrictions[0];
+					UserData[userId].domainSet = 0;
 				}
 				getUserUploadStatus(userId, function(userAccess) {
 					UserData[userId].noUploadForUser = userAccess;
@@ -746,14 +748,14 @@ router.get(rootRegExp, function (req, res){
 	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
 
 	var domainSplit = req.headers.host.split('.');
-
+	
 	if(domainSplit.length == 3 && domainSplit[0] != 'www'/* && trustedDomains.indexOf(req.headers.host) == 0*/) {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
 				var owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
 
 				Slide.find({uid : docs._id }).sort({'created': 'desc'}).exec(function (err, docs) {
-					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: req.protocol + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear});
+					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: req.protocol + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
 				});	
 			}
 			else {
