@@ -502,7 +502,7 @@ app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 	var domainClear = 'www.' + req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
-	Slide.findOne( {scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, setDomain: 0 }).exec(function (err, doc) {
+	Slide.findOne( {scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 0 }).exec(function (err, doc) {
 		if(err) {console.log(err)}
 		if( doc ) {
 			var url = "/" + doc.sid
