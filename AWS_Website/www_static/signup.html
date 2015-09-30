@@ -43,9 +43,10 @@
             <div class="container-fluid">
                 <form class="m-form-signin" role="form" action="/signup.html" method="post">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
+                <input type="hidden" name="account" value="<%= (request.body.account) ? request.body.account : request.query.account %>">
                     <h1>Sign Up</h1>
               		   <%  if (error == 2) { %>
-              				<h4 style="color: #FF0000">Email <i><%= request.param('email') %></i> has already registered. Please try another one.</h4>
+              				<h4 style="color: #FF0000">Email <i><%= request.body.email %></i> has already registered. Please try another one.</h4>
               		   <%   } else if (error == 3) { %>
               				<h4 style="color: #FF0000">Wrong email address</h4>
 						<%   } else if (error == 4) { %>

@@ -79,14 +79,14 @@
 						Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br>
 						5$/year<br>
 						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html'">
+							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?account=silver'">
 						<% } else { %>
 							<% if (userRole == 2) { %>
 								<!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
 							<% } else if (userRole == 1 || userRole == 10)  { %>
 								Your current plan!
 							<% } else { %>
-								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
+								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="silver_account">
 								<input type="hidden" name="cmd" value="_s-xclick">
 								<input type="hidden" name="hosted_button_id" value="AK3X6WJ7VWYJS">
 								<input type="hidden" name="on0" value="Account">
@@ -105,7 +105,7 @@
 						The same as our Silver plan + unlimited presentations + 100mb of space<br>
 						10$/year<br>
 						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html'">
+							<input type="button" value="Register" class="btn btn-default"/ onclick="location='/signup.html?account=gold'">
 						<% } else { %>
 							<% if (userRole == 2 || userRole == 10) { %>
 								Your current plan!
@@ -121,7 +121,7 @@
 								<input type="submit" value="Upgrade to Gold - 5$" class="btn btn-default">
 								</form>
 							<% } else { %>
-								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
+								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="gold_account">
 								<input type="hidden" name="cmd" value="_s-xclick">
 								<input type="hidden" name="hosted_button_id" value="W8DTXXRCVJB6A">
 								<input type="hidden" name="on0" value="Account">
@@ -163,6 +163,15 @@
               </ul>
           </nav>
         </header>
+		
+	<script>
+	$(document).ready(function () {
+		if(window.location.search.substring(1)) {
+			var account = window.location.search.substring(1);
+			$("#" + account + "_account").submit();
+		}
+	});
+	</script>
 
     </body>
 </html>

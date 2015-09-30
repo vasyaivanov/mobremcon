@@ -321,18 +321,23 @@ function redirectToWWW(req,res,next) {
 // Autogenerate session for hosts
 var mwCache = Object.create(null);
 function virtualHostSession(req, res, next) {
-  var host = req.get('host');
-  var domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
-  var hostSession = mwCache[domainClear];
-  if (!hostSession) {
-    hostSession = mwCache[domainClear] = session({
-      secret: 'abrakadabra',
-      resave: false,
-      cookie: {domain: '.' + domainClear},
-      saveUninitialized: false
-    });
-  }
-  hostSession(req, res, next);
+	var host = req.get('host');
+	if(host) {
+		var domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
+		var hostSession = mwCache[domainClear];
+		if (!hostSession) {
+			hostSession = mwCache[domainClear] = session({
+				secret: 'abrakadabra',
+				resave: false,
+				cookie: {domain: '.' + domainClear},
+				saveUninitialized: false
+			});
+		}
+		hostSession(req, res, next);
+	}
+	else {
+		res.send("Session not found...Reloading page...<meta http-equiv=\"refresh\" content=\"10\" />");
+	}
 }
 
 
@@ -466,7 +471,6 @@ app.use(function (req, res, next) {
 				docs.forEach(function(data){
 					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
 						if(docU) {
-							console.log(customHash)
 							if(req.headers.host.split('.')[0] == docU.domain) {
 								var url = ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + "://" + domainClear + "/" + data.sid
 								res.set('Content-Type', 'text/html');
@@ -774,7 +778,6 @@ function setUserSession(req, res, callback) {
 			});
 			// Update user slides
 			var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;
-			console.log(domainSet);
 			Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet }}, {multi: true, upsert: false},
 				function (err, numAffected) {
 					if(err) console.log(err);
@@ -878,7 +881,7 @@ router.post('/signup.html', function (req, res){
 	    }
 	    else {
             passport.authenticate('local')(req, res, function () {
-					         res.redirect(req.body.redirect ? req.body.redirect : '/');
+					         res.redirect(req.body.redirect ? req.body.redirect + ( (req.body.account) ? '?' + req.body.account : '' ) : '/');
             })
 	    }
 	}
