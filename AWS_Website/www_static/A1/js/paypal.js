@@ -27,11 +27,18 @@ socket.on('renameHash-client', function (data) {
 						$("#paypalNewHashForm").submit();
 					}
 					else {
-						if(isInIFrame() == true) {
-							parent.window.location.href="/" + data.newHashName;							
+						var redirUrl = "";
+						if(data.site) {
+							redirUrl = window.location.protocol + "//" + data.site + "/" + data.newHashName
 						}
 						else {
-							window.location.href="/" + data.newHashName;	
+							redirUrl =  "/" + data.newHashName
+						}
+						if(isInIFrame() == true) {
+							parent.window.location.href= redirUrl;							
+						}
+						else {
+							window.location.href= redirUrl;	
 						}
 
 					}

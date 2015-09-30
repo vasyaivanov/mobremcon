@@ -346,15 +346,16 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 							if(userSession.restrictions.domain == 1 && userSession.domainSet == 1) {
 								searchParams.uid = userSession.currentUserId;
 							}
-							
+							else {
+								searchParams.domainSet = 0;
+							}
+
       						module.parent.exports.SlideScheme.findOne( searchParams , function (err, doc) {
-      						//module.parent.exports.SlideScheme.findOne({scid : { $regex : new RegExp("^" + data.newHashName + "$" , "i") }, site: socket.handshake.headers.host }, function (err, doc) {
       							if (!doc){
-									console.log("NOT FOUND");
       								if(data.start == 1 && spayed == 1) {
       									module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: spayed }}, function(errU,docsU) {
       										if (!err) {
-      											socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: spayed});
+      											socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: spayed, site: (userSession.domain) ? userSession.domain + "."  + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0] : ""});
       										}
       									});
       								}
@@ -363,7 +364,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 									}
       							}
       							else {
-									console.log("FOUND");
       								var available = 0;
       								if(doc.sid == data.slideId) {available = 1;}
       								socket.emit('renameHash-client', {slideId: data.slideId, available : available,  newHashName: data.newHashName});
@@ -393,6 +393,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 								if (!docs){
 									if(data.start == 1) {
 										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
+											module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId, domainSet: 0 }, {$set: { domainSet: 1 }}, {upsert: false},
+												function (err, numAffected) {console.log('Updated slides...: ' + numAffected + err)}
+											);
 											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
 										});
 									}
