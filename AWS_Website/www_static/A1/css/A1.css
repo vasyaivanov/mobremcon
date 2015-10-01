@@ -1,7 +1,7 @@
 body {
 	/* background-color:rgba(0,0,255,0.3); */
 	font-family: 'Lato', sans-serif;
-	overflow-y: scroll;
+	overflow-y: hidden;
 	overflow-x: hidden;
 }
 
