@@ -126,7 +126,7 @@ $(document).ready(function () {
     } else {
 		socket.on("client-userRestrictions", function (loadData) {
 			var siofu = new SocketIOFileUpload(socket);
-			siofu.chunkSize = 100 * 1024;
+			siofu.chunkSize = 0;
 			siofu.maxFileSize = loadData.maxFileSize;
 			siofu.listenOnInput(document.getElementById("uploadPresentation"));		
 
