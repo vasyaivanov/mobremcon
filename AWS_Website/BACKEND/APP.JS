@@ -823,13 +823,12 @@ router.get(rootRegExp, function (req, res){
 		// Paint index page random slides
 		function getRandomSlides(Slide, callback) {
 			Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
-				console.log(result)
 			  if (!err) {
 				var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
 				for(i=0;i<result.length;i++) {
-					returnRes += '<li><a href="/'+ result[i].sid +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
-					//returnRes += '<a href="/'+ result[i].sid +'"><img src="/'+ result[i].sid +'/img0.jpg" height="150"></a>&nbsp;&nbsp;';
+					var url = (result[i].scid ? result[i].scid : result[i].sid)
+					returnRes += '<li><a href="/'+ url +'"  title="'+ result[i].title +'"><img src="/'+ result[i].sid +'/img0.jpg" alt="'+ result[i].title +'" class="slider-img" /></a></li>\n'
 				}
 				returnRes += '</ul> \
 				<!-- SLIDE CAROUSEL --> \
