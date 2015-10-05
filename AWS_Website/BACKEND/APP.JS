@@ -124,7 +124,7 @@ var slidesSchema = mongoose.Schema({
   size: { type: Number, required: true},
   tmp: {type: String, default: 1},
   created: { type: Date },
-  crawled: { type: String,  default: 0 },
+  crawled: { type: Number,  default: 0 },
   url: {type: String},
   desc: { type: String },
   site: { type: String },
@@ -823,6 +823,7 @@ router.get(rootRegExp, function (req, res){
 		// Paint index page random slides
 		function getRandomSlides(Slide, callback) {
 			Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
+				console.log(result)
 			  if (!err) {
 				var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
