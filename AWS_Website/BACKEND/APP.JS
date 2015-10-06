@@ -367,7 +367,7 @@ app.use(passport.session());
 // Set session
 app.use(function (req, res, next) {
 
-if(req.method == "POST" && req.url == "/paypal") {
+if((req.method == "POST" && req.url == "/paypal") || (req.url == "/google32d58b5279af5365.html")) {
 	next();
 }
 else {
