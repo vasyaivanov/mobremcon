@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="../css/videochat/videochat-style.css">
     <link rel="stylesheet" href="../css/jquery-ui.min.css">
     <link class="rs-file" href="../css/royalslider.css" rel="stylesheet">
-	  <link rel="stylesheet" type="text/css" href="../css/index1.css">
+	<link rel="stylesheet" type="text/css" href="../css/index1.css">
     <!-- preview-related stylesheets -->
     <link href="../css/reset.css" rel="stylesheet">
     <link href="../css/github.css" rel="stylesheet">
@@ -45,6 +45,8 @@
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <!-- font awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- remote stylesheet -->
+    <!--<link rel="stylesheet" type="text/css" href="../remote/css/index.css">-->
 </head>
 
 <body> <!--onresize="resizeCanvas()">-->
@@ -93,7 +95,22 @@
       </div>
 
       <div id="video-gallery" class="royalSlider videoGallery rsDefault">
-      </div></center>
+      </div>
+    </center>
+
+    <div class="UI botRow" id="navButtons" style="display: none">
+        <div class="UI button button_unpressed" id="prev" style="height:50px; line-height:50px;">
+            <span style="font-size:2em; vertical-align:top; float:left; padding-right:10px; padding-left:30px;">&lt;</span>
+            <span style="vertical-align:top;float:left;">PREV</span>
+        </div>
+        <div class="UI button button_unpressed" id="laser">POINTER</div>
+        <div class="UI button button_unpressed" id="draw">DRAW</div>
+        <div class="UI button button_unpressed" id="next" style="height:50px; line-height:50px;">
+            <span style="font-size:2em; vertical-align:top; float:right; padding-right:30px; padding-left:10px;">&gt;</span>
+            <span style="vertical-align:top; float:right">NEXT</span>
+        </div>
+        <span class="UI" id="timeDisplay">start &#8986;</span><br>
+    </div>
 
 	<div id="personalNotes">
 		<div class="closevideo" id="closePersonalNotes"></div>
@@ -206,6 +223,7 @@
 			<li><a href="#"></a>
 				<ul class="menuSubmenu">
 				  <li><a href="javascript:showRemote()" id="menuRemote">Remote Control (live)</a></li>
+				  <li><a href="javascript:showHideRemote()" id="menuShowHideRemote">Remote Control (new live)</a></li>
 				  <li><a href="javascript:showHideComments()" id="menuOpenWallChat"><span id='chatOpenCloseLabel'></span>Chat</a></li>
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span>Live Video</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>

@@ -787,5 +787,123 @@ right: 0px;
 left: 0%;
 }
 
+/* imported from remote.css */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.UI {
+    font-size: 6.3vmin;
+    /* border: 1px solid black; */
+    display: inline-block;
+    vertical-align: top;
+}
+#timeDisplay {
+	/*position: absolute;
+	right: 5px;
+	float: right;	
+	opacity:0.7;*/
+	font-size: 6.3vmin;
+	text-align: center;
+	overflow: hidden;
+	cursor: pointer;
+	color: rgb(69, 166, 247);
+}
+#navButtons {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.topRow {
+    height: 7%;
+}
+.midRow {
+    height: 92%;
+}
+.botRow {
+    /*height: 8%;*/
+    opacity:0.7;
+    border: none;
+    padding-bottom: 0px;
+    padding-left: 4px;
+}
+.leftCol {
+    width: 10%;
+}
+.midCol {
+    width: 100%;
+	margin-left: 5px;
+}
+.rightCol {
+    width: 18.75%;
+}
+
+#prev {
+} 
+#prev:active {
+	border-color: red;
+}
+#next {
+}   
+#next:active {
+	border-color:red;
+}
+/* filler elements are for spacing the buttons on the
+ * bottom row. */
+#filler {
+    width: 3.95%;
+    border: white;
+}
+#laser {
+}
+#draw {
+}
+#speech {
+}
+
+.button_unpressed{
+	background-color: #125182; 
+	background: -moz-linear-gradient(top, #125182, #1269ab 50%, #004375 51%, #00345b);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #125182), color-stop(.5, #1269ab), color-stop(.51, #004375), to(#00345b)); 
+}
+.button_pressed{
+	background: gray; 
+}
+
+.button { 
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+/*basic styles*/ width: 250px; height: 50px; color: #fff; text-align: center; font-size: 30px; line-height: 50px; 
+/*border styles*/ -moz-border-radius: 30px; -webkit-border-radius: 30px; border-radius: 30px; -moz-box-shadow:inset 0 0 10px #000000; -webkit-box-shadow:inset 0 0 10px #000000; box-shadow:inset 0 0 10px #000000;
+} 
+.button p { font-size: 30px; line-height: 50px; font-family: “HelveticaNeue-Light”, “Helvetica Neue Light”, “Helvetica Neue”, Helvetica, Arial, “Lucida Grande”, sans-serif; font-weight: 300; text-shadow: 0px 0px 3px #555; } 
+a { text-decoration: none; color: fff; } 
+.button:hover { -moz-box-shadow:inset 0 0 50px #000000; -webkit-box-shadow:inset 0 0 50px #000000; box-shadow:inset 0 0 50px #000000; } 
+.button p:hover { text-shadow: 0px 0px 3px #888; }
+
+.roundButton{
+  font-size: 36px;
+  width: 96%;
+  color: rgb(69, 166, 247);
+  height: 60px;
+  line-height: 60px;
+  /* background-image: url('../img/buttonLaser.png'); */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+  border-radius: 50px;  
+  text-align: center;
+  border: 6px;
+  border-style: solid;
+  border-color: rgb(69, 166, 247);
+  margin-top:2px;
+  margin-bottom: 2px;
+  cursor: pointer;
+}
 
 /* END NEXT,PREV BUTTONS */

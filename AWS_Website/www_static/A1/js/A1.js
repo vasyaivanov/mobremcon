@@ -333,6 +333,11 @@ function showRemote() {
 	showHideMenu(true);
 }
 
+function showHideRemote() {
+    $("#navButtons").slideToggle();
+    showHideMenu(true);
+}
+
 function disableMenuItem(menuItem) {
 	$(menuItem).attr('title','only presenter can do this');
 	$(menuItem).attr('onclick','return false');
@@ -342,6 +347,7 @@ function disableMenuItem(menuItem) {
 }
 function disableNonPresenterMenues() {
 	disableMenuItem("#menuRemote");
+    disableMenuItem("#menuShowHideRemote");
 	disableMenuItem("#menuOpenVideoChat");
 	disableMenuItem("#menuPassword");
 	disableMenuItem("#menuOpenScreensharing");
