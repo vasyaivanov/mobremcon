@@ -746,3 +746,11 @@ if (!isFile) {
 
     });
 }
+
+
+//$('#prev').click(function() {
+  //  alert('prev');
+    /*socket.emit('mymessage', { my:102, slide:currSlideNum });
+    currSlideNum--;
+    $("#notes").text(notesArray[currSlideNum]);*/
+//});

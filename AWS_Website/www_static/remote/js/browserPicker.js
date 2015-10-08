@@ -8,7 +8,7 @@ if (/mobile/i.test(navigator.userAgent)) {
 } else {
     scriptSrc = './js/LASER_CONTROL.js';
 }
-var script = document.createElement('script');
-script.src = scriptSrc;
+var newScript = document.createElement('script');
+newScript.src = '../remote/' + scriptSrc;
 var head = document.getElementsByTagName('head')[0];
-head.appendChild(script);
+head.appendChild(newScript);
