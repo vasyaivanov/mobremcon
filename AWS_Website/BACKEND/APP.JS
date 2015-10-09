@@ -302,15 +302,15 @@ module.exports.slitesHashLen = slitesHashLen;
 var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 
 // Auto redirect to WWW, if no subdomain
-var trustedDomains = ["","local.school.portnov.com", "slite-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com"];
+var trustedDomains = ["", "slite-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com", "localhost"];
 function redirectToWWW(req,res,next) {
-	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
-	if(req.headers.host.split('.').length == 2) {
+	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+	if(req.hostname.split('.').length == 2) {
 		res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear + req.url);
 	}
-	else if(req.headers.host.split('.').length > 3 && trustedDomains.indexOf(req.headers.host) == 0) {
+	else if(req.hostname.split('.').length > 3 && trustedDomains.indexOf(req.headers.host) == 0) {
 		// Redirect if more than 3 subdomains
-		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 		res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear);
 	}
 	else {
@@ -462,7 +462,7 @@ app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 
-	var domainClear = 'www.' + req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	if(customHash != '') {
 		Slide.find({ scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
@@ -471,7 +471,7 @@ app.use(function (req, res, next) {
 				docs.forEach(function(data){
 					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
 						if(docU) {
-							if(req.headers.host.split('.')[0] == docU.domain) {
+							if(req.hostname.split('.')[0] == docU.domain) {
 								var url = ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + "://" + domainClear + "/" + data.sid
 								res.set('Content-Type', 'text/html');
 								var output = " \
@@ -505,7 +505,7 @@ app.use(function (req, res, next) {
 app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
-	var domainClear = 'www.' + req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 	Slide.findOne( {scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 0 }).exec(function (err, doc) {
 		if(err) {console.log(err)}
 		if( doc ) {
@@ -752,7 +752,7 @@ function setUserSession(req, res, callback) {
 	//console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
 	var oldUserId = 0;
 	var expDate = new Date(Number(new Date()) + 315360000000);
-	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
@@ -796,9 +796,9 @@ function setUserSession(req, res, callback) {
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
 
-	var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
-	var domainSplit = req.headers.host.split('.');
+	var domainSplit = req.hostname.split('.');
 	
 	if(domainSplit.length == 3 && domainSplit[0] != 'www'/* && trustedDomains.indexOf(req.headers.host) == 0*/) {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
@@ -936,7 +936,7 @@ router.get('/logout', function (req, res){
 		}
 		res.clearCookie('connect.sid', { path: '/' });
 		delete UserData[req.cookies[sessionIdCookie]];
-		var domainClear = req.headers.host.split('.').reverse()[1] + '.' + req.headers.host.split('.').reverse()[0];
+		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 		res.clearCookie(sessionIdCookie , {  domain: '.' + domainClear });
 		res.redirect('/');
 	});
