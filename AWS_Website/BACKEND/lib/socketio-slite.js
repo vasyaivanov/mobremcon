@@ -97,8 +97,6 @@ function purge(s, action) {
     }
 }
 
-console.log('in remote control');
-
 function getHashPresentation(hash, next){
     var hashPath = path.join(www_dir, slitesDir, hash); // www/slites/hash
     fs.readdir(hashPath, function (err, files) {
@@ -211,6 +209,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		});
 
           }
+
+          socket.on('error', function (data){
+            console.error(data);
+          });
 
           socket.on('server-deleteSlide', function (data) {
       		var hashPath = path.join(www_dir, slitesDir, data.sid);
@@ -430,18 +432,18 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           // receive laser coordinates from the remote
           socket.on('laserCoords', function (data) {
               // 2 next lines are logs for testing
-              console.log("Laser Coordinates Received");
-              console.log("X: " + data.x + ", " + "Y: " + data.y);
-
-              // send coordinates on to the display (RECEIVER_POWERPOINT.html)
+              console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+              // send coordinates on to the display (RECEIVER_POWERPOINT.html)
                 if(docs){
                   data.slideID = docs.sid;
                   socket.broadcast.emit('moveLaser', data);
+                  socket.emit('moveLaser', data);
                 }
       			else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-      					socket.broadcast.emit('moveLaser', data);
+                socket.broadcast.emit('moveLaser', data);
+      					socket.emit('moveLaser', data);
       				//}
       			}
               });
@@ -449,31 +451,36 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawCoords', function (data) {
-              console.log("draw coords received");
+              console.log("Draw coords received");
               console.log("X: " + data.x + ", " + "Y: " + data.y);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
                   socket.broadcast.emit('drawCoords', data);
-                }
-      			else if(data.slideID == 'A1') {
+                  socket.emit('drawCoords', data);
+                  //console.log("drawCoords broadcast from " + socket.id);
+                } else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-      					socket.broadcast.emit('drawCoords', data);
+                socket.broadcast.emit('drawCoords', data);
+      					socket.emit('drawCoords', data);
+                //console.log("drawCoords broadcast from " + socket.id);
       				//}
       			}
               });
           });
 
           socket.on('laserOn', function (data) {
-              console.log("laser on");
+              console.log("laser on: " + data.slideID);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
                   socket.broadcast.emit('laserOn', data);
+                  socket.emit('laserOn', data);
                 }
       			else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-      					socket.broadcast.emit('laserOn', data);
+                socket.broadcast.emit('laserOn', data);
+      					socket.emit('laserOn', data);
       				//}
       			}
               });
@@ -481,32 +488,37 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('laserOff', function (data) {
-              console.log("laser off" + data);
-              socket.broadcast.emit('laserOff');
+              console.log("laser off: " + data.slideID);
+              socket.broadcast.emit('laserOff', data);
+              socket.emit('laserOff', data);
           });
 
-          socket.on('shake', function () {
-              socket.broadcast.emit('shake');
+          socket.on('shake', function (data) {
+              socket.broadcast.emit('shake', data);
+              socket.emit('shake', data);
           });
 
           socket.on('drawStart', function (data) {
-              console.log("drawstart");
+              console.log("drawstart: " + data.slideID);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
                   socket.broadcast.emit('drawStart', data);
+                  socket.emit('drawStart', data);
                 }
       			else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-      					socket.broadcast.emit('drawStart', data);
+                socket.broadcast.emit('drawStart', data);
+      					socket.emit('drawStart', data);
       				//}
       			}
               });
           });
 
-          socket.on('drawStop', function () {
-              console.log("drawstop");
-              socket.broadcast.emit('drawStop');
+          socket.on('drawStop', function (data) {
+              console.log("drawstop: " + data.slideID);
+              socket.broadcast.emit('drawStop', data);
+              socket.emit('drawStop', data);
           });
 
           socket.on('insertVideoId', function (data) {

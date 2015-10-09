@@ -77,9 +77,12 @@ function getUrlParam(sParam)
   }
 }
 
-$(document).ready(function() {
+$( window ).load(function() {
   //setup "global" variables first
-  var socket = io.connect(document.location.hostname + ':' + location.port);
+  if(typeof chatSocket !== 'undefined') {
+    alert('chatSocket is already defined!');
+  }
+  var chatSocket = io.connect(document.location.hostname + ':' + location.port);
   var myRoomID = null;
 
   $("form").submit(function(event) {
@@ -120,14 +123,14 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
       toggleNameForm();
       toggleChatWindow();
       $("#msg").focus();
-      socket.emit("joinserver", name, device, function(data) {
+      chatSocket.emit("joinserver", name, device, function(data) {
         var roomName = getUrlParam("presentation");
-        socket.emit("check", roomName, function(data) {
+        chatSocket.emit("check", roomName, function(data) {
           roomExists = data.result;
           if (!roomExists)
-            socket.emit("createRoom", roomName);
+            chatSocket.emit("createRoom", roomName);
           else
-            socket.emit("joinRoom", roomName);
+            chatSocket.emit("joinRoom", roomName);
         });
       });
     }
@@ -148,7 +151,7 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
   $("#chatForm").submit(function() {
     var msg = $("#msg").val();
     if (msg !== "") {
-      socket.emit("send", msg);
+      chatSocket.emit("send", msg);
       $("#msg").val("");
     }
   });
@@ -159,14 +162,14 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
 
   function timeoutFunction() {
     typing = false;
-    socket.emit("typing", false);
+    chatSocket.emit("typing", false);
   }
 
   $("#msg").keypress(function(e){
     if (e.which !== 13) {
       if (typing === false && myRoomID !== null && $("#msg").is(":focus")) {
         typing = true;
-        //socket.emit("typing", true);
+        //chatSocket.emit("typing", true);
       } else {
         clearTimeout(timeout);
         timeout = setTimeout(timeoutFunction, 5000);
@@ -174,7 +177,7 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
     }
   });
 
-  socket.on("isTyping", function(data) {
+  chatSocket.on("isTyping", function(data) {
     if (data.isTyping) {
       if ($("#"+data.person+"").length === 0) {
         $("#updates").append("<li id='"+ data.person +"'><span class='text-muted'><small><i class='fa fa-keyboard-o'></i> " + data.person + " is typing.</small></li>");
@@ -190,19 +193,19 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
   $("#msg").keypress(function(){
     if ($("#msg").is(":focus")) {
       if (myRoomID !== null) {
-        socket.emit("isTyping");
+        chatSocket.emit("isTyping");
       }
     } else {
       $("#keyboard").remove();
     }
   });
 
-  socket.on("isTyping", function(data) {
+  chatSocket.on("isTyping", function(data) {
     if (data.typing) {
       if ($("#keyboard").length === 0)
         $("#updates").append("<li id='keyboard'><span class='text-muted'><i class='fa fa-keyboard-o'></i>" + data.person + " is typing.</li>");
     } else {
-      socket.emit("clearMessage");
+      chatSocket.emit("clearMessage");
       $("#keyboard").remove();
     }
     console.log(data);
@@ -216,7 +219,7 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
   $("#createRoomBtn").click(function() {
     var roomExists = false;
     var roomName = $("#createRoomName").val();
-    socket.emit("check", roomName, function(data) {
+    chatSocket.emit("check", roomName, function(data) {
       roomExists = data.result;
        if (roomExists) {
           $("#errors").empty();
@@ -224,7 +227,7 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
           $("#errors").append("Room <i>" + roomName + "</i> already exists");
         } else {
         if (roomName.length > 0) { //also check for roomname
-          socket.emit("createRoom", roomName);
+          chatSocket.emit("createRoom", roomName);
           $("#errors").empty();
           $("#errors").hide();
           }
@@ -235,19 +238,19 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
   $("#rooms").on('click', '.joinRoomBtn', function() {
     var roomName = $(this).siblings("span").text();
     var roomID = $(this).attr("id");
-    socket.emit("joinRoom", roomID);
+    chatSocket.emit("joinRoom", roomID);
   });
 
   $("#rooms").on('click', '.removeRoomBtn', function() {
     var roomName = $(this).siblings("span").text();
     var roomID = $(this).attr("id");
-    socket.emit("removeRoom", roomID);
+    chatSocket.emit("removeRoom", roomID);
     $("#createRoom").show();
   });
 
   $("#leave").click(function() {
     var roomID = myRoomID;
-    socket.emit("leaveRoom", roomID);
+    chatSocket.emit("leaveRoom", roomID);
     $("#createRoom").show();
   });
 
@@ -262,7 +265,7 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
     if ($("#whisper").prop('checked')) {
       console.log("checked, going to get the peeps");
       //peopleOnline = ["Tamas", "Steve", "George"];
-      socket.emit("getOnlinePeople", function(data) {
+      chatSocket.emit("getOnlinePeople", function(data) {
         $.each(data.people, function(clientid, obj) {
           console.log(obj.name);
           peopleOnline.push(obj.name);
@@ -288,7 +291,7 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
   //   if ($("#whisper").prop('checked')) {
   //     console.log("checked, going to get the peeps");
   //     peopleOnline = ["Tamas", "Steve", "George"];
-  //     // socket.emit("getOnlinePeople", function(data) {
+  //     // chatSocket.emit("getOnlinePeople", function(data) {
   //     //   $.each(data.people, function(clientid, obj) {
   //     //     console.log(obj.name);
   //     //     peopleOnline.push(obj.name);
@@ -305,8 +308,8 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
   // });
 */
 
-//socket-y stuff
-socket.on("exists", function(data) {
+//chatSocket-y stuff
+chatSocket.on("exists", function(data) {
   $("#errors").empty();
   $("#errors").show();
   $("#errors").append(data.msg + " Try <strong>" + data.proposedName + "</strong>");
@@ -314,11 +317,11 @@ socket.on("exists", function(data) {
     toggleChatWindow();
 });
 
-socket.on("joined", function() {
+chatSocket.on("joined", function() {
   $("#errors").hide();
 });
 
-socket.on("history", function(data) {
+chatSocket.on("history", function(data) {
   if (data.length !== 0) {
     $.each(data, function(data, msg) {
       $("#msgs").append("<li><span class='text-warning'>" + msg.name + ': ' + msg.msg + "</span></li>");
@@ -331,11 +334,11 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
 
 });
 
-  socket.on("update", function(msg) {
+  chatSocket.on("update", function(msg) {
     $("#msgs").append("<li>" + msg + "</li>");
   });
 
-  socket.on("update-people", function(data){
+  chatSocket.on("update-people", function(data){
     var peopleOnline = 0;
     $.each(data.people, function(a, obj) {
       if (obj.roomName === getUrlParam("presentation")) peopleOnline++; // count people in this room
@@ -350,7 +353,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
       }
       if (obj.roomName === getUrlParam("presentation"))
       {
-        if (obj.socketId === socket.id) {
+        if (obj.socketId === chatSocket.id) {
           s = "<li class=\"list-group-item\"><span class='text-danger'>"
         } else {
           s = "<li class=\"list-group-item\"><span class='text-success'>"
@@ -370,8 +373,8 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
     }*/
   });
 
-  socket.on("chat", function(person, msg) {
-    if (person.socketId === socket.id) {
+  chatSocket.on("chat", function(person, msg) {
+    if (person.socketId === chatSocket.id) {
       s = "<li><strong><span class='text-danger'>"
     } else {
       s = "<li><strong><span class='text-success'>"
@@ -384,7 +387,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
 	 $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
   });
 
-  socket.on("whisper", function(person, msg) {
+  chatSocket.on("whisper", function(person, msg) {
     if (person.name === "You") {
       s = "whisper"
     } else {
@@ -393,7 +396,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
     $("#msgs").append("<li><strong><span class='text-muted'>" + person.name + "</span></strong> "+s+": " + msg + "</li>");
   });
 
-  socket.on("roomList", function(data) {
+  chatSocket.on("roomList", function(data) {
     $("#rooms").text("");
     $("#rooms").append("<li class=\"list-group-item active\">List of rooms <span class=\"badge\">"+data.count+"</span></li>");
      if (!jQuery.isEmptyObject(data.rooms)) {
@@ -406,11 +409,11 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
     }
   });
 
-  socket.on("sendRoomID", function(data) {
+  chatSocket.on("sendRoomID", function(data) {
     myRoomID = data.id;
   });
   
-  socket.on("reconnect", function(data) {
+  chatSocket.on("reconnect", function(data) {
 	setTimeout(function() {
 		toggleChatWindow();
 		toggleNameForm();
@@ -421,7 +424,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
 	}, 60000);
   });
 
-  socket.on("disconnect", function(){
+  chatSocket.on("disconnect", function(){
     $("#msgs").append("<li><strong><span class='text-warning'>Our chat server is not available. Reconnecting...</span></strong></li>");
 	
 	$( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);

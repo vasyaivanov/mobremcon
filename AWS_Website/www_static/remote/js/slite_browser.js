@@ -11,6 +11,7 @@ $('#URLBox').keypress(function (e) {
 	}
 });
 
+/*
 // Adding event handlers to the currentSlide div, the user
 // touches this div to draw or move laser
 currentSlide.addEventListener('touchstart', touchStart, false);
@@ -23,7 +24,7 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 function touchStart(event) {
     event.preventDefault();
     if(LASER === interactionType) {
-        socket.emit('laserOn', {slideID: $('#URLSlides').val()});
+        socket.emit('laserOn', {slideID: currentHash});
     } else if (DRAW === interactionType) {
         // recalculate offsets in case window size has changed
         xOffset = currentSlide.offsetLeft;
@@ -35,7 +36,7 @@ function touchStart(event) {
         //console.log("xPercent: " + xPercent);
         //console.log("yPercent: " + yPercent);
         socket.emit('drawStart',{x:xPercent,
-                                 y:yPercent , slideID: $('#URLSlides').val()});
+                                 y:yPercent , slideID: currentHash});
     }
 };
 
@@ -47,6 +48,7 @@ function touchEnd(event) {
         socket.emit('drawStop');
     }
 };
+*/
 
 $('#prev').click(function() {
     prevSlide();
@@ -57,20 +59,15 @@ $('#next').click(function() {
 });
 
 $('#laser').click(function() {
-    // calculate offset of interaction area in case window has been resized
+     // calculate offset of interaction area in case window has been resized
     // since the last time laser was used. 
-    xOffset = currentSlide.offsetLeft;
-    yOffset = currentSlide.offsetTop;
-    slideWidth = currentSlide.offsetWidth;
-    slideHeight = currentSlide.offsetHeight;
-    
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
 		$('#laser').removeClass("button_pressed");
         $('#laser').addClass("button_unpressed");
         $('#overlay').css("z-index", 0);
-        
+
     // otherwise turn laser on
     } else {
         interactionType = LASER;
@@ -83,12 +80,7 @@ $('#laser').click(function() {
 });
 
 $('#draw').click(function() {
-    xOffset = currentSlide.offsetLeft;
-    yOffset = currentSlide.offsetTop;
-    slideWidth = currentSlide.offsetWidth;
-    slideHeight = currentSlide.offsetHeight;
-
-    // if draw is on, turn it off
+     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
 		$('#draw').removeClass("button_pressed");
@@ -122,3 +114,78 @@ $('#draw').click(function() {
 		}
 	} 
 
+// LASER HANDLING
+
+// offset is used to calculate laser coords
+// it is recalculated upon the user pressing 'laser' or 'draw'
+//var offset;
+
+function moveLaser( event ) {
+    // These lines display the coordinates in the remote control, for testing only
+    // var laserCoordinates = "( " + event.pageX + ", " + event.pageY + " )";
+    // $( "#log" ).text( laserCoordinates);
+    
+    updateSlideMetrics();
+    var per = offsetToPercentage(event.pageX, event.pageY);
+    
+    //console.log("moveLaser is happening");
+    switch(interactionType) {
+        case LASER: {
+            //console.log('lasering');
+            socket.emit('laserCoords', { x: per.x, 
+                                         y: per.y, 
+                                         slideID: currentHash });
+            break;
+        }
+        case DRAW: {
+            //console.log('drawing');
+            socket.emit('drawCoords', { x: per.x, 
+                                        y: per.y, 
+                                        slideID: currentHash });
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+};
+
+ $( '#currentSlide' ).mousedown(function(event) {
+    console.log("mouse down"); 
+    updateSlideMetrics();
+    var per = offsetToPercentage(event.clientX/*pageX*/, event.clientY/*pageY*/);
+
+    $( "#currentSlide" ).on ("mousemove", moveLaser);
+    // Only turn on laser if we are in laser mode
+    if(interactionType === LASER) {
+        socket.emit('laserOn', {x: per.x, 
+                                y: per.y, 
+                                slideID: currentHash});
+    } else if(interactionType === DRAW) {
+
+        socket.emit('drawStart',{x: per.x, 
+                                 y: per.y, 
+                                 slideID: currentHash});
+    }
+});
+
+$( '#currentSlide' ).mouseup(function(event) {
+    console.log("mouse up"); 
+    $( "#currentSlide" ).off ("mousemove", moveLaser);
+    // Only turn off laser if we are in laser mode
+    if(interactionType === LASER) {
+        socket.emit('laserOff', {slideID: currentHash});
+    } else if(interactionType === DRAW) {
+        socket.emit('drawStop', {slideID: currentHash});
+    }
+});
+
+/* Image dragging was interfering with the laser pointer event listeners
+ * So I am disabling image dragging since the presenter probably won't want
+ * to drag the powerpoint slide anywhere from inside the remote control. 
+ * if we end up needing this one solution would be to make a button that
+ * would turn the laser on/off instead of using mousedown events. 
+ */
+ 
+// disable image dragging for all images
+$('img').on('dragstart', function(event) { event.preventDefault(); });

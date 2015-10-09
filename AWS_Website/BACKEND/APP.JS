@@ -754,6 +754,9 @@ function setUserSession(req, res, callback) {
 	var expDate = new Date(Number(new Date()) + 315360000000);
 	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
+	domainClear = domainClear.replace(/\:(.+)$/g,"");
+	//console.log(domainClear);
+	
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
 			var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");

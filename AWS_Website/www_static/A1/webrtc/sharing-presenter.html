@@ -13,7 +13,8 @@ video {
 }
 </style>
 <script>
-var socket = io.connect(document.location.hostname + ':' + location.port);
+// DUPLICATE SOCKET
+//var socket = io.connect(document.location.hostname + ':' + location.port);
 var MODERATOR_CHANNEL_ID = 'slite'; // channel-id
 var MODERATOR_SESSION_ID = '<%= hash %>-screen';    // room-id
 var MODERATOR_ID         = '<%= userId%>';    // user-id

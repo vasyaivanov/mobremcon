@@ -19,7 +19,11 @@ var MODERATOR_SESSION    = {         // media-type
     video: true
 };
 var MODERATOR_EXTRA      = {};       // empty extra-data
-var socket = io.connect(document.location.hostname + ':' + location.port);
+
+if(typeof videoPresenterSocket !== 'undefined') {
+	alert('videoPresenterSocket is already defined!');
+}
+var videoPresenterSocket = io.connect(document.location.hostname + ':' + location.port);
 var moderator     = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
 moderator.autoCloseEntireSession = true;
 moderator.session = MODERATOR_SESSION;
@@ -28,7 +32,7 @@ moderator.extra   = MODERATOR_EXTRA;
 
 moderator.onstream = function(event) {
 	if(event.isVideo) {
-		socket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
+		videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
 		$( "#videosharing" ).append(event.mediaElement);
 	}
 	

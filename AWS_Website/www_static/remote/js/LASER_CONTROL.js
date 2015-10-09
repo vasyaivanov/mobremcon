@@ -7,6 +7,8 @@
 // message is sent when the mouse is moved
 // 0 is no interaction, 1 is laser, 2 is draw.
 
+alert('DEPRICATED - LASER_CONTROL.js');
+
 var NONE  = 0;
 var LASER = 1;
 var DRAW  = 2;
@@ -104,6 +106,7 @@ $( '#currentSlide' ).mouseup(function() {
 // disable image dragging for all images
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
+/*
 // *********************
 // *    start timer    *
 // *********************
@@ -157,6 +160,7 @@ $('#next').click(function() {
 });
 
 $('#laser').click(function() {
+    var overlay = $("drawCanvas");
     // calculate offset of interaction area in case window has been resized
     // since the last time laser was used. 
     offset = currentSlide.offset();
@@ -164,36 +168,40 @@ $('#laser').click(function() {
     // if laser is on, turn it off
     if (LASER === interactionType) {
         interactionType = NONE;
-        $('#laser').css("background-image", "url(./img/buttonLaser.png)");
-        $('#overlay').css("z-index", 0);
+        //$('#laser').css("background-image", "url(../remote/img/buttonLaser.png)");
+        overlay.css("z-index", 0);
         
     // otherwise turn laser on
     } else {
         interactionType = LASER;
-        $('#laser').css("background-image", "url(./img/buttonLaser_inverse.png)");
-        $('#draw').css("background-image", "url(./img/buttonDraw.png)");
-        $('#overlay').css("z-index", 3);
+        //$('#laser').css("background-image", "url(../remote/img/buttonLaser_inverse.png)");
+        //$('#draw').css("background-image", "url(../remote/img/buttonDraw.png)");
+        overlay.css("z-index", 3);
     }
 });
 
 $('#draw').click(function() {
+    var overlay = $("#drawCanvas");
+    //alert($("overlay"));
     offset = currentSlide.position();
 
     // if draw is on, turn it off
     if (DRAW === interactionType) {
         interactionType = NONE;
-        $('#draw').css("background-image", "url(./img/buttonDraw.png)");
-        $('#overlay').css("z-index", 0);
+        //$('#draw').css("background-image", "url(../remote/img/buttonDraw.png)");
+        overlay.css("z-index", 0);
+        alert('set to 0');
         
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
-        $('#draw').css("background-image", "url(./img/buttonDraw_inverse.png)");
-        $('#laser').css("background-image", "url(./img/buttonLaser.png)");
-        $('#overlay').css("z-index", 3);
+        //$('#draw').css("background-image", "url(../remote/img/buttonDraw_inverse.png)");
+        //$('#laser').css("background-image", "url(../remote/img/buttonLaser.png)");
+        overlay.css("z-index", 3);
+        alert('set to 3');
     }
 });
-
+*/
 function startup () {
-    console.log("startup()");
+    console.log("LASER_CONTROL.js startup()");
 }

@@ -28,9 +28,13 @@ $(document).ready(function () {
     }
 
     var HTML5_UPLOADER = false;
-    var socket = io.connect(document.location.hostname + ':' + location.port);
+    if(typeof mainSocket !== 'undefined') {
+        alert('mainSocket is already defined!');
+    }
+    
+    var mainSocket = io.connect(document.location.hostname + ':' + location.port);
 
-	socket.emit("server-userRestrictions");
+	mainSocket.emit("server-userRestrictions");
 	
     function setUploadMessage(title) {
         progressLabel.text(title);
@@ -55,11 +59,11 @@ $(document).ready(function () {
 	$(".deleteSlide").click(function(){
 		var slideId = $(this).attr('slideId');
 		if(slideId) {
-			socket.emit('server-deleteSlide', { sid: slideId });
+			mainSocket.emit('server-deleteSlide', { sid: slideId });
 		}
 	});
 	
-	socket.on("client-deleteSlide", function (data) {
+	mainSocket.on("client-deleteSlide", function (data) {
 		//alert(data.sid);
 		$( "#slide_" + data.sid).hide();
 	});
@@ -103,12 +107,12 @@ $(document).ready(function () {
                 fileReader = new FileReader();
                 fileReader.onload = function (ev) {
                     //alert(ev.target.result);
-                    socket.emit('uploadFile', { 'name': fileName, data: ev.target.result });
+                    mainSocket.emit('uploadFile', { 'name': fileName, data: ev.target.result });
                     //alert('loaded' + fileName);
                 }
                 //fileReader.readAsBinaryString(selectedFile);
                 fileReader.readAsArrayBuffer(selectedFile);
-                socket.emit('uploadStarted', { 'name' : fileName, 'size' : selectedFile.size });
+                mainSocket.emit('uploadStarted', { 'name' : fileName, 'size' : selectedFile.size });
             }
             else {
                 alert("Please Select a File");
@@ -124,8 +128,8 @@ $(document).ready(function () {
             alert("Your Browser Doesn't Support The File API Please Update Your Browser");
         }
     } else {
-		socket.on("client-userRestrictions", function (loadData) {
-			var siofu = new SocketIOFileUpload(socket);
+		mainSocket.on("client-userRestrictions", function (loadData) {
+			var siofu = new SocketIOFileUpload(mainSocket);
 			siofu.chunkSize = 0;
 			siofu.maxFileSize = loadData.maxFileSize;
 			siofu.listenOnInput(document.getElementById("uploadPresentation"));		
@@ -158,7 +162,7 @@ $(document).ready(function () {
 		});
     } 
     
-	socket.on("uploadProgress", function (data) {
+	mainSocket.on("uploadProgress", function (data) {
         var msg = "Upload Progress";
         if (data.percentage >= 0) {
             msg += ': ' + data.percentage + '%'
@@ -173,7 +177,7 @@ $(document).ready(function () {
         }
     });
 
-    socket.on('slitePrepared', function (data) {
+    mainSocket.on('slitePrepared', function (data) {
         console.log('File converted: ' + JSON.stringify(data));
         data.msg = 'Converted successfully!\nYOU WILL BE FORWARDED TO THE URL TO SHARE.';
         data.percentage = 100;
@@ -184,7 +188,7 @@ $(document).ready(function () {
         }, 1000); // forward after 1 sec
     });
 
-    socket.on('sliteConversionError', function (rdata) {
+    mainSocket.on('sliteConversionError', function (rdata) {
 		var data = {};
 		if(rdata.limit == 1) {
 			data.msg = "You've reached the maximum limit of slides per user";

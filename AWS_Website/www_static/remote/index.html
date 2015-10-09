@@ -15,7 +15,9 @@
         <script defer src="js/slite.js"></script>
         <script src="js/thumbs.0.6.0.min.js"></script>
         <script>
-            var socket = io.connect(document.location.hostname);
+            alert ('DEPRICATED OLD remote index.html');
+            // DUPLICATE SOCKET
+            //var socket = io.connect(document.location.hostname);
         </script>
 	</head>
 <!--<body onload="startup()"-->
@@ -43,8 +45,8 @@
     <!-- End Google Tag Manager --><br>
     
     <div class="UI midRow midCol wrap" id="currentSlide" onclick="void(0)">
-    <div id="overlay"></div>
-    <iframe id="theIframe" class="frame" seamless></iframe>
+      <div id="overlay"></div>
+      <iframe id="theIframe" class="frame" seamless></iframe>
 	</div>
 	<div class="UI botRow" id="navButtons">
 		<div class="UI button button_unpressed" id="prev" style="height:50px; line-height:50px;">

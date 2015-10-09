@@ -3,6 +3,8 @@
  * remote, so they can be sent to the receiver for displaying a laser pointer
  */
 
+alert('DEPRICATED - LASER_CONTROL_mobile.js');
+
 function startup() {
     speechRecognizer = new SpeechRecognizer();
     volumeButtonControl = new VolumeButtonControl();
@@ -91,6 +93,7 @@ function onDeviceReady() {
     // Image dragging was interfering with the laser pointer event listeners
     $('img').on('dragstart', function(event) { event.preventDefault(); });
     
+    /*
     $('#prev').click(function() {
         event.preventDefault();
         prevSlide();
@@ -106,13 +109,13 @@ function onDeviceReady() {
         // if laser is on, turn it off
         if (LASER === interactionType) {
             interactionType = NONE;
-            $('#laser').css("background-image", "url(./img/buttonLaser.png)");
+            //$('#laser').css("background-image", "url(../remote/img/buttonLaser.png)");
             $('#theIframe').css("z-index", "1");
         // otherwise turn laser on
         } else {
             interactionType = LASER;
-            $('#laser').css("background-image", "url(./img/buttonLaser_inverse.png)");
-            $('#draw').css("background-image", "url(./img/buttonDraw.png)");
+            //$('#laser').css("background-image", "url(../remote/img/buttonLaser_inverse.png)");
+            //$('#draw').css("background-image", "url(../remote/img/buttonDraw.png)");
             $('#theIframe').css("z-index", "-1");
         }
     });
@@ -122,13 +125,13 @@ function onDeviceReady() {
         // if draw is on, turn it off
         if (DRAW === interactionType) {
             interactionType = NONE;
-            $('#draw').css("background-image", "url(./img/buttonDraw.png)");
+            //$('#draw').css("background-image", "url(../remote/img/buttonDraw.png)");
             $('#theIframe').css("z-index", "1");
         // otherwise turn draw on
         } else {
             interactionType = DRAW;
-            $('#draw').css("background-image", "url(./img/buttonDraw_inverse.png)");
-            $('#laser').css("background-image", "url(./img/buttonLaser.png)");
+            //$('#draw').css("background-image", "url(../remote/img/buttonDraw_inverse.png)");
+            //$('#laser').css("background-image", "url(../remote/img/buttonLaser.png)");
             $('#theIframe').css("z-index", "-1");
         }
     });
@@ -151,13 +154,14 @@ function onDeviceReady() {
        if (SPEECH === interactionType) {
            speechRecognizer.cleanup();
            interactionType = NONE;
-           $('#speech').css("background-image", "url(./img/buttonSpeech.png)");
+           $('#speech').css("background-image", "url(../remote/img/buttonSpeech.png)");
        } else {
            speechRecognizer.initialize( function(r){printSpeechResult(r)}, function(e){printSpeechResult(e)} );
            interactionType = SPEECH;
-           $('#speech').css("background-image", "url(./img/buttonSpeech_inverse.png)");
+           $('#speech').css("background-image", "url(../remote/img/buttonSpeech_inverse.png)");
        }
     });
+*/
     
     volumeButtonControl.initialize(function(r){volumeButtonCallback(r)}, function(e){volumeButtonCallback(e)} );
     

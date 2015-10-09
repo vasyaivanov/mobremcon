@@ -4,6 +4,7 @@
  * X/Y coordinates from the remote via the Backend APP.JS server, and then
  * display the laser pointer in the appropriate place. 
  */
+console.error('DEPRICATED! remote\\LASER_RECEIVER.js');
 
 var canvas, ctx, flag = false,
     prevX = 0,
@@ -14,6 +15,26 @@ var canvas, ctx, flag = false,
 
 var paintColor = "red",
     lineThickness = 2;
+
+var canvas = $("#drawCanvas");
+var ctx = canvas[0].getContext('2d');
+
+$( window ).load(function() {
+    // get offset of slides to position canvas properly
+    // console.log("setting slider variable");
+    var slider = $(".royalSlider").data('royalSlider');
+    var slideOffset = slider.currSlide.content.offset();
+    canvas.offset({ top: slideOffset.top, left: slideOffset.left });
+    resizeCanvas();
+});
+
+function resizeCanvas() {
+    var slider = $(".royalSlider").data('royalSlider');
+    var newHeight = slider.currSlide.content.height();
+    var newWidth = slider.currSlide.content.width();
+    canvas.height(newHeight);
+    canvas.width(newWidth);
+};
 
 // Whenever the user is moving the laser on the remote, turn the dot on.
 // When they are done, turn it off again
@@ -41,26 +62,6 @@ socket.on('moveLaser', function(data) {
     var scaledY = data.y * yScale;
     $( "#redDot" ).css({left:scaledX, top:scaledY});
 });
-
-var canvas = $("#drawCanvas");
-var ctx = canvas[0].getContext('2d');
-
-$( window ).load(function() {
-    // get offset of slides to position canvas properly
-    // console.log("setting slider variable");
-    var slider = $(".royalSlider").data('royalSlider');
-    var slideOffset = slider.currSlide.content.offset();
-    canvas.offset({ top: slideOffset.top, left: slideOffset.left });
-    resizeCanvas();
-});
-
-function resizeCanvas() {
-    var slider = $(".royalSlider").data('royalSlider');
-    var newHeight = slider.currSlide.content.height();
-    var newWidth = slider.currSlide.content.width();
-    canvas.height(newHeight);
-    canvas.width(newWidth);
-};
 
 socket.on('drawStart', function(data) {
     findxy('down', data.x, data.y);

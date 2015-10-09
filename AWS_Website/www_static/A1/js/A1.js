@@ -1,10 +1,15 @@
 var socket;
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
 if (!isFile) {
+    if(typeof socket !== 'undefined'){
+        alert('socket in A1.js is already defined!');
+    }
     socket = io.connect(document.location.hostname + ':' + location.port);
 }
 var currentHash = getCurrentHash();
 var isAPresenter = isPresenter();
+//console.log('A1.js loaded, socket: ');
+//console.log(socket);
 
 function isMobile() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -404,7 +409,7 @@ function canBePresenter() {
 
 function getPresentationInRemote() {
     if (!parent || !parent.document) return null;
-    var editBox = parent.document.getElementById('URLSlides');
+    var editBox = currentHash;//parent.document.getElementById('URLSlides');
     if (!editBox || !editBox.value) return null;
     return editBox.value.toUpperCase();
 }
@@ -561,7 +566,7 @@ window.onresize = function () {
     }, 60);
 };
 
-jQuery(document).ready(function ($) {
+$( window ).load(function() {
 	// Not works on real host - Show error mismatch 8081 & 80
 	 if (canBePresenter() && !isInIFrame()) {
 		 var item = $('.menuSubmenu #menuRemote');
@@ -657,20 +662,14 @@ jQuery(document).ready(function ($) {
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
     $(".rsOverflow").css("width", "100%");
-});
-
-function getClearUrl() {
-    var url = [location.protocol, '//', location.host, location.pathname].join('');
-    return url;
-}
-
-if (!isFile) {
+  
+  if (!isFile) {
     //socket = io.connect(document.location.hostname + ':' + location.port);
 
     socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
-			window.open(getClearUrl() + '/' + data.fileName);
+            window.open(getClearUrl() + '/' + data.fileName);
         }
     });
 
@@ -684,8 +683,8 @@ if (!isFile) {
 
     socket.on('news', function (data) {
         if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
-		var button = data.hello - 1;
-			var slider = $(".royalSlider").data('royalSlider');
+        var button = data.hello - 1;
+            var slider = $(".royalSlider").data('royalSlider');
             console.log(button);
             slider.goTo(data.slide);
             switch (button) {
@@ -719,9 +718,9 @@ if (!isFile) {
     });
 
     socket.on('checkSlidePassword-client', function (data) {
-		if(data.result == 1) {
-			showHidePasswordCheckOverlay();
-		}else{
+        if(data.result == 1) {
+            showHidePasswordCheckOverlay();
+        }else{
             alert("Wrong Password");
         }
     });
@@ -732,19 +731,25 @@ if (!isFile) {
         if (data.open === isVideoChatOn) return;
         showHideVideoChat();
     });
-	socket.on('broadcastScreensharing', function (data) {
+    socket.on('broadcastScreensharing', function (data) {
 
         if (data.hash !== currentHash || isAPresenter) return;
         console.log('broadcastScreensharing received');
         if (data.open === isScreensharingOn) return;
-		if(data.open == false) {
-			showHideScreensharing()
-		}
-		else {
-			showHideScreensharing();
-		}
-
+        if(data.open == false) {
+            showHideScreensharing()
+        }
+        else {
+            showHideScreensharing();
+        }
     });
+  }
+
+});
+
+function getClearUrl() {
+    var url = [location.protocol, '//', location.host, location.pathname].join('');
+    return url;
 }
 
 

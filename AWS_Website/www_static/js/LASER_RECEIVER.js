@@ -4,6 +4,7 @@
  * X/Y coordinates from the remote via the Backend APP.JS server, and then
  * display the laser pointer in the appropriate place. 
  */
+//console.log('LASER_RECIEVER.js');
 
 var canvas, ctx, flag = false,
     prevX = 0,
@@ -15,37 +16,20 @@ var canvas, ctx, flag = false,
 var paintColor = "red",
     lineThickness = 2;
 
-// Whenever the user is moving the laser on the remote, turn the dot on.
-// When they are done, turn it off again
-socket.on('laserOn', function(data) {
-    if ( (document.location.pathname == "/"+ data.slideID) || (document.location.pathname == "/"+ data.slideID + "/") ) {
-    	$( "#redDot" ).css("visibility", "visible");
-    }
-});
+function isThisHash(hash) {
+    return ( (document.location.pathname === "/"+ hash) || (document.location.pathname === "/"+ hash + "/") );
+}
 
-socket.on('laserOff', function() {
-    $( "#redDot" ).css("visibility", "hidden");
-});
- 
+ function moveLaserTo(x, y) {
+    updateSlideMetrics();
+    var res = percentageToOffset(x, y);
+    console.log('moveLaser: x: ' + x + ' y: ' + y + ' pos: X: ' + res.x + ' Y: ' + res.y);
+    var redDot = $( "#redDot" );
+    var dotWidth = redDot.width();
+    var dotHeight = redDot.height();
+    redDot.css({left: res.x - dotWidth/2, top: res.y - dotHeight/2});
+}
 
-// currently socket is initialized in the html. 
-// This function receives the x/y coordinates from the APP.JS server 
-// and moves the laser dot by adjusting the dot's CSS. 
-socket.on('moveLaser', function(data) {
-    if ( (document.location.pathname == "/"+ data.slideID) || (document.location.pathname == "/"+ data.slideID + "/") ) {
-	    var slider = $(".royalSlider").data('royalSlider');
-	    var receiverHeight = slider.currSlide.content.height();
-	    var receiverWidth = slider.currSlide.content.width();
-	    var xScale = receiverHeight / data.height;
- 	   var yScale = receiverWidth / data.width;
-	    var scaledX = data.x * xScale;
-	    var scaledY = data.y * yScale;
-	    $( "#redDot" ).css({left:scaledX, top:scaledY});
-    }
-    else {
-	   // $( "#redDot" ).css("visibility", "hidden");
-    }
-});
 
 var canvas = $("#drawCanvas");
 var ctx = canvas[0].getContext('2d');
@@ -57,6 +41,60 @@ $( window ).load(function() {
     var slideOffset = slider.currSlide.content.offset();
     canvas.offset({ top: slideOffset.top, left: slideOffset.left });
     resizeCanvas();
+
+    // Whenever the user is moving the laser on the remote, turn the dot on.
+    // When they are done, turn it off again
+    socket.on('laserOn', function(data) {
+        if (isThisHash(data.slideID)) {
+            $( "#redDot" ).css("visibility", "visible");
+            moveLaserTo(data.x, data.y);
+        }
+    });
+
+    socket.on('laserOff', function(data) {
+        if (isThisHash(data.slideID)) {
+            $( "#redDot" ).css("visibility", "hidden");
+        }
+    });
+
+    // currently socket is initialized in the html. 
+    // This function receives the x/y coordinates from the APP.JS server 
+    // and moves the laser dot by adjusting the dot's CSS. 
+    socket.on('moveLaser', function(data) {
+         if (isThisHash(data.slideID)) {
+            moveLaserTo(data.x, data.y);
+        }
+    });
+
+    socket.on('drawStart', function(data) {
+        if (isThisHash(data.slideID)) {
+            updateSlideMetrics();
+            var res = percentageToOffset(data.x, data.y);
+            findxy('down', res.x, res.y);
+        }
+    });
+
+    socket.on('drawStop', function(data) {
+        if (isThisHash(data.slideID)) {
+            findxy('up');
+        }
+    });
+
+     socket.on('drawCoords', function(data) {
+        if (isThisHash(data.slideID)) {
+            console.log("drawCoord x: " + data.x + " y:" + data.y);
+            updateSlideMetrics();
+            var res = percentageToOffset(data.x, data.y);
+
+            findxy('move', res.x, res.y);
+        }
+    });
+
+    socket.on('shake', function(data) {
+       if (isThisHash(data.slideID)) {
+           clearCanvas();
+       }
+    });
 });
 
 function resizeCanvas() {
@@ -72,33 +110,6 @@ function resizeCanvas() {
 function calcCoords(percent, offset, dim) {
     return (offset + (percent * dim));
 };
-
-socket.on('drawStart', function(data) {
-    var canvOffset = canvas.offset();
-    var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
-    var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
-    if ( (document.location.pathname == "/"+ data.slideID) || (document.location.pathname == "/"+ data.slideID + "/") ) {
-    	findxy('down', x, y);
-    }
-});
-
-socket.on('drawStop', function() {
-    	findxy('up');
-});
-
-socket.on('drawCoords', function(data) {
-    var canvOffset = canvas.offset();
-    var x = calcCoords(data.x, canvOffset.left, canvas[0].width);
-    var y = calcCoords(data.y, canvOffset.top, canvas[0].height);
-
-    if ( (document.location.pathname == "/"+ data.slideID) || (document.location.pathname == "/"+ data.slideID + "/") ) {
-	    findxy('move', x, y);
-    }
-});
-
-socket.on('shake', function() {
-    clearCanvas();
-});
 
 function clearCanvas () {
     console.log("clearCanvas() called");
