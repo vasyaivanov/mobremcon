@@ -549,7 +549,7 @@ app.use(function (req, res, next) {
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
 					slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum, ssetDomain) {
-						if(sfound == 1) {							
+						if(sfound == 1) {
 							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
 						}
 						else {
@@ -612,7 +612,7 @@ app.use(function (req, res, next) {
 			}
 		}
 	});
-	
+
 });
 
 // ROUTES
@@ -754,9 +754,9 @@ function setUserSession(req, res, callback) {
 	var expDate = new Date(Number(new Date()) + 315360000000);
 	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
-	domainClear = domainClear.replace(/\:(.+)$/g,"");
+	//domainClear = domainClear.replace(/\:(.+)$/g,"");
 	//console.log(domainClear);
-	
+
 	   // If no user id - generate or add from req.user._id
 	   if(!(req.cookies[sessionIdCookie])) {
 			var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
@@ -802,14 +802,14 @@ router.get(rootRegExp, function (req, res){
 	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	var domainSplit = req.hostname.split('.');
-	
+
 	if(domainSplit.length == 3 && domainSplit[0] != 'www'/* && trustedDomains.indexOf(req.headers.host) == 0*/) {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
 				var owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
 				Slide.find({uid : docs._id }).sort({'created': 'desc'}).exec(function (err, docs) {
 					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
-				});	
+				});
 			}
 			else {
 				res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear);
