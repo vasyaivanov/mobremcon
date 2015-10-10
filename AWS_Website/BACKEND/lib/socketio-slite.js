@@ -269,17 +269,16 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               pollUpdate();
           });
 
-          //socket.emit('news', { hello: 0 });
-          socket.on('mymessage', function (data) {
-              console.log("JD: received news from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
+          socket.on('changeSlideRequest', function (data) {
+            console.log("JD: received changeSlideRequest from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
       		// WE MUST TO CHECK USER FOR PRESENTER VAR!!!
       		module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
       			if(docs){
-      				module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: docs.sid});
+      				module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: docs.sid});
       			}
       			else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-      					module.parent.exports.io.sockets.emit('news', { hello: data.my, slide: data.slide, slideID: 'A1'});
+      					module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: 'A1'});
       				//}
       			}
       		});
@@ -425,14 +424,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               console.log("-------------- JD: received CLOSED CAPTIONING: " + data);
               console.log(data.my);
               module.parent.exports.io.sockets.emit('ccBroadcast', { hello: data.my });
-      		//module.parent.exports.io.sockets.emit('news',clients);
-      		//socket.emit('news', { hello: 1 });
+      		//module.parent.exports.io.sockets.emit('changeSlideBroadcast',clients);
+      		//socket.emit('changeSlideBroadcast', { hello: 1 });
           });
 
           // receive laser coordinates from the remote
           socket.on('laserCoords', function (data) {
               // 2 next lines are logs for testing
-              console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
+              //console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
               // send coordinates on to the display (RECEIVER_POWERPOINT.html)
                 if(docs){
@@ -442,8 +441,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 }
       			else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-                socket.broadcast.emit('moveLaser', data);
-      					socket.emit('moveLaser', data);
+                    socket.broadcast.emit('moveLaser', data);
+      		        socket.emit('moveLaser', data);
       				//}
       			}
               });
@@ -451,26 +450,25 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawCoords', function (data) {
-              console.log("Draw coords received");
-              console.log("X: " + data.x + ", " + "Y: " + data.y);
+              //console.log("drawCoords received: " + data.slideID);
+              //console.log("X: " + data.x + ", " + "Y: " + data.y);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
                   socket.broadcast.emit('drawCoords', data);
                   socket.emit('drawCoords', data);
-                  //console.log("drawCoords broadcast from " + socket.id);
-                } else if(data.slideID == 'A1') {
+                 } else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-                socket.broadcast.emit('drawCoords', data);
-      					socket.emit('drawCoords', data);
-                //console.log("drawCoords broadcast from " + socket.id);
+                    socket.broadcast.emit('drawCoords', data);
+      			    socket.emit('drawCoords', data);
       				//}
       			}
               });
           });
 
           socket.on('laserOn', function (data) {
-              console.log("laser on: " + data.slideID);
+              //console.log("laserOn received: " + data.slideID);
+              //console.log("X: " + data.x + ", " + "Y: " + data.y);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
@@ -479,8 +477,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 }
       			else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-                socket.broadcast.emit('laserOn', data);
-      					socket.emit('laserOn', data);
+                    socket.broadcast.emit('laserOn', data);
+      			    socket.emit('laserOn', data);
       				//}
       			}
               });
@@ -499,7 +497,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawStart', function (data) {
-              console.log("drawstart: " + data.slideID);
+              //console.log("drawstart: " + data.slideID);
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
@@ -508,22 +506,22 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 }
       			else if(data.slideID == 'A1') {
       				//if(userSession.userRole == 10) {
-                socket.broadcast.emit('drawStart', data);
-      					socket.emit('drawStart', data);
+                    socket.broadcast.emit('drawStart', data);
+      			    socket.emit('drawStart', data);
       				//}
       			}
               });
           });
 
           socket.on('drawStop', function (data) {
-              console.log("drawstop: " + data.slideID);
+              //console.log("drawstop: " + data.slideID);
               socket.broadcast.emit('drawStop', data);
               socket.emit('drawStop', data);
           });
 
           socket.on('insertVideoId', function (data) {
-              console.log("insertVideoId, youtube hash: " + data.video_hash + " into the slite: " + data.slite_hash
-                  + " slide number " + data.curr_slide);
+              //console.log("insertVideoId, youtube hash: " + data.video_hash + " into the slite: " + data.slite_hash
+                  //+ " slide number " + data.curr_slide);
               prepare_slite.youTube(data.video_hash, data.slite_hash, data.curr_slide);
           });
 

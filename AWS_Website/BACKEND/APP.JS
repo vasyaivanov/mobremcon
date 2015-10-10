@@ -462,7 +462,7 @@ app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 
-	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+    var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	if(customHash != '') {
 		Slide.find({ scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
@@ -754,7 +754,8 @@ function setUserSession(req, res, callback) {
 	var expDate = new Date(Number(new Date()) + 315360000000);
 	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
-	//domainClear = domainClear.replace(/\:(.+)$/g,"");
+    domainClear = domainClear.replace(/\:(.+)$/g, "");
+	domainClear = domainClear.replace(/^undefined\.localhost/g,"localhost");
 	//console.log(domainClear);
 
 	   // If no user id - generate or add from req.user._id
@@ -799,7 +800,7 @@ function setUserSession(req, res, callback) {
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
 
-	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+    var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	var domainSplit = req.hostname.split('.');
 

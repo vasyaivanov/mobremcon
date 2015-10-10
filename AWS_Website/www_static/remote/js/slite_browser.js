@@ -120,15 +120,17 @@ $('#draw').click(function() {
 // it is recalculated upon the user pressing 'laser' or 'draw'
 //var offset;
 
-function moveLaser( event ) {
+function onMouseMove(event) {
     // These lines display the coordinates in the remote control, for testing only
     // var laserCoordinates = "( " + event.pageX + ", " + event.pageY + " )";
     // $( "#log" ).text( laserCoordinates);
+    //console.log(event.pageX + ' ' + event.pageY);
+    //return;
+    console.log("onMouseMove is happening");
     
     updateSlideMetrics();
     var per = offsetToPercentage(event.pageX, event.pageY);
     
-    //console.log("moveLaser is happening");
     switch(interactionType) {
         case LASER: {
             //console.log('lasering');
@@ -151,11 +153,12 @@ function moveLaser( event ) {
 };
 
  $( '#currentSlide' ).mousedown(function(event) {
-    console.log("mouse down"); 
+    console.log("mouse down");
+    //console.log(event);
     updateSlideMetrics();
-    var per = offsetToPercentage(event.clientX/*pageX*/, event.clientY/*pageY*/);
+    var per = offsetToPercentage(event.pageX, event.pageY);
 
-    $( "#currentSlide" ).on ("mousemove", moveLaser);
+    $( "#currentSlide" ).on ("mousemove", onMouseMove);
     // Only turn on laser if we are in laser mode
     if(interactionType === LASER) {
         socket.emit('laserOn', {x: per.x, 
@@ -171,7 +174,7 @@ function moveLaser( event ) {
 
 $( '#currentSlide' ).mouseup(function(event) {
     console.log("mouse up"); 
-    $( "#currentSlide" ).off ("mousemove", moveLaser);
+    $( "#currentSlide" ).off ("mousemove", onMouseMove);
     // Only turn off laser if we are in laser mode
     if(interactionType === LASER) {
         socket.emit('laserOff', {slideID: currentHash});

@@ -23,13 +23,19 @@ function isThisHash(hash) {
  function moveLaserTo(x, y) {
     updateSlideMetrics();
     var res = percentageToOffset(x, y);
-    console.log('moveLaser: x: ' + x + ' y: ' + y + ' pos: X: ' + res.x + ' Y: ' + res.y);
+    //console.log('moveLaser: x: ' + x + ' y: ' + y + ' pos: X: ' + res.x + ' Y: ' + res.y);
     var redDot = $( "#redDot" );
     var dotWidth = redDot.width();
     var dotHeight = redDot.height();
     redDot.css({left: res.x - dotWidth/2, top: res.y - dotHeight/2});
 }
 
+function drawTo(res, x, y) {
+    updateSlideMetrics();
+    var off = percentageToOffset(x, y);
+    //console.log('drawTo: x: ' + x + ' y: ' + y + ' off: X: ' + off.x + ' Y: ' + off.y);
+    findxy(res, off.x, off.y);
+}
 
 var canvas = $("#drawCanvas");
 var ctx = canvas[0].getContext('2d');
@@ -68,26 +74,20 @@ $( window ).load(function() {
 
     socket.on('drawStart', function(data) {
         if (isThisHash(data.slideID)) {
-            updateSlideMetrics();
-            var res = percentageToOffset(data.x, data.y);
-            findxy('down', res.x, res.y);
+            drawTo('down', data.x, data.y);
         }
     });
 
     socket.on('drawStop', function(data) {
         if (isThisHash(data.slideID)) {
-            findxy('up');
+            drawTo('up', data.x, data.y);
         }
     });
 
      socket.on('drawCoords', function(data) {
         if (isThisHash(data.slideID)) {
-            console.log("drawCoord x: " + data.x + " y:" + data.y);
-            updateSlideMetrics();
-            var res = percentageToOffset(data.x, data.y);
-
-            findxy('move', res.x, res.y);
-        }
+            drawTo('move', data.x, data.y);
+         }
     });
 
     socket.on('shake', function(data) {
@@ -116,6 +116,11 @@ function clearCanvas () {
     ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
 };
 
+$(window).resize(function () {
+  //resize just happened, pixels changed
+    clearCanvas();
+});
+
 function draw() {
     ctx.beginPath();
     ctx.moveTo(prevX, prevY);
@@ -132,7 +137,7 @@ function findxy(res, x, y) {
         prevY = currY;
         currX = x - canvas[0].offsetLeft;
         currY = y - canvas[0].offsetTop;
-        console.log("findxy down. prevX = " + prevX + " currX = " + currX);
+        //console.log("findxy down. prevX = " + prevX + " currX = " + currX);
         
         flag = true;
         dot_flag = true;
@@ -149,8 +154,8 @@ function findxy(res, x, y) {
     }
     if (res == 'move') {
         if (flag) {
-            console.log("findxy move. prevX = " + prevX + " currX = " + currX);
-            console.log("findxy move. prevY = " + prevY + " currY = " + currY);
+            //console.log("findxy move. prevX = " + prevX + " currX = " + currX);
+            //console.log("findxy move. prevY = " + prevY + " currY = " + currY);
             prevX = currX;
             prevY = currY;
             currX = x - canvas[0].offsetLeft;

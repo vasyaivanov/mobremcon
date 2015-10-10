@@ -22,7 +22,7 @@ body {
 	position: fixed;
 	right: 20px;
 	top: 0px;
-	z-index: 2;
+	z-index: 7;
 }
 
 #primary_nav_wrap ul
@@ -266,13 +266,13 @@ body {
 		top:0px;
 		z-index: 2;
 	}
-
+    
 	#drawCanvas {
 		position: absolute;
 		border: none;
 		z-index: 1;
 		pointer-events: none;
-	}
+  	}
 
 #videochat{
 	position: absolute;
@@ -831,7 +831,7 @@ left: 0%;
 }
 .botRow {
     /*height: 8%;*/
-    opacity:0.7;
+    opacity:0.65;
     border: none;
     padding-bottom: 0px;
     padding-left: 4px;
@@ -879,9 +879,14 @@ left: 0%;
 }    
 
 .button_unpressed{
+    border: 1px;
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, rgba(125, 185, 232, 1) 0%, rgba(66, 139, 202, 1) 99%) repeat scroll 0 0;
+    border-color: #357ebd;
+    /*
 	background-color: #125182; 
 	background: -moz-linear-gradient(top, #125182, #1269ab 50%, #004375 51%, #00345b);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #125182), color-stop(.5, #1269ab), color-stop(.51, #004375), to(#00345b)); 
+    */
 }
 .button_pressed{
 	background: gray; 
@@ -891,10 +896,10 @@ left: 0%;
   cursor: pointer;
   margin-top: 10px;
   margin-bottom: 10px;
-/*basic styles*/ width: 210px; height: 50px; color: #fff; text-align: center; font-size: 24px; line-height: 50px; 
-/*border styles*/ -moz-border-radius: 30px; -webkit-border-radius: 30px; border-radius: 30px; -moz-box-shadow:inset 0 0 10px #000000; -webkit-box-shadow:inset 0 0 10px #000000; box-shadow:inset 0 0 10px #000000;
+/*basic styles*/ width: 150px; height: 50px; color: #fff; text-align: center; font-size: 18px/*24px*/; line-height: 50px; 
+/*border styles*/ -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px/*30px*/; /*-moz-box-shadow:inset 0 0 10px #000000; -webkit-box-shadow:inset 0 0 10px #000000; box-shadow:inset 0 0 10px #000000;*/
 } 
-.button p { font-size: 24px; line-height: 50px; font-family: “HelveticaNeue-Light”, “Helvetica Neue Light”, “Helvetica Neue”, Helvetica, Arial, “Lucida Grande”, sans-serif; font-weight: 300; text-shadow: 0px 0px 3px #555; } 
+.button p { font-size: 18px; line-height: 50px; font-family: “HelveticaNeue-Light”, “Helvetica Neue Light”, “Helvetica Neue”, Helvetica, Arial, “Lucida Grande”, sans-serif; font-weight: 300; text-shadow: 0px 0px 3px #555; } 
 a { text-decoration: none; color: fff; } 
 .button:hover { -moz-box-shadow:inset 0 0 50px #000000; -webkit-box-shadow:inset 0 0 50px #000000; box-shadow:inset 0 0 50px #000000; } 
 .button p:hover { text-shadow: 0px 0px 3px #888; }
@@ -911,7 +916,7 @@ a { text-decoration: none; color: fff; }
   background-position: center;
   -webkit-border-radius: 50px;
   border-radius: 50px;
-  border-radius: 50px;  
+  border-radius: 50px;
   text-align: center;
   border: 6px;
   border-style: solid;

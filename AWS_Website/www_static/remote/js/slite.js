@@ -17,19 +17,19 @@ function getPos(el) {
 
 function updateSlideMetrics(){
     var slide = document.getElementById("slide");
-    //var slideImgs = slide.getElementsByTagName('img');
-    //var slideImg = slideImgs[0];
+    var slideImg = slide.getElementsByTagName('img')[0];
+    var rsSlide = document.getElementsByClassName("rsSlide")[0];
+    var rsSlidePos = getPos(rsSlide);
     //var videoGallery = document.getElementById("video-gallery");
     //var videoGalleryWidth = videoGallery.offsetWidth;
     //var videoGalleryHeight = videoGallery.offsetHeight;
-    var rsSlide = document.getElementsByClassName("rsSlide")[0];
-    var rsSlidePos = getPos(rsSlide);
-    slideWidth = rsSlide.offsetWidth;
-    slideHeight = rsSlide.offsetHeight;
-    //var w = document.documentElement.clientWidth;//window.innerWidth;
-    //var h = document.documentElement.clientHeight;//window.innerHeight;
-    //var slidePosX = (w - slideWidth)/2;//rsSlidePos.x + (videoGalleryWidth - slideWidth)/2
-    //var slidePosY = (h - slideHeight)/2;//rsSlidePos.y + (videoGalleryHeight - slideHeight)/2
+    slideWidth = Math.min(rsSlide.offsetWidth, slideImg.offsetWidth);
+    slideHeight = Math.min(rsSlide.offsetHeight, slideImg.offsetHeight);
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    console.log("w: " + w + ' h: ' + h + ' sw: ' + slideWidth + ' sh ' + slideHeight );
+    xOffset = (w - slideWidth) / 2; ///rsSlidePos.x + (videoGalleryWidth - slideWidth)/2
+    yOffset = (h - slideHeight) / 2; ///rsSlidePos.y + (videoGalleryHeight - slideHeight)/2
     //console.log('innerSize: ' + w + ' ' + h);
     //console.log('Slide Pos: ' + slidePosX + ' ' + slidePosY);
     //console.log('videoGallerySize: ' + videoGalleryWidth + ' ' + videoGalleryHeight);
@@ -40,8 +40,8 @@ function updateSlideMetrics(){
     //yOffset = slideImg.offsetTop + galleryOffsetY;
     //slideWidth = slideImg.offsetWidth;
     //slideHeight = slideImg.offsetHeight;
-    xOffset = rsSlidePos.x;//slidePosX;
-    yOffset = rsSlidePos.y;//slidePosY;
+    //xOffset = rsSlidePos.x;//slidePosX;
+    //yOffset = rsSlidePos.y;//slidePosY;
     console.log('Slide Metrics:');
     console.log("xOffset: " + xOffset); 
     console.log("yOffset: " + yOffset); 
@@ -119,16 +119,29 @@ function touchEnd(event) {
     }
 };
 
+function getNumSlides() {
+    var slider = $(".royalSlider").data('royalSlider');
+    return slider.numSlides;
+}
 
 // Functions that handle moving to the next slide and updating notes
 function prevSlide() {
-    socket.emit('mymessage', { my:102, slide:currSlideNum, slideID: currentHash});
+    //if (currSlideNum <= 0) return;
     currSlideNum--;
+    if (currSlideNum < 0) {
+        currSlideNum = getNumSlides() - 1;
+    }
+    socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: currentHash});
     $("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlide() {
-    socket.emit('mymessage', { my:101, slide:currSlideNum, slideID: currentHash});
+    console.log('nextSlide');
+    //if (currSlideNum >= getSlideNumber()-1) return;
     currSlideNum++;
+    if (currSlideNum >= getNumSlides()) {
+        currSlideNum = 0;
+    }
+    socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: currentHash});
     $("#notes").text(notesArray[currSlideNum]);
 };
 
@@ -151,7 +164,7 @@ function thumbnails() {
                                      var slide_num = parseInt(this.getAttribute('slide_num'));
                                      currSlideNum = slide_num;
                                      $("#notes").text(notesArray[currSlideNum]);
-                                     socket.emit('mymessage', { my:slide_num+1, slide:slide_num });
+                                     socket.emit('changeSlideRequest', { my:slide_num+1, slide:slide_num });
                                  }, false);
     }*/
 }
@@ -187,7 +200,7 @@ function onSlideLoaded() {
     $("#notes").text(notesArray[currSlideNum]);
     // DUPLICATE SOCKET
     //socket = io.connect(document.location.hostname);
-    socket.emit('mymessage', { my:currSlideNum+1, slide:currSlideNum });
+    socket.emit('changeSlideRequest', { my:currSlideNum+1, slide:currSlideNum });
     thumbnails(); // thumbnails have to match the slides
 }
 
@@ -280,6 +293,6 @@ function populateHash(){
 }
 
 $(function() {
-    console.log( "ready!" );
+    //console.log( "ready!" );
 	populateHash();
 });
