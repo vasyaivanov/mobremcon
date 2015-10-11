@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04346AEE1BCB00BE00F078D6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04346AED1BCB00BE00F078D6 /* Default-568h@2x.png */; settings = {ASSET_TAGS = (); }; };
+		04346AF01BCB28E300F078D6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04346AEF1BCB28E300F078D6 /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
 		04CB06031B8D953300401D98 /* icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CB05F91B8D953200401D98 /* icon-40.png */; };
 		04CB06041B8D953300401D98 /* icon-40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CB05FA1B8D953200401D98 /* icon-40@2x.png */; };
 		04CB06051B8D953300401D98 /* icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = 04CB05FB1B8D953200401D98 /* icon-60.png */; };
@@ -42,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04346AED1BCB00BE00F078D6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		04346AEF1BCB28E300F078D6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = prezera/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		04CB05E31B8D91FB00401D98 /* www */ = {isa = PBXFileReference; lastKnownFileType = folder; path = www; sourceTree = "<group>"; };
 		04CB05F91B8D953200401D98 /* icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-40.png"; sourceTree = "<group>"; };
 		04CB05FA1B8D953200401D98 /* icon-40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-40@2x.png"; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				04346AEF1BCB28E300F078D6 /* Images.xcassets */,
 				308D052D1370CCF300D202BF /* icons */,
 				308D05311370CCF300D202BF /* splash */,
 				8D1107310486CEB800E47090 /* prezera-Info.plist */,
@@ -232,6 +237,7 @@
 				30B4F2FD19D5E07200D9F7D8 /* Default-667h.png */,
 				30B4F2FE19D5E07200D9F7D8 /* Default-736h.png */,
 				30B4F2FF19D5E07200D9F7D8 /* Default-Landscape-736h.png */,
+				04346AED1BCB00BE00F078D6 /* Default-568h@2x.png */,
 				D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */,
 				3088BBB7154F3926009F9C59 /* Default-Landscape@2x~ipad.png */,
 				3088BBB8154F3926009F9C59 /* Default-Landscape~ipad.png */,
@@ -327,7 +333,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				04CB060A1B8D953300401D98 /* icon-small.png in Resources */,
+				04346AF01BCB28E300F078D6 /* Images.xcassets in Resources */,
 				04CB06071B8D953300401D98 /* icon-60@3x.png in Resources */,
+				04346AEE1BCB00BE00F078D6 /* Default-568h@2x.png in Resources */,
 				04CB06031B8D953300401D98 /* icon-40.png in Resources */,
 				04CB06041B8D953300401D98 /* icon-40@2x.png in Resources */,
 				04CB06051B8D953300401D98 /* icon-60.png in Resources */,
@@ -383,7 +391,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yevgeniy Dukhovny";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -405,6 +416,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "";
 				PRODUCT_NAME = prezera;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -414,7 +426,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yevgeniy Dukhovny";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "prezera/prezera-Prefix.pch";
@@ -434,6 +449,7 @@
 					"-weak-lSystem",
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "";
 				PRODUCT_NAME = prezera;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
