@@ -12,11 +12,25 @@ $(document).ready(function () {
 	$( "#renameDomainButton" ).click(function() {
 		domainRename.renameDomainStart();	
 	});
+
+	$( "#deleteDomainButton" ).click(function() {
+		if(confirm("You're going to delete your domain.\nAlso we will delete all your custom names for your slides. Are you sure?") == true) {
+			socket.emit('deleteDomain-server');
+		}
+	});
+	
+	
+	socket.on('deleteDomain-client', function (data) {
+		if(data.removed == 1) {
+			location.reload();
+		}
+	});
 	
 	if($("#showDomainData").length) {
 		var domain = location.host;
 		domain = domain.replace(/^www\./,"");
 		domain = protocol + "://" + $( "#domainNewName" ).val() + "." + domain;
+		$("#deleteDomainButton").prop( "disabled", false );
 		$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url:  <a href=\"" + domain +  "\">" + domain +  "</a></font>" )
 	}
 	

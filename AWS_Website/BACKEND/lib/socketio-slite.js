@@ -378,6 +378,15 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		);
           });
 
+          socket.on('deleteDomain-server', function (data) {
+			module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: ""}}, function(errU,docsU) {
+				module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId }, {$set: { domainSet: 0 }}, {multi: true, upsert: false},
+					function (err, numAffected) {console.log(numAffected)}
+				);
+				socket.emit('deleteDomain-client', {removed : 1 });
+			});
+		  });
+		  
           socket.on('renameDomain-server', function (data) {
 			// WWW is not allowed to rename
 			if(data.newDomainName.toLowerCase() == 'www') {
@@ -394,7 +403,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 								if (!docs){
 									if(data.start == 1) {
 										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
-											module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId, domainSet: 0 }, {$set: { domainSet: 1 }}, {upsert: false},
+											module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId, domainSet: 0 }, {$set: { domainSet: 1 }}, {multi: true, upsert: false},
 												function (err, numAffected) {console.log('Updated slides...: ' + numAffected + err)}
 											);
 											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
@@ -532,7 +541,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       					module.parent.exports.SlideScheme.find({ sid: data.currentHash }, function (err, docs) {
       						console.log(docs);
       						if(docs && docs.length){
-      							module.parent.exports.SlideScheme.update({ sid: data.currentHash }, {$set: { password: data.password}}, {upsert: true},
+      							module.parent.exports.SlideScheme.update({ sid: data.currentHash }, {$set: { password: data.password}}, {upsert: false},
       								function (err, numAffected) {
       									if(numAffected > 0) {console.log("Password set: " + numAffected)}
       								}
@@ -768,7 +777,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
                 console.log('Presenter: ' + spresenter + ' ' + sfound)
           				if(spresenter == 1 && sfound == 1) {
-                    module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: true},
+                    module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: false},
                         function (err, numAffected) {
                             if(!err) {
                               module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
@@ -784,7 +793,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
               module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId, function(sfound, spresenter, stitle, spassword) {
           				if(spresenter == 1 && sfound == 1) {
-                    module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isScreensharingOpen: data.open}}, {upsert: true},
+                    module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isScreensharingOpen: data.open}}, {upsert: false},
                         function (err, numAffected) {
                             if(!err) {
                               module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
