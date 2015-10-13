@@ -380,7 +380,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
           socket.on('deleteDomain-server', function (data) {
 			module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: ""}}, function(errU,docsU) {
-				module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId }, {$set: { domainSet: 0 }}, {multi: true, upsert: false},
+				module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId }, {$set: { domainSet: 0, scid: null }}, {multi: true, upsert: false},
 					function (err, numAffected) {console.log(numAffected)}
 				);
 				socket.emit('deleteDomain-client', {removed : 1 });
@@ -404,7 +404,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 									if(data.start == 1) {
 										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
 											module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId, domainSet: 0 }, {$set: { domainSet: 1 }}, {multi: true, upsert: false},
-												function (err, numAffected) {console.log('Updated slides...: ' + numAffected + err)}
+												function (err, numAffected) {console.log(numAffected); console.log(err);}
 											);
 											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
 										});

@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	var renameSlide = new Object(); 
 	// DUPLICATE SOCKET
-	var socket = io.connect(document.location.hostname + ':' + location.port);
+	var socketSlides = io.connect(document.location.hostname + ':' + location.port);
 	
 	$( "[id^=rsid_]" ).keyup(function(event) {
 		var elId = event.target.id;
@@ -14,7 +14,7 @@ $(document).ready(function () {
 				$("#rresult_" + hashId).html("<font color='red'>You can't use any special symbols in slide name</font>");
 			}
 			else {
-				socket.emit('renameHash-server', {slideId: hashId, newHashName: str, start: 1});
+				socketSlides.emit('renameHash-server', {slideId: hashId, newHashName: str, start: 1});
 			}			
 		}
 		else {
@@ -32,7 +32,7 @@ $(document).ready(function () {
 		}
 	});	
 	
-	socket.on('renameHash-client', function (data) {
+	socketSlides.on('renameHash-client', function (data) {
 	console.log(data);
 	var domainAvailableMessage = "<font color='lime'>Slide name saved!</font>";
 	if(data.available == 1) {

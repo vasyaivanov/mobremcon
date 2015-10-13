@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	var domainRename = new Object(); 
 	// DUPLICATE SOCKET
-	var socket = io.connect(document.location.hostname + ':' + location.port);
+	var socketDomain = io.connect(document.location.hostname + ':' + location.port);
 
 	 $( "#domainNewName" ).keyup(function() {
 		if($( "#domainNewName" ).val() == '') {$("#domainNewNameRes").hide();$( "#renameDomainButton" ).prop( "disabled", true );}
@@ -15,12 +15,12 @@ $(document).ready(function () {
 
 	$( "#deleteDomainButton" ).click(function() {
 		if(confirm("You're going to delete your domain.\nAlso we will delete all your custom names for your slides. Are you sure?") == true) {
-			socket.emit('deleteDomain-server');
+			socketDomain.emit('deleteDomain-server');
 		}
 	});
 	
 	
-	socket.on('deleteDomain-client', function (data) {
+	socketDomain.on('deleteDomain-client', function (data) {
 		if(data.removed == 1) {
 			location.reload();
 		}
@@ -34,7 +34,7 @@ $(document).ready(function () {
 		$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url:  <a href=\"" + domain +  "\">" + domain +  "</a></font>" )
 	}
 	
-	socket.on('renameDomain-client', function (data) {
+	socketDomain.on('renameDomain-client', function (data) {
 	console.log(data);
 	var domainAvailableMessage = "<font color='lime'>This domain name is available!</font>";
 		if(data.available == 1) {
@@ -46,6 +46,7 @@ $(document).ready(function () {
 				var domain = location.host;
 				domain = domain.replace(/^www\./,"");
 				domain = protocol + "://" + $( "#domainNewName" ).val() + "." + domain;
+				$("#deleteDomainButton").prop( "disabled", false );
 				$("#domainNewNameRes").html("<font color='Yellow'>You've set your domain name!<br>You can access and share your slides through this url: <a href=\"" + domain +  "\">" + domain +  "</a></font>" )
 			}
 		}
@@ -68,7 +69,7 @@ $(document).ready(function () {
 				return 1;
 			}
 			else {
-				socket.emit('renameDomain-server', {newDomainName: str});
+				socketDomain.emit('renameDomain-server', {newDomainName: str});
 				$( "#renameDomainButton" ).prop( "disabled", false );
 				return 0;
 			}
@@ -78,7 +79,7 @@ $(document).ready(function () {
 	domainRename.renameDomainStart = function () {
 		var str = $( "#domainNewName" ).val();
 		if(str) {
-			socket.emit('renameDomain-server', {newDomainName: str, start: 1});
+			socketDomain.emit('renameDomain-server', {newDomainName: str, start: 1});
 		}
 	}
 	

@@ -10,10 +10,10 @@ video {
 </style>
 <script>
 // DUPLICATE SOCKET
-var socket = io.connect(document.location.hostname + ':' + location.port);
+var socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
 
 
-socket.on('sharing-client', function (data) {
+socketWebrtc.on('sharing-client', function (data) {
 	startSession(data.moderatorId);
 	function startSession(moderatorId) {
 		var MODERATOR_CHANNEL_ID = 'slite-video'; // channel-id
@@ -37,7 +37,7 @@ socket.on('sharing-client', function (data) {
 });
 
 function start() {
-	socket.emit("sharing-server", {hash: '<%= hash %>'});
+	socketWebrtc.emit("sharing-server", {hash: '<%= hash %>'});
 }
 
 </script>
