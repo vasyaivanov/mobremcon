@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	var renameSlide = new Object(); 
 	// DUPLICATE SOCKET
-	//var socket = io.connect(document.location.hostname + ':' + location.port);
+	var socket = io.connect(document.location.hostname + ':' + location.port);
 	
 	$( "[id^=rsid_]" ).keyup(function(event) {
 		var elId = event.target.id;

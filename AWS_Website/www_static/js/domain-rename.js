@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	var domainRename = new Object(); 
 	// DUPLICATE SOCKET
-	//var socket = io.connect(document.location.hostname + ':' + location.port);
+	var socket = io.connect(document.location.hostname + ':' + location.port);
 
 	 $( "#domainNewName" ).keyup(function() {
 		if($( "#domainNewName" ).val() == '') {$("#domainNewNameRes").hide();$( "#renameDomainButton" ).prop( "disabled", true );}

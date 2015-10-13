@@ -13,7 +13,7 @@ video {
 </style>
 <script>
 // DUPLICATE SOCKET
-//var socket = io.connect(document.location.hostname + ':' + location.port);
+var socket = io.connect(document.location.hostname + ':' + location.port);
 
 
 socket.on('sharing-client', function (data) {
