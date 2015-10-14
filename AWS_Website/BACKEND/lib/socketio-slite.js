@@ -11,7 +11,8 @@ var url = require('url')
   , SLIDE_REG_EXP = new RegExp('^img\\d+' + SLITE_EXT + '$')
   , session = require('express-session')
   , cookieParser = require('cookie-parser')
-  , HTML5_UPLOADER = false;
+  , HTML5_UPLOADER = false
+  , LOG_COORD = true;
 var start = process.hrtime();
 
 function resetElapsedTime() {
@@ -438,9 +439,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           // receive laser coordinates from the remote
-          socket.on('laserCoords', function (data) {
-              // 2 next lines are logs for testing
-              //console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
+            socket.on('laserCoords', function (data) {
+              if (LOG_COORD) {
+                // 2 next lines are logs for testing
+                console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
+              }
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
               // send coordinates on to the display (RECEIVER_POWERPOINT.html)
                 if(docs){
@@ -459,8 +462,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawCoords', function (data) {
-              //console.log("drawCoords received: " + data.slideID);
-              //console.log("X: " + data.x + ", " + "Y: " + data.y);
+              if (LOG_COORD) {
+                console.log("drawCoords received: " + data.slideID);
+                console.log("X: " + data.x + ", " + "Y: " + data.y);
+              }
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
@@ -476,8 +481,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('laserOn', function (data) {
-              //console.log("laserOn received: " + data.slideID);
-              //console.log("X: " + data.x + ", " + "Y: " + data.y);
+              if (LOG_COORD) {
+                console.log("laserOn received: " + data.slideID);
+                console.log("X: " + data.x + ", " + "Y: " + data.y);
+              }
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
@@ -494,8 +501,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               //socket.broadcast.emit('laserOn', data);
           });
 
-          socket.on('laserOff', function (data) {
-              console.log("laser off: " + data.slideID);
+            socket.on('laserOff', function (data) {
+              if (LOG_COORD) {
+                console.log("laser off: " + data.slideID);
+              }
               socket.broadcast.emit('laserOff', data);
               socket.emit('laserOff', data);
           });
@@ -506,7 +515,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawStart', function (data) {
-              //console.log("drawstart: " + data.slideID);
+              if (LOG_COORD) {
+                console.log("drawstart: " + data.slideID);
+              }
               module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
                 if(docs){
                   data.slideID = docs.sid;
@@ -523,7 +534,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawStop', function (data) {
-              //console.log("drawstop: " + data.slideID);
+              if (LOG_COORD) {
+                console.log("drawstop: " + data.slideID);
+              }
               socket.broadcast.emit('drawStop', data);
               socket.emit('drawStop', data);
           });

@@ -1,4 +1,4 @@
- var express = require('express')
+var express = require('express')
   , logger = require('morgan')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
@@ -97,7 +97,6 @@ var billingSchema =  mongoose.Schema({
   payment_status: {type: String, trim: true},
   payment_date: {type: Date},
   activated: {type: Number, default: 0 }
-
 });
 
 billingSchema.index({txn_id: 1, payment_status: 1, payment_gross: 1}, {unique: true});
