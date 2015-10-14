@@ -25,12 +25,12 @@ $('img').on('dragstart', function(event) { event.preventDefault(); });
 
 // Functions that handle moving to the next slide and updating notes
 function prevSlide() {
-    socket.emit('mymessage', { my:102, slide:currSlideNum, slideID: $('#URLSlides').val() });
+    socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: $('#URLSlides').val() });
     currSlideNum--;
     $("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlide() {
-    socket.emit('mymessage', { my:101, slide:currSlideNum, slideID: $('#URLSlides').val() });
+    socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: $('#URLSlides').val() });
     currSlideNum++;
     $("#notes").text(notesArray[currSlideNum]);
 };

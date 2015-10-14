@@ -564,7 +564,7 @@ var _channelHash = "9WDXH6OH-6K73NMI";
 
 window.onresize = function () {
     setTimeout(function(){
-        $( "#video-gallery" ).width("90%");
+        $( "#video-gallery" ).width("100%");
         $( "#video-gallery" ).height("100%");
         $( ".rsOverflow " ).height("100%");
         $( ".rsSlide " ).height("100%");
