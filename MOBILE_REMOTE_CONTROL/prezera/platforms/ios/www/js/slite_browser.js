@@ -33,6 +33,7 @@ function printSpeechResult(resultObject){
 // Adding event handlers to the currentSlide div, the user
 // touches this div to draw or move laser
 currentSlide.addEventListener('touchstart', touchStart, false);
+currentSlide.addEventListener('touchmove', touchMove, false);
 currentSlide.addEventListener('touchend', touchEnd, false);
 
 // Touching the control area (the currentSlide div) will turn the
@@ -40,7 +41,6 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 // But only if we are in laser mode. 
 function touchStart() {
     event.preventDefault();
-	currentSlide.addEventListener('touchmove', touchMove, false);
     if(LASER === interactionType) {
         socket.emit('laserOn', {x: 0, 
                                 y: 0, slideID: $('#URLSlides').val()});
@@ -61,7 +61,6 @@ function touchStart() {
 
 function touchEnd() {
     event.preventDefault();
-	currentSlide.removeEventListener('touchmove', touchMove);
 	console.log("touchEnd")
     if (LASER === interactionType) {
 		socket.emit('laserOff', {slideID: $('#URLSlides').val()});

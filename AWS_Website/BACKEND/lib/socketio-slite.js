@@ -285,22 +285,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		});
           });
 
-          // TMP for mobile app
-          socket.on('mymessage', function (data) {
-               console.log("JD: received news from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
-       		// WE MUST TO CHECK USER FOR PRESENTER VAR!!!
-       		module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-       			if(docs){
-       				module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: docs.sid});
-       			}
-       			else if(data.slideID == 'A1') {
-       				//if(userSession.userRole == 10) {
-       					module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: 'A1'});
-       				//}
-       			}
-       		});
-           });
-
       	socket.on('notes-server', function (data) {
 
       		var slideId = data.slideId.replace(/[^a-zA-Z0-9]/g,"");
@@ -568,8 +552,20 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               if (LOG_COORD) {
                 console.log("drawstop: " + data);
               }
-              socket.broadcast.emit('drawStop', data);
-              socket.emit('drawStop', data);
+              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+                if(docs){
+                  data.slideID = docs.sid;
+				  socket.broadcast.emit('drawStop', data);
+				  socket.emit('drawStop', data);
+                }
+      			else if(data.slideID == 'A1') {
+      				//if(userSession.userRole == 10) {
+					  socket.broadcast.emit('drawStop', data);
+					  socket.emit('drawStop', data);
+      				//}
+      			}
+              });
+
           });
 
           socket.on('insertVideoId', function (data) {
