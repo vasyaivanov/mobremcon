@@ -285,6 +285,22 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		});
           });
 
+          // TMP for mobile app
+          socket.on('mymessage', function (data) {
+               console.log("JD: received news from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
+       		// WE MUST TO CHECK USER FOR PRESENTER VAR!!!
+       		module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+       			if(docs){
+       				module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: docs.sid});
+       			}
+       			else if(data.slideID == 'A1') {
+       				//if(userSession.userRole == 10) {
+       					module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: 'A1'});
+       				//}
+       			}
+       		});
+           });
+
       	socket.on('notes-server', function (data) {
 
       		var slideId = data.slideId.replace(/[^a-zA-Z0-9]/g,"");
@@ -340,11 +356,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       					}
       					else {
 							var domainClear = 'www.' + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0];
-							
+
 							var searchParams = {};
 							searchParams.scid = { $regex : new RegExp("^" + data.newHashName + "$" , "i") };
 							searchParams.site = domainClear;
-							
+
 							if(userSession.restrictions.domain == 1 && userSession.domainSet == 1) {
 								searchParams.uid = userSession.currentUserId;
 							}
@@ -387,7 +403,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 				socket.emit('deleteDomain-client', {removed : 1 });
 			});
 		  });
-		  
+
           socket.on('renameDomain-server', function (data) {
 			// WWW is not allowed to rename
 			if(data.newDomainName.toLowerCase() == 'www') {
@@ -399,7 +415,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 						socket.emit('renameDomain-client', {available : 0});
 					}
 					else {
-						module.parent.exports.UserScheme.findOne({ domain : { $regex : new RegExp("^" + data.newDomainName + "$" , "i") } }, 
+						module.parent.exports.UserScheme.findOne({ domain : { $regex : new RegExp("^" + data.newDomainName + "$" , "i") } },
 							function (err, docs) {
 								if (!docs){
 									if(data.start == 1) {
@@ -503,7 +519,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
             socket.on('laserOff', function (data) {
               if (LOG_COORD) {
-                console.log("laser off: " + data.slideID);
+                console.log("laser off: " + data);
               }
               socket.broadcast.emit('laserOff', data);
               socket.emit('laserOff', data);
@@ -535,7 +551,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
           socket.on('drawStop', function (data) {
               if (LOG_COORD) {
-                console.log("drawstop: " + data.slideID);
+                console.log("drawstop: " + data);
               }
               socket.broadcast.emit('drawStop', data);
               socket.emit('drawStop', data);
