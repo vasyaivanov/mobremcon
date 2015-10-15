@@ -35,17 +35,17 @@ function getNumSlides() {
 // Functions that handle moving to the next slide and updating notes
 function prevSlide() {
     currSlideNum--;
-    if (currSlideNum < 0) {
+    /*if (currSlideNum < 0) {
         currSlideNum = getNumSlides() - 1;
-    }
+    }*/
     socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: $('#URLSlides').val() });
     $("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlide() {
     currSlideNum++;
-    if (currSlideNum >= getNumSlides()) {
+    /*if (currSlideNum >= getNumSlides()) {
         currSlideNum = 0;
-    }
+    }*/
     socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: $('#URLSlides').val() });
     $("#notes").text(notesArray[currSlideNum]);
 };
