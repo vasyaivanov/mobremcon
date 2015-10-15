@@ -75,7 +75,7 @@ function changeURL() {
     if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1') {
         url = 'http://localhost';
     } else {
-        url = 'http://www.slite.loc';
+        url = 'https://www.prezera.com';
     }
 	//if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
     //else socket = io.connect('http://slite.elasticbeanstalk.com:1337');
@@ -106,8 +106,6 @@ function touchMove(event) {
 
     var xPercent = calcOffset(xTouch, xOffset, slideWidth);
     var yPercent = calcOffset(yTouch, yOffset, slideHeight);
-
-	console.log(xPercent);
 	
     switch(interactionType) {
         case LASER: {

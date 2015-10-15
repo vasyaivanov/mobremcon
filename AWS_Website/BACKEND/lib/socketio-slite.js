@@ -521,6 +521,21 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               if (LOG_COORD) {
                 console.log("laser off: " + data);
               }
+
+              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+                if(docs){
+                  data.slideID = docs.sid;
+				  socket.broadcast.emit('laserOff', data);
+				  socket.emit('laserOff', data);
+                }
+      			else if(data.slideID == 'A1') {
+      				//if(userSession.userRole == 10) {
+					  socket.broadcast.emit('laserOff', data);
+					  socket.emit('laserOff', data);
+      				//}
+      			}
+              });
+
               socket.broadcast.emit('laserOff', data);
               socket.emit('laserOff', data);
           });
