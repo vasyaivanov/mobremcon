@@ -18,8 +18,6 @@ function calcOffset(coord, offset, dim) {
     return ((coord - offset)/dim);
 };
 
-
-
 // interactionType is a global variable for switching between different modes
 var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
 var interactionType = NONE;
@@ -38,17 +36,16 @@ function getNumSlides() {
 function prevSlide() {
     currSlideNum--;
     if (currSlideNum < 0) {
-		//currSlideNum = 0;
-        //currSlideNum = getNumSlides() - 1;
+        currSlideNum = getNumSlides() - 1;
     }
     socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: $('#URLSlides').val() });
     $("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlide() {
     currSlideNum++;
-    //if (currSlideNum >= getNumSlides()) {
-    //    currSlideNum = 0;
-   // }
+    if (currSlideNum >= getNumSlides()) {
+        currSlideNum = 0;
+    }
     socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: $('#URLSlides').val() });
     $("#notes").text(notesArray[currSlideNum]);
 };
@@ -78,7 +75,7 @@ function changeURL() {
     if (document.location.hostname == 'localhost' || document.location.hostname == '127.0.0.1') {
         url = 'http://localhost';
     } else {
-        url = 'https://www.prezera.com';
+        url = 'http://www.slite.loc';
     }
 	//if (document.getElementById("URLSlides").value == "A1") socket = io.connect('http://slite.elasticbeanstalk.com:1337');
     //else socket = io.connect('http://slite.elasticbeanstalk.com:1337');
@@ -110,11 +107,13 @@ function touchMove(event) {
     var xPercent = calcOffset(xTouch, xOffset, slideWidth);
     var yPercent = calcOffset(yTouch, yOffset, slideHeight);
 
+	console.log(xPercent);
+	
     switch(interactionType) {
         case LASER: {
             socket.emit('laserCoords',
-                        { x:xTouch - xOffset,
-                          y:yTouch - yOffset,
+                        { x:xPercent,
+                          y:yPercent,
                           width:slideWidth,
                           height:slideHeight , slideID: $('#URLSlides').val() });
             break;
