@@ -7,6 +7,8 @@ var currentSlide = document.getElementById("currentSlide"),
     slideWidth = currentSlide.offsetWidth,
     slideHeight = currentSlide.offsetHeight;
 
+	
+	
 // This function is for getting the offset given coordinate relative to document
 // It needs to be run once for X and once for Y
 // coord = coordinate of touch relative to document
@@ -16,6 +18,8 @@ function calcOffset(coord, offset, dim) {
     return ((coord - offset)/dim);
 };
 
+
+
 // interactionType is a global variable for switching between different modes
 var NONE = 0, LASER = 1, DRAW = 2, SPEECH = 3;
 var interactionType = NONE;
@@ -23,15 +27,29 @@ var interactionType = NONE;
 // disable image dragging for all images
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
+function getNumSlides() {
+	var windowjQuery = $('#theIframe')[0].contentWindow.$;
+	var f = $('#theIframe').contents().find('.royalSlider');
+	var slider = windowjQuery.data(f[0], 'royalSlider');
+    return slider.numSlides;
+};
+
 // Functions that handle moving to the next slide and updating notes
 function prevSlide() {
-    socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: $('#URLSlides').val() });
     currSlideNum--;
+    if (currSlideNum < 0) {
+		//currSlideNum = 0;
+        //currSlideNum = getNumSlides() - 1;
+    }
+    socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: $('#URLSlides').val() });
     $("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlide() {
-    socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: $('#URLSlides').val() });
     currSlideNum++;
+    //if (currSlideNum >= getNumSlides()) {
+    //    currSlideNum = 0;
+   // }
+    socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: $('#URLSlides').val() });
     $("#notes").text(notesArray[currSlideNum]);
 };
 

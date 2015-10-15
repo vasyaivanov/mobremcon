@@ -30,8 +30,8 @@ socket.on('laserOff', function() {
 // This function receives the x/y coordinates from the APP.JS server 
 // and moves the laser dot by adjusting the dot's CSS. 
 socket.on('moveLaser', function(data) {
-    // console.log("Laser Data received");
-    // console.log("X: " + data.x + ", " + "Y: " + data.y);
+     console.log("Laser Data received");
+     console.log("X: " + data.x + ", " + "Y: " + data.y);
     var slider = $(".royalSlider").data('royalSlider');
     var receiverHeight = slider.currSlide.content.height();
     var receiverWidth = slider.currSlide.content.width();
