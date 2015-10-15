@@ -42,8 +42,7 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 function touchStart() {
     event.preventDefault();
     if(LASER === interactionType) {
-        socket.emit('laserOn', {x: 0, 
-                                y: 0, slideID: $('#URLSlides').val()});
+        socket.emit('laserOn', { slideID: $('#URLSlides').val()});
     } else if (DRAW === interactionType) {
         // recalculate offsets in case window size has changed
         xOffset = currentSlide.offsetLeft;
