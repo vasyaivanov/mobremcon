@@ -946,7 +946,7 @@ router.get('/logout', function (req, res){
 });
 
 readSlideSize = function(path_to_slide, callback) {
-	var size = require('du')(path_to_slide, { filter: function (f) { return !/\.(ppt|pptx)$/.test(f) } },  function (err, size) {
+	var size = require('du')(path_to_slide, { filter: function (f) { return /\.(ppt|pptx)$/.test(f) } },  function (err, size) {
 		callback(size);
 	});
 }
