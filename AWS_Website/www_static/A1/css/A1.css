@@ -824,7 +824,7 @@ left: 0%;
     position: absolute;
     width: 100%;
     text-align: center;
-    z-index: 4;
+    z-index: 2;
 }
 
 .topRow {
