@@ -745,10 +745,24 @@ $( window ).load(function() {
     socket.on('broadcastVideoChat', function (data) {
         if (data.hash !== currentHash || isAPresenter) return;
 		// Reload video frame if two way signal communication signal was sent
-		if(data.reload == 1) {
-			document.getElementById("videoframe").contentWindow.participants.leave();
-			document.getElementById("videoframe").contentWindow.location.reload();
+		if(data.reload > 0) {
+			//document.getElementById("videoframe").contentWindow.location.reload();
+			if(data.reload == 2) {
+				/*document.getElementById("videoframe").contentWindow.participants.addStream({
+					video: true,
+					audio: true
+				});		*/
+			}
+			else if(data.reload == 1) {
+				document.getElementById("videoframe").contentWindow.location.reload();
+				/*document.getElementById("videoframe").contentWindow.participants.addStream({
+					oneway: true
+				});	*/					
+			}
+			//document.getElementById("videoframe").contentWindow.participants.leave();
+			//document.getElementById("videoframe").contentWindow.location.reload();
 		}
+
 		if(data.open == 2) {return;}
         if (data.open === isVideoChatOn) return;
         showHideVideoChat();

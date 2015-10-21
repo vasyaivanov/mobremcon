@@ -1,7 +1,8 @@
 <html>
 <head>
-<script src="https://cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//cdn.webrtc-experiment.com/video-conferencing/conference.js"> </script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
 video {
@@ -16,7 +17,7 @@ var MODERATOR_SESSION_ID = '<%= hash %>-video';    // room-id
 var MODERATOR_ID         = '<%= userId%>';    // user-id
 var MODERATOR_SESSION    = {         // media-type
     audio: true,
-    video: true
+    video: true,
 };
 var MODERATOR_EXTRA      = {};       // empty extra-data
 
@@ -35,12 +36,6 @@ moderator.onstream = function(event) {
 		if(event.type == "local") {
 			$( "#videosharing" ).append(event.mediaElement);
 			videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
-			if( $("#type_switch").attr( "value" ) == 0) {
-
-			}
-			else {
-		
-			}
 		}
 		else if(event.type == "remote") {
 			$( "#videosharingR" ).append(event.mediaElement);
@@ -63,13 +58,16 @@ function stopSession() {
 function switchVideoType() {
 	var switchTo = ($("#type_switch").attr( "value" ) == 0) ? 1 : 0;
 	if(switchTo == 1) {
-		$("#type_switch").text("One way");	
+		$("#type_switch").text("One way");
+		moderator.addStream({video: true, audio: true})
 	}
 	else {
-		$("#type_switch").text("Conference");		
+		$("#type_switch").text("Conference");
+		moderator.removeStream({video: true, audio: true})
 	}
 	$("#type_switch").attr( "value", switchTo );
-	videoPresenterSocket.emit("presenterVideoChat", {open: (switchTo == 1) ? 2 : 1, reload: 1, hash: '<%= hash %>'});
+
+	videoPresenterSocket.emit("presenterVideoChat", {open: (switchTo == 1) ? 2 : 1, reload: (switchTo == 1) ? 2 : 1, hash: '<%= hash %>'});
 }
 
 </script>
