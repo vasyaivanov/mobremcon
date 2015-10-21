@@ -73,8 +73,7 @@ body {
   background: -ms-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
   background: linear-gradient(to bottom, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd772', endColorstr='#ffc226',GradientType=0 );
-  font-family: 'PT Sans', sans-serif;
-  font-size: 34px;
+  font-size: 30px;
   position: inherit;
 }
 /* line 81, ../sass/screen.scss */
