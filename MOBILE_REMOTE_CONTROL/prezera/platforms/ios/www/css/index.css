@@ -145,27 +145,22 @@ left: 10%;
     float: left;
     display: inline-block;
     height: 20%px;
-    width: 23.3%;
+    width: 24.2%;
     font-size: 30px;
     font-weight: bold;
-    border-width: 4px;
+    margin: 2px;
+    /*border-width: 4px;
     border-style: solid;
     border-color: blue;
-    border-radius: 1px;
+    border-radius: 1px;*/
 }
 
 .buttons_off {
-    background: -webkit-linear-gradient(white, blue); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(white, blue); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(white, blue); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(white, blue); /* Standard syntax */
+    background: #7A7984;
 }
 
 .buttons_on {
-    background: -webkit-linear-gradient(yellow, white); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(yellow, white); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(yellow, white); /* For Firefox 3.6 to 15 */
-    background: linear-gradient(yellow, white); /* Standard syntax */
+    background: #3E3E54;
 }
 
 .buttons_div {
