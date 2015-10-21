@@ -75,8 +75,8 @@ $('#laser').click(function() {
         $('#laser').addClass("button_pressed");
         $('#draw').removeClass("button_pressed");
 		$('#draw').addClass("button_unpressed");
-        $('#overlay').css("z-index", 3);
-    }
+        $('#overlay').css("z-index", 1);
+     }
 });
 
 $('#draw').click(function() {
@@ -94,7 +94,7 @@ $('#draw').click(function() {
         $('#draw').addClass("button_pressed");
         $('#laser').removeClass("button_pressed");
 		$('#laser').addClass("button_unpressed");
-        $('#overlay').css("z-index", 3);
+        $('#overlay').css("z-index", 1);
     }
 });
 

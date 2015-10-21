@@ -339,13 +339,15 @@ function showRemote() {
 	showHideMenu(true);
 }
 
+var isRemoteOpen = false;
+
 function showHideRemote() {
     var label = $("#remoteOpenCloseLabel");
-    if (label.html() == "") {
-        isCommentsOpen = true;
+    if (!isRemoteOpen) {
+        isRemoteOpen = true;
         label.html("Close ");
     } else {
-        isCommentsOpen = false;
+        isRemoteOpen = false;
         label.html("");
     }
     $("#navButtons").slideToggle();
@@ -418,7 +420,7 @@ function canBePresenter() {
 
 function getPresentationInRemote() {
     if (!parent || !parent.document) return null;
-    var editBox = currentHash;//parent.document.getElementById('URLSlides');
+    var editBox = currentHash;
     if (!editBox || !editBox.value) return null;
     return editBox.value.toUpperCase();
 }
@@ -671,6 +673,12 @@ $( window ).load(function() {
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
     $(".rsOverflow").css("width", "100%");
+    
+    //document.getElementById('navButtons').style.display = isAPresenter ? 'block' : 'none';
+    //isRemoteOpen = isAPresenter;
+    if (isAPresenter) {
+        showHideRemote();
+    }
   
   if (!isFile) {
     //socket = io.connect(document.location.hostname + ':' + location.port);
