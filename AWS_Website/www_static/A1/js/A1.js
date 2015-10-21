@@ -735,7 +735,12 @@ $( window ).load(function() {
 
     socket.on('broadcastVideoChat', function (data) {
         if (data.hash !== currentHash || isAPresenter) return;
-        console.log('broadcastVideoChat received');
+		// Reload video frame if two way signal communication signal was sent
+		if(data.reload == 1) {
+			document.getElementById("videoframe").contentWindow.participants.leave();
+			document.getElementById("videoframe").contentWindow.location.reload();
+		}
+		if(data.open == 2) {return;}
         if (data.open === isVideoChatOn) return;
         showHideVideoChat();
     });

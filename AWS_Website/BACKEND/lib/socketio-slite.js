@@ -812,20 +812,19 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('presenterVideoChat', function (data) {
-              console.log(module.parent.exports.session);
               console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + 'data.open=' + data.open + ' videoChat in ' + data.hash);
               module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
                 console.log('Presenter: ' + spresenter + ' ' + sfound)
-          				if(spresenter == 1 && sfound == 1) {
+          			if(spresenter == 1 && sfound == 1) {
+						console.log(data.open);
                     module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: false},
                         function (err, numAffected) {
                             if(!err) {
-                              module.parent.exports.io.sockets.emit('broadcastVideoChat', { open: data.open, hash: data.hash});
+                              module.parent.exports.io.sockets.emit('broadcastVideoChat', data );
                               console.log("isVideoChatOpen set to " + data.open + " numAffected: " + numAffected)}
                         }
                     );
-
-                  }
+					}
               });
 
           });
@@ -849,7 +848,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       	socket.on('sharing-server', function (data) {
       		module.parent.exports.SlideScheme.findOne({sid : data.hash }).exec(function (err, doc) {
       			if( doc ) {
-      				socket.emit('sharing-client', {moderatorId: doc.uid})
+      				socket.emit('sharing-client', {moderatorId: doc.uid, chatMode: doc.isVideoChatOpen})
       			}
       		});
           });

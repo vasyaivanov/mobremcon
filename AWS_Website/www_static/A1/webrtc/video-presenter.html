@@ -32,10 +32,20 @@ moderator.extra   = MODERATOR_EXTRA;
 
 moderator.onstream = function(event) {
 	if(event.isVideo) {
-		videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
-		$( "#videosharing" ).append(event.mediaElement);
+		if(event.type == "local") {
+			$( "#videosharing" ).append(event.mediaElement);
+			videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
+			if( $("#type_switch").attr( "value" ) == 0) {
+
+			}
+			else {
+		
+			}
+		}
+		else if(event.type == "remote") {
+			$( "#videosharingR" ).append(event.mediaElement);
+		}
 	}
-	
 	if (event.isAudio) {
 		$( "#audiosharing" ).append(event.mediaElement);
 	}
@@ -50,11 +60,24 @@ function startSession() {
 function stopSession() {
 	moderator.close();
 }
+function switchVideoType() {
+	var switchTo = ($("#type_switch").attr( "value" ) == 0) ? 1 : 0;
+	if(switchTo == 1) {
+		$("#type_switch").text("One way");	
+	}
+	else {
+		$("#type_switch").text("Conference");		
+	}
+	$("#type_switch").attr( "value", switchTo );
+	videoPresenterSocket.emit("presenterVideoChat", {open: (switchTo == 1) ? 2 : 1, reload: 1, hash: '<%= hash %>'});
+}
 
 </script>
 </head>
 <body onload="startSession()">
-<div id="videosharing"></div>
+<button value="0" onclick="switchVideoType()" id="type_switch">Conference</button>
+<div id="videosharing" style="position: absolute; width: 100px; right: 20px; border: 1px solid #3F7FBF;"></div>
+<div id="videosharingR"></div>
 <div id="audiosharing"></div>
 </body>
 </html>

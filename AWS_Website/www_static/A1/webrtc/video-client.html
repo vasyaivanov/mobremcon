@@ -1,6 +1,7 @@
 <html>
 <head>
 <script src="https://cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
 video {
@@ -11,27 +12,52 @@ video {
 <script>
 // DUPLICATE SOCKET
 var socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
-
+var participants;
 
 socketWebrtc.on('sharing-client', function (data) {
-	startSession(data.moderatorId);
-	function startSession(moderatorId) {
+	startSession(data.moderatorId, data.chatMode);
+	function startSession(moderatorId, chatMode) {
 		var MODERATOR_CHANNEL_ID = 'slite-video'; // channel-id
 		var MODERATOR_SESSION_ID = '<%= hash %>-video';    // room-id
 		var MODERATOR_ID         = '' + moderatorId + '';    // user-id
-		var MODERATOR_SESSION    = {         // media-type
-			oneway: true
-		};
+		var MODERATOR_SESSION = {};
 		
+		if(chatMode == 1) {
+			MODERATOR_SESSION    = {         // media-type
+				oneway: true
+			};		
+		}
+		else if(chatMode == 2) {
+			MODERATOR_SESSION    = {         // media-type
+				video: true,
+				audio: true
+			};				
+		}
+				
 		var MODERATOR_EXTRA      = {};       // empty extra-data
 
-		var participants = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
+		participants = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
 		participants.join({
 			sessionid: MODERATOR_SESSION_ID,
 			userid:    MODERATOR_ID,
 			extra:     MODERATOR_EXTRA,
 			session:   MODERATOR_SESSION
 		});
+		
+		participants.onstream = function(event) {
+			if(event.isVideo) {
+				if(event.type == "local") {
+					$( "#videosharing" ).append(event.mediaElement);
+				}
+				else {
+					$( "#videosharingR" ).append(event.mediaElement);		
+				}
+			}
+			
+			if (event.isAudio) {
+				$( "#audiosharing" ).append(event.mediaElement);
+			}
+		};
 	}
 
 });
@@ -43,5 +69,8 @@ function start() {
 </script>
 </head>
 <body onload="start()">
+<div id="videosharing" style="position: fixed; width: 100px; top: 10px; right: 40px; border: 1px solid #3F7FBF;"></div>
+<div id="videosharingR"></div>
+<div id="audiosharing"></div>
 </body>
 </html>
