@@ -125,7 +125,8 @@ function getNumSlides() {
 }
 
 // Functions that handle moving to the next slide and updating notes
-function prevSlide() {
+function prevSlideRemote() {
+    console.log('prevSlideRemote');
     //if (currSlideNum <= 0) return;
     currSlideNum--;
     if (currSlideNum < 0) {
@@ -134,8 +135,8 @@ function prevSlide() {
     socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: currentHash});
     $("#notes").text(notesArray[currSlideNum]);
 };
-function nextSlide() {
-    console.log('nextSlide');
+function nextSlideRemote() {
+    console.log('nextSlideRemote');
     //if (currSlideNum >= getSlideNumber()-1) return;
     currSlideNum++;
     if (currSlideNum >= getNumSlides()) {

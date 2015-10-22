@@ -8,6 +8,7 @@ if (!isFile) {
 }
 var currentHash = getCurrentHash();
 var isAPresenter = isPresenter();
+var royalSlider;
 //console.log('A1.js loaded, socket: ');
 //console.log(socket);
 
@@ -62,15 +63,20 @@ function showPreviewsOnMainPage(){
 	//http://jsfiddle.net/q4d9m/2/
 }
 
-var justHidden = false;
+//var justHidden = false;
 var navigationButtonsTimeout;
 function showHideNavButtons(){
-	if (!justHidden) {
-		justHidden = false;
+	//if (!justHidden) {
+    //justHidden = false;
+    if(!isRemoteOpen)  {
 		$(".navButton").css('display','block');
 		clearTimeout(navigationButtonsTimeout);
 		navigationButtonsTimeout = setTimeout('$(".navButton").hide(400);', 6000);
 	}
+}
+
+function hideNavigationButtons(){
+    $(".navButton").hide(400);
 }
 
 function toggleMainWindow() {
@@ -341,13 +347,20 @@ function showRemote() {
 var isRemoteOpen = false;
 
 function showHideRemote() {
-	var label = $("#remoteOpenCloseLabel");
+    var slider = $(".royalSlider").data('royalSlider');
+    //console.log(slider.st);
+    //console.log(slider);
+
+    var label = $("#remoteOpenCloseLabel");
     if (!isRemoteOpen) {
         isRemoteOpen = true;
         label.html("Close ");
+        hideNavigationButtons();
+        slider.st.sliderDrag = false;
     } else {
         isRemoteOpen = false;
         label.html("");
+        slider.st.sliderDrag = true;
     }
     $("#navButtons").slideToggle();
     showHideMenu(true);
@@ -452,15 +465,23 @@ function submitInsertVideoSlide() {
 	showHideInsertVideoSlideOverlay();
 }
 
-$('#navPrev').click(function () {
-    var slider = $(".royalSlider").data('royalSlider');
+function prevSlideLocal(){
+	var slider = $(".royalSlider").data('royalSlider');
 	slider.prev();
 	clearCanvas();
+}
+
+function nextSlideLocal(){
+	var slider = $(".royalSlider").data('royalSlider');
+	slider.next();
+	clearCanvas();
+}
+
+$('#navPrev').click(function () {
+    prevSlideLocal();
 });
 $('#navNext').click(function () {
-	var slider = $(".royalSlider").data('royalSlider');
-    slider.next();
-	clearCanvas();
+    nextSlideLocal();
 });
 $('#chatPanel').click(function () {
     showHideComments();
@@ -598,11 +619,15 @@ $( window ).load(function() {
 
     }
 
-    $('#video-gallery').royalSlider({
+    royalSlider = $('#video-gallery').royalSlider({
         arrowsNav: false,
+        arrowsNavAutoHide: false,
+        navigateByClick: false,
         fadeinLoadedSlide: true,
         controlNavigationSpacing: 0,
         controlNavigation: 'none',
+        arrowsNavHideOnTouch: false,
+        sliderDrag: true,
 
         thumbs: {
             autoCenter: false,
@@ -611,7 +636,7 @@ $( window ).load(function() {
             spacing: 0,
             paddingBottom: 0
         },
-        keyboardNavEnabled: true,
+        keyboardNavEnabled: false,
         imageScaleMode: 'fill',
         imageAlignCenter: true,
         slidesSpacing: 0,
@@ -627,14 +652,15 @@ $( window ).load(function() {
         autoScaleSliderWidth: 200,
         autoScaleSliderHeight: 100,
         visibleNearby: {
-            enabled: false,
+            enabled: true,
             centerArea: 0.5,
             center: true,
             breakpoint: 650,
             breakpointCenterArea: 0.64,
             navigateByCenterClick: true
         }
-	});
+    });
+    //console.log(royalSlider);
     var staticSlite = (slite === '/HASH_TEMPLATE/' || slite === '/<%= hash %>/');
     if (staticSlite) {
         slite = '';
@@ -676,6 +702,29 @@ $( window ).load(function() {
     if (isAPresenter) {
         showHideRemote();
     }
+    
+    $(window).on("keypress", function (e) {
+        console.log('Keyborad key pressed; ' + e.key);
+        switch (e.key) {
+            case 'ArrowRight':
+                if (isAPresenter) {
+                    nextSlideRemote();
+                } else {
+                    nextSlideLocal();
+                }
+                e.preventDefault();
+                break;
+            case 'ArrowLeft':
+                if (isAPresenter) {
+                    prevSlideRemote();
+                } else {
+                    prevSlideLocal();
+                }
+                e.preventDefault();
+                break;
+            default: 
+        }
+    });
 
   if (!isFile) {
     //socket = io.connect(document.location.hostname + ':' + location.port);

@@ -5,11 +5,11 @@
 
 thumbnails();
 
-$('#URLBox').keypress(function (e) {
-	if(e.which == 13) {	
-		changeURL();
-	}
-});
+//$('#URLBox').keypress(function (e) {
+//	if(e.which == 13) {	
+//		changeURL();
+//	}
+//});
 
 /*
 // Adding event handlers to the currentSlide div, the user
@@ -51,11 +51,11 @@ function touchEnd(event) {
 */
 
 $('#prev').click(function() {
-    prevSlide();
+    prevSlideLocal();
 });
 
 $('#next').click(function() {
-    nextSlide();
+    nextSlideLocal();
 });
 
 $('#laser').click(function() {

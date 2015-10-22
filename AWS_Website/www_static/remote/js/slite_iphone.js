@@ -14,10 +14,10 @@ function printSpeechResult(resultObject){
     console.log(resultObject);
     console.log(resultObject.indexOf("NEXT"));
     if (resultObject.indexOf("NEXT") > -1) {
-        nextSlide();
+        nextSlideRemote();
     }
     else if (resultObject.indexOf("PREVIOUS") > -1) {
-        prevSlide();
+        prevSlideRemote();
     }
 };
 
@@ -49,12 +49,12 @@ function onDeviceReady() {
 	
     $('#prev').click(function() {
         event.preventDefault();
-        prevSlide();
+        prevSlideLocal();
     });
     
     $('#next').click(function() {
         event.preventDefault();
-        nextSlide()
+        nextSlideLocal()
     });
     
     $('#laser').click(function() {
@@ -114,6 +114,7 @@ function onDeviceReady() {
 // laser on, making the red dot appear on the presentation.
 // But only if we are in laser mode. 
 function touchStart() {
+    alert('iPhone touchStart');
     event.preventDefault();
     if(LASER === interactionType) {
         socket.emit('laserOn');
@@ -129,6 +130,7 @@ function touchStart() {
 };
 
 function touchEnd() {
+    alert('iPhone touchEnd');
     event.preventDefault();
     if (LASER === interactionType) {
         socket.emit('laserOff');
