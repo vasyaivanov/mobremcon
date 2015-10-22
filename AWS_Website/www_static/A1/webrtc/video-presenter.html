@@ -9,6 +9,16 @@ video {
 	display: block;
     width: 90%;
 }
+.videoR {
+	position: static;
+}
+.videoL {
+	position: absolute;
+	width: 100px;
+	right: 20px;
+	border: 1px solid #3F7FBF; 
+	display: block;
+}
 </style>
 <script>
 
@@ -59,10 +69,12 @@ function switchVideoType() {
 	var switchTo = ($("#type_switch").attr( "value" ) == 0) ? 1 : 0;
 	if(switchTo == 1) {
 		$("#type_switch").text("One way");
+		$( "#videosharing" ).addClass( "videoL" );
 		moderator.addStream({video: true, audio: true})
 	}
 	else {
 		$("#type_switch").text("Conference");
+		$( "#videosharing" ).removeClass( "videoL" );
 		moderator.removeStream({video: true, audio: true})
 	}
 	$("#type_switch").attr( "value", switchTo );
@@ -74,7 +86,7 @@ function switchVideoType() {
 </head>
 <body onload="startSession()">
 <button value="0" onclick="switchVideoType()" id="type_switch">Conference</button>
-<div id="videosharing" style="position: absolute; width: 100px; right: 20px; border: 1px solid #3F7FBF;"></div>
+<div id="videosharing"></div>
 <div id="videosharingR"></div>
 <div id="audiosharing"></div>
 </body>

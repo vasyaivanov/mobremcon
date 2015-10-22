@@ -12,12 +12,11 @@ var isAPresenter = isPresenter();
 //console.log(socket);
 
 function isMobile() {
-	return false;
-    /*if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
     } else {
         return false;
-    }*/
+    }
 }
 
 function share(url) {
@@ -339,15 +338,13 @@ function showRemote() {
 	showHideMenu(true);
 }
 
-var isRemoteOpen = false;
-
 function showHideRemote() {
     var label = $("#remoteOpenCloseLabel");
-    if (!isRemoteOpen) {
-        isRemoteOpen = true;
+    if (label.html() == "") {
+        isCommentsOpen = true;
         label.html("Close ");
     } else {
-        isRemoteOpen = false;
+        isCommentsOpen = false;
         label.html("");
     }
     $("#navButtons").slideToggle();
@@ -420,7 +417,7 @@ function canBePresenter() {
 
 function getPresentationInRemote() {
     if (!parent || !parent.document) return null;
-    var editBox = currentHash;
+    var editBox = currentHash;//parent.document.getElementById('URLSlides');
     if (!editBox || !editBox.value) return null;
     return editBox.value.toUpperCase();
 }
@@ -673,12 +670,6 @@ $( window ).load(function() {
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
     $(".rsOverflow").css("width", "100%");
-    
-    //document.getElementById('navButtons').style.display = isAPresenter ? 'block' : 'none';
-    //isRemoteOpen = isAPresenter;
-    if (isAPresenter) {
-        showHideRemote();
-    }
   
   if (!isFile) {
     //socket = io.connect(document.location.hostname + ':' + location.port);
@@ -748,6 +739,7 @@ $( window ).load(function() {
 		if(data.reload > 0) {
 			//document.getElementById("videoframe").contentWindow.location.reload();
 			if(data.reload == 2) {
+				document.getElementById("videoframe").contentWindow.changeClass();
 				/*document.getElementById("videoframe").contentWindow.participants.addStream({
 					video: true,
 					audio: true

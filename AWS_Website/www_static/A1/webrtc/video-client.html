@@ -8,6 +8,13 @@ video {
 	display: block;
     width: 90%;
 }
+.videoL {
+	position: absolute;
+	width: 100px;
+	right: 20px;
+	border: 1px solid #3F7FBF; 
+	display: block;
+}
 </style>
 <script>
 // DUPLICATE SOCKET
@@ -40,10 +47,6 @@ socketWebrtc.on('sharing-client', function (data) {
 			}
 		);
 
-		/*participants.onNewSession = function(session) {
-			alert(session);
-		}*/
-		
 		participants.onstream = function(event) {
 			if(event.isVideo) {
 				if(event.type == "local") {
@@ -65,10 +68,14 @@ function start() {
 	socketWebrtc.emit("sharing-server", {hash: '<%= hash %>'});
 }
 
+function changeClass() {
+	$( "#videosharing" ).addClass( "videoL" );
+}
+
 </script>
 </head>
 <body onload="start()">
-<div id="videosharing" style="position: fixed; width: 100px; top: 10px; right: 40px; border: 1px solid #3F7FBF;"></div>
+<div id="videosharing"></div>
 <div id="videosharingR"></div>
 <div id="audiosharing"></div>
 </body>
