@@ -19,7 +19,7 @@ var socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
 socketWebrtc.on('sharing-client', function (data) {
 	startSession(data.moderatorId);
 	function startSession(moderatorId) {
-		var MODERATOR_CHANNEL_ID = 'slite'; // channel-id
+		var MODERATOR_CHANNEL_ID = 'slite-screen'; // channel-id
 		var MODERATOR_SESSION_ID = '<%= hash %>-screen';    // room-id
 		var MODERATOR_ID         = '' + moderatorId + '';    // user-id
 		var MODERATOR_SESSION    = {         // media-type

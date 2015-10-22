@@ -1031,30 +1031,19 @@ router.get('/video.html', function (req, res){
 			});
 });
 
-router.get('/remote/index.html', function (req, res){
 
+router.get('/record.html', function (req, res){
 		var hashId = req.query.presentation;
-
-		var slitesRegMW = new RegExp('^' + slitesReg + '$');
-		var match = hashId.match(slitesRegMW);
-
-		if(match) {
 			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
-					 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: stitle, password: spassword});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/record.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
-					res.redirect('/');
+					res.send("Only presenter can record the screen")
 				}
 			});
-		}
-		else if(hashId == "A1") {
-			 res.render(path.join(www_dir,www_static_dir , 'remote/index.html'), {title: "A1", password: ""});
-		}
-		else {
-			res.redirect('/');
-		}
 });
+
 
 router.get('/clearcash', function (req, res){
 	console.log(req.header('x-forwarded-for'))

@@ -126,9 +126,6 @@ function showHideVideoChat() {
         isVideoChatOn = 1;
 		$("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
     } else {
-        // remove the video window on closing the panel
-        //var videosContainer = document.getElementById('videos-container');
-        //if (videosContainer.firstChild) videosContainer.removeChild(videosContainer.firstChild);
 		$("#videoframe").attr("src","");
         isVideoChatOn = 0;
     }
@@ -153,6 +150,41 @@ function showHideVideoChat() {
 	toggleMainWindow();
 	showHideMenu(true);
 }
+
+
+var isRecordingOn = 0;
+function recording() {
+    if (!isRecordingOn) {
+        isRecordingOn = 1;
+		$("#recordingframe").attr("src","/record.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
+    } else {
+		$("#recordingframe").attr("src","");
+        isRecordingOn = 0;
+    }
+
+    var label = $("#RecordingOpenCloseLabel");
+    if (label.text() == "Start") {
+        $("#RecordingOpenCloseLabel").html("Stop");
+    } else {
+        $("#RecordingOpenCloseLabel").html("Start");
+    }
+    $("#recording").slideToggle();
+	showHideMenu(true);
+}
+
+$("#recording").mouseover(function() {
+	if(document.getElementById("recordingframe").contentWindow.recordStarted == 1) {
+		$('#recording').animate({ "width": "25.5%", "clear": "both" },300);
+		document.getElementById("recordingframe").contentWindow.stopBlinking();
+	}
+});
+
+$("#recording").mouseleave(function() {
+	if(document.getElementById("recordingframe").contentWindow.recordStarted == 1) {
+		$('#recording').animate({ "width": "60px", "clear": "both" },300);
+		document.getElementById("recordingframe").contentWindow.startBlinking();
+	}
+});
 
 var isScreensharingOn = 0;
 function showHideScreensharing() {
@@ -395,6 +427,7 @@ function disableNonPresenterMenues() {
 	disableMenuItem("#menuPassword");
 	disableMenuItem("#menuOpenScreensharing");
 	disableMenuItem("#menuRenamePresentation");
+	disableMenuItem("#menuOpenRecording");
 }
 
 function isInIFrame(){
@@ -537,6 +570,10 @@ if(isVideoChatOpen == 1){
 }
 $('#closevideo').click(function () {
     showHideVideoChat();
+	//config.attachStream && config.attachStream.stop();
+});
+$('#closerecording').click(function () {
+    recording();
 	//config.attachStream && config.attachStream.stop();
 });
 $('#closescreensharing').click(function () {
