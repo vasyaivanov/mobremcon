@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="https://cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
+<script src="/A1/js/RTCMultiConnection.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
 audio {
@@ -24,7 +24,7 @@ socketWebrtc.on('sharing-client', function (data) {
 		var MODERATOR_ID         = '' + moderatorId + '';    // user-id
 		var MODERATOR_SESSION    = {         // media-type
 		};
-		
+
 		var MODERATOR_EXTRA      = {};       // empty extra-data
 
 		var participants = new RTCMultiConnection(MODERATOR_CHANNEL_ID);

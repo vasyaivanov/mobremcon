@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="//cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
+<script src="/A1/js/RTCMultiConnection.js"></script>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
@@ -12,7 +12,7 @@ video {
 	position: absolute;
 	width: 100px;
 	right: 20px;
-	border: 1px solid #3F7FBF; 
+	border: 1px solid #3F7FBF;
 	display: block;
 }
 </style>
@@ -28,20 +28,20 @@ socketWebrtc.on('sharing-client', function (data) {
 		var MODERATOR_SESSION_ID = '<%= hash %>-video';    // room-id
 		var MODERATOR_ID         = '' + moderatorId + '';    // user-id
 		var MODERATOR_SESSION = {};
-		
+
 		if(chatMode == 1) {
-			MODERATOR_SESSION    = {         
+			MODERATOR_SESSION    = {
 			};
 		}
 		else if(chatMode == 2) {
 			$( "#videosharing" ).addClass( "videoL" );
-			MODERATOR_SESSION    = {        
+			MODERATOR_SESSION    = {
 				video: true,
 				audio: true
-			};			
+			};
 		}
-		
-		participants.join(	{	
+
+		participants.join(	{
 				sessionid: MODERATOR_SESSION_ID,
 				userid:    MODERATOR_ID,
 				session:   MODERATOR_SESSION
@@ -54,7 +54,7 @@ socketWebrtc.on('sharing-client', function (data) {
 					$( "#videosharing" ).append(event.mediaElement);
 				}
 				else {
-					$( "#videosharingR" ).append(event.mediaElement);		
+					$( "#videosharingR" ).append(event.mediaElement);
 				}
 			}
 			if (event.isAudio) {

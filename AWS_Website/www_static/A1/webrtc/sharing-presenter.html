@@ -1,6 +1,6 @@
 <html>
 <head>
-<script src="https://cdn.webrtc-experiment.com/RTCMultiConnection.js"></script>
+<script src="/A1/js/RTCMultiConnection.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
@@ -35,7 +35,7 @@ moderator.onstream = function(event) {
 		socket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
 		$( "#screensharing" ).append(event.mediaElement);
 	}
-	
+
 	if (event.isAudio) {
 		$( "#audiosharing" ).append(event.mediaElement);
 	}
@@ -70,7 +70,7 @@ function stopSession() {
 <script>
 var getChromeExtensionStatus = function (callback) {
 	if (!!navigator.mozGetUserMedia) return callback('not-chrome');
-	
+
 	var extensionid = 'ajhifddimkapgcifgcodmmfdlknahffk';
 
 	var image = document.createElement('img');
