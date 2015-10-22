@@ -69,12 +69,12 @@ function switchVideoType() {
 	if(switchTo == 1) {
 		$("#type_switch").text("One way");
 		$( "#videosharing" ).addClass( "videoL" );
-		moderator.addStream({video: true, audio: true})
+		//moderator.addStream({video: true, audio: true})
 	}
 	else {
 		$("#type_switch").text("Conference");
 		$( "#videosharing" ).removeClass( "videoL" );
-		moderator.removeStream({video: true, audio: true})
+		//moderator.removeStream({video: true, audio: true})
 	}
 	$("#type_switch").attr( "value", switchTo );
 
@@ -87,6 +87,6 @@ function switchVideoType() {
 <button value="0" onclick="switchVideoType()" id="type_switch">Conference</button>
 <div id="videosharing"></div>
 <div id="videosharingR"></div>
-<div id="audiosharing"></div>
+<div id="audiosharing" style="display: none"></div>
 </body>
 </html>

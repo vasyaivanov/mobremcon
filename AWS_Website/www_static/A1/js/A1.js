@@ -672,11 +672,11 @@ $( window ).load(function() {
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
     $(".rsOverflow").css("width", "100%");
-  
+
     if (isAPresenter) {
         showHideRemote();
     }
-  
+
   if (!isFile) {
     //socket = io.connect(document.location.hostname + ':' + location.port);
 
@@ -743,22 +743,13 @@ $( window ).load(function() {
         if (data.hash !== currentHash || isAPresenter) return;
 		// Reload video frame if two way signal communication signal was sent
 		if(data.reload > 0) {
-			//document.getElementById("videoframe").contentWindow.location.reload();
 			if(data.reload == 2) {
 				document.getElementById("videoframe").contentWindow.changeClass();
-				/*document.getElementById("videoframe").contentWindow.participants.addStream({
-					video: true,
-					audio: true
-				});		*/
+				document.getElementById("videoframe").contentWindow.addStream();
 			}
 			else if(data.reload == 1) {
 				document.getElementById("videoframe").contentWindow.location.reload();
-				/*document.getElementById("videoframe").contentWindow.participants.addStream({
-					oneway: true
-				});	*/					
 			}
-			//document.getElementById("videoframe").contentWindow.participants.leave();
-			//document.getElementById("videoframe").contentWindow.location.reload();
 		}
 
 		if(data.open == 2) {return;}

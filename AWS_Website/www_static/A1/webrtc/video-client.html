@@ -31,6 +31,7 @@ socketWebrtc.on('sharing-client', function (data) {
 
 		if(chatMode == 1) {
 			MODERATOR_SESSION    = {
+				oneway: true
 			};
 		}
 		else if(chatMode == 2) {
@@ -53,7 +54,7 @@ socketWebrtc.on('sharing-client', function (data) {
 				if(event.type == "local") {
 					$( "#videosharing" ).append(event.mediaElement);
 				}
-				else {
+				else if(event.type == "remote") {
 					$( "#videosharingR" ).append(event.mediaElement);
 				}
 			}
@@ -69,6 +70,17 @@ function start() {
 	socketWebrtc.emit("sharing-server", {hash: '<%= hash %>'});
 }
 
+function addStream() {
+	participants.removeStream({
+		oneway: true
+	});
+
+	participants.addStream({
+		video: true,
+		audio: true
+	});
+}
+
 function changeClass() {
 	$( "#videosharing" ).addClass( "videoL" );
 }
@@ -78,6 +90,6 @@ function changeClass() {
 <body onload="start()">
 <div id="videosharing"></div>
 <div id="videosharingR"></div>
-<div id="audiosharing"></div>
+<div id="audiosharing" style="display: none"></div>
 </body>
 </html>
