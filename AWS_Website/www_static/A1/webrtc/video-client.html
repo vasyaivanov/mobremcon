@@ -34,6 +34,7 @@ socketWebrtc.on('sharing-client', function (data) {
 			};
 		}
 		else if(chatMode == 2) {
+			$( "#videosharing" ).addClass( "videoL" );
 			MODERATOR_SESSION    = {        
 				video: true,
 				audio: true

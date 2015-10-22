@@ -12,11 +12,11 @@ var isAPresenter = isPresenter();
 //console.log(socket);
 
 function isMobile() {
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    /*if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
-    } else {
+    } else {*/
         return false;
-    }
+    //}
 }
 
 function share(url) {
@@ -338,13 +338,15 @@ function showRemote() {
 	showHideMenu(true);
 }
 
+var isRemoteOpen = false;
+
 function showHideRemote() {
-    var label = $("#remoteOpenCloseLabel");
-    if (label.html() == "") {
-        isCommentsOpen = true;
+	var label = $("#remoteOpenCloseLabel");
+    if (!isRemoteOpen) {
+        isRemoteOpen = true;
         label.html("Close ");
     } else {
-        isCommentsOpen = false;
+        isRemoteOpen = false;
         label.html("");
     }
     $("#navButtons").slideToggle();
@@ -417,7 +419,7 @@ function canBePresenter() {
 
 function getPresentationInRemote() {
     if (!parent || !parent.document) return null;
-    var editBox = currentHash;//parent.document.getElementById('URLSlides');
+    var editBox = currentHash;
     if (!editBox || !editBox.value) return null;
     return editBox.value.toUpperCase();
 }
@@ -632,7 +634,7 @@ $( window ).load(function() {
             breakpointCenterArea: 0.64,
             navigateByCenterClick: true
         }
-    });
+	});
     var staticSlite = (slite === '/HASH_TEMPLATE/' || slite === '/<%= hash %>/');
     if (staticSlite) {
         slite = '';
@@ -670,6 +672,10 @@ $( window ).load(function() {
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
     $(".rsOverflow").css("width", "100%");
+  
+    if (isAPresenter) {
+        showHideRemote();
+    }
   
   if (!isFile) {
     //socket = io.connect(document.location.hostname + ':' + location.port);
