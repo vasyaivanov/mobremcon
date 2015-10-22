@@ -1,16 +1,22 @@
 var socket;
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
-if (!isFile) {
-    if(typeof socket !== 'undefined'){
-        alert('socket in A1.js is already defined!');
-    }
-    socket = io.connect(document.location.hostname + ':' + location.port);
-}
 var currentHash = getCurrentHash();
 var isAPresenter = isPresenter();
 var royalSlider;
+var hashUsers = 0;
 //console.log('A1.js loaded, socket: ');
 //console.log(socket);
+
+if (!isFile) {
+    if (typeof socket !== 'undefined') {
+        alert('socket in A1.js is already defined!');
+    }
+    socket = io.connect(document.location.hostname + ':' + location.port, {query: "type=user&hash=" + currentHash});
+}
+socket.on('connect', function (data) {
+    console.log('Connected: ');
+});
+
 
 function isMobile() {
     /*if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -182,6 +188,7 @@ function showHideScreensharing() {
 var isMenuOn = false;
 function showHideMenu(fromItemClick) {
     if (!isMenuOn && !fromItemClick) {
+        socket.emit("get-nof-users", {hash: currentHash});
         $('.menuSubmenu').slideDown("slow");
         isMenuOn = true;
     } else {
@@ -356,17 +363,14 @@ function showHideRemote() {
         isRemoteOpen = true;
         label.html("Close ");
         hideNavigationButtons();
-        //slider.st.sliderDrag = false;
-        slider._slidesContainer.off(slider._downEvent/*, function (e) { console.log('_downEvent'); e.preventDefault(); }*/);
-        //slider._isDragging = false;
-        slider._doc.off(slider._moveEvent/*, function (e) { console.log('_moveEvent'); e.preventDefault(); }*/)
-				   .off(slider._upEvent/*, function (e) { console.log('_upEvent'); e.preventDefault(); }*/);
+        slider._slidesContainer.off(slider._downEvent);
+        slider._doc.off(slider._moveEvent)
+				   .off(slider._upEvent);
+        $('.royalSlider').on('dragstart', function (event) { event.preventDefault(); });
     } else {
         isRemoteOpen = false;
         label.html("");
-        //slider.st.sliderDrag = true;
         slider._slidesContainer.on(slider._downEvent, function (e) { console.log('_downEvent'); slider._onDragStart(e); });
-        //slider._isDragging = true;
         slider._doc.on(slider._moveEvent, function (e) { console.log('_moveEvent'); slider._onDragMove(e, false/*isThumbs*/); })
 				   .on(slider._upEvent, function (e) { console.log('_upEvent'); slider._onDragRelease(e, false/*isThumbs*/); });
         turnLaser(false);
@@ -672,7 +676,7 @@ $( window ).load(function() {
             navigateByCenterClick: true
         }
     });
-    //console.log(royalSlider);
+    
     var staticSlite = (slite === '/HASH_TEMPLATE/' || slite === '/<%= hash %>/');
     if (staticSlite) {
         slite = '';
@@ -739,8 +743,8 @@ $( window ).load(function() {
     });
 
   if (!isFile) {
-    //socket = io.connect(document.location.hostname + ':' + location.port);
-
+      //socket = io.connect(document.location.hostname + ':' + location.port);
+    
     socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
@@ -829,6 +833,12 @@ $( window ).load(function() {
             showHideScreensharing();
         }
     });
+    socket.on('nof-users', function (data) {
+       //console.log("nof-users received: " + data.nof_users);
+       hashUsers = data.nof_users;
+       $("#chatUsersLabel").html(" ( " + hashUsers + " users )");
+    });
+
   }
 
 });

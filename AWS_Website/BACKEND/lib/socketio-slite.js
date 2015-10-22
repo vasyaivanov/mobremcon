@@ -58,6 +58,7 @@ var people = {};
 var rooms = {};
 var sockets = [];
 var chatHistory = {};
+var nofUsers = [];
 
 function purge(s, action) {
     if (people[s.id].inroom) { //user is in a room
@@ -122,6 +123,21 @@ function getHashPresentation(hash, next){
     });
 }
 
+module.parent.exports.io.use(function (socket, next) {
+    console.log("Query: ", socket.handshake.query);
+    // return the result of next() to accept the connection.
+    if (socket.handshake.query.type == "user" && typeof socket.handshake.query.hash !== 'undefined') {
+        if (isNaN(nofUsers[socket.handshake.query.hash]) || nofUsers[socket.handshake.query.hash] < 0) {
+            nofUsers[socket.handshake.query.hash] = 0;
+        }
+        nofUsers[socket.handshake.query.hash]++;
+        console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+        return next();
+    }
+    // call next() with an Error if you need to reject the connection.
+    return next();
+    //next(new Error('Authentication error'));
+});
 
 module.parent.exports.io.sockets.on('connection', function (socket) {
     if(typeof module.parent.exports.UserData  !== "undefined") {
@@ -131,7 +147,19 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               pollUpdate();
           }
           console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
-          socket.on('disconnect', function () {
+
+            socket.on('disconnect', function () {
+                if (socket.handshake.query.type === 'user' && typeof socket.handshake.query.hash !== 'undefined') {
+                    if (isNaN(nofUsers[socket.handshake.query.hash])) {
+                        nofUsers[socket.handshake.query.hash] = 0;
+                    }
+                    nofUsers[socket.handshake.query.hash]--;
+                    if (nofUsers[socket.handshake.query.hash] < 0) {
+                        nofUsers[socket.handshake.query.hash] = 0;
+                    }
+                    console.log("User disconnected");
+                    console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+                }
               if (typeof people[socket.id] !== "undefined") { //this handles the refresh of the name screen
                   purge(socket, "disconnect");
               }
@@ -856,7 +884,18 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
       	socket.on('server-userRestrictions', function (data) {
       			socket.emit('client-userRestrictions',{maxFileSize: userSession.restrictions.maxSlideSize});
-      	});
+            });
+
+            socket.on("get-nof-users", function (data) {
+                if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
+                data.nof_users = nofUsers[data.hash];
+                if (isNaN(data.nof_users) || data.nof_users < 0) {
+                    nofUsers[data.hash] = 0;
+                    data.nof_users = 0;
+                }
+                socket.emit("nof-users", data);
+                //console.log("nof-users ", data.nof_users);
+            });
 
       }
     }
