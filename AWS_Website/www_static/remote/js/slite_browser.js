@@ -58,11 +58,9 @@ $('#next').click(function() {
     nextSlideLocal();
 });
 
-$('#laser').click(function() {
-     // calculate offset of interaction area in case window has been resized
-    // since the last time laser was used. 
+function turnLaser(on){
     // if laser is on, turn it off
-    if (LASER === interactionType) {
+    if (!on) {
         interactionType = NONE;
 		$('#laser').removeClass("button_pressed");
         $('#laser').addClass("button_unpressed");
@@ -77,25 +75,35 @@ $('#laser').click(function() {
 		$('#draw').addClass("button_unpressed");
         $('#overlay').css("z-index", 1);
      }
+}
+
+$('#laser').click(function() {
+     // calculate offset of interaction area in case window has been resized
+    // since the last time laser was used. 
+    turnLaser(LASER !== interactionType);
 });
 
-$('#draw').click(function() {
+function turnDraw(on){
      // if draw is on, turn it off
-    if (DRAW === interactionType) {
+    if (!on) {
         interactionType = NONE;
-		$('#draw').removeClass("button_pressed");
+        $('#draw').removeClass("button_pressed");
         $('#draw').addClass("button_unpressed");
         $('#overlay').css("z-index", 0);
         
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
-		$('#draw').removeClass("button_unpressed");
+        $('#draw').removeClass("button_unpressed");
         $('#draw').addClass("button_pressed");
         $('#laser').removeClass("button_pressed");
-		$('#laser').addClass("button_unpressed");
+        $('#laser').addClass("button_unpressed");
         $('#overlay').css("z-index", 1);
     }
+}
+
+$('#draw').click(function() {
+    turnDraw(DRAW !== interactionType);
 });
 
 

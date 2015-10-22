@@ -356,11 +356,22 @@ function showHideRemote() {
         isRemoteOpen = true;
         label.html("Close ");
         hideNavigationButtons();
-        slider.st.sliderDrag = false;
+        //slider.st.sliderDrag = false;
+        slider._slidesContainer.off(slider._downEvent/*, function (e) { console.log('_downEvent'); e.preventDefault(); }*/);
+        //slider._isDragging = false;
+        slider._doc.off(slider._moveEvent/*, function (e) { console.log('_moveEvent'); e.preventDefault(); }*/)
+				   .off(slider._upEvent/*, function (e) { console.log('_upEvent'); e.preventDefault(); }*/);
     } else {
         isRemoteOpen = false;
         label.html("");
-        slider.st.sliderDrag = true;
+        //slider.st.sliderDrag = true;
+        slider._slidesContainer.on(slider._downEvent, function (e) { console.log('_downEvent'); slider._onDragStart(e); });
+        //slider._isDragging = true;
+        slider._doc.on(slider._moveEvent, function (e) { console.log('_moveEvent'); slider._onDragMove(e, false/*isThumbs*/); })
+				   .on(slider._upEvent, function (e) { console.log('_upEvent'); slider._onDragRelease(e, false/*isThumbs*/); });
+        turnLaser(false);
+        turnDraw(false);
+        clearCanvas();
     }
     $("#navButtons").slideToggle();
     showHideMenu(true);
@@ -627,6 +638,7 @@ $( window ).load(function() {
         controlNavigationSpacing: 0,
         controlNavigation: 'none',
         arrowsNavHideOnTouch: false,
+        sliderTouch: false,
         sliderDrag: true,
 
         thumbs: {
