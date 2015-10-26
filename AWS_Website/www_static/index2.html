@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-US">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -13,11 +13,11 @@
     <link rel="canonical" href="https://www.webentations.com" />
 
     <!-- minified css -->
-    <link rel="stylesheet" href="css/min/style-min.css" />
-    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/min/style-min.css">
     <link rel="stylesheet" href="css/jquery-ui.min.css">
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/min/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- <link rel="stylesheet" href="css/min/elastislide.css" />  -->
 
     <!-- normal css -->
@@ -132,18 +132,16 @@
   
   <% if(noUploadForUser == 0) { %>
         <div class="uploadfile">
-            <button type="button" class="uploadButton">Upload Presentation</button>
+            <div type="button" class="uploadButton">Upload Presentation</div>
             <input type="file" accept="pptx" id="uploadPresentation">
         </div>
   <% } else { %>
     <div class="uploadfile">
-            <button type="button" class="uploadButton" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</button>
+            <div type="button" class="uploadButton" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</div>
       <input type="file" accept="pptx" id="uploadPresentation" style="display: none">   
         </div>
   <% } %>
   <%- randomSlides %>
-  <img src="./img/RightCurtain.png" id="rightCurtain" class="curtain" />
-  <img src="./img/RightCurtain.png" id="leftCurtain" class="curtain leftCurtain" />
  
         <!--<div id="bgvid">
             <video autoplay poster="img/Slite_Background.jpg" style="width:100%"><source src="media/Slite_Background.mp4" type="video/mp4"></video><br />
@@ -153,7 +151,7 @@
             <source src="media/Slite_Background.ogv" type="video/ogg">
             <source src="media/Slite_Background.webm" type="video/webm">
         </video>-->
-        <a href="#one" class="goto-next scrolly">Next</a>   
+        <!-- <a href="#one" class="goto-next scrolly">Next</a>    -->
 </section>
 
     <!-- One -->
@@ -169,7 +167,7 @@
                 <p>PREZERA.COM&#8482; enables you to present from inside your browser to a remote and in-house audiences. It comes with an iPhone remote control app. PREZERA.COM&#8482; adds a social component inside your presentation allowing audience to connect with each other and presenter. Desktop sharing and video broadcasting make your presentation efficient. PREZERA.COM&#8482; is <b>the</b> best and the simpliest way in the world to explain information from one person to many.</p>
             </header>
         </div>
-        <a href="#two" class="goto-next scrolly">Next</a>
+
     </section>
     <!-- Two -->
     <section id="two" class="spotlight style1 bottom">
@@ -203,7 +201,6 @@
                 </div>
             </div>
         </div>
-        <a href="#three" class="goto-next scrolly">Next</a>
     </section>
 
     <!-- Three -->
@@ -223,7 +220,6 @@
         Have fun with PREZERA.COM&#8482;, and if you have any questions before, during or after your presentation, email us at help@prezera.com, and we'll be there for you.
             </p>
         </div>
-        <a href="#four" class="goto-next scrolly">Next</a>
     </section>
 
     <!--<!-- Four -->
@@ -235,12 +231,12 @@
             <div class="container">
                 <div class="row">
                     <div class="6u 12u$(small)" style="text-align: center">
-                        <span class="icon alt major fa-area-chart"></span>
+                        <span class="fa fa-area-chart alt major"></span>
                         <h3>Business inquiries</h3>
                         <p>partners@prezera.com</p>
                     </div>
                     <div class="6u 12u$(small)" style="text-align: center">
-                        <span class="icon alt major fa-comment"></span>
+                        <span class="fa fa-comment alt major"></span>
                         <h3>Press</h3>
                         <p>press@prezera.com</p>
                     </div>
@@ -262,7 +258,7 @@
             <li><a href="#" class="icon alt fa-envelope"><span class="label">Email</span></a></li>
         </ul>
         <ul class="copyright">
-            <li>&copy; Slite&#8482;. All rights reserved.</li>
+            <li>&copy; Prezra&#8482;. All rights reserved.</li>
         </ul>
     </footer>
     <script type="text/javascript">

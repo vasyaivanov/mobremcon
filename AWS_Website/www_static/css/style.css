@@ -4,6 +4,10 @@
 /* ============================================================
   DEMO 4 - FULL SCREEN BACKGROUND VIDEO
 ============================================================ */
+.icon:hover {
+    color:blue !important;
+}
+
 #cmn-video-demo4__video {
     position: fixed;
     top: 50%;
@@ -1510,7 +1514,7 @@ input[type="button"],
 
 /* Goto Next */
 
-.goto-next {
+/*.goto-next {
     border: 0;
     bottom: 0;
     display: block;
@@ -1523,9 +1527,9 @@ input[type="button"],
     white-space: nowrap;
     width: 10em;
     z-index: 1;
-}
+}*/
 
-    .goto-next:before {
+    /*.goto-next:before {
         background-image: url("images/arrow.svg");
         background-position: center center;
         background-repeat: no-repeat;
@@ -1539,7 +1543,7 @@ input[type="button"],
         top: 50%;
         width: 2em;
         z-index: 1;
-    }
+    }*/
 
 /* Spotlight */
 
@@ -2053,7 +2057,8 @@ body.landing #header {
 
 #banner {
     background-attachment: fixed;
-    background-image: url("../img/Slite_Background6.jpg");
+    background: #272833;
+    /*background-image: url("../img/Slite_Background6.jpg");*/
     background-position: center center;
     background-size: cover;
     box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.25);
@@ -2329,43 +2334,20 @@ input.renameSlide {
 .uploadButton {
     cursor: inherit;
     width: inherit;
-    height: inherit;
     display: block;
-    
-    -moz-box-shadow: 0px 1px 0px 0px #fff6af;
-    -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
-    box-shadow: 0px 1px 0px 0px #fff6af;
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffec64), color-stop(1, #ffab23));
-    background:-moz-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background:-webkit-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background:-o-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background:-ms-linear-gradient(top, #ffec64 5%, #ffab23 100%);
-    background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffec64', endColorstr='#ffab23',GradientType=0);
-    background-color:#ffec64;
-    -moz-border-radius:50px;
-    -webkit-border-radius:50px;
-    border-radius:50px;
-    border:1px solid #ffaa22;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
     color:#333333;
-
     font-family: 'Lato', sans-serif;
     font-size: inherit;
     font-weight: bold;
     text-decoration: none;
-    text-shadow: 0px 1px 0px #ffee66;
 }
 
 .uploadButton:hover {
     cursor:pointer;
-    /*background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffab23), color-stop(1, #ffec64));
-	background:-moz-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-	background:-webkit-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-	background:-o-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-	background:-ms-linear-gradient(top, #ffab23 5%, #ffec64 100%);
-	background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffab23', endColorstr='#ffec64',GradientType=0);
-	background-color:#ffab23;*/ 
+
+
 }
 
 .curtain {

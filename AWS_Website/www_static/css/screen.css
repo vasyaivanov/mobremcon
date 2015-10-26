@@ -60,21 +60,24 @@ body {
     */
 /* line 62, ../sass/screen.scss */
 .uploadfile .uploadButton {
-  width: inherit;
-  height: inherit;
-  display: block;
-  border-color: #e6a400;
-  background: #ffd772;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffd772), color-stop(50%, #ffd978), color-stop(52%, #ffce52), color-stop(100%, #ffc226));
-  background: -webkit-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
-  background: -o-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
-  background: -ms-linear-gradient(top, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
-  background: linear-gradient(to bottom, #ffd772 0%, #ffd978 50%, #ffce52 52%, #ffc226 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd772', endColorstr='#ffc226',GradientType=0 );
-  font-size: 30px;
+
+
+  background: rgb(125,185,232);
+  background: -moz-linear-gradient(top, rgba(125,185,232,1) 0%, rgba(66,139,202,1) 99%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,185,232,1)), color-stop(99%,rgba(66,139,202,1)));
+  background: -webkit-linear-gradient(top, rgba(125,185,232,1) 0%,rgba(66,139,202,1) 99%);
+  background: -o-linear-gradient(top, rgba(125,185,232,1) 0%,rgba(66,139,202,1) 99%);
+  background: -ms-linear-gradient(top, rgba(125,185,232,1) 0%,rgba(66,139,202,1) 99%);
+  background: linear-gradient(to bottom, rgba(125,185,232,1) 0%,rgba(66,139,202,1) 99%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#428bca',GradientType=0 );
+  border-color: #357ebd;
+
+  font-size: 25px;
   position: inherit;
+}
+
+.uploadButton:hover {
+  background: rgb(66,139,202);
 }
 /* line 81, ../sass/screen.scss */
 .uploadfile input[type="file"] #uploadPresentation {
