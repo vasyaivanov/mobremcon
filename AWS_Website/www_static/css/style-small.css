@@ -117,6 +117,7 @@
 	}
 
 		#titleBar .title {
+			background-color: rgb(125,185,232);
 			color: #ffffff;
 			display: block;
 			font-weight: 300;
@@ -124,6 +125,8 @@
 			line-height: 44px;
 			text-align: center;
 		}
+
+
 
 		#titleBar .toggle {
 			text-decoration: none;
@@ -144,8 +147,8 @@
 			}
 
 			#titleBar .toggle:before {
-				background: #2517f9;
-				color: rgba(255, 255, 255, 0.5);
+				background: rgb(125,185,232);
+				color: rgba(255, 255, 255);
 				content: '\f0c9';
 				display: block;
 				font-size: 18px;
