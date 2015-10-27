@@ -61,7 +61,7 @@ body {
 /* line 62, ../sass/screen.scss */
 .uploadfile .uploadButton {
 
-
+  padding: 15px 20px 15px 20px;
   background: rgb(125,185,232);
   background: -moz-linear-gradient(top, rgba(125,185,232,1) 0%, rgba(66,139,202,1) 99%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,185,232,1)), color-stop(99%,rgba(66,139,202,1)));
@@ -71,7 +71,6 @@ body {
   background: linear-gradient(to bottom, rgba(125,185,232,1) 0%,rgba(66,139,202,1) 99%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7db9e8', endColorstr='#428bca',GradientType=0 );
   border-color: #357ebd;
-
   font-size: 25px;
   position: inherit;
 }
