@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en-US">
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
@@ -12,20 +12,17 @@
     <meta name="author" content="WEBENTATIONS inc.">
     <link rel="canonical" href="https://www.webentations.com" />
 
-    <!-- minified css -->
+    
     <link rel="stylesheet" href="css/min/style-min.css">
     <link rel="stylesheet" href="css/jquery-ui.min.css">
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/min/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- <link rel="stylesheet" href="css/min/elastislide.css" />  -->
 
-    <!-- normal css -->
-    <!-- <link rel="stylesheet" href="css/style.css" /> -->
+
+  
     <link rel="stylesheet" href="js/elastislide/css/elastislide.css" /> 
-    <!-- <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>-->
 
-    <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/skel.css" />
     <link rel=" stylesheet" href="css/style-xlarge.css" />
@@ -34,12 +31,12 @@
     
 
 
-    <!-- minified js -->
+  
     <script src="js/client.min.js"></script>
     <script src="js/init.min.js"></script>
 
     
-    <!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+
     <script src="js/modernizr.js"></script>
   <script src="js/elastislide/js/modernizr.custom.17475.js"></script>
     <script src="js/jquery-2.1.3.min.js"></script>
@@ -52,17 +49,11 @@
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <!--
-        <script src="js/client.js"></script>
-        <script src="js/init.js"></script>
-     -->
+
     <script src="js/main.js"></script>
     <script src="js/jquery.scrollTo.js"></script>
   <script src="js/elastislide/js/jquery.elastislide.js"></script>
 
-
-    <!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
-    <!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css"/><![endif]-->
 
 </head>
 
@@ -75,7 +66,6 @@
         </div>
     </div>
 
-<!-- Google Tag Manager -->
     <noscript>
         <iframe src="//www.googletagmanager.com/ns.html?id=GTM-NRK9KQ"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
@@ -94,15 +84,9 @@
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-NRK9KQ');
     </script>
-<!-- End Google Tag Manager -->
-  
-    <!-- Header -->
+
     <header id="header">
-        <!--<h1>
-            <a href="index.html" id="logo">
-                <img src="img/logo.png" id="headerLogo" />
-            </a>
-        </h1>-->
+
         <nav id="nav">
             <ul id="navigation" class="clearfix">
                 <li><a href="#banner" data-index="one" class="menuLink">Upload</a></li>
@@ -132,29 +116,20 @@
   
   <% if(noUploadForUser == 0) { %>
         <div class="uploadfile">
-            <div type="button" class="uploadButton">Upload Presentation</div>
+            <button type="button" class="uploadButton">Upload Presentation</button>
             <input type="file" accept="pptx" id="uploadPresentation">
         </div>
   <% } else { %>
-    <!-- <div class="uploadfile">
-            <div type="button" class="uploadButton" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</div>
+    <div class="uploadfile">
+            <button type="button" class="uploadButton" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</button>
       <input type="file" accept="pptx" id="uploadPresentation" style="display: none">   
-        </div> -->
+        </div>
   <% } %>
   <%- randomSlides %>
  
-        <!--<div id="bgvid">
-            <video autoplay poster="img/Slite_Background.jpg" style="width:100%"><source src="media/Slite_Background.mp4" type="video/mp4"></video><br />
-        </div>-->
-        <!--<video id="cmn-video-demo4__video" autoplay muted>
-            <source src="media/Slite_Background.mp4" type="video/mp4">
-            <source src="media/Slite_Background.ogv" type="video/ogg">
-            <source src="media/Slite_Background.webm" type="video/webm">
-        </video>-->
-        <!-- <a href="#one" class="goto-next scrolly">Next</a>    -->
+
 </section>
 
-    <!-- One -->
     <section id="one" class="spotlight style2 right">
         <span class="image fit main">
             <img src="img/Background_BusinessMeeting.jpg" alt="" />
@@ -169,7 +144,7 @@
         </div>
 
     </section>
-    <!-- Two -->
+    
     <section id="two" class="spotlight style1 bottom">
         <span class="image fit main">
             <img src="img/Background_BusinessPeople.jpg" alt="" />
@@ -203,7 +178,7 @@
         </div>
     </section>
 
-    <!-- Three -->
+
     <section id="three" class="spotlight style3 left">
         <span class="image fit main bottom">
             <img src="img/Meeting_to_discuss.jpg" alt="" />
@@ -222,7 +197,7 @@
         </div>
     </section>
 
-    <!--<!-- Four -->
+    
     <section id="four" class="spotlight style1 bottom">
         <span class="image fit main">
             <img src="img/Background_BusinessMeeting.jpg" alt="" />
@@ -247,7 +222,7 @@
     </section>
 
 
-    <!-- Footer -->
+
     <footer id="footer">
         <ul class="icons">
             <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
@@ -270,4 +245,284 @@
         });
     </script>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title><% if (user) { %> <%= user.email %> <%} %> WEB PRESENTATIONS (live)</title>
+    <meta name="title" content="Live online presentations" />
+    <meta name="description" content="Free online web presentations. Social chat, video presentation, personal presentation notes, password protection and much more." />
+    <meta name="keywords" content="web presentations, web presentation, presentation, powerpoint, free, free online presentation, free presentation, slide, slides, free slides, powerpoint replacement">
+  <meta content="https://www.webentations.com" property="og:url" />
+    <meta content="https://www.webentations.com/img/logo.png" property="og:image" />
+    <link rel="shortcut icon" id="favicon" href="img/favicon.png">
+    <meta name="author" content="WEBENTATIONS inc.">
+    <link rel="canonical" href="https://www.webentations.com" />
+
+    <!-- Bootstrap Core CSS -->
+    <link href="new_template/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="new_template/css/stylish-portfolio.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Custom Fonts -->
+    <link href="new_template/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li><a href="#banner" data-index="one" class="menuLink">Upload</a></li>
+        <li><a href="#one" data-index="one" class="menuLink">Product</a></li>
+                <li><a href="#two" data-index="two" class="menuLink">How it works</a></li>
+                <li><a href="#three" data-index="three" class="menuLink">Company</a></li>
+                <li><a href="#four" data-index="four" class="menuLink">Contact</a></li>
+                    <% if (!user) { %>
+            <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
+            <li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
+                      <li><a href="signin.html" class="menuLinkNoScroll">Sign in</a></li>
+            <li><a href="signup.html" class="menuLinkNoScroll">Sign up</a></li>
+                    <% } else { %>
+            <% if (userRole == 0) { %>
+              <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
+            <% } else { %>
+              <li><a href="/account.html" data-index="three" class="menuLinkNoScrollRed">My account</a></li>
+            <% } %>     
+            <li><a href="/my.html" data-index="three" class="menuLinkNoScroll">My presentations</a></li>
+            <li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
+                    <% } %>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header id="banner" class="header">
+        <div class="text-vertical-center">
+
+            <% if(noUploadForUser == 0) { %>
+                <div class="uploadfile">
+                    <button type="button" class="btn btn-dark btn-lg">Upload Presentation</button>
+                    <input type="file" accept="pptx" id="uploadPresentation">
+                </div>
+            <% } else { %>
+            <div class="uploadfile">
+                <button type="button" class="btn btn-dark btn-lg" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</button>
+                <input type="file" accept="pptx" id="uploadPresentation" style="display: none">   
+            </div>
+            <% } %>
+            <!-- <a href="#about" class="btn btn-dark btn-lg">Find Out More</a> -->
+        </div>
+    </header>
+
+    <!-- RANDOM SLIDES -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2> Example Slides </h2>
+                      <%- randomSlides %>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+
+    <!-- Services -->
+    <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
+    <section id="one" class="services bg-primary">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <h2>About Our Product</h2>
+                    <hr class="small">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="service-item">
+                            </span>
+                                <h4>
+                                    <strong>Service Name</strong>
+                                </h4>
+                                <p>PREZERA.COM™ enables you to present from inside your browser to a remote and in-house audiences. It comes with an iPhone remote control app. PREZERA.COM™ adds a social component inside your presentation allowing audience to connect with each other and presenter. Desktop sharing and video broadcasting make your presentation efficient. PREZERA.COM™ is the best and the simpliest way in the world to explain information from one person to many.</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.col-lg-10 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+
+    <!-- Callout -->
+    <aside class="callout">
+        <div class="text-vertical-center">
+            <h1>Vertically Centered Text</h1>
+        </div>
+    </aside>
+
+    <!-- Portfolio -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <h2>Our Work</h2>
+                    <hr class="small">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                <a href="#">
+                                    <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                <a href="#">
+                                    <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                <a href="#">
+                                    <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                <a href="#">
+                                    <img class="img-portfolio img-responsive" src="img/portfolio-4.jpg">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.row (nested) -->
+                    <a href="#" class="btn btn-dark">View More Items</a>
+                </div>
+                <!-- /.col-lg-10 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+
+    <!-- Call to Action -->
+    <aside class="call-to-action bg-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h3>The buttons below are impossible to resist.</h3>
+                    <a href="#" class="btn btn-lg btn-light">Click Me!</a>
+                    <a href="#" class="btn btn-lg btn-dark">Look at Me!</a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Map -->
+    <section id="contact" class="map">
+        <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
+        <br />
+        <small>
+            <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
+        </small>
+        </iframe>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <h4><strong>Start Bootstrap</strong>
+                    </h4>
+                    <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fa fa-phone fa-fw"></i> (123) 456-7890</li>
+                        <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:name@example.com">name@example.com</a>
+                        </li>
+                    </ul>
+                    <br>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
+                        </li>
+                    </ul>
+                    <hr class="small">
+                    <p class="text-muted">Copyright &copy; Your Website 2014</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="new_template/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="new_template/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script>
+    // Closes the sidebar menu
+    $("#menu-close").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Opens the sidebar menu
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+
+    // Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+    </script>
+
+</body>
+
 </html>
+
+
+

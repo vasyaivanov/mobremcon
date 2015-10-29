@@ -254,12 +254,25 @@
     <!-- Footer -->
     <footer id="footer">
         <ul class="icons">
-            <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
-            <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
-            <li><a href="#" class="icon alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-            <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
-            <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
-            <li><a href="#" class="icon alt fa-envelope"><span class="label">Email</span></a></li>
+            <li><a href="#banner" data-index="one" class="menuLink">Upload</a></li>
+        <li><a href="#one" data-index="one" class="menuLink">Product</a></li>
+                <li><a href="#two" data-index="two" class="menuLink">How it works</a></li>
+                <li><a href="#three" data-index="three" class="menuLink">Company</a></li>
+                <li><a href="#four" data-index="four" class="menuLink">Contact</a></li>
+                    <% if (!user) { %>
+            <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
+            <li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
+                      <li><a href="signin.html" class="menuLinkNoScroll">Sign in</a></li>
+            <li><a href="signup.html" class="menuLinkNoScroll">Sign up</a></li>
+                    <% } else { %>
+            <% if (userRole == 0) { %>
+              <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
+            <% } else { %>
+              <li><a href="/account.html" data-index="three" class="menuLinkNoScrollRed">My account</a></li>
+            <% } %>     
+            <li><a href="/my.html" data-index="three" class="menuLinkNoScroll">My presentations</a></li>
+            <li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
+                    <% } %>
         </ul>
         <ul class="copyright">
             <li>&copy; Slite&#8482;. All rights reserved.</li>
