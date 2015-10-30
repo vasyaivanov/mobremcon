@@ -41,10 +41,10 @@
         <ul class="sidebar-nav">
             <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
             <li><a href="#top" data-index="one" class="menuLink">Upload</a></li>
-        <li><a href="#one" data-index="one" class="menuLink">Product</a></li>
-                <li><a href="#two" data-index="two" class="menuLink">How it works</a></li>
-                <li><a href="#three" data-index="three" class="menuLink">Company</a></li>
-                <li><a href="#four" data-index="four" class="menuLink">Contact</a></li>
+        <li><a href="#product" data-index="one" class="menuLink">Product</a></li>
+                <li><a href="#works" data-index="two" class="menuLink">How it works</a></li>
+                <li><a href="#company" data-index="three" class="menuLink">Company</a></li>
+                <li><a href="#contact" data-index="four" class="menuLink">Contact</a></li>
                     <% if (!user) { %>
             <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
             <li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
@@ -64,9 +64,16 @@
 
     <!-- Header -->
     <header id="top" class="header">
-        <div class="text-vertical-center">
-            <h1>Prezera</h1>
+        <div class="title col-xs-12"><h1>Prezera</h1></div>
 
+
+
+        <video autoplay loop poster="polina.jpg" id="bgvid" muted="muted">
+            <source src="new_template/img/vid2.mp4" type="video/webm" >
+        </video>
+
+
+        <div class="text-vertical-center">
             <% if(noUploadForUser == 0) { %>
                 <div class="uploadfile">
                     <button type="button" class="btn btn-dark btn-lg">Upload Presentation</button>
@@ -83,13 +90,18 @@
     </header>
 
     <!-- RANDOM SLIDES -->
-    <section id="about" class="about">
+    <section id="about" class="about whiteBg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2> Example Slides </h2>
                       <!-- <%- randomSlides %> -->
                       SLIDES WILL GO HERE, THEY NEED CSS STYLING TO BE DISPLAYED CORRECTLY
+
+                      sdfsdf
+                      sdf
+                      sd
+                      fsd
                 </div>
             </div>
             <!-- /.row -->
@@ -97,9 +109,9 @@
         <!-- /.container -->
     </section>
 
-    <!-- Services -->
+    <!-- Our Product -->
     <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
-    <section id="one" class="services bg-primary">
+    <section id="product" class="services bg-primary">
         <div class="container">
             <div class="row text-center">
                 <div class="col-lg-10 col-lg-offset-1">
@@ -129,52 +141,45 @@
         <!-- /.container -->
     </section>
 
-    <!-- Callout -->
-    <aside class="callout">
+    <!-- SOMETHING HERE -->
+   <!--  <aside class="callout">
         <div class="text-vertical-center">
-            <h1>Vertically Centered Text</h1>
+            <h1>SOMETHING CAN GO HERE</h1>
         </div>
-    </aside>
+    </aside> -->
 
-    <!-- Portfolio -->
-    <section id="portfolio" class="portfolio">
+    <!-- How It Works -->
+    <section id="works" class="portfolio whiteBg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
-                    <h2>Our Work</h2>
                     <hr class="small">
-                    <div class="row">
+                    <div class="row text-left">
                         <div class="col-md-6">
                             <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
-                                </a>
+                                <h4>How It Works</h4>
+                                <ol>
+                                    <li>Upload your existing PowerPoint presentation to our main page OR create a new online presentation via our website in minutes!</li><br>
+                                    <li>Obtain the unique 4 digit code in which you can use to enter into the browser AND share the slideshow with everyone you want to show your presentation to.</li><br>
+                                    <li>Now you can share your presentation LIVE by sending a unique URL, viewable by anyone in the world - all you need is a browser!</li><br>
+                                    <li>use mobile app remote control to: move to next/previous slide, have a virtual laser pointer, draw on slides from your phone, and just for fun: voice control your presentation!</li><br>
+                                    <li>poll your audience live. Get feedback immediately on your topic during the presentation.</li>
+                                </ol>
+
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="portfolio-item">
-                                <a href="#">
-                                    <img class="img-portfolio img-responsive" src="img/portfolio-4.jpg">
-                                </a>
+                            <h4>Cool things you can do during your presentation:</h4>
+                                <ol>
+                                    <li>use mobile app remote control to: move to next/previous slide, have a virtual laser pointer, draw on slides from your phone, and just for fun: voice control your presentation!</li><br>
+                                    <li>poll your audience live. Get feedback immediately on your topic during the presentation.</li><br><li>use mobile app remote control to: move to next/previous slide, have a virtual laser pointer, draw on slides from your phone, and just for fun: voice control your presentation!</li><br>
+                                    <li>poll your audience live. Get feedback immediately on your topic during the presentation.</li>
+                                </ol>
                             </div>
                         </div>
                     </div>
                     <!-- /.row (nested) -->
-                    <a href="#" class="btn btn-dark">View More Items</a>
                 </div>
                 <!-- /.col-lg-10 -->
             </div>
@@ -183,42 +188,46 @@
         <!-- /.container -->
     </section>
 
-    <!-- Call to Action -->
-    <aside class="call-to-action bg-primary">
+    <!-- Call to Company -->
+    <section id="company" class="bg-primary">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>About our company</h2><br>
                     <p>PREZERA.COM™ is a company based in Mountain View - a city in the heart of Silicon Valley, California. It took 2 PhDs and 75 years of experience to design and make the most efficient to tool for presentations up to date. Our goal is to make your life easier, make presentations less boring and more fun (while increasing your productivity). We embrace latest, coolest technologies and let you use them in our product while making sure your 80 year grandmother is able to use our product too. Have fun with PREZERA.COM™, and if you have any questions before, during or after your presentation, email us at help@prezera.com, and we'll be there for you.</p>
-                </div>
+                </div><br>
             </div>
         </div>
-    </aside>
+    </section>
 
     <!-- Map -->
-    <section id="contact" class="map">
+    <!-- <section id="contact" class="map">
         <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
         <br />
         <small>
             <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
         </small>
         </iframe>
-    </section>
+    </section> -->
 
     <!-- Footer -->
 
     <footer>
+        <section id="contact" class="whiteBg">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
-                    <div class="col-lg-5">
+                    <br>
+                    <div class="col-xs-offset-2 col-xs-4 contact">
                         <h4><strong>Business inquiries</strong></h4>
                         <ul class="list-unstyled">
                             <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:partners@prezera.com">partners@prezera.com</a>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-lg-5">
+
+                    <div class="col-xs-4 contact">
+
                         <h4><strong>Press</strong></h4>
                         <ul class="list-unstyled">
                             <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:press@prezera.com">press@prezera.com</a>
@@ -226,7 +235,7 @@
                         </ul>
                     </div>
 
-
+                    <div class="col-xs-12">
                     <br>
                     <ul class="list-inline">
                         <li>
@@ -248,12 +257,15 @@
                             <a href="#"><i class="fa fa-envelope fa-fw fa-3x"></i></a>
                         </li>
                     </ul>
-                   
                     <hr class="small">
                     <p class="text-muted">© Prezera™. All rights reserved.</p>
                 </div>
+                   
+                    
+                </div>
             </div>
         </div>
+    </section>
     </footer>
 
     <!-- jQuery -->
@@ -261,6 +273,7 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="new_template/js/bootstrap.min.js"></script>
+
 
     <!-- Custom Theme JavaScript -->
     <script>

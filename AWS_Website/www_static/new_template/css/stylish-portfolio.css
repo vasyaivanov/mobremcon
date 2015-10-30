@@ -159,7 +159,7 @@ hr.small {
     position: relative;
     width: 100%;
     height: 100%;
-    background: url(../img/bg.png) no-repeat center center scroll;
+    /*background: url(../img/bg.png) no-repeat center center scroll;*/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -238,11 +238,6 @@ hr.small {
 
 /* Footer */
 
-footer {
-    padding: 100px 0;
-}
-
-
 /* Button Upload Presentation*/
 .uploadfile {
     width: 250px;
@@ -300,4 +295,61 @@ input.renameSlide {
     width: 50%;
     height: 300px;
     background: url(../img/meeting.jpg) no-repeat center center scroll;
+}
+
+.contact {
+    margin-bottom: 20px;
+}
+
+.title {
+    margin-top: 0.01%;
+    position: absolute;
+    margin-right: 5%;
+   
+    opacity: 0.6;
+    color: black;
+    text-shadow: 1px 1px #ffffff;
+}
+
+.center {
+    text-align: center;
+    margin-bottom: 4%;
+}
+
+.whiteBg {
+    background: rgba(255,255,255,1);
+
+}
+
+
+/*VIDEO*/
+
+video#bgvid { 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 5%;
+    min-height:20%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    background-size: cover; 
+}
+
+@media screen and (max-device-width: 800px) {
+        video#bgvid { 
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 5%;
+        min-height:100%;
+        width: auto;
+        z-index: -100;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        background-size: cover; 
+    }
+    
 }
