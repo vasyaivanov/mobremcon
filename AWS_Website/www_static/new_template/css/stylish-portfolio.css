@@ -355,14 +355,20 @@ video#bgvid {
 }
 
 .upload {
-    position: absolute;
-    margin-top: 15%;
-    background-color: black;
-    color: white;
-    border-radius: 5px;
-    z-index: 10;
-    height: 100px;
+    margin: 30px auto;
+    background-color: white;
+    width: 600px;   
 }
+
+#progressbar {
+    color:#337AB7;
+}
+
+.modal-header {
+    border-bottom: 0px !important;
+}
+
+
 
 
 /*.uploadDialog {
@@ -379,4 +385,5 @@ video#bgvid {
     -moz-transition: opacity 400ms ease-in;
     transition: opacity 400ms ease-in;
     pointer-events: none;
-}*/
+}
+*/
