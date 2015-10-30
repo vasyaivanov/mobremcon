@@ -31,16 +31,21 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
+    <!-- jQuery -->
+    <script src="new_template/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="new_template/js/bootstrap.min.js"></script>
+	
+    <script src="js/client.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+
 </head>
 
 <body>
-    <div id="upload_presentation" class="uploadDialog">
-        <div>
-            <a href="#closeUpload" title="Close" class="closeUpload">X</a>
-            <h3 id="uploadLabel">Uploading presentation...</h3>
-            <div id="progressbar"></div>
-        </div>
-    </div>
 
     <!-- Navigation -->
     <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
@@ -69,13 +74,22 @@
         </ul>
     </nav>
 
+    <!-- Upload Presentation -->
+    <div id="upload_presentation" class="col-xs-offset-3 col-xs-6 upload uploadDialog">
+        <div>
+            <a href="#closeUpload" title="Close" class="closeUpload">X</a>
+            <h3 id="uploadLabel">Uploading presentation...</h3>
+            <div id="progressbar"></div>
+        </div>
+    </div>
+
     <!-- Header -->
     <header id="top" class="header">
+
         <div class="title col-xs-12"><h1>Prezera</h1></div>
 
 
-
-        <video autoplay loop poster="polina.jpg" id="bgvid" muted="muted">
+        <video autoplay loop id="bgvid" muted="muted">
             <source src="new_template/img/vid2.mp4" type="video/webm" >
         </video>
 
@@ -95,7 +109,6 @@
             <!-- <a href="#about" class="btn btn-dark btn-lg">Find Out More</a> -->
         </div>
     </header>
-
     <!-- RANDOM SLIDES -->
     <section id="about" class="about whiteBg">
         <div class="container">
@@ -109,7 +122,6 @@
         </div>
         <!-- /.container -->
     </section>
-
     <!-- Our Product -->
     <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
     <section id="product" class="services bg-primary">
@@ -265,16 +277,9 @@
     </section>
     </footer>
 
-    <!-- jQuery -->
-    <script src="new_template/js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="new_template/js/bootstrap.min.js"></script>
 
 
     <!-- Custom Theme JavaScript -->
-    <script src="js/main.js"></script>
-    <script src="js/client.min.js"></script>
 
     <script>
     // Closes the sidebar menu

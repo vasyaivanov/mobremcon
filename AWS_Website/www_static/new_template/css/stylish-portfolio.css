@@ -354,7 +354,18 @@ video#bgvid {
     
 }
 
-.uploadDialog {
+.upload {
+    position: absolute;
+    margin-top: 15%;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    z-index: 10;
+    height: 100px;
+}
+
+
+/*.uploadDialog {
     position: fixed;
     font-family: 'Raleway', sans-serif;
     top: 0;
@@ -368,4 +379,4 @@ video#bgvid {
     -moz-transition: opacity 400ms ease-in;
     transition: opacity 400ms ease-in;
     pointer-events: none;
-}
+}*/
