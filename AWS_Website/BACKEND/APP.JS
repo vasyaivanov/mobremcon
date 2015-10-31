@@ -848,7 +848,10 @@ router.get(rootRegExp, function (req, res){
 				user: req.user,
 				noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
 				randomSlides: randomSlides,
-				userRole: UserData[req.cookies[sessionIdCookie]].userRole
+				userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+        request: req,
+        ERROR_AUTH: 1,
+        error: 0
 			});
 		});
 	}
