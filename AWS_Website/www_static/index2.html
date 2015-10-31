@@ -14,9 +14,6 @@
     <meta name="author" content="WEBENTATIONS inc.">
     <link rel="canonical" href="https://www.webentations.com" />
 
-    <!-- Bootstrap Core CSS -->
-    <link href="new_template/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <!-- Custom CSS -->
     <link href="new_template/css/stylish-portfolio.css" rel="stylesheet">
@@ -226,10 +223,33 @@
     </section>
 
     <!-- Login -->
-  <!--   <section id="login" >
-        
-       
-    </section> -->
+    <section id="login" class="login">
+        <div class="col-xs-offset-3 col-xs-6">
+
+                <form class="m-form-signin" role="form" action="/signin.html" method="post">
+                <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
+                    <h1>Sign In</h1>
+            <% if (request.query.REG_OK == 1) { %>
+                <h4 style="color: #FF0000">Congrats! You have registered. Enter your password to log in.</h4>
+            <% } %>
+
+            <% if (ERROR_AUTH == 1) { %>
+                <h4 style="color: #FF0000">The email or password is incorrect.</h4>
+            <% } %>
+
+                    <div class="form-group">
+                        <label for="Username">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.body.email %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label> <!--a href="#">(forgot password)</a-->
+                        <input type="password" class="form-control" name="password" placeholder="Password">
+                    </div> <!-- <input type="checkbox"> -->
+
+                    <input type="submit" value="Sign In" class="btn btn-default"/>
+                </form>
+            </div>
+    </section>
 
     <!-- Footer -->
 
