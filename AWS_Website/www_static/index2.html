@@ -34,6 +34,8 @@
 
     <!-- jQuery -->
     <script src="new_template/js/jquery.js"></script>
+    <script src="new_template/js/customJs.js"></script>
+
 
     <!-- Bootstrap Core JavaScript -->
     <script src="new_template/js/bootstrap.min.js"></script>
@@ -60,7 +62,10 @@
                     <% if (!user) { %>
             <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
             <li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
-                      <li><a href="signin.html" class="menuLinkNoScroll">Sign in</a></li>
+                      <!-- <li><a href="signin.html" class="menuLinkNoScroll">Sign in</a></li> -->
+
+                       <li><a href="#login" class="loginUser">Sign in</a></li>
+
             <li><a href="signup.html" class="menuLinkNoScroll">Sign up</a></li>
                     <% } else { %>
             <% if (userRole == 0) { %>
@@ -73,6 +78,8 @@
                     <% } %>
         </ul>
     </nav>
+
+
 
     <!-- Upload Presentation -->
     <div class="modal-dialog uploadDialog">
@@ -96,7 +103,7 @@
     </div> -->
 
     <!-- Header -->
-    <header id="top" class="header">
+    <header id="top" class="header allData">
 
         <div class="title col-xs-12"><h1>Prezera</h1></div>
 
@@ -122,7 +129,7 @@
         </div>
     </header>
     <!-- RANDOM SLIDES -->
-    <section id="about" class="about whiteBg">
+    <section id="about" class="about whiteBg allData">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -135,8 +142,7 @@
         <!-- /.container -->
     </section>
     <!-- Our Product -->
-    <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
-    <section id="product" class="services bg-primary">
+    <section id="product" class="services bg-primary allData">
         <div class="container">
             <div class="row text-center">
                 <div class="col-lg-10 col-lg-offset-1">
@@ -174,7 +180,7 @@
     </aside> -->
 
     <!-- How It Works -->
-    <section id="works" class="portfolio whiteBg">
+    <section id="works" class="portfolio whiteBg allData">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
@@ -214,7 +220,7 @@
     </section>
 
     <!-- Call to Company -->
-    <section id="company" class="bg-primary">
+    <section id="company" class="bg-primary allData">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -226,11 +232,12 @@
     </section>
 
     <!-- Login -->
-    <section id="login" class="login">
-        <div class="col-xs-offset-3 col-xs-6">
+    <section id="login2" class="login">
+        <div class="col-xs-offset-4 col-xs-4">
 
                 <form class="m-form-signin" role="form" action="/signin.html" method="post">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
+                    <br>
                     <h1>Sign In</h1>
             <% if (request.query.REG_OK == 1) { %>
                 <h4 style="color: #FF0000">Congrats! You have registered. Enter your password to log in.</h4>
@@ -257,12 +264,12 @@
     <!-- Footer -->
 
     <footer>
-        <section id="contact" class="whiteBg">
+        <section id="contact" class="whiteBg allData">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
                     <br>
-                    <div class="col-xs-offset-2 col-xs-4 contact">
+                    <div class="col-xs-offset-2 col-xs-4 contact ">
                         <h4><strong>Business inquiries</strong></h4>
                         <ul class="list-unstyled">
                             <li><i class="fa fa-envelope-o fa-fw"></i>  <a href="mailto:partners@prezera.com">partners@prezera.com</a>
@@ -270,7 +277,7 @@
                         </ul>
                     </div>
 
-                    <div class="col-xs-4 contact">
+                    <div class="col-xs-4 contact ">
 
                         <h4><strong>Press</strong></h4>
                         <ul class="list-unstyled">
