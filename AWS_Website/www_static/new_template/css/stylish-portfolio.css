@@ -242,7 +242,7 @@ hr.small {
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(0,0,0,0.8);
+    /*background: rgba(0,0,0,0.8);*/
     z-index: 99999;
     opacity:0;
     -webkit-transition: opacity 400ms ease-in;
@@ -257,12 +257,12 @@ hr.small {
 }
 
 .uploadDialog > div {
-    width: 50vw;
+/*    width: 50vw;
     min-width: 100px;
     max-width: 1000px;
     padding: 4vh 3.5vw 6vh 3.5vw;
     border-radius: 1em;
-    margin-left: 25vw;
+    margin-left: 25vw;*/
     margin-top: 35vh;
 
     position: relative;
@@ -297,15 +297,14 @@ hr.small {
 #progressbar {
     margin-top: 1vh;
     height:     7vh;
-    background: #474747;
+    background: #337ab7;
 
     /*background-color: blue;*/
 }
 
 #uploadLabel {
     font-weight: bold;
-    color: blue;
-    /*font-size: 24px;*/
+    color: #337ab7;
     font-size: 1.8vw;
 }
 
@@ -388,7 +387,7 @@ input.renameSlide {
     margin-top: 0.01%;
     position: absolute;
     margin-right: 5%;
-   
+    
     opacity: 0.6;
     color: black;
     text-shadow: 1px 1px #ffffff;
@@ -456,11 +455,7 @@ video#bgvid {
 
 #login2 {
     background-color: white;
-
 }
-
-
-
 
 /*.uploadDialog {
     position: fixed;
