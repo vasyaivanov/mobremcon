@@ -156,6 +156,10 @@ hr.small {
     width: 100%;
     height: 100%;
     /*background: url(../img/bg.png) no-repeat center center scroll;*/
+	background: -webkit-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* For Firefox 3.6 to 15 */
+background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Standard syntax */
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
