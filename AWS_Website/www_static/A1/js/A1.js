@@ -19,11 +19,11 @@ socket.on('connect', function (data) {
 
 
 function isMobile() {
-    /*if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
-    } else {*/
+    } else {
         return false;
-    //}
+    }
 }
 
 function share(url) {
