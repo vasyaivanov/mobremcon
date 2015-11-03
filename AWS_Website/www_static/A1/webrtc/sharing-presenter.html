@@ -63,7 +63,7 @@ function stopSession() {
 	</li>
 
 	<li id="install_firefox_extension" style="display: none">
-		<a href="https://www.webrtc-experiment.com/store/firefox-extension/enable-screen-capturing.xpi">Click here to install Firefox Presenter Extension (audience don't need it)</a>
+		<a href="https://addons.mozilla.org/en-US/firefox/addon/enable-screen-capturing/" target="_blank">Click here to install Firefox Presenter Extension (audience don't need it)</a>
 	</li>
 </ul>
 
@@ -91,7 +91,18 @@ getChromeExtensionStatus(function(result) {
 		startSession();
 	}
 	else {
-		alert('You should use Chrome browser');
+		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+			moderator.onMediaError = function(error) {
+				if(error.name == 'PermissionDeniedError') {
+					$("#install_firefox_extension").show();
+				}
+			};
+			startSession();
+		}
+		else {
+			alert("We only support the latest versions of Google Chrome and FF")
+		}
+
 	}
 });
 
