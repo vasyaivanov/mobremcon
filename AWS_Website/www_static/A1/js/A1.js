@@ -173,19 +173,11 @@ function recording() {
 	showHideMenu(true);
 }
 
-$("#recording").mouseover(function() {
-	if(document.getElementById("recordingframe").contentWindow.recordStarted == 1) {
-		$('#recording').animate({ "width": "25.5%", "clear": "both" },300);
-		document.getElementById("recordingframe").contentWindow.stopBlinking();
-	}
+$("#recordButton").click(function() {
+	$("#recStarted").hide();
+	$('#recording').show();
 });
 
-$("#recording").mouseleave(function() {
-	if(document.getElementById("recordingframe").contentWindow.recordStarted == 1) {
-		$('#recording').animate({ "width": "60px", "clear": "both" },300);
-		document.getElementById("recordingframe").contentWindow.startBlinking();
-	}
-});
 
 var isScreensharingOn = 0;
 function showHideScreensharing() {

@@ -37,15 +37,23 @@ $( document ).ready(function() {
 	
 	moderator.onstream = function(event) {
 		if(event.type=="local") {
-			startBlinking();
 			recordStarted = 1;
-			$('#recording', window.parent.document).animate({ "width": "60px", "clear": "both" },300);
 			$("#stopRecording").prop('disabled', false);
+			$("#hideRecording").prop('disabled', false);
 		}
 		if(event.isScreen) {
-			moderator.streams[event.streamid].startRecording({
-				video: true
-			});
+			if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+				moderator.streams[event.streamid].startRecording({
+					video: true,
+					audio: true
+				});
+			}
+			else {
+				moderator.streams[event.streamid].startRecording({
+					video: true
+				});
+			}
+
 			$( "#screensharing" ).append(event.mediaElement);
 		}
 		if (event.isAudio) {
@@ -56,45 +64,64 @@ $( document ).ready(function() {
 		}
 	};
 
-	//function appendSession(media, streamid, event) {
 	$('#stopRecording').click( function () {
 		recordStarted = 0;
-	
-		var videoStream = moderator.streams.selectFirst({
-			isScreen: true,
-			local: true
-		});	
-		
-		var audioStream = moderator.streams.selectFirst({
-			isAudio: true,
-			local: true
-		});	
 
-		moderator.streams[videoStream.streamid].stopRecording(function(blob) {
-			if(blob.video) {
+		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+			var FFStream = moderator.streams.selectFirst({
+				isScreen: true,
+				isAudio: true,
+				local: true
+			});
+
+			moderator.streams[FFStream.streamid].stopRecording(function(blob) {
 				h2 = document.createElement('p');
 				h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>';
 				$( "#video_result" ).append(h2);
 				console.log(blob);
-			}
-		});
-		
-		moderator.streams[audioStream.streamid].stopRecording(function(blob) {
-			console.log(blob);
-			if(blob.audio) {
-				h2 = document.createElement('p');
-				h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded ' + blob.audio.type + '</a>';
-				$( "#audio_result" ).append(h2);
-			}
-		});
-		
-		moderator.streams.stop();	
-		stopSession();
+			});
+
+			moderator.streams.stop();	
+			stopSession();
+			
+		}
+		else {
+			var videoStream = moderator.streams.selectFirst({
+				isScreen: true,
+				local: true
+			});	
+			
+			var audioStream = moderator.streams.selectFirst({
+				isAudio: true,
+				local: true
+			});	
+
+			moderator.streams[videoStream.streamid].stopRecording(function(blob) {
+				if(blob.video) {
+					h2 = document.createElement('p');
+					h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>';
+					$( "#video_result" ).append(h2);
+					console.log(blob);
+				}
+			});
+			
+			moderator.streams[audioStream.streamid].stopRecording(function(blob) {
+				console.log(blob);
+				if(blob.audio) {
+					h2 = document.createElement('p');
+					h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded ' + blob.audio.type + '</a>';
+					$( "#audio_result" ).append(h2);
+				}
+			});
+			
+			moderator.streams.stop();	
+			stopSession();		
+		}
 
 		$("#stopRecording").prop('disabled', true);
 		$("#startRecording").prop('disabled', false);
+		$("#hideRecording").prop('disabled', true);
 	});
-	//}
 	
 	function startSession() {
 		moderator.open({
@@ -127,20 +154,25 @@ $( document ).ready(function() {
 			$('#install_chrome_extension').show();
 		}
 		else if(result == 'installed-enabled') {
+			alert("Unfortunetely Google chrome doesn't support to record Screen + Audio in one channel. Beta version.\nFor full functionality please download the latest version of Firefox. Sorry for inconvinience");
 			$("#startRecording").prop('disabled', false);
 		}
 		else {
 			if(navigator.userAgent.indexOf("Firefox") != -1 )  {
 				moderator.onMediaError = function(error) {
+					console.log(error);
 					if(error.name == 'PermissionDeniedError') {
+						window.postMessage({
+							enableScreenCapturing: true,
+							domains: window.location.hostname
+						}, "*");
 						$("#install_firefox_extension").show();
 					}
 				};
-
 				$("#startRecording").prop('disabled', false);
 			}
 			else {
-				alert('We only support the latest versions of Google Chrome and FF');
+				alert("We only support the latest versions of Google Chrome and FireFox")
 			}
 		}
 	});
@@ -151,29 +183,20 @@ $( document ).ready(function() {
 		//$("#audio_result").empty();
 		//$("#video_result").empty();
 	});
+	$('#hideRecording').click( function () {
+		$('#recording', window.parent.document).hide();
+		$('#recStarted', window.parent.document).show();
+	});
 });
-
-function startBlinking() {
-	$("#mainBody").hide();
-	$("#recStarted").show();	
-}
-
-function stopBlinking() {
-	$("#mainBody").show();	
-	$("#recStarted").hide();
-}
 
 </script>
 </head>
 <body onload="">
 
-<div id="recStarted" style="position: absolute;  top: 40px; display: none">
-<img src="/img/matrox-record-icon.jpg" width="50" height="60">
-</div>
-
 <div id="mainBody">
 
 <button id="startRecording" disabled>Start recording</button>
+<button id="hideRecording" disabled>Hide</button>
 <button id="stopRecording" disabled>Stop recording</button>
 
 <br>
@@ -190,7 +213,7 @@ function stopBlinking() {
 	</li>
 
 	<li id="install_firefox_extension" style="display: none">
-		<a href="https://addons.mozilla.org/en-US/firefox/addon/enable-screen-capturing/" target="_blank">Click here to install Firefox Presenter Extension (audience don't need it)</a>
+		<a href="https://addons.mozilla.org/en-US/firefox/addon/enable-screen-capturing/" target="_blank" id="firefox_plugin_button">Click here to install Firefox Presenter Extension (audience don't need it)</a>
 	</li>
 </ul>
 
