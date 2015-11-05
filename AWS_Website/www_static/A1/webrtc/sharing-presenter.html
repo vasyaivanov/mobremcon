@@ -34,9 +34,14 @@ moderator.onstream = function(event) {
 	if(event.isScreen) {
 		socket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
 		$( "#screensharing" ).append(event.mediaElement);
+
+		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+
+		}
 	}
 
 	if (event.isAudio) {
+		// Only for GC. 
 		$( "#audiosharing" ).append(event.mediaElement);
 	}
 };
@@ -63,7 +68,7 @@ function stopSession() {
 	</li>
 
 	<li id="install_firefox_extension" style="display: none">
-		<a href="https://addons.mozilla.org/en-US/firefox/addon/enable-screen-capturing/" target="_blank">Click here to install Firefox Presenter Extension (audience don't need it)</a>
+		<a href="https://addons.mozilla.org/en-US/firefox/addon/enable-screen-capturing/" target="_blank" id="firefox_plugin_button">Click here to install Firefox Presenter Extension (audience don't need it)</a>
 	</li>
 </ul>
 
@@ -93,24 +98,43 @@ getChromeExtensionStatus(function(result) {
 	else {
 		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
 			moderator.onMediaError = function(error) {
+				console.log(error);
 				if(error.name == 'PermissionDeniedError') {
+					window.postMessage({
+						enableScreenCapturing: true,
+						domains: window.location.hostname
+					}, "*");
 					$("#install_firefox_extension").show();
 				}
 			};
 			startSession();
 		}
 		else {
-			alert("We only support the latest versions of Google Chrome and FF")
+			alert("We only support the latest versions of Google Chrome and FireFox")
 		}
-
 	}
+});
+
+window.addEventListener("message", function(event) {
+    var addonMessage = event.data;
+
+    if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
+
+    if(addonMessage.enabledScreenCapturing === true) {
+		location.reload();
+    }
+    else {
+        // reason === 'user-rejected'
+        alert(addonMessage.reason);
+    }
+}, false);
+
+
+$('#firefox_plugin_button').click( function () {
+	setTimeout(function(){ location.reload(); }, 10000);
 });
 
 </script>
 
-
-
-<!--a onclick="startSession();">Start</a-->
-<!--a onclick="stopSession();">Stop</a-->
 </body>
 </html>
