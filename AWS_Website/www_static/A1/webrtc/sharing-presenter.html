@@ -68,8 +68,13 @@ function stopSession() {
 	</li>
 
 	<li id="install_firefox_extension" style="display: none">
-		<a href="https://addons.mozilla.org/en-US/firefox/addon/enable-screen-capturing/" target="_blank" id="firefox_plugin_button">Click here to install Firefox Presenter Extension (audience don't need it)</a>
+		<a href="#" onclick="reloadFFPlugin()">Click here to install Firefox Presenter Extension (audience don't need it)</a>
 	</li>
+
+	<li id="installing_firefox_extension" style="display: none">
+		Installing FF plugin...
+	</li>
+	
 </ul>
 
 <script>
@@ -104,15 +109,21 @@ getChromeExtensionStatus(function(result) {
 						enableScreenCapturing: true,
 						domains: window.location.hostname
 					}, "*");
+
 					$("#install_firefox_extension").show();
 				}
 			};
-			startSession();
+			$("#startRecording").prop('disabled', false);
 		}
 		else {
 			alert("We only support the latest versions of Google Chrome and FireFox")
 		}
 	}
+	
+	if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+		startSession();
+	}
+	
 });
 
 window.addEventListener("message", function(event) {
@@ -130,9 +141,15 @@ window.addEventListener("message", function(event) {
 }, false);
 
 
-$('#firefox_plugin_button').click( function () {
-	setTimeout(function(){ location.reload(); }, 10000);
-});
+function reloadFFPlugin() {
+	$("#install_firefox_extension").hide();
+	
+	xpi={'Enable Screen Capturing in Firefox':'https://addons.mozilla.org/firefox/downloads/file/363432/enable_screen_capturing_in_firefox-1.0.007-fx.xpi?src=dp-btn-primary'};
+	InstallTrigger.install(xpi,function () {alert('test')});
+	
+	$("#installing_firefox_extension").show();
+	setTimeout(function(){ location.reload(); }, 5000);
+}
 
 </script>
 

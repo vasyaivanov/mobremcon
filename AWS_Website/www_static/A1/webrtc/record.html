@@ -166,6 +166,7 @@ $( document ).ready(function() {
 							enableScreenCapturing: true,
 							domains: window.location.hostname
 						}, "*");
+
 						$("#install_firefox_extension").show();
 					}
 				};
@@ -187,7 +188,36 @@ $( document ).ready(function() {
 		$('#recording', window.parent.document).hide();
 		$('#recStarted', window.parent.document).show();
 	});
+	
+	
+	window.addEventListener("message", function(event) {
+		var addonMessage = event.data;
+
+		if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
+
+		if(addonMessage.enabledScreenCapturing === true) {
+			location.reload();
+		}
+		else {
+			alert(addonMessage.reason);
+		}
+	}, false);
+
+	if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+		startSession();
+	}
+	
 });
+
+function reloadFFPlugin() {
+	$("#install_firefox_extension").hide();
+	
+	xpi={'Enable Screen Capturing in Firefox':'https://addons.mozilla.org/firefox/downloads/file/363432/enable_screen_capturing_in_firefox-1.0.007-fx.xpi?src=dp-btn-primary'};
+	InstallTrigger.install(xpi,function () {alert('test')});
+	
+	$("#installing_firefox_extension").show();
+	setTimeout(function(){ location.reload(); }, 5000);
+}
 
 </script>
 </head>
@@ -213,8 +243,13 @@ $( document ).ready(function() {
 	</li>
 
 	<li id="install_firefox_extension" style="display: none">
-		<a href="https://addons.mozilla.org/en-US/firefox/addon/enable-screen-capturing/" target="_blank" id="firefox_plugin_button">Click here to install Firefox Presenter Extension (audience don't need it)</a>
+		<a href="#" onclick="reloadFFPlugin()">Click here to install Firefox Presenter Extension (audience don't need it)</a>
 	</li>
+
+	<li id="installing_firefox_extension" style="display: none">
+		Installing FF plugin...
+	</li>
+	
 </ul>
 
 </body>
