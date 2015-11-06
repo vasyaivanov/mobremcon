@@ -44,8 +44,8 @@ moderator.onstream = function(event) {
 	if(event.isVideo) {
 		if(event.type == "local") {
 			$( "#videosharing" ).append(event.mediaElement);
-			$("#" + event.streamid).hide();
 			if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+				$("#" + event.streamid).hide();
 				setTimeout(function(){
 					event.mediaElement.play();
 					$("#" + event.streamid).show();
