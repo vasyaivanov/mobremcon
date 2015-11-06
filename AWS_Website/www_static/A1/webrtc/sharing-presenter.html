@@ -34,14 +34,19 @@ moderator.onstream = function(event) {
 	if(event.isScreen) {
 		socket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
 		$( "#screensharing" ).append(event.mediaElement);
-
 		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-
+			$("#" + event.streamid).hide();
+			$("#sharing_starting").show();
+			setTimeout(function(){
+				event.mediaElement.play();
+				$("#" + event.streamid).show();
+				$("#sharing_starting").hide();
+			}, 1000);
 		}
 	}
 
 	if (event.isAudio) {
-		// Only for GC. 
+		// Only for GC.
 		$( "#audiosharing" ).append(event.mediaElement);
 	}
 };
@@ -74,7 +79,12 @@ function stopSession() {
 	<li id="installing_firefox_extension" style="display: none">
 		Installing FF plugin...
 	</li>
-	
+
+
+	<li id="sharing_starting" style="display: none">
+		Starting screen sharing...
+	</li>
+
 </ul>
 
 <script>
@@ -119,11 +129,11 @@ getChromeExtensionStatus(function(result) {
 			alert("We only support the latest versions of Google Chrome and FireFox")
 		}
 	}
-	
+
 	if(navigator.userAgent.indexOf("Firefox") != -1 )  {
 		startSession();
 	}
-	
+
 });
 
 window.addEventListener("message", function(event) {
@@ -132,7 +142,8 @@ window.addEventListener("message", function(event) {
     if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
 
     if(addonMessage.enabledScreenCapturing === true) {
-		location.reload();
+			var new_url = document.URL + '&reload=1'
+			location.href = new_url;
     }
     else {
         // reason === 'user-rejected'
@@ -143,10 +154,10 @@ window.addEventListener("message", function(event) {
 
 function reloadFFPlugin() {
 	$("#install_firefox_extension").hide();
-	
+
 	xpi={'Enable Screen Capturing in Firefox':'https://addons.mozilla.org/firefox/downloads/file/363432/enable_screen_capturing_in_firefox-1.0.007-fx.xpi?src=dp-btn-primary'};
 	InstallTrigger.install(xpi,function () {alert('test')});
-	
+
 	$("#installing_firefox_extension").show();
 	setTimeout(function(){ location.reload(); }, 5000);
 }

@@ -34,7 +34,7 @@ $( document ).ready(function() {
 	moderator.session = MODERATOR_SESSION;
 	moderator.userid  = MODERATOR_ID;
 	moderator.extra   = MODERATOR_EXTRA;
-	
+
 	moderator.onstream = function(event) {
 		if(event.type=="local") {
 			recordStarted = 1;
@@ -43,18 +43,28 @@ $( document ).ready(function() {
 		}
 		if(event.isScreen) {
 			if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-				moderator.streams[event.streamid].startRecording({
-					video: true,
-					audio: true
-				});
+				$( "#screensharing" ).append(event.mediaElement);
+				$("#" + event.streamid).hide();
+				$("#recorder_starting").show();
+				setTimeout(function(){
+					event.mediaElement.play();
+					$("#" + event.streamid).show();
+					$("#recorder_starting").hide();
+					moderator.streams[event.streamid].startRecording({
+						video: true,
+						audio: true
+					});
+					hideRecording();
+				}, 1000);
 			}
 			else {
+				$( "#screensharing" ).append(event.mediaElement);
+				hideRecording();
 				moderator.streams[event.streamid].startRecording({
 					video: true
 				});
 			}
 
-			$( "#screensharing" ).append(event.mediaElement);
 		}
 		if (event.isAudio) {
 			moderator.streams[event.streamid].startRecording({
@@ -81,20 +91,20 @@ $( document ).ready(function() {
 				console.log(blob);
 			});
 
-			moderator.streams.stop();	
+			moderator.streams.stop();
 			stopSession();
-			
+
 		}
 		else {
 			var videoStream = moderator.streams.selectFirst({
 				isScreen: true,
 				local: true
-			});	
-			
+			});
+
 			var audioStream = moderator.streams.selectFirst({
 				isAudio: true,
 				local: true
-			});	
+			});
 
 			moderator.streams[videoStream.streamid].stopRecording(function(blob) {
 				if(blob.video) {
@@ -104,7 +114,7 @@ $( document ).ready(function() {
 					console.log(blob);
 				}
 			});
-			
+
 			moderator.streams[audioStream.streamid].stopRecording(function(blob) {
 				console.log(blob);
 				if(blob.audio) {
@@ -113,27 +123,27 @@ $( document ).ready(function() {
 					$( "#audio_result" ).append(h2);
 				}
 			});
-			
-			moderator.streams.stop();	
-			stopSession();		
+
+			moderator.streams.stop();
+			stopSession();
 		}
 
 		$("#stopRecording").prop('disabled', true);
 		$("#startRecording").prop('disabled', false);
 		$("#hideRecording").prop('disabled', true);
 	});
-	
+
 	function startSession() {
 		moderator.open({
 			dontTransmit: true,
 			sessionid:    MODERATOR_SESSION_ID
 		});
 	}
-	
+
 	function stopSession() {
 		moderator.close();
 	}
-	
+
 	var getChromeExtensionStatus = function (callback) {
 		if (!!navigator.mozGetUserMedia) return callback('not-chrome');
 
@@ -177,46 +187,51 @@ $( document ).ready(function() {
 			}
 		}
 	});
-	
+
 	$('#startRecording').click( function () {
 		startSession();
 		$("#startRecording").prop('disabled', true);
 		//$("#audio_result").empty();
 		//$("#video_result").empty();
 	});
+
 	$('#hideRecording').click( function () {
-		$('#recording', window.parent.document).hide();
-		$('#recStarted', window.parent.document).show();
+		hideRecording();
 	});
-	
-	
+
+
 	window.addEventListener("message", function(event) {
 		var addonMessage = event.data;
 
 		if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
 
 		if(addonMessage.enabledScreenCapturing === true) {
-			location.reload();
+			var new_url = document.URL + '&reload=1'
+			location.href = new_url;
 		}
 		else {
 			alert(addonMessage.reason);
 		}
 	}, false);
 
-	if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+	if(document.URL.indexOf("reload=1") != -1 )  {
 		startSession();
 	}
-	
+
+	function hideRecording() {
+		$('#recording', window.parent.document).hide();
+		$('#recStarted', window.parent.document).show();
+	}
+
 });
 
 function reloadFFPlugin() {
 	$("#install_firefox_extension").hide();
-	
 	xpi={'Enable Screen Capturing in Firefox':'https://addons.mozilla.org/firefox/downloads/file/363432/enable_screen_capturing_in_firefox-1.0.007-fx.xpi?src=dp-btn-primary'};
 	InstallTrigger.install(xpi,function () {alert('test')});
-	
 	$("#installing_firefox_extension").show();
-	setTimeout(function(){ location.reload(); }, 5000);
+	var new_url = document.URL + '&reload=1'
+	setTimeout(function(){ location.href = new_url; }, 5000);
 }
 
 </script>
@@ -249,7 +264,11 @@ function reloadFFPlugin() {
 	<li id="installing_firefox_extension" style="display: none">
 		Installing FF plugin...
 	</li>
-	
+
+	<li id="recorder_starting" style="display: none">
+		Starting recorder...
+	</li>
+
 </ul>
 
 </body>
