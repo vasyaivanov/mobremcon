@@ -7,6 +7,10 @@ var hashUsers = 0;
 //console.log('A1.js loaded, socket: ');
 //console.log(socket);
 
+if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+  $('#menuOpenRecording').show();
+}
+
 if (!isFile) {
     if (typeof socket !== 'undefined') {
         alert('socket in A1.js is already defined!');
@@ -706,7 +710,7 @@ $( window ).load(function() {
             navigateByCenterClick: true
         }
     });
-    
+
     var staticSlite = (slite === '/HASH_TEMPLATE/' || slite === '/<%= hash %>/');
     if (staticSlite) {
         slite = '';
@@ -748,7 +752,7 @@ $( window ).load(function() {
     if (isAPresenter) {
         showHideRemote();
     }
-    
+
     $(window).on("keypress", function (e) {
         console.log('Keyborad key pressed; ' + e.key);
         switch (e.key) {
@@ -768,13 +772,13 @@ $( window ).load(function() {
                 }
                 e.preventDefault();
                 break;
-            default: 
+            default:
         }
     });
 
   if (!isFile) {
       //socket = io.connect(document.location.hostname + ':' + location.port);
-    
+
     socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
