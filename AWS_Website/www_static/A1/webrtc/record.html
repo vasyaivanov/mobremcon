@@ -134,6 +134,7 @@ $( document ).ready(function() {
 	});
 
 	function startSession() {
+		$("#startRecording").prop('disabled', true);
 		moderator.open({
 			dontTransmit: true,
 			sessionid:    MODERATOR_SESSION_ID
@@ -190,7 +191,6 @@ $( document ).ready(function() {
 
 	$('#startRecording').click( function () {
 		startSession();
-		$("#startRecording").prop('disabled', true);
 		//$("#audio_result").empty();
 		//$("#video_result").empty();
 	});
