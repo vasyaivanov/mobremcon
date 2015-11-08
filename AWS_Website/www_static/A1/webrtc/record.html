@@ -215,13 +215,15 @@ $( document ).ready(function() {
 	}, false);
 
 	if(document.URL.indexOf("reload=1") != -1 )  {
-		startSession();
+		//startSession();
 	}
 
 	function hideRecording() {
 		$('#recording', window.parent.document).hide();
 		$('#recStarted', window.parent.document).show();
 	}
+
+	startSession();
 
 });
 
@@ -236,11 +238,11 @@ function reloadFFPlugin() {
 
 </script>
 </head>
-<body onload="">
+<body>
 
 <div id="mainBody">
 
-<button id="startRecording" disabled>Start recording</button>
+<button id="startRecording" style="display: none" disabled>Start recording</button>
 <button id="hideRecording" disabled>Hide</button>
 <button id="stopRecording" disabled>Stop recording</button>
 
