@@ -166,7 +166,7 @@ rolesRestrictions[1] = {maxSlidesCount: 3, maxSlidesSize: 10485760, maxSlideSize
 // Gold account
 rolesRestrictions[2] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlideSize: 104857600, rename: 1, domain: 1};
 // Admin account
-rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlideSize: 104857600, rename: 1, domain: 1};
+rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 10485760000000000000, maxSlideSize: 10485760000000000000, rename: 1, domain: 1};
 
 var Plans = {
 	'1': {desc: 'Silver', price: 5, role: 1},
