@@ -461,6 +461,17 @@ video#bgvid {
     background-color: white;
 }
 
+.mainbackground {
+    background: -webkit-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    background: -o-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    background: -moz-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
 /*.uploadDialog {
     position: fixed;
     font-family: 'Raleway', sans-serif;
