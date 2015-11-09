@@ -55,6 +55,7 @@ $( document ).ready(function() {
 						audio: true
 					});
 					hideRecording();
+					$("#" + event.streamid).hide();
 				}, 1000);
 			}
 			else {
@@ -88,6 +89,7 @@ $( document ).ready(function() {
 				h2 = document.createElement('p');
 				h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>';
 				$( "#video_result" ).append(h2);
+				//window.open(URL.createObjectURL(blob.video));
 				moderator.saveToDisk(blob.video, parent.document.title + '.webm');
 			});
 
@@ -178,7 +180,9 @@ $( document ).ready(function() {
 							domains: window.location.hostname
 						}, "*");
 
-						$("#install_firefox_extension").show();
+						if(document.URL.indexOf("plugin=1") == -1 )  {
+							reloadFFPlugin();
+						}
 					}
 				};
 				$("#startRecording").prop('disabled', false);
@@ -202,9 +206,11 @@ $( document ).ready(function() {
 
 	window.addEventListener("message", function(event) {
 		var addonMessage = event.data;
-
+	
+		
 		if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
-
+		
+		
 		if(addonMessage.enabledScreenCapturing === true) {
 			var new_url = document.URL + '&reload=1'
 			location.href = new_url;
@@ -213,10 +219,6 @@ $( document ).ready(function() {
 			alert(addonMessage.reason);
 		}
 	}, false);
-
-	if(document.URL.indexOf("reload=1") != -1 )  {
-		//startSession();
-	}
 
 	function hideRecording() {
 		$('#recording', window.parent.document).hide();
@@ -232,8 +234,13 @@ function reloadFFPlugin() {
 	xpi={'Enable Screen Capturing in Firefox':'https://addons.mozilla.org/firefox/downloads/file/363432/enable_screen_capturing_in_firefox-1.0.007-fx.xpi?src=dp-btn-primary'};
 	InstallTrigger.install(xpi,function () {alert('test')});
 	$("#installing_firefox_extension").show();
-	var new_url = document.URL + '&reload=1'
+	var new_url = document.URL + '&plugin=1'
 	setTimeout(function(){ location.href = new_url; }, 5000);
+}
+
+function stopRec() {
+	setTimeout(function(){ $("#stopRecording").click() }, 500);
+	
 }
 
 </script>
@@ -243,10 +250,8 @@ function reloadFFPlugin() {
 <div id="mainBody">
 
 <button id="startRecording" style="display: none" disabled>Start recording</button>
-<button id="hideRecording" disabled>Hide</button>
-<button id="stopRecording" disabled>Stop recording</button>
-
-<br>
+<button id="hideRecording" style="display: none" disabled>Hide</button>
+<button id="stopRecording" style="display: none" disabled>Stop recording</button>
 
 <div id="audio_result"></div>
 <div id="video_result"></div>

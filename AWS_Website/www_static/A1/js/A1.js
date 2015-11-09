@@ -8,7 +8,18 @@ var hashUsers = 0;
 //console.log(socket);
 
 if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-  $('#menuOpenRecording').show();
+	var uMatch = navigator.userAgent.match(/Firefox\/(.*)$/),
+		ffVersion;
+	if (uMatch && uMatch.length > 1) {
+		ffVersion = uMatch[1];
+	}
+
+	if(ffVersion >= 42) {
+		$('#menuOpenRecording').show();
+	}
+	else {
+		alert("Please update your browser. We support FF version >= 42.0 for screen recording.")
+	}
 }
 
 if (!isFile) {
@@ -173,13 +184,15 @@ function recording() {
     } else {
         $("#RecordingOpenCloseLabel").html("Start");
     }
-    $("#recording").slideToggle();
+	$("#recording").hide();
+    //$("#recording").slideToggle();
 	showHideMenu(true);
 }
 
 $("#recordButton").click(function() {
 	$("#recStarted").hide();
-	$('#recording').show();
+	$("#recording").show();
+	document.getElementById("recordingframe").contentWindow.stopRec();
 });
 
 

@@ -2430,7 +2430,7 @@ function WhammyRecorder(mediaStream, config) {
     config = config || {};
 
     if (!config.frameInterval) {
-        config.frameInterval = 10;
+        config.frameInterval = 0;
     }
 
     if (!config.disableLogs) {
@@ -2517,7 +2517,7 @@ function WhammyRecorder(mediaStream, config) {
      * @param {integer} frameInterval - set minimum interval (in milliseconds) between each time we push a frame to Whammy
      */
     function drawFrames(frameInterval) {
-        frameInterval = typeof frameInterval !== 'undefined' ? frameInterval : 10;
+        frameInterval = typeof frameInterval !== 'undefined' ? frameInterval : 0;
 
         var duration = new Date().getTime() - lastTime;
         if (!duration) {
