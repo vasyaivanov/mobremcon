@@ -622,6 +622,7 @@ var router = express.Router();
 //    console.log('remote: ' + req.params.slite_path);
 //});
 
+/*
 router.get('/socket.io/socket.io.js', function (req, res, next) {
     if (appPort === ioPort) {
         next();
@@ -633,19 +634,21 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
                 'x-sent': true
             }
         };
-
-        res.sendFile(path.join(www_dir, www_static_dir, '/js/socket.io-1.3.4.js'), options, function (err) {
+        
+        var socketJsPath = path.join(www_dir, 'BACKEND', 'lib', '/js/socket.io-1.3.4.js');
+        console.log('socketJsPath: ' + socketJsPath);
+        res.sendFile(socketJsPath, options, function (err) {
             if (err) {
                 console.log(err);
                 res.status(err.status).end();
             }
             else {
-                //console.log('Sent: socket.io');
+                console.log('Sent: socket.io');
             }
         });
     }
 })
-
+*/
 
 router.post('/paypal', function (req, res, next) {
 
