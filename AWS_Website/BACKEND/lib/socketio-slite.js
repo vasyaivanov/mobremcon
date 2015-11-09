@@ -124,7 +124,7 @@ function getHashPresentation(hash, next){
 }
 
 module.parent.exports.io.use(function (socket, next) {
-    console.log("Query: ", socket.handshake.query);
+    //console.log("Query: ", socket.handshake.query);
     // return the result of next() to accept the connection.
     if (socket.handshake.query.type == "user" && typeof socket.handshake.query.hash !== 'undefined') {
         if (isNaN(nofUsers[socket.handshake.query.hash]) || nofUsers[socket.handshake.query.hash] < 0) {
