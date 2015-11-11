@@ -326,12 +326,14 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
 
 /* Button Upload Presentation*/
 .uploadfile {
+    position: absolute;
+    top: 50%;
+	left: 40%;
     width: 250px;
     height: 48px;
     font-size: 18px;
 
     cursor:pointer;
-    position: relative;
     display: inline-block;
     margin: 0;
  }
@@ -391,9 +393,8 @@ input.renameSlide {
     margin-top: 0.01%;
     position: absolute;
     margin-right: 5%;
-    
+	color: #000061;
     opacity: 0.6;
-    color: black;
     text-shadow: 1px 1px #ffffff;
 }
 
@@ -407,8 +408,16 @@ input.renameSlide {
 
 }
 
+.login {
+	color: white;
+}
 
-
+.loginbody {
+    position: absolute;
+    top: 30%;
+    right: 30%
+	width: 50%;
+}
 
 /*VIDEO*/
 
@@ -454,11 +463,6 @@ video#bgvid {
 
 .modal-header {
     border-bottom: 0px !important;
-}
-
-
-#login2 {
-    background-color: white;
 }
 
 .mainbackground {

@@ -53,7 +53,7 @@
 
 </head>
 
-<body>
+<body class='mainbackground'>
 
     <!-- Navigation -->
     <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
@@ -240,10 +240,10 @@
     </section>
 
     <!-- Login -->
-    <section id="login2" class="login">
-        <div class="title col-xs-12"><h1>Prezera</h1></div>
+    <section id="login2" class="login mainbackground">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
 
-        <div class="col-xs-offset-4 col-xs-4">
+        <div class="loginbody col-xs-offset-4 col-xs-4">
 
                 <form class="m-form-signin" role="form" action="/signin.html" method="post">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
@@ -264,15 +264,15 @@
     </section>
 
     <!-- Sign Up -->
-    <section id="signUp" class="signUp">
-        <div class="title col-xs-12"><h1>Prezera</h1></div>
-        <div class="col-xs-offset-4 col-xs-4">
+    <section id="signUp" class="login mainbackground">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="loginbody col-xs-offset-4 col-xs-4">
 
                <div class="container-fluid">
                 <form class="m-form-signin" role="form" action="/signup.html" method="post">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
                 <input type="hidden" name="account" value="<%= (request.body.account) ? request.body.account : request.query.account %>">
-                    <h2>Create your personal account </h2>
+                    <h1>Create account </h1>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.body.email %>">
