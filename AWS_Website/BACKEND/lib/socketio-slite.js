@@ -599,7 +599,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           socket.on('insertVideoId', function (data) {
               //console.log("insertVideoId, youtube hash: " + data.video_hash + " into the slite: " + data.slite_hash
                   //+ " slide number " + data.curr_slide);
-              prepare_slite.youTube(data.video_hash, data.slite_hash, data.curr_slide);
+              //prepare_slite.youTube(data.video_hash, data.slite_hash, data.curr_slide);
           });
 
           socket.on('updatePassword', function (data) {
