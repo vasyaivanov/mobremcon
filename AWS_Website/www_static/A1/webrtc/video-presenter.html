@@ -44,6 +44,7 @@ moderator.extra   = MODERATOR_EXTRA;
 moderator.onstream = function(event) {
 	if(event.isVideo) {
 		if(event.type == "local") {
+			event.mediaElement.volume = 1;
 			$( "#videosharing" ).append(event.mediaElement);
 			if(navigator.userAgent.indexOf("Firefox") != -1 )  {
 				$("#" + event.streamid).hide();
@@ -56,6 +57,13 @@ moderator.onstream = function(event) {
 		}
 		else if(event.type == "remote") {
 			$( "#videosharingR" ).append(event.mediaElement);
+			if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+				$("#" + event.streamid).hide();
+				setTimeout(function(){
+					event.mediaElement.play();
+					$("#" + event.streamid).show();
+				}, 1000);
+			}
 		}
 	}
 	if (event.isAudio) {
