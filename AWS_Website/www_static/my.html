@@ -37,8 +37,11 @@
       <!-- font icons -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
+	  <!-- Custom CSS -->
+	  <link href="new_template/css/stylish-portfolio.css" rel="stylesheet">
+	
     </head>
-    <body>
+    <body class='mainbackground'>
         <section class="middle">
             <div class="container-fluid">
                     <h1>My uploads</h1>
@@ -56,17 +59,10 @@
         <header id="header">
           <nav id="nav">
               <ul id="navigation" class="clearfix">
-                <li><a href="/" class='menuLink' id='menuAbout'>Home</a></li>
-                <li><a href="/" class='menuLink' id='menuAbout'>Upload</a></li>
-                <li><a href="/#one" class='menuLink' id='menuAbout'>About</a></li>
-                <li><a href="/#four" class='menuLink' id='menuContact'>Contact</a></li>
+                <li><a href="https://www.prezera.com" class='menuLink' id='menuAbout'>Home</a></li>
                 <% if (!user) { %>
 				<li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
-                <li><a href="signin.html" data-index="three" class="">Sign in</a></li>
-                <li><a href="signup.html" data-index="four" class="">Sign up</a></li>
                 <% } else { %>
-                <li><a href="/account.html" data-index="three" class="">My account</a></li>
-                <li><a href="/logout" data-index="three" class="">Sign out</a></li>
                 <% } %>
               </ul>
           </nav>

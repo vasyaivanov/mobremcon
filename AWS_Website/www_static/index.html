@@ -245,7 +245,7 @@
 
         <div class="loginbody col-xs-offset-4 col-xs-4">
 
-                <form class="m-form-signin" role="form" action="/signin.html" method="post">
+                <form class="m-form-signin" role="form" id="signinform" action="/signin.html" method="post">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
                     <br>
                     <h1>Sign In</h1>
@@ -363,7 +363,13 @@
         e.preventDefault();
         $("#sidebar-wrapper").toggleClass("active");
     });
-
+	
+	// Click on item in menu
+	$(".menuLink").click(function(e) {
+        e.preventDefault();
+        $("#sidebar-wrapper").toggleClass("active");
+    });
+	
     // Scrolls to the selected menu item on the page
     $(function() {
         $('a[href*=#]:not([href=#])').click(function() {
