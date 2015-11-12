@@ -50,14 +50,6 @@ function touchEnd(event) {
 };
 */
 
-$('#prev').click(function() {
-    prevSlideLocal();
-});
-
-$('#next').click(function() {
-    nextSlideLocal();
-});
-
 function turnLaser(on){
     // if laser is on, turn it off
     if (!on) {

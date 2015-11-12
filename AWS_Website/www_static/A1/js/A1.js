@@ -534,12 +534,15 @@ function nextSlideLocal(){
 	slider.next();
 	clearCanvas();
 }
-
-$('#navPrev').click(function () {
-    prevSlideLocal();
+$('#prev').click(function() {
+	if (isAPresenter) {
+		prevSlideRemote();
+	}
 });
-$('#navNext').click(function () {
-    nextSlideLocal();
+$('#next').click(function() {
+	if (isAPresenter) {
+		nextSlideRemote();
+	}
 });
 $('#chatPanel').click(function () {
     showHideComments();
