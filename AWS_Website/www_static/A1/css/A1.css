@@ -309,7 +309,7 @@ body {
 	left: 0px;
 	top: 0px;
 	width: 25.5%;
-	height: 40%;
+	height: 60px;
 	display: none;
 	border: 1px solid rgba(0,0,0,.15);
 	-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
@@ -957,6 +957,15 @@ a { text-decoration: none; color: fff; }
 .wrap {
     padding: 0;
     overflow: hidden;
+}
+
+#recStarted {
+	display: block;
+	position: absolute;
+	top: -15px;
+	left: -15px;
+	display: none;
+	z-index: 3;
 }
 
 /* END NEXT,PREV BUTTONS */

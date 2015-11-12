@@ -184,8 +184,8 @@ function recording() {
     } else {
         $("#RecordingOpenCloseLabel").html("Start");
     }
-	$("#recording").hide();
-    //$("#recording").slideToggle();
+	//$("#recording").hide();
+    $("#recording").slideToggle();
 	showHideMenu(true);
 }
 

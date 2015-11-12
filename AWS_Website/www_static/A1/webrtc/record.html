@@ -223,7 +223,7 @@ $( document ).ready(function() {
 
 	function hideRecording() {
 		$('#recording', window.parent.document).hide();
-		$('#recStarted', window.parent.document).show();
+		$('#recStarted', window.parent.document).css("display", "block");
 	}
 
 	startSession();
