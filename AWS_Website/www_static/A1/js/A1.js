@@ -883,7 +883,7 @@ $( window ).load(function() {
     socket.on('nof-users', function (data) {
        //console.log("nof-users received: " + data.nof_users);
        hashUsers = data.nof_users;
-       $("#chatUsersLabel").html(" ( " + hashUsers + " users )");
+       $("#chatUsersLabel").html(" ( " + hashUsers + " user" + (hashUsers === 1 ? "" : "s") + " )");
     });
 
   }
