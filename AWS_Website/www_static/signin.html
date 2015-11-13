@@ -37,9 +37,11 @@
       <!-- font icons -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
+	  <link href="new_template/css/stylish-portfolio.css" rel="stylesheet">
+	
     </head>
-    <!-- style='background-image: url(img/Slite_Background.jpg);' -->
-    <body>
+    <body class='mainbackground'>
+
         <section class="middle">
             <div class="container-fluid">
 
@@ -77,8 +79,6 @@
               <ul id="navigation" class="clearfix">
                 <li><a href="/" class='menuLink' id='menuAbout'>Home</a></li>
 				<li><a href="/" class='menuLink' id='menuAbout'>Upload</a></li>
-                <li><a href="/#one" class='menuLink' id='menuAbout'>About</a></li>
-                <li><a href="/#four" class='menuLink' id='menuContact'>Contact</a></li>
                 <% if (!user) { %>
 				<li><a href="/my.html" data-index="three" class="menuLink">My presentations</a></li>
                 <li><a href="signin.html" data-index="three" class="menuLink">Sign in</a></li>
