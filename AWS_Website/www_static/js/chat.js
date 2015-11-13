@@ -101,7 +101,7 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
 
   $("#main-chat-screen").hide();
   $("#errors").hide();
-  $("#name").focus();
+  //$("#name").focus();
   $("#join").attr('disabled', 'disabled');
 
   if ($("#name").val() === "") {

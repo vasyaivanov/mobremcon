@@ -769,10 +769,10 @@ $( window ).load(function() {
         showHideRemote();
     }
 
-    $(window).on("keypress", function (e) {
-        console.log('Keyborad key pressed; ' + e.key);
-        switch (e.key) {
-            case 'ArrowRight':
+    $(window).on("keydown", function (e) {
+        console.log(e);
+        switch (e.keyCode) {
+            case 39:
                 if (isAPresenter) {
                     nextSlideRemote();
                 } else {
@@ -780,7 +780,23 @@ $( window ).load(function() {
                 }
                 e.preventDefault();
                 break;
-            case 'ArrowLeft':
+            case 37:
+                if (isAPresenter) {
+                    prevSlideRemote();
+                } else {
+                    prevSlideLocal();
+                }
+                e.preventDefault();
+                break;
+            case 34:
+                if (isAPresenter) {
+                    nextSlideRemote();
+                } else {
+                    nextSlideLocal();
+                }
+                e.preventDefault();
+                break;
+            case 33:
                 if (isAPresenter) {
                     prevSlideRemote();
                 } else {
