@@ -299,6 +299,8 @@ var slitesDir = "slites";
 var slitesHashLen = 4;
 module.exports.slitesHashLen = slitesHashLen;
 var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
+// middleware do render slites files from /slites folders
+var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 
 // Auto redirect to WWW, if no subdomain
 var trustedDomains = ["", "slite-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com", "localhost"];
@@ -371,56 +373,77 @@ if((req.method == "POST" && req.url == "/paypal") || (req.url == "/google32d58b5
 }
 else {
   setUserSession(req,res,function(userId) {
-		if(userId == 0) {
-			res.redirect(req.url);
+		if(userId == 0 && req.query.auth != 1 && !req.url.match(slitesRegMW)) {
+			res.redirect(req.url + '?auth=1');
 		}
 		else {
-			// Initialize new session
-			if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
-			if(req.user) UserData[userId].domain = req.user.domain
-			UserData[userId].currentUserId = userId
-			readUserRights(userId, function(res) {
-				if(req.user) {
-					UserData[userId].userAuth = 1;
-					UserData[userId].userRole = res;
-					UserData[userId].restrictions = rolesRestrictions[res];
-					UserData[userId].domainSet = req.user.domain ? 1 : 0;
+			if(req.query.auth == 1 && userId > 0) {
+				var new_url = req.url;
+				new_url = new_url.replace("?auth=1","")
+				console.log(new_url);
+				res.redirect(new_url);
+			}
+			else {
+				if(userId == 0) {
+					// Render for bots :)
+					if((req.url.length == slitesHashLen+1) && (req.query.auth != 1)) {
+						console.log("Send fake slide page");
+						var hash = req.url.replace("/","");
+
+						Slide.findOne({sid : hash }).exec(function (err, doc) {
+							if( doc ) {
+								res.render(path.join(www_dir, www_static_dir, "fake_slide.html"), {
+									title: doc.title,
+									img: req.url + "/img0.jpg"
+								});
+							} else {
+								res.send("Cant find this slide: " + hash)
+							}
+						});
+					}
+					else {
+						next();
+					}
 				}
 				else {
-					UserData[userId].userAuth = 0;
-					UserData[userId].userRole = 0;
-					UserData[userId].restrictions = rolesRestrictions[0];
-					UserData[userId].domainSet = 0;
+					// Initialize new session
+					if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
+					if(req.user) UserData[userId].domain = req.user.domain
+					UserData[userId].currentUserId = userId
+					readUserRights(userId, function(res) {
+						if(req.user) {
+							UserData[userId].userAuth = 1;
+							UserData[userId].userRole = res;
+							UserData[userId].restrictions = rolesRestrictions[res];
+							UserData[userId].domainSet = req.user.domain ? 1 : 0;
+						}
+						else {
+							UserData[userId].userAuth = 0;
+							UserData[userId].userRole = 0;
+							UserData[userId].restrictions = rolesRestrictions[0];
+							UserData[userId].domainSet = 0;
+						}
+						getUserUploadStatus(userId, function(userAccess) {
+							UserData[userId].noUploadForUser = userAccess;
+							// Set user session
+							UserData[userId].expire = new Date(new Date().getTime() + 86400000);
+							module.exports.UserData[userId] = UserData[userId];
+							// Clear old sessions
+							for (k in UserData) {
+							  var dateComp = new Date();
+							  if(dateComp > UserData[k].expire) {
+									delete UserData[k];
+							  }
+							}
+							next();
+						});
+					});
 				}
-				getUserUploadStatus(userId, function(userAccess) {
-					UserData[userId].noUploadForUser = userAccess;
-					// Set user session
-					UserData[userId].expire = new Date(new Date().getTime() + 86400000);
-					module.exports.UserData[userId] = UserData[userId];
-					next();
-					// Clear old sessions
-					for (k in UserData) {
-					  var dateComp = new Date();
-					  if(dateComp > UserData[k].expire) {
-							delete UserData[k];
-					  }
-					}
-				});
-			});
+			}
 		}
     });
 }
 });
-
-/*app.use(function (req, res, next) {
-	// If no session cookie - reset.
-	if(typeof req.cookies[sessionIdCookie] === 'undefined') {
-		res.redirect(req.url);
-	}
-	else {
-		next();
-	}
-});*/
 
 // Calculate user slides size sum & slides count
 var getUserUploadStatus = function (userId, callback) {
@@ -453,8 +476,6 @@ app.use(redirectToWWW);
 var UserData = {};
 module.exports.UserData = {};
 
-// middleware do render slites files from /slites folders
-var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 
 // Visualize custom domain slide
 app.use(function (req, res, next) {
@@ -847,15 +868,29 @@ router.get(rootRegExp, function (req, res){
 		}
 
 		getRandomSlides(Slide,function(randomSlides) {
-			res.render(path.join(www_dir, www_static_dir, indexHtml), {
-				user: req.user,
-				noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
-				randomSlides: randomSlides,
-				userRole: UserData[req.cookies[sessionIdCookie]].userRole,
-        request: req,
-        ERROR_AUTH: 1,
-        error: 0
-			});
+			if(typeof req.cookies[sessionIdCookie] != "undefined") {
+				res.render(path.join(www_dir, www_static_dir, indexHtml), {
+					user: req.user,
+					noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
+					randomSlides: randomSlides,
+					userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+					request: req,
+					ERROR_AUTH: 0,
+					error: 0
+				});
+			}
+			else {
+				// No cookie - no upload and other stuff :)
+				res.render(path.join(www_dir, www_static_dir, indexHtml), {
+					user: req.user,
+					noUploadForUser: 2,
+					randomSlides: randomSlides,
+					userRole: 0,
+					request: req,
+					ERROR_AUTH: 0,
+					error: 0
+				});
+			}
 		});
 	}
 });
