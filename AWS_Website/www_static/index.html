@@ -65,28 +65,28 @@
                 <li><a href="#works" data-index="two" class="menuLink">How it works</a></li>
                 <li><a href="#company" data-index="three" class="menuLink">Company</a></li>
                 <li><a href="#contact" data-index="four" class="menuLink">Contact</a></li>
-                    <% if (!user) { %>
+             <% if (!user) { %>
+			 
+				<% if (noUploadForUser != 2) { %>
                 <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
                 <li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
-
-                <li><a href="#login" class="loginUser">Sign in</a></li>
-
-                <li>
-                    <a href="#signUp" class="signUpUser">Sign up</a></li>
-                    <% } else { %>
-            <% if (userRole == 0) { %>
-              <li><!-- <a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a> -->
-                <a href="#accountUpgrade" data-index="three" class="menuLinkNoScrollRed accountUpgrade">Upgrade account</a>
-              </li>
-
-
-
+				<li><a href="#login" class="loginUser">Sign in</a></li>
+                <li><a href="#signUp" class="signUpUser">Sign up</a></li>
+				<% } %>
             <% } else { %>
-              <li><a href="/account.html" data-index="three" class="menuLinkNoScrollRed">My account</a></li>
-            <% } %>
+				<% if (userRole == 0) { %>
+				  <li><!-- <a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a> -->
+					<a href="#accountUpgrade" data-index="three" class="menuLinkNoScrollRed accountUpgrade">Upgrade account</a>
+				  </li>
+
+
+
+				<% } else { %>
+				  <li><a href="/account.html" data-index="three" class="menuLinkNoScrollRed">My account</a></li>
+				<% } %>
             <li><a href="/my.html" data-index="three" class="menuLinkNoScroll">My presentations</a></li>
             <li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
-                    <% } %>
+            <% } %>
         </ul>
     </nav>
 
@@ -129,7 +129,9 @@
                     <button type="file" class="btn btn-dark btn-lg"  accept="pptx">Upload Presentation</button>
                     <input type="file" accept="pptx" id="uploadPresentation">
                 </div>
-            <% } else { %>
+			<% } else if (noUploadForUser == 2) { %>
+				
+			<% } else { %>
             <div class="uploadfile">
                 <button type="button" class="btn btn-dark btn-lg" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</button>
                 <input type="file" accept="pptx" id="uploadPresentation" style="display: none">
