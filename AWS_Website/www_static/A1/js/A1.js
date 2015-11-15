@@ -623,7 +623,7 @@ if(presentationPassword == 1 && isPresenter() == false) {
 if( isMobile() ) {
 	$("#sliteWatermak").css("display","none");
 
-	if (screen.height > screen.width){
+	if (window.innerHeight > window.innerWidth){
 	    $('#orientationOverlay').fadeIn(400);
 	}
 
