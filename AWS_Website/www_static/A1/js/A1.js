@@ -630,9 +630,11 @@ if( isMobile() ) {
 	window.addEventListener("orientationchange", function() {
 		if (window.orientation == 0 || window.orientation == 180) {
 			$('#orientationOverlay').fadeIn(400);
+			clearCanvas();
 		}
 		else {
 			$('#orientationOverlay').fadeOut(400);
+			clearCanvas();
 		}
 	}, false);
 

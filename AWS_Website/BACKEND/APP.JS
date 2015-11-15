@@ -655,7 +655,7 @@ router.get('/socket.io/socket.io.js', function (req, res, next) {
                 'x-sent': true
             }
         };
-        
+
         var socketJsPath = path.join(www_dir, 'BACKEND', 'lib', '/js/socket.io-1.3.4.js');
         console.log('socketJsPath: ' + socketJsPath);
         res.sendFile(socketJsPath, options, function (err) {
@@ -995,33 +995,43 @@ readSlideSize = function(path_to_slide, callback) {
 module.exports.readSlideSize = readSlideSize;
 
 router.get('/my.html', function (req, res){
-	return Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
-		if( !err ) {
-			res.render(path.join(www_dir,www_static_dir , 'my.html'), {
-			  slides: docs,
-			  request: req,
-			  user: req.user,
-			  moment: moment
-			});
-		} else {
-			return console.log( err );
-		}
-	});
+  if(typeof req.cookies[sessionIdCookie] === "undefined") {
+    res.redirect('/');
+  }
+  else {
+  	return Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
+  		if( !err ) {
+  			res.render(path.join(www_dir,www_static_dir , 'my.html'), {
+  			  slides: docs,
+  			  request: req,
+  			  user: req.user,
+  			  moment: moment
+  			});
+  		} else {
+  			return console.log( err );
+  		}
+  	});
+  }
 });
 
 
 router.get('/subscription.html', function (req, res){
-   	Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, doc) {
-		var expire = "";
-		if(doc) {expire = doc.end_date}
-		res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
-		  request: req,
-		  user: req.user,
-		  moment: moment,
-		  userRole: UserData[req.cookies[sessionIdCookie]].userRole,
-		  expire: expire
-		});
-	});
+  if(typeof req.cookies[sessionIdCookie] === "undefined") {
+    res.redirect('/');
+  }
+  else {
+     	Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, doc) {
+  		var expire = "";
+  		if(doc) {expire = doc.end_date}
+  		res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
+  		  request: req,
+  		  user: req.user,
+  		  moment: moment,
+  		  userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+  		  expire: expire
+  		});
+  	});
+  }
 });
 
 // Render remote control
@@ -1043,6 +1053,10 @@ slideCheckPresenter = function(hashId, currentUserId , callback) {
 module.exports.slideCheckPresenter = slideCheckPresenter;
 
 router.get('/screensharing.html', function (req, res){
+  if(typeof req.cookies[sessionIdCookie] === "undefined") {
+    res.redirect('/');
+  }
+  else {
 		var hashId = req.query.presentation;
 			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
@@ -1055,9 +1069,14 @@ router.get('/screensharing.html', function (req, res){
 					res.send("No slide")
 				}
 			});
+    }
 });
 
 router.get('/video.html', function (req, res){
+  if(typeof req.cookies[sessionIdCookie] === "undefined") {
+    res.redirect('/');
+  }
+  else {
 		var hashId = req.query.presentation;
 			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
@@ -1070,10 +1089,15 @@ router.get('/video.html', function (req, res){
 					res.send("No slide")
 				}
 			});
+    }
 });
 
 
 router.get('/record.html', function (req, res){
+  if(typeof req.cookies[sessionIdCookie] === "undefined") {
+    res.redirect('/');
+  }
+  else {
 		var hashId = req.query.presentation;
 			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
 				if(sfound == 1 && spresenter == 1) {
@@ -1083,6 +1107,7 @@ router.get('/record.html', function (req, res){
 					res.send("Only presenter can record the screen")
 				}
 			});
+    }
 });
 
 

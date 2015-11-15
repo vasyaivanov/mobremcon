@@ -1,3 +1,12 @@
 User-agent: *
 Disallow: /remote/
 Disallow: /letscrawl.html
+Disallow: /my.html
+Disallow: /video.html
+Disallow: /record.html
+Disallow: /screensharing.html
+Disallow: /account.html
+Disallow: /signup.html
+Disallow: /signin.html
+Disallow: /logout
+Disallow: /subscription.html
