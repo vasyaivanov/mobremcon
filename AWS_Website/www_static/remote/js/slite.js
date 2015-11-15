@@ -33,7 +33,7 @@ function updateSlideMetrics(){
     //console.log('innerSize: ' + w + ' ' + h);
     //console.log('Slide Pos: ' + slidePosX + ' ' + slidePosY);
     //console.log('videoGallerySize: ' + videoGalleryWidth + ' ' + videoGalleryHeight);
-    
+
     //var galleryOffsetX = videoGallery.offsetLeft;
     //var galleryOffsetY = videoGallery.offsetTop;
     //xOffset = slideImg.offsetLeft + galleryOffsetX;
@@ -43,9 +43,9 @@ function updateSlideMetrics(){
     //xOffset = rsSlidePos.x;//slidePosX;
     //yOffset = rsSlidePos.y;//slidePosY;
     console.log('Slide Metrics:');
-    console.log("xOffset: " + xOffset); 
-    console.log("yOffset: " + yOffset); 
-    console.log("slideWidth: " + slideWidth); 
+    console.log("xOffset: " + xOffset);
+    console.log("yOffset: " + yOffset);
+    console.log("slideWidth: " + slideWidth);
     console.log("slideHeight: " + slideHeight);
 }
 
@@ -96,21 +96,24 @@ currentSlide.addEventListener('touchmove', touchMove, false);
 currentSlide.addEventListener('touchend', touchEnd, false);
 
 function touchStart(event) {
-    alert('touchStart');
+    //alert('touchStart');
     event.preventDefault();
+    updateSlideMetrics(event.pageX, event.pageY);
+    var per = offsetToPercentage(event.pageX, event.pageY);
     if(LASER === interactionType) {
-        socket.emit('laserOn', {slideID: currentHash});
+      socket.emit('laserOn', {x: per.x,
+                              y: per.y,
+                              slideID: currentHash});
     } else if (DRAW === interactionType) {
         // recalculate offsets in case window size has changed
-        updateSlideMetrics(event.pageX, event.pageY);
-        socket.emit('drawStart',{x:xPercent,
-                                 y:yPercent , 
+        socket.emit('drawStart',{x:per.x,
+                                 y:per.y ,
                                  slideID: currentHash});
     }
 };
 
 function touchEnd(event) {
-    alert('touchEnd');
+    //alert('touchEnd');
     event.preventDefault();
     if (LASER === interactionType) {
         socket.emit('laserOff', {slideID: currentHash});
@@ -212,7 +215,7 @@ function clearURLSlides(){
 // this is the main function handling laser and draw control by sending
 // touch coordinates on to the server through socket.emit()
 function touchMove(event) {
-    alert('touchMove');
+    //alert('touchMove');
     event.preventDefault();
     console.log("touchMove called");
 
@@ -227,19 +230,20 @@ function touchMove(event) {
     }
 
     updateSlideMetrics(xTouch, yTouch);
+    var per = offsetToPercentage(event.pageX, event.pageY);
 
     switch(interactionType) {
         case LASER: {
             socket.emit('laserCoords',
-                        { x:xPercent,
-                          y:yPercent, 
+                        { x:per.x,
+                          y:per.y,
                           slideID: currentHash});
             break;
         }
         case DRAW: {
             socket.emit('drawCoords',
-                        { x:xPercent,
-                          y:yPercent , 
+                        { x:per.x,
+                          y:per.y ,
                           slideID: currentHash});
             break;
         }

@@ -1,12 +1,13 @@
-/* 
- * This script is for controlling browser specific functions 
+/*
+ * This script is for controlling browser specific functions
  * of the remote control.
  */
 
 thumbnails();
 
+
 //$('#URLBox').keypress(function (e) {
-//	if(e.which == 13) {	
+//	if(e.which == 13) {
 //		changeURL();
 //	}
 //});
@@ -20,7 +21,7 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 
 // Touching the control area (the currentSlide div) will turn the
 // laser on, making the red dot appear on the presentation.
-// But only if we are in laser mode. 
+// But only if we are in laser mode.
 function touchStart(event) {
     event.preventDefault();
     if(LASER === interactionType) {
@@ -71,7 +72,7 @@ function turnLaser(on){
 
 $('#laser').click(function() {
      // calculate offset of interaction area in case window has been resized
-    // since the last time laser was used. 
+    // since the last time laser was used.
     turnLaser(LASER !== interactionType);
 });
 
@@ -82,7 +83,7 @@ function turnDraw(on){
         $('#draw').removeClass("button_pressed");
         $('#draw').addClass("button_unpressed");
         $('#overlay').css("z-index", 0);
-        
+
     // otherwise turn draw on
     } else {
         interactionType = DRAW;
@@ -99,20 +100,20 @@ $('#draw').click(function() {
 });
 
 
-	
+
 	function getUrlParameter(sParam)
 	{
 		var sPageURL = window.location.search.substring(1);
 		var sURLVariables = sPageURL.split('&');
-		for (var i = 0; i < sURLVariables.length; i++) 
+		for (var i = 0; i < sURLVariables.length; i++)
 		{
 			var sParameterName = sURLVariables[i].split('=');
-			if (sParameterName[0] == sParam) 
+			if (sParameterName[0] == sParam)
 			{
 				return sParameterName[1];
 			}
 		}
-	} 
+	}
 
 // LASER HANDLING
 
@@ -127,22 +128,22 @@ function onMouseMove(event) {
     //console.log(event.pageX + ' ' + event.pageY);
     //return;
     console.log("onMouseMove is happening");
-    
+
     updateSlideMetrics();
     var per = offsetToPercentage(event.pageX, event.pageY);
-    
+
     switch(interactionType) {
         case LASER: {
             //console.log('lasering');
-            socket.emit('laserCoords', { x: per.x, 
-                                         y: per.y, 
+            socket.emit('laserCoords', { x: per.x,
+                                         y: per.y,
                                          slideID: currentHash });
             break;
         }
         case DRAW: {
             //console.log('drawing');
-            socket.emit('drawCoords', { x: per.x, 
-                                        y: per.y, 
+            socket.emit('drawCoords', { x: per.x,
+                                        y: per.y,
                                         slideID: currentHash });
             break;
         }
@@ -161,19 +162,19 @@ function onMouseMove(event) {
     $( "#currentSlide" ).on ("mousemove", onMouseMove);
     // Only turn on laser if we are in laser mode
     if(interactionType === LASER) {
-        socket.emit('laserOn', {x: per.x, 
-                                y: per.y, 
+        socket.emit('laserOn', {x: per.x,
+                                y: per.y,
                                 slideID: currentHash});
     } else if(interactionType === DRAW) {
 
-        socket.emit('drawStart',{x: per.x, 
-                                 y: per.y, 
+        socket.emit('drawStart',{x: per.x,
+                                 y: per.y,
                                  slideID: currentHash});
     }
 });
 
 $( '#currentSlide' ).mouseup(function(event) {
-    console.log("mouse up"); 
+    console.log("mouse up");
     $( "#currentSlide" ).off ("mousemove", onMouseMove);
     // Only turn off laser if we are in laser mode
     if(interactionType === LASER) {
@@ -185,10 +186,10 @@ $( '#currentSlide' ).mouseup(function(event) {
 
 /* Image dragging was interfering with the laser pointer event listeners
  * So I am disabling image dragging since the presenter probably won't want
- * to drag the powerpoint slide anywhere from inside the remote control. 
+ * to drag the powerpoint slide anywhere from inside the remote control.
  * if we end up needing this one solution would be to make a button that
- * would turn the laser on/off instead of using mousedown events. 
+ * would turn the laser on/off instead of using mousedown events.
  */
- 
+
 // disable image dragging for all images
 $('img').on('dragstart', function(event) { event.preventDefault(); });
