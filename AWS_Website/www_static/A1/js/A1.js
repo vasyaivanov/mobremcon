@@ -41,6 +41,8 @@ function isMobile() {
     }
 }
 
+
+
 function share(url) {
 	var h = 200;
 	var w = 500;
@@ -617,8 +619,24 @@ if( hostname.indexOf("www") == 0){
 if(presentationPassword == 1 && isPresenter() == false) {
     showHidePasswordCheckOverlay();
 }
+
 if( isMobile() ) {
 	$("#sliteWatermak").css("display","none");
+
+	if (screen.height > screen.width){
+	    $('#orientationOverlay').fadeIn(400);
+	}
+
+	window.addEventListener("orientationchange", function() {
+		alert(window.orientation);
+		if (window.orientation == 0 || window.orientation == 180) {
+			$('#orientationOverlay').fadeIn(400);
+		}
+		else {
+			$('#orientationOverlay').fadeOut(400);
+		}
+	}, false);
+
 }
 if( !isAPresenter ) {
 	disableNonPresenterMenues();
