@@ -628,7 +628,6 @@ if( isMobile() ) {
 	}
 
 	window.addEventListener("orientationchange", function() {
-		alert(window.orientation);
 		if (window.orientation == 0 || window.orientation == 180) {
 			$('#orientationOverlay').fadeIn(400);
 		}
