@@ -23,6 +23,14 @@ var MODERATOR_SESSION    = {         // media-type
 	audio: true,
 	screen: true
 };
+
+// Switch off audio if video is running
+if(parent.window.isVideoChatOn == 1) {
+	MODERATOR_SESSION    = {
+		screen: true
+	};
+}
+
 var MODERATOR_EXTRA      = {};       // empty extra-data
 
 var moderator     = new RTCMultiConnection(MODERATOR_CHANNEL_ID);

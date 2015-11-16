@@ -29,6 +29,13 @@ var MODERATOR_SESSION    = {         // media-type
     audio: true,
     video: true,
 };
+
+if(parent.window.isScreensharingOn == 1) {
+	MODERATOR_SESSION    = {
+		video: true
+	};
+}
+
 var MODERATOR_EXTRA      = {};       // empty extra-data
 
 if(typeof videoPresenterSocket !== 'undefined') {
