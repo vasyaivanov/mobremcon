@@ -300,7 +300,7 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
 
 #progressbar {
     margin-top: 1vh;
-    height:     7vh;
+    height:     0px;
     background: #337ab7;
 
     /*background-color: blue;*/
