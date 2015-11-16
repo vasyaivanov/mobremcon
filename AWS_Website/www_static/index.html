@@ -13,7 +13,7 @@
     <link rel="shortcut icon" id="favicon" href="img/favicon.ico">
     <meta name="author" content="WEBENTATIONS inc.">
     <link rel="canonical" href="https://www.webentations.com" />
-	
+	<meta name="viewport" content="width=device-width, initial-scale=0.9">
 	<!-- Facebook specific tags -->
 	<meta property="og:image" content="img/Prezera_Logo.png" />
 	<meta property="og:title" content="Prezera - main page" />
@@ -66,7 +66,7 @@
                 <li><a href="#company" data-index="three" class="menuLink">Company</a></li>
                 <li><a href="#contact" data-index="four" class="menuLink">Contact</a></li>
              <% if (!user) { %>
-			 
+
 				<% if (noUploadForUser != 2) { %>
                 <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
                 <li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
@@ -130,7 +130,7 @@
                     <input type="file" accept="pptx" id="uploadPresentation">
                 </div>
 			<% } else if (noUploadForUser == 2) { %>
-				
+
 			<% } else { %>
             <div class="uploadfile">
                 <button type="button" class="btn btn-dark btn-lg" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</button>
@@ -365,13 +365,13 @@
         e.preventDefault();
         $("#sidebar-wrapper").toggleClass("active");
     });
-	
+
 	// Click on item in menu
 	$(".menuLink,.signUpUser,.loginUser").click(function(e) {
         e.preventDefault();
         $("#sidebar-wrapper").toggleClass("active");
     });
-	
+
     // Scrolls to the selected menu item on the page
     $(function() {
         $('a[href*=#]:not([href=#])').click(function() {
