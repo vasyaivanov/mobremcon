@@ -326,16 +326,10 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
 
 /* Button Upload Presentation*/
 .uploadfile {
-    position: absolute;
-    top: 50%;
-	left: 40%;
-    width: 250px;
-    height: 48px;
-    font-size: 18px;
-
-    cursor:pointer;
-    display: inline-block;
-    margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
  }
 
 .uploadfile :hover {
@@ -414,14 +408,18 @@ input.renameSlide {
 
 .loginbody {
     position: absolute;
-    top: 30%;
-    right: 30%
-	width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+form {
+    width: 20em;
 }
 
 /*VIDEO*/
 
-video#bgvid { 
+video#bgvid {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -432,11 +430,11 @@ video#bgvid {
     z-index: -100;
     -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
-    background-size: cover; 
+    background-size: cover;
 }
 
 @media screen and (max-device-width: 800px) {
-        video#bgvid { 
+        video#bgvid {
         position: fixed;
         top: 50%;
         left: 50%;
@@ -446,15 +444,15 @@ video#bgvid {
         z-index: -100;
         -webkit-transform: translateX(-50%) translateY(-50%);
         transform: translateX(-50%) translateY(-50%);
-        background-size: cover; 
+        background-size: cover;
     }
-    
+
 }
 
 .upload {
     margin: 30px auto;
     background-color: white;
-    width: 600px;   
+    width: 600px;
 }
 
 #progressbar {
