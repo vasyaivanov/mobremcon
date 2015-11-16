@@ -32,5 +32,12 @@ $(function() {
         $("#signUp").hide();
         $("#accountUpgrade").show();
     });
+	
+	$('#top, #product, #works, #company, #login2, #signUp, #contact').click(function() {
+		if($("#sidebar-wrapper").hasClass("active") === true) {
+			$("#sidebar-wrapper").toggleClass("active");
+		}
+
+	});
     
 });
