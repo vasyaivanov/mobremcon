@@ -309,7 +309,7 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
 #uploadLabel {
     font-weight: bold;
     color: #337ab7;
-    font-size: 1.8vw;
+    font-size: 2vh;
 }
 
 /*
