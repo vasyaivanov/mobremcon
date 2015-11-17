@@ -228,11 +228,12 @@ $(document).ready(function () {
 		   success: function(data){
 				console.log(data);
 				if(data.error > 0) {
-					$("#loginError").text("The email or password is incorrect.");
+					$("#loginError").html("The email or password is incorrect.");
 					$("#loginError").show();
 				}
 				else {
-					$("#loginError").text("Successfully logged in...");
+					$("#loginError").show();
+					$("#loginError").html("Successfully logged in...");
 					$("#signInForm").hide();
 					setTimeout(function(){ location.href="/"; }, 1000);
 					
@@ -275,6 +276,7 @@ $(document).ready(function () {
 					$("#signupError").show();
 				}
 				else {
+					$("#signupError").show();
 					$("#signupError").text("Successfully logged in...");
 					$("#signupError").hide();
 					setTimeout(function(){ location.href="/"; }, 1000);
