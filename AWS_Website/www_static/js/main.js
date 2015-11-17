@@ -217,6 +217,71 @@ $(document).ready(function () {
     if(navigator.userAgent.match(/(iPhone|iPad)/i)) {
 		//$('.uploadfile').css('display', 'none');
    };
+   
+   // Logging in
+   $("#buttonSignIn").click(function() {
+		$.ajax({
+		   type: "POST",
+		   dataType: "json",
+		   url: "/signin.html",
+		   data: { email: $("#signinEmail").val(), password: $("#signinPassword").val()},
+		   success: function(data){
+				console.log(data);
+				if(data.error > 0) {
+					$("#loginError").text("The email or password is incorrect.");
+					$("#loginError").show();
+				}
+				else {
+					$("#loginError").text("Successfully logged in...");
+					$("#signInForm").hide();
+					setTimeout(function(){ location.href="/"; }, 1000);
+					
+				}
+		   }
+		 });
+   });
+   
+   // Logging in
+   $("#buttonSignUp").click(function() {
+		$.ajax({
+		   type: "POST",
+		   dataType: "json",
+		   url: "/signup.html",
+		   data: { email: $("#signUpEmail").val(), password: $("#signUpPassword").val()},
+		   success: function(data){
+				console.log(data);
+				var err_text = "";
+				if(data.error == 1) {
+					err_text = "Please fill out the registration form.";
+				}
+				else if(data.error == 2) {
+					err_text = "Email <i>"+ $("#signUpEmail").val() +"</i> has already registered. Please try another one.";
+				}
+				else if(data.error == 2) {
+					err_text = "Email <i>"+ $("#signUpEmail").val() +"</i> has already registered. Please try another one.";
+				}
+				else if(data.error == 3) {
+					err_text = "Wrong email address";
+				}
+				else if(data.error == 4) {
+					err_text = "DB error. Contact us, please.";
+				}
+				else if(data.error == 5) {
+					err_text = "Password does not match the confirm password.";
+				}
+				
+				if(data.error > 0) {
+					$("#signupError").html(err_text);
+					$("#signupError").show();
+				}
+				else {
+					$("#signupError").text("Successfully logged in...");
+					$("#signupError").hide();
+					setTimeout(function(){ location.href="/"; }, 1000);
+				}
+		   }
+		 });
+   });
 });
 
 function replaceDomainName() {

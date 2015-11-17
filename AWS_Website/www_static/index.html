@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -50,7 +49,9 @@
     <script src="js/jquery-ui.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
-
+	<script>
+	var section = window.location.hash;
+	</script>
 </head>
 
 <body class='mainbackground'>
@@ -69,9 +70,9 @@
 
 				<% if (noUploadForUser != 2) { %>
                 <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
-                <li><a href="/my.html" class="menuLinkNoScroll">My presentations</a></li>
-				<li><a href="#login" class="loginUser">Sign in</a></li>
-                <li><a href="#signUp" class="signUpUser">Sign up</a></li>
+                <li><a href="#myPres" class="myPres menuLinkOther">My presentations</a></li>
+				<li><a href="#login" class="loginUser menuLinkOther">Sign in</a></li>
+                <li><a href="#signUp" class="signUpUser menuLinkOther">Sign up</a></li>
 				<% } %>
             <% } else { %>
 				<% if (userRole == 0) { %>
@@ -84,7 +85,7 @@
 				<% } else { %>
 				  <li><a href="/account.html" data-index="three" class="menuLinkNoScrollRed">My account</a></li>
 				<% } %>
-            <li><a href="/my.html" data-index="three" class="menuLinkNoScroll">My presentations</a></li>
+            <li><a href="#myPres" class="myPres menuLinkOther">My presentations</a></li>
             <li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
             <% } %>
         </ul>
@@ -107,7 +108,7 @@
 
 
     <!-- Header -->
-    <header id="top" class="header allData">
+    <header id="top" class="header allData mainData">
 
         <div class="title col-xs-12" style="position: absolute; top: 20%;">
 			<center>
@@ -152,7 +153,7 @@
         </div>
     </section>-->
     <!-- Our Product -->
-    <section id="product" class="mainbackground services bg-primary allData">
+    <section id="product" class="mainbackground services bg-primary allData mainData">
         <div class="container">
             <div class="row text-center">
                 <div class="col-lg-10 col-lg-offset-1">
@@ -190,7 +191,7 @@
     </aside> -->
 
     <!-- How It Works -->
-    <section id="works" class="portfolio whiteBg allData">
+    <section id="works" class="portfolio whiteBg allData mainData">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
@@ -230,7 +231,7 @@
     </section>
 
     <!-- Call to Company -->
-    <section id="company" class="mainbackground bg-primary allData">
+    <section id="company" class="mainbackground bg-primary allData mainData">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -242,55 +243,84 @@
     </section>
 
     <!-- Login -->
-    <section id="login2" class="login mainbackground">
+
+	<% if (!user) { %>	
+
+    <section id="login" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
 
         <div class="loginbody">
-                <form id="signinform" action="/signin.html" method="post">
+				<h1>Sign In</h1>
+				<h4 id="loginError" style="color: #FF0000; display:none"></h4>
+                <form role="form" id="signInForm">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
-                    <h1>Sign In</h1>
                     <div class="form-group">
                         <label for="Username">Email</label>
-                        <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.body.email %>">
+                        <input id="signinEmail" type="email" class="form-control" name="email" placeholder="Enter email">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" name="password" placeholder="Password">
+                        <input id="signinPassword" type="password" class="form-control" name="password" placeholder="Password">
                     </div>
-                    <input type="submit" value="Sign In" class="btn btn-default"/>
+                    <input type="button" id="buttonSignIn" value="Sign In" class="btn btn-default"/>
                 </form>
             </div>
     </section>
 
     <!-- Sign Up -->
-    <section id="signUp" class="login mainbackground">
+    <section id="signUp" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
 
         <div class="loginbody">
-                <form role="form" action="/signup.html" method="post">
+				<h1>Create account </h1>
+				<h4 id="signupError" style="color: #FF0000; display:none"></h4>
+                <form role="form"id="signUpForm">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
                 <input type="hidden" name="account" value="<%= (request.body.account) ? request.body.account : request.query.account %>">
-                    <h1>Create account </h1>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= request.body.email %>">
+                        <input id="signUpEmail" type="email" class="form-control" name="email" placeholder="Enter email">
                     </div>
-
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" name="password" placeholder="Password">
+                        <input id="signUpPassword" type="password" class="form-control" name="password" placeholder="Password">
                     </div>
-                    <input type="submit" value="Create Account" class="btn btn-default"/>
+                    <input id="buttonSignUp" type="button" value="Create Account" class="btn btn-default"/>
                 </form>
             </div>
     </section>
 
+	<% } %>
+
+    <!-- Sign Up -->
+	
+	
+    <section id="myPres" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="simplePage">
+          <h3>My presentations</h3>
+           <table class="table" style="max-width: 100%">
+
+			<% slides.forEach(function(slide){ %>
+				<tr id="slide_<%= slide.sid %>">
+				<td width="150"><a href="/<%= slide.sid %>"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
+				<td><a href="/<%= slide.sid %>"><%= slide.title %></a><br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete slide</a></td>
+				</tr>
+			<%  }); %>
+		   
+
+
+
+           </table>
+
+        </div>
+    </section>
 
 
     <!-- Footer -->
 
     <footer>
-        <section id="contact" class="whiteBg allData">
+        <section id="contact" class="whiteBg allData mainData">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1 text-center">
@@ -350,40 +380,7 @@
     <!-- Custom Theme JavaScript -->
 
     <script>
-    // Closes the sidebar menu
-    $("#menu-close").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
 
-    // Opens the sidebar menu
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-
-	// Click on item in menu
-	$(".menuLink,.signUpUser,.loginUser").click(function(e) {
-        e.preventDefault();
-        $("#sidebar-wrapper").toggleClass("active");
-    });
-
-    // Scrolls to the selected menu item on the page
-    $(function() {
-        $('a[href*=#]:not([href=#])').click(function() {
-            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
-
-                var target = $(this.hash);
-                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-                if (target.length) {
-                    $('html,body').animate({
-                        scrollTop: target.offset().top
-                    }, 1000);
-                    return false;
-                }
-            }
-        });
-    });
     </script>
 
 </body>

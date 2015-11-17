@@ -907,14 +907,18 @@ router.get(rootRegExp, function (req, res){
 
 		getRandomSlides(Slide,function(randomSlides) {
 			if(typeof req.cookies[sessionIdCookie] != "undefined") {
-				res.render(path.join(www_dir, www_static_dir, indexHtml), {
-					user: req.user,
-					noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
-					randomSlides: randomSlides,
-					userRole: UserData[req.cookies[sessionIdCookie]].userRole,
-					request: req,
-					ERROR_AUTH: 0,
-					error: 0
+				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
+					res.render(path.join(www_dir, www_static_dir, indexHtml), {
+						user: req.user,
+						noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
+						randomSlides: randomSlides,
+						userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+						request: req,
+						slides: docs,
+						ERROR_AUTH: 0,
+						error: 0,
+						moment: moment
+					});
 				});
 			}
 			else {
@@ -926,7 +930,8 @@ router.get(rootRegExp, function (req, res){
 					userRole: 0,
 					request: req,
 					ERROR_AUTH: 0,
-					error: 0
+					error: 0,
+					slides: {}
 				});
 			}
 		});
@@ -937,51 +942,29 @@ router.get('/account.html', ensureAuthenticated, function (req, res){
     res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user, userData: UserData[req.cookies[sessionIdCookie]], protocol: ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") });
 });
 
-router.get('/signup.html', function (req, res){
-  if(req.user) {
-    res.redirect('/');
-  }
-  else {
-    res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, message: req.flash('error'), request: req,  error: 0});
-  }
-});
-
 
 router.post('/signup.html', function (req, res){
   console.log("MA: new user: " + req.body.password + " " + req.body.email);
   var errorCode = 0;
   if( !req.body.password || !req.body.email ) {
-    res.render(path.join(www_dir,www_static_dir , 'signup.html'), { user: req.user, request: req,  error: 1});
+    res.json({ error: '1' });
   }
-  else
-  {
-    addUser(req.body.password, req.body.email,
+  else {
+	addUser(req.body.password, req.body.email,
 	function (error_code) {
-	    if(error_code > 0) {
+		if(error_code > 0) {
 			// Error codes: 1 - user exists, 2 - email exists, 3 - wrong email,  4 - other DB errors, 5 - Passwords are different
-	        res.render(path.join(www_dir,www_static_dir , '/signup.html'), { user: req.user, error: error_code, request: req })
-	    }
-	    else {
-            passport.authenticate('local')(req, res, function () {
-					         res.redirect(req.body.redirect ? req.body.redirect + ( (req.body.account) ? '?' + req.body.account : '' ) : '/');
-            })
-	    }
+			res.json({ error: error_code });
+		}
+		else {
+			passport.authenticate('local')(req, res, function () {
+				res.json({ error: 0 });
+			})
+		}
 	}
-    );
-
-
+	);
   }
 });
-
-router.get('/signin.html', function (req, res){
-    if(req.user) {
-      res.redirect('/');
-    }
-    else {
-      res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, ERROR_AUTH: 0, request: req });
-    }
-});
-
 
 router.get('/letscrawl.html', function (req, res){
 	res.send('Crawl is very dangerous! :)');
@@ -997,14 +980,21 @@ router.get('/letscrawl.html', function (req, res){
 router.post('/signin.html',
   function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
-      if (err) { return next(err); }
-      if (!user) { return res.render(path.join(www_dir,www_static_dir , 'signin.html'), { user: req.user, ERROR_AUTH: 1, request: req }); }
-      req.logIn(user, function(err) {
-        if (err) { return next(err); }
-        // Set new session after login is mandotary for middleware
-        //setUserSession(req,res,function(userId) {});
-        return res.redirect(req.body.redirect ? req.body.redirect : '/');
-      });
+      if (err) {
+		  res.json({ error: '1' });
+	  }
+      else if (!user) { 
+		res.json({ error: '2' });
+	  }
+	  else {
+		  req.logIn(user, function(err) {
+			if (err) { return next(err); }
+			// Set new session after login is mandotary for middleware
+			setUserSession(req,res,function(userId) {});
+			//return res.redirect(req.body.redirect ? req.body.redirect : '/');
+		  });
+		  res.json({ error: '0' });
+	  }
     })(req, res, next);
 });
 
@@ -1031,26 +1021,6 @@ readSlideSize = function(path_to_slide, callback) {
 }
 
 module.exports.readSlideSize = readSlideSize;
-
-router.get('/my.html', function (req, res){
-  if(typeof req.cookies[sessionIdCookie] === "undefined") {
-    res.redirect('/');
-  }
-  else {
-  	return Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
-  		if( !err ) {
-  			res.render(path.join(www_dir,www_static_dir , 'my.html'), {
-  			  slides: docs,
-  			  request: req,
-  			  user: req.user,
-  			  moment: moment
-  			});
-  		} else {
-  			return console.log( err );
-  		}
-  	});
-  }
-});
 
 
 router.get('/subscription.html', function (req, res){
@@ -1216,7 +1186,7 @@ var socketIoSlite = require("./lib/socketio-slite.js").setDir(www_dir, slitesDir
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/signin.html');
+  res.redirect('/#login');
 }
 
 module.exports.deleteFolderRecursive = function(path) {
