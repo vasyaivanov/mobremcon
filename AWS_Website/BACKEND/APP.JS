@@ -377,7 +377,7 @@ else {
 			res.redirect(req.url + '?auth=1');
 		}
 		else {
-			if(req.query.auth == 1 && userId > 0) {
+			if(req.query.auth == 1 && userId.length > 0) {
 				var new_url = req.url;
 				new_url = new_url.replace("?auth=1","")
 				console.log(new_url);
