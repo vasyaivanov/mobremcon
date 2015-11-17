@@ -372,7 +372,7 @@ if((req.method == "POST" && req.url == "/paypal") || (req.url == "/google32d58b5
 	next();
 }
 else {
-  setUserSession(req,res,function(userId) {
+  setUserSession(req,res,function(userId) {	
 		if(userId == 0 && req.query.auth != 1 && !req.url.match(slitesRegMW)) {
 			res.redirect(req.url + '?auth=1');
 		}
@@ -385,16 +385,50 @@ else {
 			}
 			else {
 				if(userId == 0) {
+					console.log('YOU\'re a bot! HAHA! I\'m going to show you a fake slide ]:->');
+
+					var split_hash = req.path.split("/");
+					var hash = req.path.replace("/","");
+
+					if(split_hash.length == 2) {
+						Slide.findOne({	$or: [{sid: hash} ,  {scid: hash}]}, function (err, doc) {
+							if(doc){
+								var images = '';
+								if(doc.slidesNum > 0) {
+									for (i=0;i<=doc.slidesNum; i++) {
+										images += "<img width='70%' src='/" + doc.sid + "/img" + i +".jpg'><br>"
+									}
+								}
+								res.render(path.join(www_dir, www_static_dir, "fake_slide.html"), {
+									title: doc.title,
+									img: images
+								});
+							}
+							else {
+								// No slide
+								next();
+							}
+						});
+					}
+					else {
+						// Not a slide
+						next();
+					}
 					// Render for bots :)
-					if((req.url.length == slitesHashLen+1) && (req.query.auth != 1)) {
+					/*if((req.url.length == slitesHashLen+1) && (req.query.auth != 1)) {
 						console.log("Send fake slide page");
-						var hash = req.url.replace("/","");
 
 						Slide.findOne({sid : hash }).exec(function (err, doc) {
 							if( doc ) {
+								var images = '';
+								if(doc.slidesNum > 0) {
+									for (i=0;i<=doc.slidesNum; i++) {
+										images += "<img width='30%' src='" + req.url + "/img" + i +".jpg'><br>"
+									}
+								}
 								res.render(path.join(www_dir, www_static_dir, "fake_slide.html"), {
 									title: doc.title,
-									img: req.url + "/img0.jpg"
+									img: images
 								});
 							} else {
 								res.send("Cant find this slide: " + hash)
@@ -403,7 +437,7 @@ else {
 					}
 					else {
 						next();
-					}
+					}*/
 				}
 				else {
 					// Initialize new session
@@ -499,8 +533,8 @@ app.use(function (req, res, next) {
 								<head> \
 								<title></title> \
 								</head> \
-								<body style='scrolling:no;'> \
-								<iframe src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
+								<body style='scrolling:no;' onload=\"document.getElementById('frame').focus();\"> \
+								<iframe id='frame' src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
 								</iframe> \
 								</body>";
 								res.send(output);
@@ -536,8 +570,8 @@ app.use(function (req, res, next) {
 			<head> \
 			<title></title> \
 			</head> \
-			<body style='scrolling:no;'> \
-			<iframe src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
+			<body style='scrolling:no;' onload=\"document.getElementById('frame').focus();\"> \
+			<iframe id='frame' src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
 			</iframe> \
 			</body>";
 			res.send(output);
@@ -562,21 +596,25 @@ app.use(function (req, res, next) {
 				//console.log('hash: ' + hash);
 				//console.log('afterHash: ' + afterHash);
 
-				if (afterHash === '' ||
-					afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
+				if (afterHash === '' || afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
 					//var indexPathname = path.join(wwwSlites, hash, 'index.html');                // www/slites/hash/index.html
 					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
 					//console.log('RENDERING HTML: ' + indexPathname);
 					// Check slide in DB
-					slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum, ssetDomain) {
-						if(sfound == 1) {
-							res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
-						}
-						else {
-							console.log( "Slide was not found" );
-							res.redirect('/');
-						}
-					});
+					if(typeof req.cookies[sessionIdCookie] != "undefined") {
+						slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scustomurl, sisVideoChatOpen, sisScreensharingOpen, sslidesNum, ssetDomain) {
+							if(sfound == 1) {
+								res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
+							}
+							else {
+								console.log( "Slide was not found" );
+								res.redirect('/');
+							}
+						});
+					}
+					else {
+						res.redirect('/');
+					}
 				} else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
 					//console.log('jpg: ' + afterHash);
 					var extTsPos = afterHash.indexOf('.jpg?ts=', 4);
