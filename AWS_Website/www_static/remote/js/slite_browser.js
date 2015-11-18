@@ -127,7 +127,7 @@ function onMouseMove(event) {
     // $( "#log" ).text( laserCoordinates);
     //console.log(event.pageX + ' ' + event.pageY);
     //return;
-    console.log("onMouseMove is happening");
+    //console.log("onMouseMove is happening");
 
     updateSlideMetrics();
     var per = offsetToPercentage(event.pageX, event.pageY);
@@ -154,7 +154,7 @@ function onMouseMove(event) {
 };
 
  $( '#currentSlide' ).mousedown(function(event) {
-    console.log("mouse down");
+    //console.log("mouse down");
     //console.log(event);
     updateSlideMetrics();
     var per = offsetToPercentage(event.pageX, event.pageY);
@@ -174,7 +174,7 @@ function onMouseMove(event) {
 });
 
 $( '#currentSlide' ).mouseup(function(event) {
-    console.log("mouse up");
+    //console.log("mouse up");
     $( "#currentSlide" ).off ("mousemove", onMouseMove);
     // Only turn off laser if we are in laser mode
     if(interactionType === LASER) {

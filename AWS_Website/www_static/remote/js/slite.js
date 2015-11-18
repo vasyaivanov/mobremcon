@@ -5,7 +5,8 @@ var currentSlide = document.getElementById("currentSlide"),
     slideWidth = 0,
     slideHeight = 0,
     xOffset = 0,
-    xOffset = 0;
+    xOffset = 0, 
+    LOG_COORDS = false;
 
 function getPos(el) {
     // yay readability
@@ -46,33 +47,39 @@ function updateSlideMetrics(){
     //slideHeight = slideImg.offsetHeight;
     //xOffset = rsSlidePos.x;//slidePosX;
     //yOffset = rsSlidePos.y;//slidePosY;
-    console.log('Slide Metrics:');
-    //console.log("window inner width: " + w + ', height: ' + h);
-    console.log("xOffset: " + xOffset);
-    console.log("yOffset: " + yOffset);
-    console.log("slideWidth: " + slideWidth);
-    console.log("slideHeight: " + slideHeight);
+    if (LOG_COORDS) {
+        console.log('Slide Metrics:');
+        //console.log("window inner width: " + w + ', height: ' + h);
+        console.log("xOffset: " + xOffset);
+        console.log("yOffset: " + yOffset);
+        console.log("slideWidth: " + slideWidth);
+        console.log("slideHeight: " + slideHeight);
+    }
 }
 
 function offsetToPercentage(xOff, yOff) {
     var xPer = calcOffset(xOff, xOffset, slideWidth);
     var yPer = calcOffset(yOff, yOffset, slideHeight);
-
-    console.log("xOff: " + xOff);
-    console.log("yOff: " + yOff);
-    console.log("xPer: " + xPer);
-    console.log("yPer: " + yPer);
+    
+    if (LOG_COORDS) {
+        console.log("xOff: " + xOff);
+        console.log("yOff: " + yOff);
+        console.log("xPer: " + xPer);
+        console.log("yPer: " + yPer);
+    }
     return {x: xPer, y: yPer};
 }
 
 function percentageToOffset(xPer, yPer) {
     var xOff = calcPercentage(xPer, xOffset, slideWidth);
     var yOff = calcPercentage(yPer, yOffset, slideHeight);
-
-    console.log("xOff: " + xOff);
-    console.log("yOff: " + yOff);
-    console.log("xPer: " + xPer);
-    console.log("yPer: " + yPer);
+    
+    if (LOG_COORDS) {
+        console.log("xOff: " + xOff);
+        console.log("yOff: " + yOff);
+        console.log("xPer: " + xPer);
+        console.log("yPer: " + yPer);
+    }
     return {x: xOff, y: yOff};
 }
 
