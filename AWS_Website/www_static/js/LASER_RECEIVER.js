@@ -105,6 +105,7 @@ function resizeCanvas() {
     canvas[0].width = newWidth;*/
     canvas[0].width = window.innerWidth;
     canvas[0].height = window.innerHeight;
+    clearCanvas();
     //console.log("Canvas W:" + canvas[0].width + " H:" + canvas[0].height);
 };  
 
@@ -123,7 +124,6 @@ function clearCanvas () {
 $(window).resize(function () {
     //resize just happened, pixels changed
     resizeCanvas();
-    clearCanvas();
 });
 
 function draw() {
