@@ -372,8 +372,8 @@ if((req.method == "POST" && req.url == "/paypal") || (req.url == "/google32d58b5
 	next();
 }
 else {
-  setUserSession(req,res,function(userId) {	
-		if(userId == 0 && req.query.auth != 1 && !req.url.match(slitesRegMW)) {
+  setUserSession(req,res,function(userId) {
+		if(userId == 0 && req.query.auth != 1 /*&& !req.url.match(slitesRegMW)*/) {
 			res.redirect(req.url + '?auth=1');
 		}
 		else {
@@ -983,7 +983,7 @@ router.post('/signin.html',
       if (err) {
 		  res.json({ error: '1' });
 	  }
-      else if (!user) { 
+      else if (!user) {
 		res.json({ error: '2' });
 	  }
 	  else {
