@@ -18,18 +18,22 @@ function getPos(el) {
 function updateSlideMetrics(){
     var slide = document.getElementById("slide");
     var slideImg = slide.getElementsByTagName('img')[0];
-    var rsSlide = document.getElementsByClassName("rsSlide")[0];
-    var rsSlidePos = getPos(rsSlide);
+    var sliteImgPos = getPos(slideImg);
+    slideWidth = slideImg.offsetWidth;
+    slideHeight = slideImg.offsetHeight;
+    xOffset = sliteImgPos.x;
+    yOffset = sliteImgPos.y;
+    //var rsSlide = document.getElementsByClassName("rsSlide")[0];
+    //var rsSlidePos = getPos(rsSlide);
+    //slideWidth = Math.min(rsSlide.offsetWidth, slideImg.offsetWidth);
+    //slideHeight = Math.min(rsSlide.offsetHeight, slideImg.offsetHeight);
+    //var w = window.innerWidth;
+    //var h = window.innerHeight;
     //var videoGallery = document.getElementById("video-gallery");
     //var videoGalleryWidth = videoGallery.offsetWidth;
     //var videoGalleryHeight = videoGallery.offsetHeight;
-    slideWidth = Math.min(rsSlide.offsetWidth, slideImg.offsetWidth);
-    slideHeight = Math.min(rsSlide.offsetHeight, slideImg.offsetHeight);
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-    console.log("w: " + w + ' h: ' + h + ' sw: ' + slideWidth + ' sh ' + slideHeight );
-    xOffset = (w - slideWidth) / 2; ///rsSlidePos.x + (videoGalleryWidth - slideWidth)/2
-    yOffset = (h - slideHeight) / 2; ///rsSlidePos.y + (videoGalleryHeight - slideHeight)/2
+    //xOffset = (w - slideWidth) / 2; ///rsSlidePos.x + (videoGalleryWidth - slideWidth)/2
+    //yOffset = (h - slideHeight) / 2; ///rsSlidePos.y + (videoGalleryHeight - slideHeight)/2
     //console.log('innerSize: ' + w + ' ' + h);
     //console.log('Slide Pos: ' + slidePosX + ' ' + slidePosY);
     //console.log('videoGallerySize: ' + videoGalleryWidth + ' ' + videoGalleryHeight);
@@ -43,31 +47,32 @@ function updateSlideMetrics(){
     //xOffset = rsSlidePos.x;//slidePosX;
     //yOffset = rsSlidePos.y;//slidePosY;
     console.log('Slide Metrics:');
+    //console.log("window inner width: " + w + ', height: ' + h);
     console.log("xOffset: " + xOffset);
     console.log("yOffset: " + yOffset);
     console.log("slideWidth: " + slideWidth);
     console.log("slideHeight: " + slideHeight);
 }
 
-function offsetToPercentage(x, y) {
-    var xPercent = calcOffset(x, xOffset, slideWidth);
-    var yPercent = calcOffset(y, yOffset, slideHeight);
+function offsetToPercentage(xOff, yOff) {
+    var xPer = calcOffset(xOff, xOffset, slideWidth);
+    var yPer = calcOffset(yOff, yOffset, slideHeight);
 
-    /*console.log("x: " + x);
-    console.log("y: " + y);*/
-    console.log("xPercent: " + xPercent);
-    console.log("yPercent: " + yPercent);
-    return {x: xPercent, y: yPercent};
+    console.log("xOff: " + xOff);
+    console.log("yOff: " + yOff);
+    console.log("xPer: " + xPer);
+    console.log("yPer: " + yPer);
+    return {x: xPer, y: yPer};
 }
 
-function percentageToOffset(x, y) {
-    var xOff = calcPercentage(x, xOffset, slideWidth);
-    var yOff = calcPercentage(y, yOffset, slideHeight);
+function percentageToOffset(xPer, yPer) {
+    var xOff = calcPercentage(xPer, xOffset, slideWidth);
+    var yOff = calcPercentage(yPer, yOffset, slideHeight);
 
-    /*console.log("x: " + x);
-    console.log("y: " + y);*/
-    console.log("xOffset: " + xOff);
-    console.log("yOffset: " + yOff);
+    console.log("xOff: " + xOff);
+    console.log("yOff: " + yOff);
+    console.log("xPer: " + xPer);
+    console.log("yPer: " + yPer);
     return {x: xOff, y: yOff};
 }
 
@@ -106,8 +111,8 @@ function touchStart(event) {
                               slideID: currentHash});
     } else if (DRAW === interactionType) {
         // recalculate offsets in case window size has changed
-        socket.emit('drawStart',{x:per.x,
-                                 y:per.y ,
+        socket.emit('drawStart',{x: per.x,
+                                 y: per.y ,
                                  slideID: currentHash});
     }
 };
