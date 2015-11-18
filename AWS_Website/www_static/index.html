@@ -126,15 +126,15 @@
 
         <div class="text-vertical-center">
             <% if(noUploadForUser == 0) { %>
-                <div class="uploadfile">
-                    <button type="file" class="btn btn-dark btn-lg"  accept="pptx">Upload Presentation</button>
-                    <input type="file" accept="pptx" id="uploadPresentation">
-                </div>
+
+              <span class="file-input btn btn-primary btn-file uploadButton">
+                  Upload presentation <input type="file" accept="pptx" id="uploadPresentation">
+              </span>
 			<% } else if (noUploadForUser == 2) { %>
 
 			<% } else { %>
             <div class="uploadfile">
-                <button type="button" class="btn btn-dark btn-lg" onclick="javascript:document.location='my.html'">Limit reached.<br/>Click here to delete.</button>
+                <button type="button" class="btn uploadButton" onclick="$('.myPres').click()">Limit reached.<br/>Click here to delete.</button>
                 <input type="file" accept="pptx" id="uploadPresentation" style="display: none">
             </div>
             <% } %>
@@ -244,7 +244,7 @@
 
     <!-- Login -->
 
-	<% if (!user) { %>	
+	<% if (!user) { %>
 
     <section id="login" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
@@ -293,8 +293,8 @@
 	<% } %>
 
     <!-- Sign Up -->
-	
-	
+
+
     <section id="myPres" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage">
@@ -307,7 +307,7 @@
 				<td><a href="/<%= slide.sid %>"><%= slide.title %></a><br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete slide</a></td>
 				</tr>
 			<%  }); %>
-		   
+
 
 
 
