@@ -37,8 +37,8 @@ $(function() {
 
     // Menu visualization
     $(".allData").hide();
-	if(section) {
-		$(section).show();
+	if(window.location.hash) {
+		$(window.location.hash).show();
 	}
 	else {
 		$(".mainData").show();
