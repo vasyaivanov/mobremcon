@@ -322,9 +322,15 @@ function redirectToWWW(req,res,next) {
 // Autogenerate session for hosts
 var mwCache = Object.create(null);
 function virtualHostSession(req, res, next) {
-	var host = req.get('host');
+	var host = req.hostname;
 	if(host) {
-		var domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
+		var domainClear;
+		if(trustedDomains.indexOf(host) > 0) {
+			domainClear = host;
+		}
+		else {
+			domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
+		}
 		var hostSession = mwCache[domainClear];
 		if (!hostSession) {
 			hostSession = mwCache[domainClear] = session({
@@ -380,7 +386,6 @@ else {
 			if(req.query.auth == 1 && userId.length > 0) {
 				var new_url = req.url;
 				new_url = new_url.replace("?auth=1","")
-				console.log(new_url);
 				res.redirect(new_url);
 			}
 			else {
@@ -813,49 +818,53 @@ function setUserSession(req, res, callback) {
 	//console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
 	var oldUserId = 0;
 	var expDate = new Date(Number(new Date()) + 315360000000);
-	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+	
+	var domainClear;
+	var host = req.hostname;
+	if(trustedDomains.indexOf(host) > 0) {
+		domainClear = host;
+	}
+	else {
+		domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
+	}	
 
-    domainClear = domainClear.replace(/\:(.+)$/g, "");
-	domainClear = domainClear.replace(/^undefined\.localhost/g,"localhost");
-	//console.log(domainClear);
+   // If no user id - generate or add from req.user._id
+   if(!(req.cookies[sessionIdCookie])) {
+		var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
+		var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
+		//console.log("Setting new session cookie");
+		res.cookie(sessionIdCookie, newUserId, { domain: '.' + domainClear, expires: expDate });
+		callback(0);
+		//callback(newUserId);
+   }
+   else {
+	// User loged in, but has older, random generated id
+	if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
+		//console.log("-----------Setting new user id");
+		oldUserId = req.cookies[sessionIdCookie];
+		res.cookie(sessionIdCookie, req.user._id.toString() , {  domain: '.' + domainClear, expires: expDate });
 
-	   // If no user id - generate or add from req.user._id
-	   if(!(req.cookies[sessionIdCookie])) {
-			var userIpAddress = req.connection.remoteAddress.replace(/\./g,"");
-			var newUserId = (req.user) ? req.user._id.toString() : Math.floor(Math.random() * (99999999999 - 1)) + 1 + userIpAddress + Math.round(+new Date()/1000);
-			//console.log("Setting new session cookie");
-			res.cookie(sessionIdCookie, newUserId, { domain: '.' + domainClear, expires: expDate });
-			callback(0);
-			//callback(newUserId);
-	   }
-	   else {
-		// User loged in, but has older, random generated id
-		if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
-			//console.log("-----------Setting new user id");
-			oldUserId = req.cookies[sessionIdCookie];
-			res.cookie(sessionIdCookie, req.user._id.toString() , {  domain: '.' + domainClear, expires: expDate });
-
-			// Update user Notes
-			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
-				function (err, numAffected) {
-					if(err) console.log(err);
-					if(numAffected > 0) {console.log("Remaped notes: " + numAffected)}
-			});
-			// Update user slides
-			var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;
-			Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet }}, {multi: true, upsert: false},
-				function (err, numAffected) {
-					if(err) console.log(err);
-					if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
-			});
-			// Send page reload
-			callback(0);
-		}
-		else {
-			//console.log("-------------User is set");
-			callback(req.cookies[sessionIdCookie]);
-		}
-	   }
+		// Update user Notes
+		Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
+			function (err, numAffected) {
+				if(err) console.log(err);
+				if(numAffected > 0) {console.log("Remaped notes: " + numAffected)}
+		});
+		// Update user slides
+		var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;
+		Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet }}, {multi: true, upsert: false},
+			function (err, numAffected) {
+				if(err) console.log(err);
+				if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
+		});
+		// Send page reload
+		callback(0);
+	}
+	else {
+		//console.log("-------------User is set");
+		callback(req.cookies[sessionIdCookie]);
+	}
+   }
 }
 // Index page
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
@@ -907,6 +916,7 @@ router.get(rootRegExp, function (req, res){
 
 		getRandomSlides(Slide,function(randomSlides) {
 			if(typeof req.cookies[sessionIdCookie] != "undefined") {
+
 				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
 					res.render(path.join(www_dir, www_static_dir, indexHtml), {
 						user: req.user,
@@ -931,7 +941,7 @@ router.get(rootRegExp, function (req, res){
 					request: req,
 					ERROR_AUTH: 0,
 					error: 0,
-					slides: {}
+					slides: []
 				});
 			}
 		});
