@@ -123,6 +123,22 @@ function getHashPresentation(hash, next){
     });
 }
 
+function notifyNofUsersChanged(socket, hash, local) {
+    var data = { hash: hash, 
+                 nof_users: nofUsers[hash]};
+    if (isNaN(data.nof_users) || data.nof_users < 0) {
+        nofUsers[data.hash] = 0;
+        data.nof_users = 0;
+    }
+    if (typeof local !== "undefined" && local === true) {
+        socket.emit("nof-users", data);
+    } else {
+        socket.broadcast.emit("nof-users", data);
+    }
+    //console.log("nof-users emitted Users: " + data.nof_users + " for hash: " + data.hash);
+}
+
+
 module.parent.exports.io.use(function (socket, next) {
     //console.log("Query: ", socket.handshake.query);
     // return the result of next() to accept the connection.
@@ -131,6 +147,7 @@ module.parent.exports.io.use(function (socket, next) {
             nofUsers[socket.handshake.query.hash] = 0;
         }
         nofUsers[socket.handshake.query.hash]++;
+        notifyNofUsersChanged(socket, socket.handshake.query.hash);
         console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
         return next();
     }
@@ -157,6 +174,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                     if (nofUsers[socket.handshake.query.hash] < 0) {
                         nofUsers[socket.handshake.query.hash] = 0;
                     }
+                    notifyNofUsersChanged(socket, socket.handshake.query.hash);
                     console.log("User disconnected");
                     console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
                 }
@@ -888,12 +906,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
             socket.on("get-nof-users", function (data) {
                 if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
-                data.nof_users = nofUsers[data.hash];
-                if (isNaN(data.nof_users) || data.nof_users < 0) {
-                    nofUsers[data.hash] = 0;
-                    data.nof_users = 0;
-                }
-                socket.emit("nof-users", data);
+                notifyNofUsersChanged(socket, data.hash, true);
                 //console.log("nof-users ", data.nof_users);
             });
 
