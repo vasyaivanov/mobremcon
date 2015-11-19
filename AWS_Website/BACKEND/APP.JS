@@ -921,7 +921,8 @@ router.get(rootRegExp, function (req, res){
 							ERROR_AUTH: 0,
 							error: 0,
 							moment: moment,
-							expire: expire
+							expire: expire,
+							userData: UserData[req.cookies[sessionIdCookie]]
 						});
 					});
 				});
@@ -937,7 +938,8 @@ router.get(rootRegExp, function (req, res){
 					ERROR_AUTH: 0,
 					error: 0,
 					slides: [],
-					expire: ''
+					expire: '',
+					userData: []
 				});
 			}
 		});
