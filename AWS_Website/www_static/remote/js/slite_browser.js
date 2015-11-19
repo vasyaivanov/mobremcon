@@ -129,7 +129,7 @@ function onMouseMove(event) {
     //return;
     //console.log("onMouseMove is happening");
 
-    updateSlideMetrics();
+    updateSlideMetrics(event.pageX, event.pageY);
     var per = offsetToPercentage(event.pageX, event.pageY);
 
     switch(interactionType) {
@@ -156,7 +156,7 @@ function onMouseMove(event) {
  $( '#currentSlide' ).mousedown(function(event) {
     //console.log("mouse down");
     //console.log(event);
-    updateSlideMetrics();
+    updateSlideMetrics(event.pageX, event.pageY);
     var per = offsetToPercentage(event.pageX, event.pageY);
 
     $( "#currentSlide" ).on ("mousemove", onMouseMove);

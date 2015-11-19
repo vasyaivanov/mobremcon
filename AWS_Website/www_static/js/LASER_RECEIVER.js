@@ -11,8 +11,9 @@ var canvas, ctx, flag = false,
     currX = 0,
     prevY = 0,
     currY = 0,
-    dot_flag = false;
-
+	dot_flag = false,
+	LOG_DRAWING = true;
+	
 var paintColor = "red",
     lineThickness = 3;
 
@@ -27,6 +28,10 @@ function isThisHash(hash) {
     var dotWidth = redDot.width();
     var dotHeight = redDot.height();
     //console.log('moveLaserTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
+	if (LOG_DRAWING) {
+        console.log('moveLaserTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
+    }
+
     redDot.css({left: off.x - dotWidth/2, top: off.y - dotHeight/2});
 }
 
@@ -34,6 +39,9 @@ function drawTo(res, x, y) {
     updateSlideMetrics();
     var off = percentageToOffset(x, y);
     //console.log('drawTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
+	if (LOG_DRAWING && res !== 'up') {
+        console.log('drawTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
+    }
     findxy(res, off.x, off.y);
 }
 
