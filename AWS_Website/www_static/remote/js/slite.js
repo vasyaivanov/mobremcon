@@ -6,7 +6,7 @@ var currentSlide = document.getElementById("currentSlide"),
     slideHeight = 0,
     xOffset = 0,
     xOffset = 0, 
-    LOG_COORDS = true;
+    LOG_COORDS = false;
 
 function getPos(el) {
     // yay readability
@@ -16,7 +16,7 @@ function getPos(el) {
     return {x: lx, y: ly};
 }
 
-function updateSlideMetrics(mouseX, mouseY){
+function updateSlideMetrics(){
     var slide = document.getElementById("slide");
     var slideImg = slide.getElementsByTagName('img')[0];
     var sliteImgPos = getPos(slideImg);
@@ -49,9 +49,6 @@ function updateSlideMetrics(mouseX, mouseY){
     //yOffset = rsSlidePos.y;//slidePosY;
     if (LOG_COORDS) {
         console.log('Slide Metrics:');
-        if (typeof mouseX !== "undefined" && typeof mouseY !== "undefined") {
-            console.log("mouse X: " + mouseX + " Y: " + mouseY);
-        }
         //console.log("window inner width: " + w + ', height: ' + h);
         console.log("xOffset: " + xOffset);
         console.log("yOffset: " + yOffset);
@@ -63,22 +60,26 @@ function updateSlideMetrics(mouseX, mouseY){
 function offsetToPercentage(xOff, yOff) {
     var xPer = calcOffset(xOff, xOffset, slideWidth);
     var yPer = calcOffset(yOff, yOffset, slideHeight);
-
-    console.log("xOff: " + xOff);
-    console.log("yOff: " + yOff);
-    console.log("xPer: " + xPer);
-    console.log("yPer: " + yPer);
+    
+    if (LOG_COORDS) {
+        console.log("xOff: " + xOff);
+        console.log("yOff: " + yOff);
+        console.log("xPer: " + xPer);
+        console.log("yPer: " + yPer);
+    }
     return {x: xPer, y: yPer};
 }
 
 function percentageToOffset(xPer, yPer) {
     var xOff = calcPercentage(xPer, xOffset, slideWidth);
     var yOff = calcPercentage(yPer, yOffset, slideHeight);
-
-    console.log("xOff: " + xOff);
-    console.log("yOff: " + yOff);
-    console.log("xPer: " + xPer);
-    console.log("yPer: " + yPer);
+    
+    if (LOG_COORDS) {
+        console.log("xOff: " + xOff);
+        console.log("yOff: " + yOff);
+        console.log("xPer: " + xPer);
+        console.log("yPer: " + yPer);
+    }
     return {x: xOff, y: yOff};
 }
 
@@ -241,7 +242,7 @@ function touchMove(event) {
     }
 
     updateSlideMetrics(xTouch, yTouch);
-    var per = offsetToPercentage(xTouch, yTouch);
+    var per = offsetToPercentage(event.pageX, event.pageY);
 
     switch(interactionType) {
         case LASER: {

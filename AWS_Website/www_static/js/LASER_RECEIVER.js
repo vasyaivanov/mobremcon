@@ -11,9 +11,7 @@ var canvas, ctx, flag = false,
     currX = 0,
     prevY = 0,
     currY = 0,
-    dot_flag = false,
-    LOG_DRAWING = true;
-
+    dot_flag = false;
 
 var paintColor = "red",
     lineThickness = 2;
@@ -24,23 +22,18 @@ function isThisHash(hash) {
 
  function moveLaserTo(x, y) {
     updateSlideMetrics();
-    var res = percentageToOffset(x, y);
-    //console.log('moveLaser: x: ' + x + ' y: ' + y + ' pos: X: ' + res.x + ' Y: ' + res.y);
+    var off = percentageToOffset(x, y);
     var redDot = $( "#redDot" );
     var dotWidth = redDot.width();
     var dotHeight = redDot.height();
-    if (LOG_DRAWING) {
-        console.log('moveLaserTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
-    }
+    //console.log('moveLaserTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
     redDot.css({left: off.x - dotWidth/2, top: off.y - dotHeight/2});
 }
 
 function drawTo(res, x, y) {
     updateSlideMetrics();
     var off = percentageToOffset(x, y);
-    if (LOG_DRAWING && res !== 'up') {
-        console.log('drawTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
-    }
+    //console.log('drawTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
     findxy(res, off.x, off.y);
 }
 
@@ -105,12 +98,15 @@ $( window ).load(function() {
 });
 
 function resizeCanvas() {
-    var slider = $(".royalSlider").data('royalSlider');
+    /*var slider = $(".royalSlider").data('royalSlider');
     var newHeight = slider.currSlide.content.height();
     var newWidth = slider.currSlide.content.width();
     canvas[0].height = newHeight;
-    canvas[0].width = newWidth;
-};
+    canvas[0].width = newWidth;*/
+    canvas[0].width = window.innerWidth;
+    canvas[0].height = window.innerHeight;
+    //console.log("Canvas W:" + canvas[0].width + " H:" + canvas[0].height);
+};  
 
 // Converts percent offset received from server into XY coords
 // (this mirrors calcOffset in slite.js)
@@ -120,11 +116,13 @@ function calcCoords(percent, offset, dim) {
 
 function clearCanvas () {
     console.log("clearCanvas() called");
+    ctx = canvas[0].getContext('2d');
     ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
 };
 
 $(window).resize(function () {
-  //resize just happened, pixels changed
+    //resize just happened, pixels changed
+    resizeCanvas();
     clearCanvas();
 });
 
