@@ -14,7 +14,7 @@ var canvas, ctx, flag = false,
     dot_flag = false;
 
 var paintColor = "red",
-    lineThickness = 2;
+    lineThickness = 3;
 
 function isThisHash(hash) {
     return ( (document.location.pathname === "/"+ hash) || (document.location.pathname === "/"+ hash + "/") );
