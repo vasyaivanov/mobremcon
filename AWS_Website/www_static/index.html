@@ -52,6 +52,10 @@
 	<script>
 	var accountType = "<%=request.query.account%>";
 	</script>
+	<% if (userData.restrictions.domain == 1) {%>
+	<script>var protocol = window.location.protocol.replace(":","");</script>
+	<script src="js/domain-rename.js"></script>
+	<% } %>
 </head>
 
 <body class='mainbackground'>
@@ -62,12 +66,11 @@
         <ul class="sidebar-nav">
             <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
             <li><a href="#top" data-index="one" class="menuLink">Home</a></li>
-        <li><a href="#product" data-index="one" class="menuLink">Product</a></li>
-                <li><a href="#works" data-index="two" class="menuLink">How it works</a></li>
-                <li><a href="#company" data-index="three" class="menuLink">Company</a></li>
-                <li><a href="#contact" data-index="four" class="menuLink">Contact</a></li>
+			<li><a href="#product" data-index="one" class="menuLink">Product</a></li>
+			<li><a href="#works" data-index="two" class="menuLink">How it works</a></li>
+			<li><a href="#company" data-index="three" class="menuLink">Company</a></li>
+			<li><a href="#contact" data-index="four" class="menuLink">Contact</a></li>
              <% if (!user) { %>
-
 				<% if (noUploadForUser != 2) { %>
                 <li><a href="#subscription" class="subscription menuLinkOther">Upgrade account</a></li>
                 <li><a href="#myPres" class="myPres menuLinkOther">My presentations</a></li>
@@ -80,7 +83,7 @@
 					<a href="#subscription" class="subscription menuLinkOther">Upgrade account</a>
 				  </li>
 				<% } else { %>
-				  <li><a href="/account.html" data-index="three" class="menuLinkNoScrollRed">My account</a></li>
+				  <li><a href="#account" class="account menuLinkOther">My account</a></li>
 				<% } %>
             <li><a href="#myPres" class="myPres menuLinkOther">My presentations</a></li>
             <li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
@@ -287,8 +290,6 @@
 	<% } %>
 
     <!-- Sign Up -->
-
-
     <section id="myPres" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage">
@@ -310,6 +311,36 @@
         </div>
     </section>
 
+	<% if (userRole > 0) { %>
+	
+	<!-- Account -->
+    <section id="myAccount" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="simplePage">
+			<h3>My account</h3>
+			<a href="#" class="subscription">Manage subscription</a>
+			<table class="table">
+			<% if (userData.restrictions.domain == 1) {%>
+			<tr>
+			<td>
+			<div id="renameHashDialog" class="m-subscription-center">
+				<% if(userData.domain) { %>
+					<div id="showDomainData" style="display: none"></div>
+				<% } %>
+				<div style="font-size:22px;">Enter domain name<br>Example: john<br><span style="font-size:16px"></span></div>
+				<input type="text" name="domainNewName" id="domainNewName" size="30" maxlength="30" value="<%= userData.domain %>"/>
+				<div id="domainNewNameRes"></div>
+				<input type="button" class="btn btn-default" id="renameDomainButton" value="Set domain name" disabled>
+				<input type="button" class="btn btn-default" id="deleteDomainButton" value="Delete domain" disabled>
+			</div>
+			</td>
+			</tr>
+			<% } %>
+			</table>
+        </div>
+    </section>
+
+	<% } %>
     <!-- Sign Up -->
     <section id="notifications" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
@@ -359,7 +390,7 @@
 						Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br>
 						4.99$/year<br>
 						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default"/ onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
+							<input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
 						<% } else { %>
 							<% if (userRole == 2) { %>
 								<!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
@@ -385,7 +416,7 @@
 						The same as our Silver plan + unlimited presentations + 100mb of space<br>
 						9.99$/year<br>
 						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default"/ onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
+							<input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
 						<% } else { %>
 							<% if (userRole == 2 || userRole == 10) { %>
 								Your current plan!

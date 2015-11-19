@@ -73,9 +73,9 @@ $(function() {
 		$("#signUp").show();
     });
 
-    $( ".accountUpgrade" ).click(function() {
+    $( ".account" ).click(function() {
         $(".allData").hide();
-
+		$("#myAccount").show();
     });
 	
 	// Redirect to paypal
