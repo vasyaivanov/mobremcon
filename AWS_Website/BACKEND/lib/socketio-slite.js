@@ -886,16 +886,23 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       			socket.emit('client-userRestrictions',{maxFileSize: userSession.restrictions.maxSlideSize});
             });
 
-            socket.on("get-nof-users", function (data) {
-                if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
-                data.nof_users = nofUsers[data.hash];
-                if (isNaN(data.nof_users) || data.nof_users < 0) {
-                    nofUsers[data.hash] = 0;
-                    data.nof_users = 0;
-                }
-                socket.emit("nof-users", data);
-                //console.log("nof-users ", data.nof_users);
-            });
+		socket.on("get-nof-users", function (data) {
+			if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
+			data.nof_users = nofUsers[data.hash];
+			if (isNaN(data.nof_users) || data.nof_users < 0) {
+				nofUsers[data.hash] = 0;
+				data.nof_users = 0;
+			}
+			socket.emit("nof-users", data);
+			//console.log("nof-users ", data.nof_users);
+		});
+		
+		socket.on('checkUserUploadStatus', function(data, callback){
+			module.parent.exports.getUserUploadStatus(userSession.currentUserId, function(uplStatus) {
+				callback(uplStatus);
+			});
+			
+		});
 
       }
     }

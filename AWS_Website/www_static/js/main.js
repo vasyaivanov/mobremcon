@@ -67,7 +67,26 @@ $(document).ready(function () {
 		//alert(data.sid);
 		$( "#slide_" + data.sid).hide();
 	});
-    
+
+	checkUploadStatus();
+	
+	$("#menu-toggle").click(function() {
+		checkUploadStatus();
+	});
+
+	function checkUploadStatus() {
+		mainSocket.emit('checkUserUploadStatus', [], function(noupload){
+			if(noupload == 1) {
+				$("#uploadFalse").show();
+				$("#uploadTrue").hide();
+			}
+			else {
+				$("#uploadTrue").show();
+				$("#uploadFalse").hide();
+			}
+		});
+	}	
+
     function updateProgress(data) {
         var printMsg = false, newLine = false;
         var finalMsg = data.percentage == 100 && typeof data.msg !== 'undefined';
@@ -248,7 +267,7 @@ $(document).ready(function () {
 		   type: "POST",
 		   dataType: "json",
 		   url: "/signup.html",
-		   data: { email: $("#signUpEmail").val(), password: $("#signUpPassword").val()},
+		   data: { email: $("#signUpEmail").val(), password: $("#signUpPassword").val(), redirect: $("signUpRedirect").val(), account: $("#signUpAccType").val()},
 		   success: function(data){
 				console.log(data);
 				var err_text = "";
@@ -276,10 +295,16 @@ $(document).ready(function () {
 					$("#signupError").show();
 				}
 				else {
+					$("#signUpForm").hide();
+					$("#signupError").text("Successfully registered...");
 					$("#signupError").show();
-					$("#signupError").text("Successfully logged in...");
-					$("#signupError").hide();
-					setTimeout(function(){ location.href="/"; }, 1000);
+					
+					var redirectUrl = '/';
+					
+					if(data.account) {
+						redirectUrl += '?account=' + data.account;
+					}
+					setTimeout(function(){ location.href=redirectUrl; }, 1000);
 				}
 		   }
 		 });
@@ -303,3 +328,4 @@ function replaceDomainName() {
 function delSlide(slideId) {
 	deleteSlide(slideId);
 }
+

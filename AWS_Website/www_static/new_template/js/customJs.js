@@ -55,6 +55,13 @@ $(function() {
 
     });
 
+    $( ".subscription" ).click(function() {
+        $(".allData").hide();
+        $("#subscription").show();
+
+    });	
+	
+
     $( ".menuLink" ).click(function() {
 		$(".allData").hide();
 		$(".mainData").show();
@@ -70,6 +77,14 @@ $(function() {
         $(".allData").hide();
 
     });
+	
+	// Redirect to paypal
+	if(accountType != '') {
+		$(".allData").hide();
+		$("#notifText").text("Redirecting to paypal...");
+		$("#notifications").show();
+		$("#" + accountType + "_account_upgrade").submit();
+	}
 
 	$('.allData').click(function() {
 		if($("#sidebar-wrapper").hasClass("active") === true) {
