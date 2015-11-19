@@ -46,3 +46,4 @@ expressLogFile.log
 BACKEND/UPLOADS/
 *.bat
 AWS_Website/BACKEND/node_modules/
+AWS_Website/libreoffice/

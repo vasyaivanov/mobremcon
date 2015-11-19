@@ -119,6 +119,7 @@ function toggleMainWindow() {
 		$(".navButtonPrev").animate({"left":"0%"},300);
 		//$(".navButton").animate({"padding-top":"30%"},300);
 	}
+	resizeCanvas();
 }
 
 var isCommentsOpen = false;
