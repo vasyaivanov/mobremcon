@@ -809,7 +809,7 @@ function setUserSession(req, res, callback) {
 	//console.log("------------ Checking user session, IP: " + req.connection.remoteAddress);
 	var oldUserId = 0;
 	var expDate = new Date(Number(new Date()) + 315360000000);
-	
+
 	var domainClear;
 	var host = req.hostname;
 	if(trustedDomains.indexOf(host) > 0) {
@@ -817,7 +817,7 @@ function setUserSession(req, res, callback) {
 	}
 	else {
 		domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
-	}	
+	}
 
    // If no user id - generate or add from req.user._id
    if(!(req.cookies[sessionIdCookie])) {
