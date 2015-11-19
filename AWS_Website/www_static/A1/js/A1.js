@@ -140,6 +140,10 @@ function showHideComments() {
 
 var isVideoChatOn = 0;
 function showHideVideoChat() {
+	if(isScreensharingOn == 1) {
+		showHideScreensharing()
+	}
+	
     if (!isVideoChatOn) {
         isVideoChatOn = 1;
 		$("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
@@ -201,6 +205,10 @@ $("#recordButton").click(function() {
 
 var isScreensharingOn = 0;
 function showHideScreensharing() {
+	if(isVideoChatOn == 1) {
+		showHideVideoChat()
+	}	
+	
     if (!isScreensharingOn) {
 		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
         isScreensharingOn = 1;
