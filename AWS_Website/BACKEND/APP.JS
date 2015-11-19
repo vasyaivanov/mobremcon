@@ -939,7 +939,7 @@ router.get(rootRegExp, function (req, res){
 					error: 0,
 					slides: [],
 					expire: '',
-					userData: []
+					userData: { restrictions: rolesRestrictions[0] }
 				});
 			}
 		});
