@@ -738,7 +738,7 @@ $( window ).load(function() {
             paddingBottom: 0
         },
         keyboardNavEnabled: false,
-        imageScaleMode: 'fill',
+        imageScaleMode: 'fit',//'fit-if-smaller',//'fill', //'none'
         imageAlignCenter: true,
         slidesSpacing: 0,
         loop: false,

@@ -6,7 +6,7 @@ var currentSlide = document.getElementById("currentSlide"),
     slideHeight = 0,
     xOffset = 0,
     xOffset = 0, 
-    LOG_COORDS = false;
+    LOG_COORDS = true;
 
 function getPos(el) {
     // yay readability
@@ -16,7 +16,7 @@ function getPos(el) {
     return {x: lx, y: ly};
 }
 
-function updateSlideMetrics(){
+function updateSlideMetrics(mouseX, mouseY){
     var slide = document.getElementById("slide");
     var slideImg = slide.getElementsByTagName('img')[0];
     var sliteImgPos = getPos(slideImg);
@@ -49,6 +49,9 @@ function updateSlideMetrics(){
     //yOffset = rsSlidePos.y;//slidePosY;
     if (LOG_COORDS) {
         console.log('Slide Metrics:');
+        if (typeof mouseX !== "undefined" && typeof mouseY !== "undefined") {
+            console.log("mouse X: " + mouseX + " Y: " + mouseY);
+        }
         //console.log("window inner width: " + w + ', height: ' + h);
         console.log("xOffset: " + xOffset);
         console.log("yOffset: " + yOffset);
@@ -242,7 +245,7 @@ function touchMove(event) {
     }
 
     updateSlideMetrics(xTouch, yTouch);
-    var per = offsetToPercentage(event.pageX, event.pageY);
+    var per = offsetToPercentage(xTouch, yTouch);
 
     switch(interactionType) {
         case LASER: {
