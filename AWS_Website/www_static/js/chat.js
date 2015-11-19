@@ -344,7 +344,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
       if (obj.roomName === getUrlParam("presentation")) peopleOnline++; // count people in this room
     });
     $("#people").empty();
-    $('#people').append("<li class=\"list-group-item active\">People online <span class=\"badge\">"+peopleOnline+"</span></li>");
+    //$('#people').append("<li class=\"list-group-item active\">People online <span class=\"badge\">"+peopleOnline+"</span></li>");
     $.each(data.people, function(a, obj) {
       if (!("country" in obj)) {
         html = "";
