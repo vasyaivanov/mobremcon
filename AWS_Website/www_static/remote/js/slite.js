@@ -63,26 +63,22 @@ function updateSlideMetrics(mouseX, mouseY){
 function offsetToPercentage(xOff, yOff) {
     var xPer = calcOffset(xOff, xOffset, slideWidth);
     var yPer = calcOffset(yOff, yOffset, slideHeight);
-    
-    if (LOG_COORDS) {
-        console.log("xOff: " + xOff);
-        console.log("yOff: " + yOff);
-        console.log("xPer: " + xPer);
-        console.log("yPer: " + yPer);
-    }
+
+    console.log("xOff: " + xOff);
+    console.log("yOff: " + yOff);
+    console.log("xPer: " + xPer);
+    console.log("yPer: " + yPer);
     return {x: xPer, y: yPer};
 }
 
 function percentageToOffset(xPer, yPer) {
     var xOff = calcPercentage(xPer, xOffset, slideWidth);
     var yOff = calcPercentage(yPer, yOffset, slideHeight);
-    
-    if (LOG_COORDS) {
-        console.log("xOff: " + xOff);
-        console.log("yOff: " + yOff);
-        console.log("xPer: " + xPer);
-        console.log("yPer: " + yPer);
-    }
+
+    console.log("xOff: " + xOff);
+    console.log("yOff: " + yOff);
+    console.log("xPer: " + xPer);
+    console.log("yPer: " + yPer);
     return {x: xOff, y: yOff};
 }
 

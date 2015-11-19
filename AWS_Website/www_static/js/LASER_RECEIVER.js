@@ -16,7 +16,7 @@ var canvas, ctx, flag = false,
 
 
 var paintColor = "red",
-    lineThickness = 3;
+    lineThickness = 2;
 
 function isThisHash(hash) {
     return ( (document.location.pathname === "/"+ hash) || (document.location.pathname === "/"+ hash + "/") );
@@ -24,7 +24,8 @@ function isThisHash(hash) {
 
  function moveLaserTo(x, y) {
     updateSlideMetrics();
-    var off = percentageToOffset(x, y);
+    var res = percentageToOffset(x, y);
+    //console.log('moveLaser: x: ' + x + ' y: ' + y + ' pos: X: ' + res.x + ' Y: ' + res.y);
     var redDot = $( "#redDot" );
     var dotWidth = redDot.width();
     var dotHeight = redDot.height();
@@ -104,16 +105,12 @@ $( window ).load(function() {
 });
 
 function resizeCanvas() {
-    /*var slider = $(".royalSlider").data('royalSlider');
+    var slider = $(".royalSlider").data('royalSlider');
     var newHeight = slider.currSlide.content.height();
     var newWidth = slider.currSlide.content.width();
     canvas[0].height = newHeight;
-    canvas[0].width = newWidth;*/
-    canvas[0].width = window.innerWidth;
-    canvas[0].height = window.innerHeight;
-    clearCanvas();
-    //console.log("Canvas W:" + canvas[0].width + " H:" + canvas[0].height);
-};  
+    canvas[0].width = newWidth;
+};
 
 // Converts percent offset received from server into XY coords
 // (this mirrors calcOffset in slite.js)
@@ -123,13 +120,12 @@ function calcCoords(percent, offset, dim) {
 
 function clearCanvas () {
     console.log("clearCanvas() called");
-    ctx = canvas[0].getContext('2d');
     ctx.clearRect(0, 0, canvas[0].width, canvas[0].height);
 };
 
 $(window).resize(function () {
-    //resize just happened, pixels changed
-    resizeCanvas();
+  //resize just happened, pixels changed
+    clearCanvas();
 });
 
 function draw() {

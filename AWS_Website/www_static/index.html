@@ -49,6 +49,13 @@
     <script src="js/jquery-ui.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
+	<script>
+	var accountType = "<%=request.query.account%>";
+	</script>
+	<% if (userData.restrictions.domain == 1) {%>
+	<script>var protocol = window.location.protocol.replace(":","");</script>
+	<script src="js/domain-rename.js"></script>
+	<% } %>
 </head>
 
 <body class='mainbackground'>
@@ -59,14 +66,13 @@
         <ul class="sidebar-nav">
             <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
             <li><a href="#top" data-index="one" class="menuLink">Home</a></li>
-        <li><a href="#product" data-index="one" class="menuLink">Product</a></li>
-                <li><a href="#works" data-index="two" class="menuLink">How it works</a></li>
-                <li><a href="#company" data-index="three" class="menuLink">Company</a></li>
-                <li><a href="#contact" data-index="four" class="menuLink">Contact</a></li>
+			<li><a href="#product" data-index="one" class="menuLink">Product</a></li>
+			<li><a href="#works" data-index="two" class="menuLink">How it works</a></li>
+			<li><a href="#company" data-index="three" class="menuLink">Company</a></li>
+			<li><a href="#contact" data-index="four" class="menuLink">Contact</a></li>
              <% if (!user) { %>
-
 				<% if (noUploadForUser != 2) { %>
-                <li><a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
+                <li><a href="#subscription" class="subscription menuLinkOther">Upgrade account</a></li>
                 <li><a href="#myPres" class="myPres menuLinkOther">My presentations</a></li>
 				<li><a href="#login" class="loginUser menuLinkOther">Sign in</a></li>
                 <li><a href="#signUp" class="signUpUser menuLinkOther">Sign up</a></li>
@@ -74,13 +80,10 @@
             <% } else { %>
 				<% if (userRole == 0) { %>
 				  <li><!-- <a href="/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a> -->
-					<a href="#accountUpgrade" data-index="three" class="menuLinkNoScrollRed accountUpgrade">Upgrade account</a>
+					<a href="#subscription" class="subscription menuLinkOther">Upgrade account</a>
 				  </li>
-
-
-
 				<% } else { %>
-				  <li><a href="/account.html" data-index="three" class="menuLinkNoScrollRed">My account</a></li>
+				  <li><a href="#account" class="account menuLinkOther">My account</a></li>
 				<% } %>
             <li><a href="#myPres" class="myPres menuLinkOther">My presentations</a></li>
             <li><a href="/logout" data-index="three" class="menuLinkNoScroll">Sign out</a></li>
@@ -122,17 +125,14 @@
 
 
         <div class="text-vertical-center">
-            <% if(noUploadForUser == 0) { %>
-              <div class="uploadfile">
+			<% if (noUploadForUser != 2) { %>
+              <div id="uploadTrue" class="uploadfile">
                   <input class="btn uploadButton" onclick="$('#uploadPresentation').click()" type="button" value="Upload presentation">
                   <input type="file" accept="pptx" id="uploadPresentation" style="display: none">
-              </span>
-			<% } else if (noUploadForUser == 2) { %>
+              </div>
 
-			<% } else { %>
-            <div class="uploadfile">
+            <div id="uploadFalse"  class="uploadfile">
                 <button type="button" class="btn uploadButton" onclick="$('.myPres').click()">Limit reached.<br/>Click here to delete.</button>
-                <input type="file" accept="pptx" id="uploadPresentation" style="display: none">
             </div>
             <% } %>
             <!-- <a href="#about" class="btn btn-dark btn-lg">Find Out More</a> -->
@@ -271,9 +271,9 @@
         <div class="loginbody">
 				<h1>Create account </h1>
 				<h4 id="signupError" style="color: #FF0000; display:none"></h4>
-                <form role="form"id="signUpForm">
-                <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
-                <input type="hidden" name="account" value="<%= (request.body.account) ? request.body.account : request.query.account %>">
+                <form role="form" id="signUpForm">
+                <input type="hidden" id="signUpRedirect" name="redirect" value="<%= request.headers.referer %>">
+                <input type="hidden" id="signUpAccType" name="account" value="">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
                         <input id="signUpEmail" type="email" class="form-control" name="email" placeholder="Enter email">
@@ -290,8 +290,6 @@
 	<% } %>
 
     <!-- Sign Up -->
-
-
     <section id="myPres" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage">
@@ -307,6 +305,155 @@
 
 
 
+
+           </table>
+
+        </div>
+    </section>
+
+	<% if (userRole > 0) { %>
+	
+	<!-- Account -->
+    <section id="myAccount" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="simplePage">
+			<h3>My account</h3>
+			<a href="#" class="subscription">Manage subscription</a>
+			<table class="table">
+			<% if (userData.restrictions.domain == 1) {%>
+			<tr>
+			<td>
+			<div id="renameHashDialog" class="m-subscription-center">
+				<% if(userData.domain) { %>
+					<div id="showDomainData" style="display: none"></div>
+				<% } %>
+				<div style="font-size:22px;">Enter domain name<br>Example: john<br><span style="font-size:16px"></span></div>
+				<input type="text" name="domainNewName" id="domainNewName" size="30" maxlength="30" value="<%= userData.domain %>"/>
+				<div id="domainNewNameRes"></div>
+				<input type="button" class="btn btn-default" id="renameDomainButton" value="Set domain name" disabled>
+				<input type="button" class="btn btn-default" id="deleteDomainButton" value="Delete domain" disabled>
+			</div>
+			</td>
+			</tr>
+			<% } %>
+			</table>
+        </div>
+    </section>
+
+	<% } %>
+    <!-- Sign Up -->
+    <section id="notifications" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="loginbody">
+				<h4 id="notifText" style="color: #FF0000;"></h4>
+            </div>
+    </section>	
+	
+	<section id="subscription" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="simplePage">
+          <h3>My subscription</h3>
+           <table class="table" style="max-width: 100%">
+
+					<% if(expire) { %>
+						Your plan is
+						<% if(userRole == 2) { %>
+						<b>Gold</b>
+						<% } else if (userRole == 1) { %>
+						<b>Silver</b>
+						<% } else if (userRole == 10) { %>
+            <b>Administrator</b>
+						<% } %>
+					, valid until  <%= moment(expire).format('MMMM DD, YYYY') %><br>
+					After that date you have 5 days grace period, if you won't renew your account it will be switched to our Basic plan, that's absolutely free!<br>
+					We will notify you before this date.<br><br>
+
+					<% } %>
+
+					<!--% } else { %-->
+
+						<tr>
+						<td>Basic<br>
+						You can use PREZERA absolutely for free!<br>
+						You don't need to register, if you use only one laptop.<br>
+						Keep your data safe in the cloud!<br>
+						You're allowed to upload up to <b>3</b> slides and <b>10mb</b> and you can also buy a custom name for your slide only for 99c!<br>
+						<% if (userRole > 0) { %>
+							<!--input type="button" value="Downgrade to Basic" class="btn btn-default"/ onclick="location='/downgrade.html?plan=0'"-->
+						<% } %>
+
+						</td>
+						</tr>
+						<tr>
+						<td>Silver<br>
+						The same as our Basic plan + you can get your own domain on PREZERA, example: john.prezera.com<br>
+						Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br>
+						4.99$/year<br>
+						<% if (!user) { %>
+							<input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
+						<% } else { %>
+							<% if (userRole == 2) { %>
+								<!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
+							<% } else if (userRole == 1 || userRole == 10)  { %>
+								Your current plan!
+							<% } else { %>
+								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="silver_account_upgrade">
+								<input type="hidden" name="cmd" value="_s-xclick">
+								<input type="hidden" name="hosted_button_id" value="AK3X6WJ7VWYJS">
+								<input type="hidden" name="on0" value="Account">
+								<input type="hidden" name="on1" value="UserId">
+								<input type="hidden" name="os0" value="Silver">
+								<input type="hidden" name="os1" value="<%= user.id %>">
+								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+								<input type="submit" value="Upgrade to Silver plan" class="btn btn-default">
+								</form>
+							<% } %>
+						<% } %>
+						</td>
+						</tr>
+						<tr>
+						<td>Gold<br>
+						The same as our Silver plan + unlimited presentations + 100mb of space<br>
+						9.99$/year<br>
+						<% if (!user) { %>
+							<input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
+						<% } else { %>
+							<% if (userRole == 2 || userRole == 10) { %>
+								Your current plan!
+							<% } else if (userRole == 1) { %>
+								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
+								<input type="hidden" name="cmd" value="_s-xclick">
+								<input type="hidden" name="hosted_button_id" value="UYUFTGR7GMX54">
+								<input type="hidden" name="on0" value="Account">
+								<input type="hidden" name="on1" value="UserId">
+								<input type="hidden" name="os0" value="Gold upgrade">
+								<input type="hidden" name="os1" value="<%= user.id %>">
+								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+								<input type="submit" value="Upgrade to Gold - 5$" class="btn btn-default">
+								</form>
+							<% } else { %>
+								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="gold_account_upgrade">
+								<input type="hidden" name="cmd" value="_s-xclick">
+								<input type="hidden" name="hosted_button_id" value="W8DTXXRCVJB6A">
+								<input type="hidden" name="on0" value="Account">
+								<input type="hidden" name="on1" value="UserId">
+								<input type="hidden" name="os0" value="Gold">
+								<input type="hidden" name="os1" value="<%= user.id %>">
+								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+								<input type="submit" value="Upgrade to Gold plan" class="btn btn-default">
+								</form>
+							<% } %>
+						<% } %>
+						</td>
+						</tr>
+					<!--% } %-->
+					<tr>
+					<td>Platinum<br>
+					Get your own, private server!<br>
+					Ask us about the price: <a href="mailto:contactus@prezera.com">contactus@prezera.com</a><br>
+					</td>
+					<tr>
+					</table>
 
            </table>
 

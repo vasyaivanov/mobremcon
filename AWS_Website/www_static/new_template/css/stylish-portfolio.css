@@ -331,7 +331,7 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
   cursor:pointer;
-  display: inline-block;
+  display: none;
  }
 
 .uploadfile :hover {

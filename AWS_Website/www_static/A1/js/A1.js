@@ -3,7 +3,7 @@ var isFile = RegExp(/^file:.*/i).test(document.location.href);
 var currentHash = getCurrentHash();
 var isAPresenter = isPresenter();
 var royalSlider;
-var hashUsers = -1;
+var hashUsers = 0;
 //console.log('A1.js loaded, socket: ');
 //console.log(socket);
 
@@ -118,8 +118,7 @@ function toggleMainWindow() {
         //$(".rsContainer").css({ "width": "100%", "clear": "both" });
 		$(".navButtonPrev").animate({"left":"0%"},300);
 		//$(".navButton").animate({"padding-top":"30%"},300);
-    }
-    resizeCanvas();
+	}
 }
 
 var isCommentsOpen = false;
@@ -233,7 +232,7 @@ function showHideScreensharing() {
 var isMenuOn = false;
 function showHideMenu(fromItemClick) {
     if (!isMenuOn && !fromItemClick) {
-        askNumberOfUsers();
+        socket.emit("get-nof-users", {hash: currentHash});
         $('.menuSubmenu').slideDown("slow");
         isMenuOn = true;
     } else {
@@ -681,31 +680,6 @@ window.onresize = function () {
     }, 60);
 };
 
-function updateTitle() {
-    var newTitle = "";
-    
-    if (!isNaN(hashUsers) && hashUsers >= 0) {
-        newTitle += "(" + hashUsers + ") ";
-    }
-    
-    if (typeof title !== 'undefined') {
-        newTitle += title;
-    } else {
-        newTitle += "Presentation";
-    }
-
-    if (isInIFrame() == true) {
-        //Temporary disabled, error in mobile app
-		//parent.document.title = newTitle;
-    } else {
-        document.title = newTitle;
-    }
-}
-
-function askNumberOfUsers(){
-    socket.emit("get-nof-users", { hash: currentHash });
-}
-
 $( window ).load(function() {
 	// Not works on real host - Show error mismatch 8081 & 80
 	 if (canBePresenter() && !isInIFrame()) {
@@ -716,8 +690,17 @@ $( window ).load(function() {
 		 var item = $('.menuSubmenu #menuPassword');
 		 item.show();
     }
-    updateTitle();
-    askNumberOfUsers();
+    if ( typeof title !== 'undefined' ) {
+		if(isInIFrame() == true) {
+      //Temporary disabled, error in mobile app
+			//parent.document.title = title;
+		}
+		else {
+			document.title = title;
+		}
+
+
+    }
 
     royalSlider = $('#video-gallery').royalSlider({
         arrowsNav: false,
@@ -934,15 +917,10 @@ $( window ).load(function() {
             showHideScreensharing();
         }
     });
-        socket.on('nof-users', function (data) {
-            hashUsers = data.nof_users;
-            //console.log("nof-users received: " + data.nof_users);
-            var usersText = "";
-            if (!isNaN(hashUsers) && hashUsers >= 0) {
-                usersText = " ( " + hashUsers + " user" + (hashUsers === 1 ? "" : "s") + " )";
-            }
-            $("#chatUsersLabel").html(usersText);
-            updateTitle();
+    socket.on('nof-users', function (data) {
+       //console.log("nof-users received: " + data.nof_users);
+       hashUsers = data.nof_users;
+       $("#chatUsersLabel").html(" ( " + hashUsers + " user" + (hashUsers === 1 ? "" : "s") + " )");
     });
 
   }
