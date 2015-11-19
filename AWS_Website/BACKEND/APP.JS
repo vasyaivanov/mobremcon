@@ -379,14 +379,27 @@ if((req.method == "POST" && req.url == "/paypal") || (req.url == "/google32d58b5
 }
 else {
   setUserSession(req,res,function(userId) {
+		var readQueryStr = "";
+		if(req.url.indexOf('?') > 0) {
+			readQueryStr = req.url;
+			readQueryStr = readQueryStr.replace(/(.+)\?/g,"")
+		}
 		if(userId == 0 && req.query.auth != 1 /*&& !req.url.match(slitesRegMW)*/) {
-			res.redirect(req.url + '?auth=1');
+			if(readQueryStr != '') {
+				readQueryStr = '?' + readQueryStr + '&auth=1';
+			}
+			else {
+				readQueryStr = "?auth=1"
+			}
+			res.redirect(req.path + readQueryStr);
 		}
 		else {
 			if(req.query.auth == 1 && userId.length > 0) {
-				var new_url = req.url;
-				new_url = new_url.replace("?auth=1","")
-				res.redirect(new_url);
+				if(readQueryStr != '') {
+					readQueryStr = "?" + readQueryStr;
+				}
+				readQueryStr = readQueryStr.replace(/(\&|\?)?auth=1/g,"")
+				res.redirect(req.path + readQueryStr);
 			}
 			else {
 				if(userId == 0) {
@@ -419,30 +432,6 @@ else {
 						// Not a slide
 						next();
 					}
-					// Render for bots :)
-					/*if((req.url.length == slitesHashLen+1) && (req.query.auth != 1)) {
-						console.log("Send fake slide page");
-
-						Slide.findOne({sid : hash }).exec(function (err, doc) {
-							if( doc ) {
-								var images = '';
-								if(doc.slidesNum > 0) {
-									for (i=0;i<=doc.slidesNum; i++) {
-										images += "<img width='30%' src='" + req.url + "/img" + i +".jpg'><br>"
-									}
-								}
-								res.render(path.join(www_dir, www_static_dir, "fake_slide.html"), {
-									title: doc.title,
-									img: images
-								});
-							} else {
-								res.send("Cant find this slide: " + hash)
-							}
-						});
-					}
-					else {
-						next();
-					}*/
 				}
 				else {
 					// Initialize new session
@@ -507,6 +496,8 @@ var getUserUploadStatus = function (userId, callback) {
 		}
 	});
 }
+
+module.exports.getUserUploadStatus = getUserUploadStatus;
 
 app.use(redirectToWWW);
 
@@ -896,7 +887,7 @@ router.get(rootRegExp, function (req, res){
 
 		// Paint index page random slides
 		function getRandomSlides(Slide, callback) {
-			Slide.findRandom({site: req.headers.host, crawled: 1}, {}, {limit: 10},function(err, result) {
+			Slide.findRandom({site: req.headers.host}, {}, {limit: 50},function(err, result) {
 			  if (!err) {
 				var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
@@ -909,25 +900,29 @@ router.get(rootRegExp, function (req, res){
 				<script type="text/javascript"> \
 					$( \'#carousel\' ).elastislide(); \
 				</script>'
-				callback(returnRes)
+				callback(returnRes, result)
 			  }
 			});
 		}
 
 		getRandomSlides(Slide,function(randomSlides) {
 			if(typeof req.cookies[sessionIdCookie] != "undefined") {
-
 				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
-					res.render(path.join(www_dir, www_static_dir, indexHtml), {
-						user: req.user,
-						noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
-						randomSlides: randomSlides,
-						userRole: UserData[req.cookies[sessionIdCookie]].userRole,
-						request: req,
-						slides: docs,
-						ERROR_AUTH: 0,
-						error: 0,
-						moment: moment
+					Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, docExpDate) {
+						var expire = "";
+						if(docExpDate) {expire = docExpDate.end_date}
+						res.render(path.join(www_dir, www_static_dir, indexHtml), {
+							user: req.user,
+							noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
+							randomSlides: randomSlides,
+							userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+							request: req,
+							slides: docs,
+							ERROR_AUTH: 0,
+							error: 0,
+							moment: moment,
+							expire: expire
+						});
 					});
 				});
 			}
@@ -941,7 +936,8 @@ router.get(rootRegExp, function (req, res){
 					request: req,
 					ERROR_AUTH: 0,
 					error: 0,
-					slides: []
+					slides: [],
+					expire: ''
 				});
 			}
 		});
@@ -968,7 +964,7 @@ router.post('/signup.html', function (req, res){
 		}
 		else {
 			passport.authenticate('local')(req, res, function () {
-				res.json({ error: 0 });
+				res.json({ error: 0, account: req.body.account });
 			})
 		}
 	}
@@ -1031,26 +1027,6 @@ readSlideSize = function(path_to_slide, callback) {
 }
 
 module.exports.readSlideSize = readSlideSize;
-
-
-router.get('/subscription.html', function (req, res){
-  if(typeof req.cookies[sessionIdCookie] === "undefined") {
-    res.redirect('/');
-  }
-  else {
-     	Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, doc) {
-  		var expire = "";
-  		if(doc) {expire = doc.end_date}
-  		res.render(path.join(www_dir,www_static_dir , 'subscription.html'), {
-  		  request: req,
-  		  user: req.user,
-  		  moment: moment,
-  		  userRole: UserData[req.cookies[sessionIdCookie]].userRole,
-  		  expire: expire
-  		});
-  	});
-  }
-});
 
 // Render remote control
 slideCheckPresenter = function(hashId, currentUserId , callback) {
