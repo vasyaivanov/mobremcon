@@ -51,6 +51,7 @@ $(function() {
 
     $( ".myPres" ).click(function() {
         $(".allData").hide();
+		window.location.hash = "#myPres";
         $("#myPres").show();
 
     });
@@ -58,7 +59,6 @@ $(function() {
     $( ".subscription" ).click(function() {
         $(".allData").hide();
         $("#subscription").show();
-
     });	
 	
 
