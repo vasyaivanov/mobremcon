@@ -124,7 +124,7 @@ function getHashPresentation(hash, next){
 }
 
 function notifyNofUsersChanged(socket, hash, local) {
-    var data = { hash: hash, 
+    var data = { hash: hash,
                  nof_users: nofUsers[hash]};
     if (isNaN(data.nof_users) || data.nof_users < 0) {
         nofUsers[data.hash] = 0;
@@ -162,7 +162,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           if (pollAnswerArray.length > 0) {
               pollUpdate();
           }
-          console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
+          console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id + ' UserAgent:' + socket.handshake.headers['user-agent']);
 
             socket.on('disconnect', function () {
                 if (socket.handshake.query.type === 'user' && typeof socket.handshake.query.hash !== 'undefined') {
@@ -908,12 +908,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			notifyNofUsersChanged(socket, data.hash, true);
 			//console.log("nof-users ", data.nof_users);
 		});
-		
+
 		socket.on('checkUserUploadStatus', function(data, callback){
 			module.parent.exports.getUserUploadStatus(userSession.currentUserId, function(uplStatus) {
 				callback(uplStatus);
 			});
-			
+
 		});
 
       }
