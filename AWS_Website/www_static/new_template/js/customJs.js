@@ -52,8 +52,16 @@ $(function() {
     $( ".myPres" ).click(function() {
         $(".allData").hide();
 		window.location.hash = "#myPres";
-        $("#myPres").show();
-
+		
+		if(typeof customDomain != "undefined" && customDomain != "") {
+			var domain = location.host;
+			domain = domain.replace(/^www\./,"");
+			domain = protocol + "://" + customDomain + "." + domain;
+			location.href=domain;
+		}
+		else {
+			$("#myPres").show();
+		}
     });
 
     $( ".subscription" ).click(function() {
@@ -79,7 +87,7 @@ $(function() {
     });
 	
 	// Redirect to paypal
-	if(accountType != '') {
+	if(typeof accountType != 'undefined' && accountType != '') {
 		$(".allData").hide();
 		$("#notifText").text("Redirecting to paypal...");
 		$("#notifications").show();

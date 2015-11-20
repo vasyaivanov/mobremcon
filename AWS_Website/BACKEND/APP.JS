@@ -864,7 +864,7 @@ router.get(rootRegExp, function (req, res){
 			});
 		}
 
-		getRandomSlides(Slide,function(randomSlides) {
+		getRandomSlides(Slide,function(randomSlides, clearData) {
 			if(typeof req.cookies[sessionIdCookie] != "undefined") {
 				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
 					Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, docExpDate) {
@@ -891,7 +891,7 @@ router.get(rootRegExp, function (req, res){
 				res.render(path.join(www_dir, www_static_dir, indexHtml), {
 					user: req.user,
 					noUploadForUser: 2,
-					randomSlides: randomSlides,
+					randomSlides: clearData,
 					userRole: 0,
 					request: req,
 					ERROR_AUTH: 0,

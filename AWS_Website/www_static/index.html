@@ -53,7 +53,10 @@
 	var accountType = "<%=request.query.account%>";
 	</script>
 	<% if (userData.restrictions.domain == 1) {%>
-	<script>var protocol = window.location.protocol.replace(":","");</script>
+	<script>
+	var customDomain = "<%=userData.domain%>";
+	var protocol = window.location.protocol.replace(":","");
+	</script>
 	<script src="js/domain-rename.js"></script>
 	<% } %>
 </head>
@@ -134,7 +137,23 @@
             <div id="uploadFalse"  class="uploadfile">
                 <button type="button" class="btn uploadButton" onclick="$('.myPres').click()">Limit reached.<br/>Click here to delete.</button>
             </div>
-            <% } %>
+            <% } else if (noUploadForUser == 2) {%>
+			
+				<% randomSlides.forEach(function(slide){ %>
+					<p><a href="/
+					<% if(slide.scid != null) { %>
+						<%= slide.scid %>
+					<% } else { %>
+						<%= slide.sid %>
+					<% } %>
+					">
+					<img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="20" title="<%= slide.title %>">
+					<%= slide.title %></a></p>
+				<%  }); %>
+
+			
+			<% } %>
+			
             <!-- <a href="#about" class="btn btn-dark btn-lg">Find Out More</a> -->
         </div>
     </header>

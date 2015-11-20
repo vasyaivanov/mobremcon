@@ -1,50 +1,80 @@
-﻿<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>Web presentation software</title>
-      <meta name="description" content="">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
 
-      <script src="js/jquery-2.1.3.min.js"></script>
-      <script src="js/jquery.scrolly.min.js"></script>
-      <script src="js/jquery.dropotron.min.js"></script>
-      <script src="js/jquery.scrollex.min.js"></script>
-      <script src="js/skel.min.js"></script>
-      <script src="js/skel-layers.min.js"></script>
-      <script src="js/init.js"></script>
-      <script src="js/jquery-ui.min.js"></script>
-      <script src="js/bootstrap.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
-      <script src="js/client.js"></script>
-      <script src="js/main.js"></script>
-      <script src="js/jquery.scrollTo.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title><% if (user) { %> <%= user.email %> <%} %> WEB PRESENTATIONS (live)</title>
+    <meta name="title" content="Live online presentations" />
+    <meta name="description" content="Free online web presentations. Social chat, video presentation, personal presentation notes, password protection and much more." />
+    <meta name="keywords" content="web presentations, web presentation, presentation, powerpoint, free, free online presentation, free presentation, slide, slides, free slides, powerpoint replacement">
+  <meta content="https://www.webentations.com" property="og:url" />
+    <meta content="https://www.webentations.com/img/logo.png" property="og:image" />
+    <link rel="shortcut icon" id="favicon" href="img/favicon.ico">
+    <meta name="author" content="WEBENTATIONS inc.">
+    <link rel="canonical" href="https://www.webentations.com" />
+	<meta name="viewport" content="width=device-width, initial-scale=0.9">
+	<!-- Facebook specific tags -->
+	<meta property="og:image" content="img/Prezera_Logo.png" />
+	<meta property="og:title" content="Prezera - main page" />
+	<meta property="og:site_name" content="Prezera - live online presentations"/>
+	<meta property="og:description" content="PREZERA.COM™ enables you to present from inside your browser to a remote and in-house audiences. It comes with an iPhone remote control app. PREZERA.COM™ adds a social component inside your presentation allowing audience to connect with each other and presenter. Desktop sharing and video broadcasting make your presentation efficient. PREZERA.COM™ is the best and the simpliest way in the world to explain information from one person to many." />
+
+    <!-- Bootstrap Core CSS -->
+    <link href="new_template/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- Custom CSS -->
+    <link href="new_template/css/stylish-portfolio.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="new_template/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <!-- jQuery -->
+    <script src="new_template/js/jquery.js"></script>
+    <script src="new_template/js/customJs.js"></script>
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="new_template/js/bootstrap.min.js"></script>
+
+    <script src="js/client.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+
 	  <% if (userData.restrictions.domain == 1) {%>
 	<script src="js/slides-rename.js"></script>
 	  <% } %>
+</head>
 
-      <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-      <link rel="icon" href="favicon.ico" type="image/x-icon">
+<body class='mainbackground'>
 
-      <link rel="stylesheet" href="css/bootstrap.css">
-      <link rel="stylesheet" href="css/screen.css">
-      <link rel="stylesheet" href="css/style.css" />
+    <!-- Navigation -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li><a href="<%= mainDomainGo %>/">Home</a></li>
+        </ul>
+    </nav>
 
-       <!-- font -->
-      <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
-      <!-- font icons -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
-    </head>
-    <body>
-        <section class="middle">
-            <div class="container-fluid">
-                    <h1><%= clearDomain %></h1>
-					<table width="500" border="0">
+     <section id="domain" class="login mainbackground mainData allData" >
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+
+        <div class="simplePage">
+          <h3><%= clearDomain %></h3>
+           <table class="table" style="max-width: 100%">
+
+
 					<% slides.forEach(function(slide){ %>
 						<tr id="slide_<%= slide.sid %>">
 						<td width="200"><img src="/<%= slide.sid %>/img0.jpg" width="50%"></td>
@@ -68,29 +98,15 @@
 						</tr>
 					<%  }); %>
 
-					</table>
-            </div>
-        </section>
-				<input type="file" accept="pptx" id="uploadPresentation" style="display: none">
-        <header id="header">
-          <nav id="nav">
-              <ul id="navigation" class="clearfix">
-                <li><a href="<%= mainDomainGo %>/" class='menuLink' id='menuAbout'>Home</a></li>
-                <li><a href="<%= mainDomainGo %>/" class='menuLink' id='menuAbout'>Upload</a></li>
-                <li><a href="<%= mainDomainGo %>/#one" class='menuLink' id='menuAbout'>About</a></li>
-                <li><a href="<%= mainDomainGo %>/#four" class='menuLink' id='menuContact'>Contact</a></li>
-                <li><a href="<%= mainDomainGo %>/my.html" data-index="three" class="">My presentations</a></li>
-                <% if (!user) { %>
-				<li><a href="<%= mainDomainGo %>/subscription.html" data-index="three" class="menuLinkNoScrollRed">Upgrade account</a></li>
-                <li><a href="<%= mainDomainGo %>/signin.html" data-index="three" class="">Sign in</a></li>
-                <li><a href="<%= mainDomainGo %>/signup.html" data-index="four" class="">Sign up</a></li>
-                <% } else { %>
-                <li><a href="<%= mainDomainGo %>/account.html" data-index="three" class="">My account</a></li>
-                <li><a href="<%= mainDomainGo %>/logout" data-index="three" class="">Sign out</a></li>
-                <% } %>
-              </ul>
-          </nav>
-        </header>
 
-    </body>
+
+           </table>
+
+        </div>
+		 <input type="file" accept="pptx" id="uploadPresentation" style="display: none">
+    </section>
+
+
+</body>
+
 </html>
