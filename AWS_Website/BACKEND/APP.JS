@@ -309,7 +309,7 @@ function redirectToWWW(req,res,next) {
 	if(req.hostname.split('.').length == 2) {
 		res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear + req.url);
 	}
-	else if(req.hostname.split('.').length > 3 && trustedDomains.indexOf(req.headers.host) == 0) {
+	else if(req.hostname.split('.').length > 3 && trustedDomains.indexOf(req.headers.host) == -1) {
 		// Redirect if more than 3 subdomains
 		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 		res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear);
@@ -360,14 +360,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(virtualHostSession);
-/*app.use(session({
-    secret: 'abrakadabra',
-    resave: false,
-    cookie: {domain: '.slite.loc'},
-    saveUninitialized: false
-}));*/
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -671,39 +663,6 @@ app.use(function (req, res, next) {
 
 // ROUTES
 var router = express.Router();
-
-// remote
-//router.get('/remote/:slite_path?', function (req, res) {
-//    console.log('remote: ' + req.params.slite_path);
-//});
-
-/*
-router.get('/socket.io/socket.io.js', function (req, res, next) {
-    if (appPort === ioPort) {
-        next();
-    } else {
-        var options = {
-            dotfiles: 'deny',
-            headers: {
-                'x-timestamp': Date.now(),
-                'x-sent': true
-            }
-        };
-
-        var socketJsPath = path.join(www_dir, 'BACKEND', 'lib', '/js/socket.io-1.3.4.js');
-        console.log('socketJsPath: ' + socketJsPath);
-        res.sendFile(socketJsPath, options, function (err) {
-            if (err) {
-                console.log(err);
-                res.status(err.status).end();
-            }
-            else {
-                console.log('Sent: socket.io');
-            }
-        });
-    }
-})
-*/
 
 router.post('/paypal', function (req, res, next) {
 
