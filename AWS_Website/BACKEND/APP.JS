@@ -591,7 +591,7 @@ app.use(function (req, res, next) {
 				//console.log('afterHash: ' + afterHash);
 
 				afterHash = afterHash.replace(/(\&|\?)?auth=1/g,"")
-				
+
 				if (afterHash === '' || afterHash.match(/^index($|\.html$|\.htm$)/)) {              // if nothing after hash or index.html (from slites/hash folder)
 					//var indexPathname = path.join(wwwSlites, hash, 'index.html');                // www/slites/hash/index.html
 					var indexPathname = path.join(www_dir, www_static_dir, "A1",'index.html');
@@ -778,7 +778,7 @@ Billing.aggregate([
 	if(req.query.tx) {
 		Billing.findOne({txn_id : req.query.tx }).exec(function (err, doc) {
 			if(doc) {
-				res.redirect("/account.html");
+				res.redirect("/#myAccount");
 			}
 			else {
 				Slide.findOne({paypalTransaction : req.query.tx }).exec(function (err, doc) {
@@ -945,11 +945,6 @@ router.get(rootRegExp, function (req, res){
 		});
 	}
 });
-
-router.get('/account.html', ensureAuthenticated, function (req, res){
-    res.render(path.join(www_dir, www_static_dir ,   'account.html'), { user: req.user, userData: UserData[req.cookies[sessionIdCookie]], protocol: ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") });
-});
-
 
 router.post('/signup.html', function (req, res){
   console.log("MA: new user: " + req.body.password + " " + req.body.email);
