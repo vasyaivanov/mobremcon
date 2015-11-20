@@ -357,23 +357,7 @@ input.renameSlide {
     opacity: 0;
 }
 
-.uploadButton {
-    cursor: inherit;
-    width: inherit;
-    display: block;
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    color:#333333;
-    font-family: 'Lato', sans-serif;
-    font-size: inherit;
-    font-weight: bold;
-    text-decoration: none;
-}
 
-.uploadButton:hover {
-    cursor:pointer;
-
-}
 
 .product {
     width: 50%;
@@ -509,7 +493,7 @@ table {
   font-weight: normal;
   vertical-align: middle;
   background: #00147C;
-  color: #8C8B8E;
+  color: #5D80C0;
 }
 
 .uploadButton:hover {
