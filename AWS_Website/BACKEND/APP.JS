@@ -376,7 +376,7 @@ else {
 			readQueryStr = req.url;
 			readQueryStr = readQueryStr.replace(/(.+)\?/g,"")
 		}
-		if(userId == 0 && req.query.auth != 1) {
+		if(userId == 0 && req.query.auth != 1 && req.headers['user-agent'].match(/(bot|spider)/i) == null) {
 			if(readQueryStr != '') {
 				readQueryStr = '?' + readQueryStr + '&auth=1';
 			}
