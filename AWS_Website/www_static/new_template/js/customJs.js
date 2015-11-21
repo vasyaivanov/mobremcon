@@ -37,12 +37,12 @@ $(function() {
 
     // Menu visualization
     $(".allData").hide();
-	if(window.location.hash) {
-		$(window.location.hash).show();
-	}
-	else {
-		$(".mainData").show();
-	}
+  	if(window.location.hash) {
+  		$(window.location.hash).show();
+  	}
+  	else {
+  		$(".mainData").show();
+  	}
 
     $( ".loginUser" ).click(function() {
         $(".allData").hide();
@@ -50,42 +50,37 @@ $(function() {
     });
 
     $( ".myPres" ).click(function() {
-        $(".allData").hide();
-		window.location.hash = "#myPres";
-		
-		if(typeof customDomain != "undefined" && customDomain != "") {
-			var domain = location.host;
-			domain = domain.replace(/^www\./,"");
-			domain = protocol + "://" + customDomain + "." + domain;
-			location.href=domain;
-		}
-		else {
-			$("#myPres").show();
-		}
+      $(".allData").hide();
+        window.location.hash = "#myPres";
+
+      if(moveToDomainPres() == false) {
+        $("#myPres").show();
+      }
+
     });
 
     $( ".subscription" ).click(function() {
         $(".allData").hide();
         $("#subscription").show();
-    });	
-	
+    });
+
 
     $( ".menuLink" ).click(function() {
-		$(".allData").hide();
-		$(".mainData").show();
+  		$(".allData").hide();
+  		$(".mainData").show();
     });
 
     //show sign up hide everything else
     $( ".signUpUser" ).click(function() {
         $(".allData").hide();
-		$("#signUp").show();
+		    $("#signUp").show();
     });
 
     $( ".account" ).click(function() {
         $(".allData").hide();
-		$("#myAccount").show();
+        $("#myAccount").show();
     });
-	
+
 	// Redirect to paypal
 	if(typeof accountType != 'undefined' && accountType != '') {
 		$(".allData").hide();
@@ -100,5 +95,18 @@ $(function() {
 		}
 
 	});
+
+  function moveToDomainPres() {
+    if(typeof customDomain != "undefined" && customDomain != "") {
+			var domain = location.host;
+			domain = domain.replace(/^www\./,"");
+			domain = protocol + "://" + customDomain + "." + domain;
+			location.href=domain;
+      return true;
+		}
+    else {
+      return false;
+    }
+  }
 
 });

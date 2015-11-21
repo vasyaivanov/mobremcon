@@ -1,13 +1,13 @@
 $(document).ready(function () {
-	var renameSlide = new Object(); 
+	var renameSlide = new Object();
 	// DUPLICATE SOCKET
 	var socketSlides = io.connect(document.location.hostname + ':' + location.port);
-	
+
 	$( "[id^=rsid_]" ).keyup(function(event) {
 		var elId = event.target.id;
 		var hashId = event.target.id.replace("rsid_","");
 		var str = $( "#" + elId ).val();
-		
+
 		if($( "#" + elId ).val() != '')  {
 			var regex = /[^\w\s]/gi;
 			if(regex.test(str) == true) {
@@ -15,23 +15,25 @@ $(document).ready(function () {
 			}
 			else {
 				socketSlides.emit('renameHash-server', {slideId: hashId, newHashName: str, start: 1});
-			}			
+			}
 		}
 		else {
-			$("#rresult_" + hashId).html("<font color='red'>Enter a new slide name!</font>");			
+			$("#rresult_" + hashId).html("<font color='red'>Enter a new slide name!</font>");
 		}
 	});
-	
+
 	$( "[id^=open_]" ).click(function(event) {
 		var elId = event.target.id;
 		var hashId = event.target.id.replace("open_","");
 		var str = $( "#rsid_" + hashId ).val();
 		if(str) {
 			var loc = location.href.replace("#","");
-			window.open(loc + str);
+
+			location.href = loc + str;
+			//window.open(loc + str);
 		}
-	});	
-	
+	});
+
 	socketSlides.on('renameHash-client', function (data) {
 	console.log(data);
 	var domainAvailableMessage = "<font color='lime'>Slide name saved!</font>";
@@ -43,5 +45,5 @@ $(document).ready(function () {
 		$("#rresult_" + data.slideId).html(domainNotAvailableMessage);
 	}
 });
-	
+
 });
