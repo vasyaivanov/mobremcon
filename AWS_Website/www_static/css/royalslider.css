@@ -235,7 +235,7 @@ img.rsImg {
 }
 
 .grab-cursor {
-	cursor:url('../remote/img/grab.png') 8 8, move; 
+	cursor:url('/img/grab.png') 8 8, move; 
 }
 
 /*
