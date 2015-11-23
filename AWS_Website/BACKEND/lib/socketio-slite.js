@@ -911,6 +911,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
 		socket.on('checkUserUploadStatus', function(data, callback){
 			module.parent.exports.getUserUploadStatus(userSession.currentUserId, function(uplStatus) {
+				module.parent.exports.UserData[module.parent.exports.getCookie(socket.handshake.headers.cookie,module.parent.exports.sessionIdCookie)].noUploadForUser = uplStatus;
 				callback(uplStatus);
 			});
 
