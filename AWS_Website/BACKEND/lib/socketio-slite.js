@@ -12,6 +12,7 @@ var url = require('url')
   , session = require('express-session')
   , cookieParser = require('cookie-parser')
   , HTML5_UPLOADER = false
+  , supportUplExtensions = [".ppt", ".pptx"]
   , LOG_COORD = true;
 var start = process.hrtime();
 
@@ -237,15 +238,22 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       			}
       			else {
       				fs.exists(event.file.pathName, function (exists) {
-      					if((fs.statSync(event.file.pathName)["size"] > 0)) {
-      						uploadComplete(event.file.pathName, event.file.name);
-      					}
-      					else {
-      						fs.unlinkSync(event.file.pathName);
-      						uploadError(2, "");
-      					}
+						if(supportUplExtensions.indexOf(path.extname(event.file.pathName)) == -1) {
+							fs.unlinkSync(event.file.pathName);
+							uploadError(3, "");	
+						}
+						else {
+							if((fs.statSync(event.file.pathName)["size"] > 0)) {
+								uploadComplete(event.file.pathName, event.file.name);
+							}
+							else {
+								fs.unlinkSync(event.file.pathName);
+								uploadError(2, "");
+							}
+						}
       				});
-      			}
+
+				}
 
       		});
 

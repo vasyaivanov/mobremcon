@@ -209,16 +209,20 @@ $(document).ready(function () {
 
     mainSocket.on('sliteConversionError', function (rdata) {
 		var data = {};
+
 		if(rdata.limit == 1) {
 			data.msg = "You've reached the maximum limit of slides per user";
 		}
 		else if(rdata.limit == 2) {
 			data.msg = "The file is too big";
 		}
-		else {
-	        data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
+		else if(rdata.limit == 3) {
+			data.msg = "We support only ppt & pptx files"
 		}
-	    console.log("File conversion failed! " + JSON.stringify(data));
+		else {
+			data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
+		}
+	    //console.log("File conversion failed! " + JSON.stringify(data));
         data.error = true;
         data.percentage = 100;
 		updateProgress(data);
