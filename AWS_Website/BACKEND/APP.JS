@@ -596,12 +596,12 @@ app.use(function (req, res, next) {
 							}
 							else {
 								console.log( "Slide was not found" );
-								res.redirect('/');
+								res.send('Slide was not found');
 							}
 						});
 					}
 					else {
-						res.redirect('/');
+						res.send('Slide was not found');
 					}
 				} else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
 					//console.log('jpg: ' + afterHash);
