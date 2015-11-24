@@ -217,7 +217,7 @@ $(document).ready(function () {
 			data.msg = "The file is too big";
 		}
 		else if(rdata.limit == 3) {
-			data.msg = "We support only ppt & pptx files"
+			data.msg = "We only support ppt & pptx files"
 		}
 		else {
 			data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
