@@ -114,14 +114,24 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 function touchStart(event) {
     //alert('touchStart');
     event.preventDefault();
-    updateSlideMetrics(event.pageX, event.pageY);
-    var per = offsetToPercentage(event.pageX, event.pageY);
+	
+    var xTouch, yTouch;
+    if (isMobile()) {
+        xTouch = event.touches[0].pageX;
+        yTouch = event.touches[0].pageY;
+    } else {
+        xTouch = event.pageX;
+        yTouch = event.pageY;
+    }
+	
+    updateSlideMetrics(xTouch, yTouch);
+    var per = offsetToPercentage(xTouch, yTouch);
+
     if(LASER === interactionType) {
       socket.emit('laserOn', {x: per.x,
                               y: per.y,
                               slideID: currentHash});
     } else if (DRAW === interactionType) {
-        // recalculate offsets in case window size has changed
         socket.emit('drawStart',{x: per.x,
                                  y: per.y ,
                                  slideID: currentHash});
@@ -129,7 +139,6 @@ function touchStart(event) {
 };
 
 function touchEnd(event) {
-    //alert('touchEnd');
     event.preventDefault();
     if (LASER === interactionType) {
         socket.emit('laserOff', {slideID: currentHash});
@@ -237,7 +246,7 @@ function touchMove(event) {
 
     // This code is needed because the touch event is different on mobile vs browser
     var xTouch, yTouch;
-    if (/mobile/i.test(navigator.userAgent)) {
+    if (isMobile()) {
         xTouch = event.touches[0].pageX;
         yTouch = event.touches[0].pageY;
     } else {
@@ -245,6 +254,7 @@ function touchMove(event) {
         yTouch = event.pageY;
     }
 
+	
     updateSlideMetrics(xTouch, yTouch);
     var per = offsetToPercentage(xTouch, yTouch);
 

@@ -222,8 +222,8 @@ $( document ).ready(function() {
 	}, false);
 
 	function hideRecording() {
-		$('#recording', window.parent.document).hide();
-		$('#recStarted', window.parent.document).css("display", "block");
+		$('#recording', window.parent.document).slideToggle();
+		$('#recStarted', window.parent.document).slideToggle();
 	}
 
 	startSession();
@@ -240,6 +240,7 @@ function reloadFFPlugin() {
 }
 
 function stopRec() {
+	$('#recording', window.parent.document).animate({ "width": "0", "clear": "both" },1);
 	setTimeout(function(){ $("#stopRecording").click() }, 500);
 	
 }

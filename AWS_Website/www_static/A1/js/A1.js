@@ -180,7 +180,7 @@ function recording() {
         isRecordingOn = 1;
 		$("#recordingframe").attr("src","/record.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
     } else {
-		$('#recording').animate({ "width": "25.5%", "clear": "both" },300);
+		$('#recording').animate({ "width": "100%", "clear": "both" },300);
 		$("#recordingframe").attr("src","");
         isRecordingOn = 0;
     }
@@ -198,7 +198,7 @@ function recording() {
 
 $("#recordButton").click(function() {
 	$("#recStarted").hide();
-	$("#recording").show();
+	$("#recording").slideToggle();
 	document.getElementById("recordingframe").contentWindow.stopRec();
 });
 

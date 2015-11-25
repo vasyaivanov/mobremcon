@@ -5,52 +5,6 @@
 
 thumbnails();
 
-
-//$('#URLBox').keypress(function (e) {
-//	if(e.which == 13) {
-//		changeURL();
-//	}
-//});
-
-/*
-// Adding event handlers to the currentSlide div, the user
-// touches this div to draw or move laser
-currentSlide.addEventListener('touchstart', touchStart, false);
-currentSlide.addEventListener('touchmove', touchMove, false);
-currentSlide.addEventListener('touchend', touchEnd, false);
-
-// Touching the control area (the currentSlide div) will turn the
-// laser on, making the red dot appear on the presentation.
-// But only if we are in laser mode.
-function touchStart(event) {
-    event.preventDefault();
-    if(LASER === interactionType) {
-        socket.emit('laserOn', {slideID: currentHash});
-    } else if (DRAW === interactionType) {
-        // recalculate offsets in case window size has changed
-        xOffset = currentSlide.offsetLeft;
-        yOffset = currentSlide.offsetTop;
-        slideWidth = currentSlide.offsetWidth,
-        slideHeight = currentSlide.offsetHeight;
-        var xPercent = calcOffset(event.pageX, xOffset, slideWidth);
-        var yPercent = calcOffset(event.pageY, yOffset, slideHeight);
-        //console.log("xPercent: " + xPercent);
-        //console.log("yPercent: " + yPercent);
-        socket.emit('drawStart',{x:xPercent,
-                                 y:yPercent , slideID: currentHash});
-    }
-};
-
-function touchEnd(event) {
-    event.preventDefault();
-    if (LASER === interactionType) {
-        socket.emit('laserOff');
-    } else if (DRAW === interactionType) {
-        socket.emit('drawStop');
-    }
-};
-*/
-
 function turnLaser(on){
     // if laser is on, turn it off
     if (!on) {
