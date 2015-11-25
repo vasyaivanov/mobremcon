@@ -604,7 +604,7 @@ $('#closescreensharing').click(function () {
     showHideScreensharing();
 });
 if(isScreensharingOpen == 1){
-    showHideScreensharing();
+	setTimeout(function(){showHideScreensharing()},2000);
 }
 $('#submitInsertVideoSlide').click(function () {
     submitInsertVideoSlide();

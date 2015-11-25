@@ -48,6 +48,12 @@ moderator.session = MODERATOR_SESSION;
 moderator.userid  = MODERATOR_ID;
 moderator.extra   = MODERATOR_EXTRA;
 
+moderator.sdpConstraints.mandatory = {
+    OfferToReceiveAudio: true,
+    OfferToReceiveVideo: true,
+	IceRestart: true
+};
+
 moderator.onstream = function(event) {
 	if(event.isVideo) {
 		if(event.type == "local") {

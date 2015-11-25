@@ -22,6 +22,12 @@ video {
 var socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
 var participants = new RTCMultiConnection('slite-video');
 
+participants.sdpConstraints.mandatory = {
+    OfferToReceiveAudio: true,
+    OfferToReceiveVideo: true,
+	IceRestart: true
+};
+
 socketWebrtc.on('sharing-client', function (data) {
 	startSession(data.moderatorId, data.chatMode);
 	function startSession(moderatorId, chatMode) {
@@ -77,6 +83,15 @@ socketWebrtc.on('sharing-client', function (data) {
 				$( "#audiosharing" ).append(event.mediaElement);
 			}
 		};
+	
+		
+		participants.onstreamended = function(event) {
+			if(event.type == "remote" && event.userid == data.moderatorId) {
+				alert("Lost video connection with presenter. Reconnecting...");
+				location.reload();
+			}
+		};
+
 	}
 
 });
