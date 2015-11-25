@@ -143,7 +143,7 @@ function showHideVideoChat() {
 	if(isScreensharingOn == 1) {
 		showHideScreensharing()
 	}
-	
+
     if (!isVideoChatOn) {
         isVideoChatOn = 1;
 		$("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
@@ -207,8 +207,8 @@ var isScreensharingOn = 0;
 function showHideScreensharing() {
 	if(isVideoChatOn == 1) {
 		showHideVideoChat()
-	}	
-	
+	}
+
     if (!isScreensharingOn) {
 		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
         isScreensharingOn = 1;
@@ -642,7 +642,7 @@ if( isMobile() ) {
 		}
 		else {
 			$('#orientationOverlay').fadeOut(400);
-			location.reload();
+			resizeCanvas();
 		}
 	}, false);
 
@@ -691,11 +691,11 @@ window.onresize = function () {
 
 function updateTitle() {
     var newTitle = "";
-    
+
     if (!isNaN(hashUsers) && hashUsers >= 0) {
         newTitle += "(" + hashUsers + ") ";
     }
-    
+
     if (typeof title !== 'undefined') {
         newTitle += title;
     } else {
@@ -948,7 +948,7 @@ $( window ).load(function() {
             showHideScreensharing();
         }
     });
-	
+
     socket.on('nof-users', function (data) {
             hashUsers = data.nof_users;
             //console.log("nof-users received: " + data.nof_users);
