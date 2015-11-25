@@ -534,6 +534,22 @@ function submitInsertVideoSlide() {
 	showHideInsertVideoSlideOverlay();
 }
 
+$("#navNext").click(function() {
+	if (isAPresenter) {
+		nextSlideRemote();
+	} else {
+		nextSlideLocal();
+	}
+});
+
+$("#navPrev").click(function() {
+	if (isAPresenter) {
+		prevSlideRemote();
+	} else {
+		prevSlideLocal();
+	}
+});
+
 function prevSlideLocal(){
 	var slider = $(".royalSlider").data('royalSlider');
 	slider.prev();
