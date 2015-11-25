@@ -303,13 +303,13 @@ var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 
 // Auto redirect to WWW, if no subdomain
-var trustedDomains = ["", "slite-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com", "localhost"];
+var trustedDomains = ["", "prezera-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com", "localhost"];
 function redirectToWWW(req,res,next) {
 	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 	if(req.hostname.split('.').length == 2) {
 		res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear + req.url);
 	}
-	else if(req.hostname.split('.').length > 3 && trustedDomains.indexOf(req.headers.host) == -1) {
+	else if(req.hostname.split('.').length == 3 && trustedDomains.indexOf(req.headers.host) == -1) {
 		// Redirect if more than 3 subdomains
 		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 		res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear);
@@ -331,6 +331,7 @@ function virtualHostSession(req, res, next) {
 		else {
 			domainClear = host.split('.').reverse()[1] + '.' + host.split('.').reverse()[0];
 		}
+
 		var hostSession = mwCache[domainClear];
 		if (!hostSession) {
 			hostSession = mwCache[domainClear] = session({
@@ -824,7 +825,7 @@ router.get(rootRegExp, function (req, res){
 
 	var domainSplit = req.hostname.split('.');
 
-	if(domainSplit.length == 3 && domainSplit[0] != 'www'/* && trustedDomains.indexOf(req.headers.host) == 0*/) {
+	if(domainSplit.length == 3 && domainSplit[0] != 'www' && trustedDomains.indexOf(req.headers.host) == 0) {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
 				var owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
