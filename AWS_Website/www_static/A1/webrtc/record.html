@@ -112,7 +112,7 @@ $( document ).ready(function() {
 			moderator.streams[videoStream.streamid].stopRecording(function(blob) {
 				if(blob.video) {
 					h2 = document.createElement('p');
-					h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>';
+					h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded video </a>';
 					$( "#video_result" ).append(h2);
 					console.log(blob);
 				}
@@ -122,7 +122,7 @@ $( document ).ready(function() {
 				console.log(blob);
 				if(blob.audio) {
 					h2 = document.createElement('p');
-					h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded ' + blob.audio.type + '</a>';
+					h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded audio </a>';
 					$( "#audio_result" ).append(h2);
 				}
 			});
