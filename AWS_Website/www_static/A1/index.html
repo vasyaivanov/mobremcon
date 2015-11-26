@@ -46,9 +46,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- remote stylesheet -->
     <!--<link rel="stylesheet" type="text/css" href="../remote/css/index.css">-->
+		<script>
+		function showWindow() {
+			$("#loadingPage").fadeOut(200);
+			$("#mainSlide").fadeIn(2000);
+		}
+		</script>
 </head>
 
-<body> <!--onresize="resizeCanvas()">-->
+<body onload="showWindow()"> <!--onresize="resizeCanvas()">-->
+
+<div id="loadingPage" class="centerText">
+<img src="/A1/img/loading_spinner.gif" width="100">
+</div>
+
+<div id="mainSlide" style="display: none">
 
 <div id="recStarted">
 <img id="recordButton" width="23px" height="23px" style="cursor:pointer;opacity:0.5;position:fixed;top:0px;left:0px;" title="Stop recording" alt="Stop recording" src="/img/stop_recording_button.png">
@@ -317,6 +329,6 @@
 	</script>
 	<div id="redDot"><img src="../img/redDot.png" alt="Laser Pointer"></div>
 
-
+	</div>
 	</body>
 </html>
