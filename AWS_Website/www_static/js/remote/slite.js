@@ -6,7 +6,7 @@ var currentSlide = document.getElementById("currentSlide"),
     slideWidth = 0,
     slideHeight = 0,
     xOffset = 0,
-    xOffset = 0, 
+    xOffset = 0,
     LOG_COORDS = true;
 
 function getPos(el) {
@@ -64,7 +64,7 @@ function updateSlideMetrics(mouseX, mouseY){
 function offsetToPercentage(xOff, yOff) {
     var xPer = calcOffset(xOff, xOffset, slideWidth);
     var yPer = calcOffset(yOff, yOffset, slideHeight);
-    
+
     if (LOG_COORDS) {
         console.log("xOff: " + xOff);
         console.log("yOff: " + yOff);
@@ -77,7 +77,7 @@ function offsetToPercentage(xOff, yOff) {
 function percentageToOffset(xPer, yPer) {
     var xOff = calcPercentage(xPer, xOffset, slideWidth);
     var yOff = calcPercentage(yPer, yOffset, slideHeight);
-    
+
     if (LOG_COORDS) {
         console.log("xOff: " + xOff);
         console.log("yOff: " + yOff);
@@ -114,7 +114,7 @@ currentSlide.addEventListener('touchend', touchEnd, false);
 function touchStart(event) {
     //alert('touchStart');
     event.preventDefault();
-	
+
     var xTouch, yTouch;
     if (isMobile()) {
         xTouch = event.touches[0].pageX;
@@ -123,26 +123,28 @@ function touchStart(event) {
         xTouch = event.pageX;
         yTouch = event.pageY;
     }
-	
+
     updateSlideMetrics(xTouch, yTouch);
     var per = offsetToPercentage(xTouch, yTouch);
 
     if(LASER === interactionType) {
-      socket.emit('laserOn', {x: per.x,
-                              y: per.y,
-                              slideID: currentHash});
+        // Laser immediately for presenter
+        $( "#redDot" ).css("visibility", "visible");
+        moveLaserTo(per.x, per.y);
+        socket.emit('laserOn', {x: per.x, y: per.y, slideID: currentHash});
     } else if (DRAW === interactionType) {
-        socket.emit('drawStart',{x: per.x,
-                                 y: per.y ,
-                                 slideID: currentHash});
+        drawTo('down', per.x, per.y);
+        socket.emit('drawStart',{x: per.x, y: per.y , slideID: currentHash});
     }
 };
 
 function touchEnd(event) {
     event.preventDefault();
     if (LASER === interactionType) {
+        $( "#redDot" ).css("visibility", "hidden");
         socket.emit('laserOff', {slideID: currentHash});
     } else if (DRAW === interactionType) {
+        drawTo('up');
         socket.emit('drawStop', {slideID: currentHash});
     }
 };
@@ -154,6 +156,7 @@ function getNumSlides() {
 
 // Functions that handle moving to the next slide and updating notes
 function prevSlideRemote() {
+    prevSlideLocal();
     console.log('prevSlideRemote');
     //if (currSlideNum <= 0) return;
     currSlideNum--;
@@ -164,6 +167,7 @@ function prevSlideRemote() {
     //$("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlideRemote() {
+    nextSlideLocal();
     console.log('nextSlideRemote');
     //if (currSlideNum >= getSlideNumber()-1) return;
     currSlideNum++;
@@ -254,24 +258,22 @@ function touchMove(event) {
         yTouch = event.pageY;
     }
 
-	
+
     updateSlideMetrics(xTouch, yTouch);
     var per = offsetToPercentage(xTouch, yTouch);
 
     switch(interactionType) {
         case LASER: {
-            socket.emit('laserCoords',
-                        { x:per.x,
-                          y:per.y,
-                          slideID: currentHash});
+            // Draw immediately for presenter
+            moveLaserTo(per.x, per.y);
+            socket.emit('laserCoords', { x:per.x,  y:per.y,  slideID: currentHash});
             break;
         }
         case DRAW: {
-            socket.emit('drawCoords',
-                        { x:per.x,
-                          y:per.y ,
-                          slideID: currentHash});
-            break;
+          // Draw immediately for presenter
+          drawTo('move', per.x, per.y);
+          socket.emit('drawCoords', { x:per.x, y:per.y , slideID: currentHash});
+          break;
         }
         default: {
             break;
@@ -288,7 +290,7 @@ $(window).resize(function() {
 
 // This script is intended to detect whether or not
 // the program is opened in a mobile browser, and load
-// the correct .js file. 
+// the correct .js file.
 var scriptSrc = '/js/remote/slite_browser.js';
 /* if (/mobile/i.test(navigator.userAgent)) {
     scriptSrc = './js/slite_iphone.js';

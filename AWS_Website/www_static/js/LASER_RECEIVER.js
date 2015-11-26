@@ -1,8 +1,8 @@
-/* 
+/*
  * This script is for moving the laser pointer on the presentation slide
  * based on what the presenter does on the remote control. It will receive
  * X/Y coordinates from the remote via the Backend APP.JS server, and then
- * display the laser pointer in the appropriate place. 
+ * display the laser pointer in the appropriate place.
  */
 //console.log('LASER_RECIEVER.js');
 
@@ -13,7 +13,7 @@ var canvas, ctx, flag = false,
     currY = 0,
 	dot_flag = false,
 	LOG_DRAWING = true;
-	
+
 var paintColor = "red",
     lineThickness = 3;
 
@@ -59,41 +59,41 @@ $( window ).load(function() {
     // Whenever the user is moving the laser on the remote, turn the dot on.
     // When they are done, turn it off again
     socket.on('laserOn', function(data) {
-        if (isThisHash(data.slideID)) {
+        if (isThisHash(data.slideID) && isAPresenter === false) {
             $( "#redDot" ).css("visibility", "visible");
             moveLaserTo(data.x, data.y);
         }
     });
 
     socket.on('laserOff', function(data) {
-        if (isThisHash(data.slideID)) {
+        if (isThisHash(data.slideID) && isAPresenter === false) {
             $( "#redDot" ).css("visibility", "hidden");
         }
     });
 
-    // currently socket is initialized in the html. 
-    // This function receives the x/y coordinates from the APP.JS server 
-    // and moves the laser dot by adjusting the dot's CSS. 
+    // currently socket is initialized in the html.
+    // This function receives the x/y coordinates from the APP.JS server
+    // and moves the laser dot by adjusting the dot's CSS.
     socket.on('moveLaser', function(data) {
-         if (isThisHash(data.slideID)) {
+         if (isThisHash(data.slideID) && isAPresenter === false) {
             moveLaserTo(data.x, data.y);
         }
     });
 
     socket.on('drawStart', function(data) {
-        if (isThisHash(data.slideID)) {
+        if (isThisHash(data.slideID) && isAPresenter === false) {
             drawTo('down', data.x, data.y);
         }
     });
 
     socket.on('drawStop', function(data) {
-        if (isThisHash(data.slideID)) {
+        if (isThisHash(data.slideID) && isAPresenter === false) {
             drawTo('up', data.x, data.y);
         }
     });
 
      socket.on('drawCoords', function(data) {
-        if (isThisHash(data.slideID)) {
+        if (isThisHash(data.slideID) && isAPresenter === false) {
             drawTo('move', data.x, data.y);
          }
     });
@@ -115,7 +115,7 @@ function resizeCanvas() {
     canvas[0].height = window.innerHeight;
 	clearCanvas();
     //console.log("Canvas W:" + canvas[0].width + " H:" + canvas[0].height);
-};  
+};
 
 // Converts percent offset received from server into XY coords
 // (this mirrors calcOffset in slite.js)
@@ -151,7 +151,7 @@ function findxy(res, x, y) {
         currX = x - canvas[0].offsetLeft;
         currY = y - canvas[0].offsetTop;
         //console.log("findxy down. prevX = " + prevX + " currX = " + currX);
-        
+
         flag = true;
         dot_flag = true;
         if (dot_flag) {
@@ -177,4 +177,3 @@ function findxy(res, x, y) {
         }
     }
 };
-

@@ -892,7 +892,8 @@ $( window ).load(function() {
 
 
     socket.on('changeSlideBroadcast', function (data) {
-        if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
+        //if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
+				if(data.slideID == getCurrentHash() && isAPresenter === false) {
         var button = data.hello - 1;
             var slider = $(".royalSlider").data('royalSlider');
             console.log(button);
