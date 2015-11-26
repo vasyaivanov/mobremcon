@@ -89,6 +89,7 @@ function onMouseMove(event) {
     switch(interactionType) {
         case LASER: {
             //console.log('lasering');
+            moveLaserTo(per.x, per.y);
             socket.emit('laserCoords', { x: per.x,
                                          y: per.y,
                                          slideID: currentHash });
@@ -96,6 +97,7 @@ function onMouseMove(event) {
         }
         case DRAW: {
             //console.log('drawing');
+            drawTo('move', per.x, per.y);
             socket.emit('drawCoords', { x: per.x,
                                         y: per.y,
                                         slideID: currentHash });
@@ -116,11 +118,13 @@ function onMouseMove(event) {
     $( "#currentSlide" ).on ("mousemove", onMouseMove);
     // Only turn on laser if we are in laser mode
     if(interactionType === LASER) {
+        $( "#redDot" ).css("visibility", "visible");
+        moveLaserTo(per.x, per.y);
         socket.emit('laserOn', {x: per.x,
                                 y: per.y,
                                 slideID: currentHash});
     } else if(interactionType === DRAW) {
-
+        drawTo('down', per.x, per.y);
         socket.emit('drawStart',{x: per.x,
                                  y: per.y,
                                  slideID: currentHash});
@@ -132,8 +136,10 @@ $( '#currentSlide' ).mouseup(function(event) {
     $( "#currentSlide" ).off ("mousemove", onMouseMove);
     // Only turn off laser if we are in laser mode
     if(interactionType === LASER) {
+        $( "#redDot" ).css("visibility", "hidden");
         socket.emit('laserOff', {slideID: currentHash});
     } else if(interactionType === DRAW) {
+        drawTo('up');
         socket.emit('drawStop', {slideID: currentHash});
     }
 });
