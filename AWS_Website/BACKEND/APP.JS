@@ -517,7 +517,9 @@ app.use(function (req, res, next) {
 					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
 						if(docU) {
 							if(req.hostname.split('.')[0] == docU.domain) {
+                console.log("TTT");
                 req.url = "/" + data.sid;
+                next();
 							}
 							else {next();}
 						}

@@ -18,7 +18,7 @@ var paintColor = "red",
     lineThickness = 3;
 
 function isThisHash(hash) {
-    return ( (document.location.pathname === "/"+ hash) || (document.location.pathname === "/"+ hash + "/") );
+    return ( currentHash === hash );
 }
 
  function moveLaserTo(x, y) {

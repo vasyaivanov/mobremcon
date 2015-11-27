@@ -1,6 +1,5 @@
 var socket;
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
-var currentHash = getCurrentHash();
 var isAPresenter = isPresenter();
 var royalSlider;
 var hashUsers = -1;
@@ -291,14 +290,14 @@ function showHideRenamePresentationOverlay() {
 }
 
 function getCurrentHash() {
-    var hash = document.location.href;
+    /*var hash = document.location.href;
     if (hash[hash.length - 1] === '/') {
         hash = hash.slice(0, -1);
     }
     var slashPos = hash.lastIndexOf('/');
     hash = hash.slice(slashPos + 1);
-    hash = hash.toLowerCase();
-    return hash;
+    hash = hash.toLowerCase();*/
+    return currentHash;
 }
 
 function downloadPresentation() {
