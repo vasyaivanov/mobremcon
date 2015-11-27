@@ -889,7 +889,8 @@ router.get(rootRegExp, function (req, res){
 							error: 0,
 							moment: moment,
 							expire: expire,
-							userData: UserData[req.cookies[sessionIdCookie]]
+							userData: UserData[req.cookies[sessionIdCookie]],
+              domains: []
 						});
 					});
 				});
@@ -897,7 +898,7 @@ router.get(rootRegExp, function (req, res){
 			else {
 				// No cookie - no upload and other stuff :)
 
-        User.findRandom({domain: {$ne: null}}, {}, {limit: 10}, function (err, customDomains) {
+        User.findRandom({domain: {$ne: ""}}, {}, {limit: 10}, function (err, customDomains) {
   				res.render(path.join(www_dir, www_static_dir, indexHtml), {
   					user: req.user,
   					noUploadForUser: 2,
