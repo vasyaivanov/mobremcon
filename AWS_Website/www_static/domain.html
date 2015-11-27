@@ -50,9 +50,9 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
 
-	  <% if (userData.restrictions.domain == 1) {%>
+	  <% if (userData && userData.restrictions.domain == 1) {%>
 	<script src="js/slides-rename.js"></script>
-	  <% } %>
+	  <% }  %>
 </head>
 
 <body class='mainbackground'>

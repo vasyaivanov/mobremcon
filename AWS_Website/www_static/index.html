@@ -138,14 +138,20 @@
                 <button type="button" class="btn uploadButton" onclick="$('.myPres').click()">Limit reached.<br/>Click here to delete.</button>
             </div>
             <% } else if (noUploadForUser == 2) {%>
-			
+
 				<% randomSlides.forEach(function(slide){ %>
 					<p><a href="https://<%=slide.site%>/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>">
 					<img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="20" title="<%= slide.title %>">
 					<%= slide.title %></a></p>
 				<%  }); %>
 			<% } %>
-			
+
+      <% if(domains) { %>
+        <% domains.forEach(function(domain){ %>
+					<p><a href="https://<%= domain.domain %>.<%= clearDomain %>"><%= domain.domain %>.<%= clearDomain %></a></p>
+				<%  }); %>
+      <% } %>
+
             <!-- <a href="#about" class="btn btn-dark btn-lg">Find Out More</a> -->
         </div>
     </header>
@@ -323,7 +329,7 @@
     </section>
 
 	<% if (userRole > 0) { %>
-	
+
 	<!-- Account -->
     <section id="myAccount" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
@@ -358,8 +364,8 @@
         <div class="loginbody">
 				<h4 id="notifText" style="color: #FF0000;"></h4>
             </div>
-    </section>	
-	
+    </section>
+
 	<section id="subscription" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage">

@@ -42,6 +42,8 @@ var userSchema = mongoose.Schema({
   domain: {type: String, lowercase: true}
 });
 
+userSchema.plugin(mongooserand);
+
 userSchema.index({email: 1}, {unique: true});
 
 // Notes
@@ -64,6 +66,8 @@ notesSchema.pre('save', function(next){
 notesSchema.index({uid: 1, sid: 1}, {unique: true});
 
 var Note = mongoose.model('note', notesSchema);
+
+
 
 module.exports.NoteScheme = Note;
 
@@ -396,7 +400,7 @@ else {
 			}
 			else {
 				if(userId == 0) {
-					console.log('YOU\'re a bot! HAHA! I\'m going to show you a fake slide ]:->');
+					console.log('Bot or crawler: ' + req.url + ' : ' + req.headers['user-agent']);
 					var split_hash = req.path.split("/");
 					var hash = req.path.replace("/","");
 					if(split_hash.length == 2) {
@@ -821,14 +825,17 @@ function setUserSession(req, res, callback) {
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
 
-    var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+  var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	var domainSplit = req.hostname.split('.');
 
 	if(domainSplit.length == 3 && domainSplit[0] != 'www' && trustedDomains.indexOf(req.headers.host) == -1) {
 		User.findOne({ domain : domainSplit[0] }, function (err, docs) {
 			if(docs) {
-				var owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
+        var owner = 0;
+        if(typeof req.cookies[sessionIdCookie] != "undefined") {
+          owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
+        }
 				Slide.find({uid : docs._id }).sort({'created': 'desc'}).exec(function (err, docs) {
 					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
 				});
@@ -847,7 +854,7 @@ router.get(rootRegExp, function (req, res){
 
 		// Paint index page random slides
 		function getRandomSlides(Slide, callback) {
-			Slide.findRandom({site: req.headers.host}, {}, {limit: 50},function(err, result) {
+			Slide.findRandom({site: req.headers.host}, {}, {skip: 0, limit: 10},function(err, result) {
 			  if (!err) {
 				var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
@@ -889,18 +896,23 @@ router.get(rootRegExp, function (req, res){
 			}
 			else {
 				// No cookie - no upload and other stuff :)
-				res.render(path.join(www_dir, www_static_dir, indexHtml), {
-					user: req.user,
-					noUploadForUser: 2,
-					randomSlides: clearData,
-					userRole: 0,
-					request: req,
-					ERROR_AUTH: 0,
-					error: 0,
-					slides: [],
-					expire: '',
-					userData: { restrictions: rolesRestrictions[0] }
-				});
+
+        User.findRandom({domain: {$ne: null}}, {}, {limit: 10}, function (err, customDomains) {
+  				res.render(path.join(www_dir, www_static_dir, indexHtml), {
+  					user: req.user,
+  					noUploadForUser: 2,
+  					randomSlides: clearData,
+  					userRole: 0,
+  					request: req,
+  					ERROR_AUTH: 0,
+  					error: 0,
+  					slides: [],
+  					expire: '',
+  					userData: { restrictions: rolesRestrictions[0] },
+            domains: customDomains,
+            clearDomain: domainClear
+  				});
+        });
 			}
 		});
 	}
