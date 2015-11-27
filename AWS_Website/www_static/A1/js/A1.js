@@ -654,11 +654,12 @@ if( isMobile() ) {
 
 	window.addEventListener("orientationchange", function() {
 		if (window.orientation == 0 || window.orientation == 180) {
+			$("#mainSlide").hide();
 			$('#orientationOverlay').fadeIn(400);
 		}
 		else {
 			$('#orientationOverlay').fadeOut(400);
-			resizeCanvas();
+			location.reload();
 		}
 	}, false);
 

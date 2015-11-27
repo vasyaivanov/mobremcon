@@ -523,6 +523,7 @@ app.use(function (req, res, next) {
 								<html> \
 								<head> \
 								<title></title> \
+                <meta name=\"viewport\" content=\"width=device-width, initial-scale=0.9, user-scalable=no\"> \
 								</head> \
 								<body style='scrolling:no;' onload=\"document.getElementById('frame').focus();\"> \
 								<iframe id='frame' src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
@@ -560,9 +561,10 @@ app.use(function (req, res, next) {
 			<html> \
 			<head> \
 			<title></title> \
+      <meta name=\"viewport\" content=\"width=device-width, initial-scale=0.9, user-scalable=no\"> \
 			</head> \
 			<body style='scrolling:no;' onload=\"document.getElementById('frame').focus();\"> \
-			<iframe id='frame' src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
+			<iframe id='frame' src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='no'> \
 			</iframe> \
 			</body>";
 			res.send(output);
