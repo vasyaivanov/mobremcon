@@ -240,7 +240,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       				fs.exists(event.file.pathName, function (exists) {
 						if(supportUplExtensions.indexOf(path.extname(event.file.pathName)) == -1) {
 							fs.unlinkSync(event.file.pathName);
-							uploadError(3, "");	
+							uploadError(3, "");
 						}
 						else {
 							if((fs.statSync(event.file.pathName)["size"] > 0)) {
@@ -433,7 +433,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('deleteDomain-server', function (data) {
-			module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: ""}}, function(errU,docsU) {
+			module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $unset: { domain: ""}}, function(errU,docsU) {
 				module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId }, {$set: { domainSet: 0, scid: null }}, {multi: true, upsert: false},
 					function (err, numAffected) {console.log(numAffected)}
 				);
