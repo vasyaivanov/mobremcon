@@ -517,19 +517,7 @@ app.use(function (req, res, next) {
 					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
 						if(docU) {
 							if(req.hostname.split('.')[0] == docU.domain) {
-								var url = ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + "://" + domainClear + "/" + data.sid
-								res.set('Content-Type', 'text/html');
-								var output = " \
-								<html> \
-								<head> \
-								<title></title> \
-                <meta name=\"viewport\" content=\"width=device-width, initial-scale=0.9, user-scalable=no\"> \
-								</head> \
-								<body style='scrolling:no;' onload=\"document.getElementById('frame').focus();\"> \
-								<iframe id='frame' src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='auto'> \
-								</iframe> \
-								</body>";
-								res.send(output);
+                req.url = "/" + data.sid;
 							}
 							else {next();}
 						}
@@ -557,7 +545,6 @@ app.use(function (req, res, next) {
       if( doc ) {
         req.url = "/" + doc.sid;
       }
-      console.log(req.url);
 			var match = req.url.match(slitesRegMW);
 			if (match) {                                                     // if hash found in url
 				if (req.url[req.url.length - 1] === '/') {
