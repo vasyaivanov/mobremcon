@@ -659,7 +659,8 @@ if( isMobile() ) {
 		}
 		else {
 			$('#orientationOverlay').fadeOut(400);
-			location.reload();
+			resizeCanvas();
+			$("#mainSlide").show();
 		}
 	}, false);
 
