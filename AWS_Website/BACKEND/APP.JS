@@ -554,24 +554,12 @@ app.use(function (req, res, next) {
 	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 	Slide.findOne( {scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 0 }).exec(function (err, doc) {
 		if(err) {console.log(err)}
-		if( doc ) {
-			var url = "/" + doc.sid
-			res.set('Content-Type', 'text/html');
-			var output = " \
-			<html> \
-			<head> \
-			<title></title> \
-      <meta name=\"viewport\" content=\"width=device-width, initial-scale=0.9, user-scalable=no\"> \
-			</head> \
-			<body style='scrolling:no;' onload=\"document.getElementById('frame').focus();\"> \
-			<iframe id='frame' src='" + url + "' style='position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:999' frameborder='no' scrolling='no'> \
-			</iframe> \
-			</body>";
-			res.send(output);
-		}
-		else {
+      if( doc ) {
+        req.url = "/" + doc.sid;
+      }
+      console.log(req.url);
 			var match = req.url.match(slitesRegMW);
-			if (match) {                                                        // if hash found in url
+			if (match) {                                                     // if hash found in url
 				if (req.url[req.url.length - 1] === '/') {
 					req.url = req.url.slice(0, -1);
 					//console.log("removed trailing slash");
@@ -663,7 +651,7 @@ app.use(function (req, res, next) {
 			else {
 				next();
 			}
-		}
+		//}
 	});
 
 });
