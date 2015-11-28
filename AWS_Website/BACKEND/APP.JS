@@ -512,8 +512,7 @@ app.use(function (req, res, next) {
 	if(customHash != '' && req.hostname.split('.')[0] != 'www' && !path.extname(customHash)) {
     User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
         if(docU) {
-          //{ $regex : new RegExp("^" + customHash + "$" , "i") }
-          Slide.findOne({ $or: [{sid: customHash} ,  {scid: customHash}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
+          Slide.findOne({ $or: [{sid: customHash} ,  {scid: { $regex : new RegExp("^" + customHash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
               if(doc) {
                 req.url = "/" + doc.sid;
                 next();
