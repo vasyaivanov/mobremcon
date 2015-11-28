@@ -780,7 +780,8 @@ function setUserSession(req, res, callback) {
 		});
 		// Update user slides
 		var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;
-		Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet }}, {multi: true, upsert: false},
+    var paypalPayed = (domainSet == 1) ? 1 : 0;
+		Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet, paypalPayed: paypalPayed }}, {multi: true, upsert: false},
 			function (err, numAffected) {
 				if(err) console.log(err);
 				if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
