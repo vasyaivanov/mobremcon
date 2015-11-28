@@ -59,14 +59,14 @@ $( window ).load(function() {
     // Whenever the user is moving the laser on the remote, turn the dot on.
     // When they are done, turn it off again
     socket.on('laserOn', function(data) {
-        if (isThisHash(data.slideID) && isAPresenter === false) {
+        if (isThisHash(data.slideID) && isPresenter() === false) {
             $( "#redDot" ).css("visibility", "visible");
             moveLaserTo(data.x, data.y);
         }
     });
 
     socket.on('laserOff', function(data) {
-        if (isThisHash(data.slideID) && isAPresenter === false) {
+        if (isThisHash(data.slideID) && isPresenter() === false) {
             $( "#redDot" ).css("visibility", "hidden");
         }
     });
@@ -75,25 +75,25 @@ $( window ).load(function() {
     // This function receives the x/y coordinates from the APP.JS server
     // and moves the laser dot by adjusting the dot's CSS.
     socket.on('moveLaser', function(data) {
-         if (isThisHash(data.slideID) && isAPresenter === false) {
+         if (isThisHash(data.slideID) && isPresenter() === false) {
             moveLaserTo(data.x, data.y);
         }
     });
 
     socket.on('drawStart', function(data) {
-        if (isThisHash(data.slideID) && isAPresenter === false) {
+        if (isThisHash(data.slideID) && isPresenter() === false) {
             drawTo('down', data.x, data.y);
         }
     });
 
     socket.on('drawStop', function(data) {
-        if (isThisHash(data.slideID) && isAPresenter === false) {
+        if (isThisHash(data.slideID) && isPresenter() === false) {
             drawTo('up', data.x, data.y);
         }
     });
 
      socket.on('drawCoords', function(data) {
-        if (isThisHash(data.slideID) && isAPresenter === false) {
+        if (isThisHash(data.slideID) && isPresenter() === false) {
             drawTo('move', data.x, data.y);
          }
     });

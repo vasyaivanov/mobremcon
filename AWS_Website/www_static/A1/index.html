@@ -145,12 +145,7 @@
 			<div class="closevideo" id="closeChat" style='margin-right: 20px;' title="Close Chat"></div>
 			<iframe id="urlChat" src="../chat.html" style='width:100%;height:92%'></iframe>
 			<script>
-			    var pathName = document.location.pathname;
-			    if (pathName) {
-			        pathName = pathName.replace('/', '');
-			    }
-			    pathName = pathName.toUpperCase();
-			    document.getElementById('urlChat').src = "../chat.html?presentation=" + pathName;
+			    document.getElementById('urlChat').src = "../chat.html?presentation=" + currentHash.toUpperCase();
     		</script>
 	</div>
 

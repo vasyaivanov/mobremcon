@@ -507,21 +507,21 @@ app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 
-    var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+  var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
-	if(customHash != '') {
+	if(customHash != '' && req.hostname.split('.')[0] != 'www') {
 		Slide.find({ scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
-		//Slide.find({ scid : customHash , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
 			if(docs.length > 0) {
 				docs.forEach(function(data){
 					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
 						if(docU) {
 							if(req.hostname.split('.')[0] == docU.domain) {
-                console.log("TTT");
                 req.url = "/" + data.sid;
                 next();
 							}
-							else {next();}
+							else {
+                //next();
+              }
 						}
 						else {next();}
 					});
@@ -579,13 +579,12 @@ app.use(function (req, res, next) {
 								res.render(indexPathname, {title: stitle, presenter: spresenter, password: spassword ? 1 : 0 , payed:  spayed , customurl: scustomurl, isVideoChatOpen: sisVideoChatOpen, isScreensharingOpen: sisScreensharingOpen, slidesNum: sslidesNum , hash: hash, role: module.exports.userRole });
 							}
 							else {
-								console.log( "Slide was not found" );
-								res.send('Slide was not found');
+								res.send('Presentation was not found');
 							}
 						});
 					}
 					else {
-						res.send('Slide was not found');
+						res.send('Presentation was not found');
 					}
 				} else if (afterHash.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
 					//console.log('jpg: ' + afterHash);
@@ -1009,7 +1008,7 @@ router.get('/screensharing.html', function (req, res){
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
-					res.send("No slide")
+					res.send("Presentation was not found")
 				}
 			});
     }
@@ -1029,7 +1028,7 @@ router.get('/video.html', function (req, res){
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
-					res.send("No slide")
+					res.send("Presentation was not found")
 				}
 			});
     }

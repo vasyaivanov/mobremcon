@@ -1,10 +1,7 @@
 var socket;
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
-var isAPresenter = isPresenter();
 var royalSlider;
 var hashUsers = -1;
-//console.log('A1.js loaded, socket: ');
-//console.log(socket);
 
 if(navigator.userAgent.indexOf("Firefox") != -1 )  {
 	var uMatch = navigator.userAgent.match(/Firefox\/(.*)$/),
@@ -25,7 +22,7 @@ if (!isFile) {
     if (typeof socket !== 'undefined') {
         alert('socket in A1.js is already defined!');
     }
-    socket = io.connect(document.location.hostname + ':' + location.port, {query: "type=user&hash=" + currentHash});
+    socket = io.connect(document.location.hostname + ':' + location.port, {query: "type=user&hash=" + getCurrentHash()});
 }
 socket.on('connect', function (data) {
     console.log('Connected: ');
@@ -151,8 +148,8 @@ function showHideVideoChat() {
         isVideoChatOn = 0;
     }
 
-    if (isAPresenter && isVideoChatOn == 0) {
-		socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: currentHash});
+    if (isPresenter() && isVideoChatOn == 0) {
+		socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: getCurrentHash()});
     }
 
     var label = $("#videoChatOpenCloseLabel");
@@ -216,8 +213,8 @@ function showHideScreensharing() {
         isScreensharingOn = 0;
     }
 
-    if (isAPresenter && isScreensharingOn == 0) {
-        socket.emit("presenterScreensharing", {open: isScreensharingOn, hash: currentHash});
+    if (isPresenter() && isScreensharingOn == 0) {
+        socket.emit("presenterScreensharing", {open: isScreensharingOn, hash: getCurrentHash()});
     }
 
     var label = $("#screensharingOpenCloseLabel");
@@ -290,19 +287,12 @@ function showHideRenamePresentationOverlay() {
 }
 
 function getCurrentHash() {
-    /*var hash = document.location.href;
-    if (hash[hash.length - 1] === '/') {
-        hash = hash.slice(0, -1);
-    }
-    var slashPos = hash.lastIndexOf('/');
-    hash = hash.slice(slashPos + 1);
-    hash = hash.toLowerCase();*/
     return currentHash;
 }
 
 function downloadPresentation() {
-    console.log('Sending Request to Download Presentation in Hash: ' + currentHash);
-    socket.emit('requestDownloadPresentation', { 'hash': currentHash });
+    console.log('Sending Request to Download Presentation in Hash: ' + getCurrentHash());
+    socket.emit('requestDownloadPresentation', { 'hash': getCurrentHash() });
     showHideMenu(true);
 }
 
@@ -359,7 +349,7 @@ function showHidePasswordCreateOverlay() {
 
 function submitPassword() {
     var pwd = document.getElementById("presentationPassword").value;
-    socket.emit('updatePassword', { 'password': pwd, 'currentHash': currentHash});
+    socket.emit('updatePassword', { 'password': pwd, 'currentHash': getCurrentHash()});
     showHidePasswordCreateOverlay();
 }
 
@@ -379,7 +369,7 @@ function showHidePasswordCheckOverlay() {
 function submitCheckPassword() {
     var pwd = document.getElementById("presentationCheckPassword").value;
 	if(pwd) {
-		socket.emit("checkSlidePassword-server", {password: pwd, hash: currentHash});
+		socket.emit("checkSlidePassword-server", {password: pwd, hash: getCurrentHash()});
 	}
 }
 
@@ -388,20 +378,17 @@ function hideClickAllow(delay) {
     $('#clickallow').delay(3000).fadeOut(600);
 }
 
-function showRemote() {
+/*function showRemote() {
     var pathName = document.location.pathname;
     if (pathName) {
         pathName = pathName.replace(/\//g, '');
     }
 
     var newUrl = "http://" + document.location.hostname + ':' + location.port
-    /*if (document.location.hostname === 'localhost') {
-        newUrl += ':8081';
-    }*/
     newUrl += "/remote/index.html?presentation=" + pathName;
     window.open(newUrl, "popupWindow", "width=1160, height=850, scrollbars=no");
 	showHideMenu(true);
-}
+}*/
 
 var isRemoteOpen = false;
 
@@ -475,16 +462,6 @@ function isLocalhost() {
 }
 
 function isPresenter() {
-	 //returns true if there is a 'remote' word in the url
-    //if (!parent || !parent.document) return false;
-    //var pathName = parent.document.location.pathname;
-    //var reg = RegExp(/^\/?remote(\/|#|\?|$).*/i);
-    //var res = reg.test(pathName);
-    //return res;
-	return canBePresenter();
-}
-
-function canBePresenter() {
 	if( typeof presenter !== 'undefined') {
 		var result = presenter > 0 ? true : false;
 		var location = document.location + "";
@@ -500,7 +477,7 @@ function canBePresenter() {
 
 function getPresentationInRemote() {
     if (!parent || !parent.document) return null;
-    var editBox = currentHash;
+    var editBox = getCurrentHash();
     if (!editBox || !editBox.value) return null;
     return editBox.value.toUpperCase();
 }
@@ -520,12 +497,9 @@ function submitInsertVideoSlide() {
 			}
 			result =  video_id;
 		}
-    	var pathName = document.location.pathname;
-        if (pathName) {
-            pathName = pathName.replace('/', '');
-        }
+
         var slider = $(".royalSlider").data('royalSlider');
-		socket.emit('insertVideoId', { video_hash: result, slite_hash: pathName, curr_slide: slider.currSlideId+1 });
+		socket.emit('insertVideoId', { video_hash: result, slite_hash: getCurrentHash(), curr_slide: slider.currSlideId+1 });
 	}else{
 		alert("Your youtube url or id is wrong. Please see example above");
 	}
@@ -534,7 +508,7 @@ function submitInsertVideoSlide() {
 }
 
 $("#navNext").click(function() {
-	if (isAPresenter) {
+	if (isPresenter()) {
 		nextSlideRemote();
 	} else {
 		nextSlideLocal();
@@ -542,7 +516,7 @@ $("#navNext").click(function() {
 });
 
 $("#navPrev").click(function() {
-	if (isAPresenter) {
+	if (isPresenter()) {
 		prevSlideRemote();
 	} else {
 		prevSlideLocal();
@@ -561,12 +535,12 @@ function nextSlideLocal(){
 	clearCanvas();
 }
 $('#prev').click(function() {
-	if (isAPresenter) {
+	if (isPresenter()) {
 		prevSlideRemote();
 	}
 });
 $('#next').click(function() {
-	if (isAPresenter) {
+	if (isPresenter()) {
 		nextSlideRemote();
 	}
 });
@@ -664,7 +638,7 @@ if( isMobile() ) {
 	}, false);
 
 }
-if( !isAPresenter ) {
+if( !isPresenter() ) {
 	disableNonPresenterMenues();
 }
 $('#menuTitle').html(hostname);
@@ -673,7 +647,7 @@ $('#slide').css('overflow','hidden');
 
 var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
-if(isAPresenter){
+if(isPresenter()){
 	if (navigator.mozGetUserMedia) {
 		$('#install_chrome_extension').css("display","none");
 	}else if(isChrome){
@@ -728,21 +702,16 @@ function updateTitle() {
 }
 
 function askNumberOfUsers(){
-    socket.emit("get-nof-users", { hash: currentHash });
+    socket.emit("get-nof-users", { hash: getCurrentHash() });
 }
-
-function askNumberOfUsers(){
-    socket.emit("get-nof-users", { hash: currentHash });
-}
-
 
 $( window ).load(function() {
 	// Not works on real host - Show error mismatch 8081 & 80
-	 if (canBePresenter() && !isInIFrame()) {
+	 if (isPresenter() && !isInIFrame()) {
 		 var item = $('.menuSubmenu #menuRemote');
 		 item.show();
     }
-	if (canBePresenter() && !isInIFrame()) {
+	if (isPresenter() && !isInIFrame()) {
 		 var item = $('.menuSubmenu #menuPassword');
 		 item.show();
     }
@@ -831,7 +800,7 @@ $( window ).load(function() {
     $(".rsOverflow").css("height", "100%");
     $(".rsOverflow").css("width", "100%");
 
-    if (isAPresenter) {
+    if (isPresenter()) {
         showHideRemote();
     }
 
@@ -839,7 +808,7 @@ $( window ).load(function() {
         console.log(e);
         switch (e.keyCode) {
             case 39:
-                if (isAPresenter) {
+                if (isPresenter()) {
                     nextSlideRemote();
                 } else {
                     nextSlideLocal();
@@ -847,7 +816,7 @@ $( window ).load(function() {
                 e.preventDefault();
                 break;
             case 37:
-                if (isAPresenter) {
+                if (isPresenter()) {
                     prevSlideRemote();
                 } else {
                     prevSlideLocal();
@@ -855,7 +824,7 @@ $( window ).load(function() {
                 e.preventDefault();
                 break;
             case 34:
-                if (isAPresenter) {
+                if (isPresenter()) {
                     nextSlideRemote();
                 } else {
                     nextSlideLocal();
@@ -863,7 +832,7 @@ $( window ).load(function() {
                 e.preventDefault();
                 break;
             case 33:
-                if (isAPresenter) {
+                if (isPresenter()) {
                     prevSlideRemote();
                 } else {
                     prevSlideLocal();
@@ -893,8 +862,7 @@ $( window ).load(function() {
 
 
     socket.on('changeSlideBroadcast', function (data) {
-        //if ((document.location.pathname == "/" + data.slideID) || (document.location.pathname == "/" + data.slideID + "/")) {
-				if(data.slideID == getCurrentHash() && isAPresenter === false) {
+				if(data.slideID == getCurrentHash() && isPresenter() === false) {
         var button = data.hello - 1;
             var slider = $(".royalSlider").data('royalSlider');
             console.log(button);
@@ -938,7 +906,7 @@ $( window ).load(function() {
     });
 
     socket.on('broadcastVideoChat', function (data) {
-        if (data.hash !== currentHash || isAPresenter) return;
+        if (data.hash !== getCurrentHash() || isPresenter()) return;
 		// Reload video frame if two way signal communication signal was sent
 		if(data.reload > 0) {
 			if(data.reload == 2) {
@@ -956,7 +924,7 @@ $( window ).load(function() {
     });
     socket.on('broadcastScreensharing', function (data) {
 
-        if (data.hash !== currentHash || isAPresenter) return;
+        if (data.hash !== getCurrentHash() || isPresenter()) return;
         console.log('broadcastScreensharing received');
         if (data.open === isScreensharingOn) return;
         if(data.open == false) {
@@ -968,14 +936,15 @@ $( window ).load(function() {
     });
 
     socket.on('nof-users', function (data) {
-            hashUsers = data.nof_users;
-            //console.log("nof-users received: " + data.nof_users);
-            var usersText = "";
-            if (!isNaN(hashUsers) && hashUsers >= 0) {
-                usersText = " ( " + hashUsers + " user" + (hashUsers === 1 ? "" : "s") + " )";
-            }
-            $("#chatUsersLabel").html(usersText);
-            updateTitle();
+						if(data.hash == getCurrentHash()) {
+	            hashUsers = data.nof_users;
+	            var usersText = "";
+	            if (!isNaN(hashUsers) && hashUsers >= 0) {
+	                usersText = " ( " + hashUsers + " user" + (hashUsers === 1 ? "" : "s") + " )";
+	            }
+	            $("#chatUsersLabel").html(usersText);
+	            updateTitle();
+						}
     });
 
   }

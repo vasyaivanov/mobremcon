@@ -914,7 +914,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		socket.on("get-nof-users", function (data) {
 			if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
 			notifyNofUsersChanged(socket, data.hash, true);
-			//console.log("nof-users ", data.nof_users);
 		});
 
 		socket.on('checkUserUploadStatus', function(data, callback){

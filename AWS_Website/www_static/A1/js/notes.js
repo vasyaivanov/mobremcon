@@ -3,10 +3,10 @@
 var noteSaveTimeout = 0;
 
 // Initialize
-socket.emit('notes-server', {slideId: document.location.pathname, init: 1});
+socket.emit('notes-server', {slideId: getCurrentHash(), init: 1});
 
 socket.on('notes-client', function (data) {
-	if(currentHash == data.slideId) {
+	if(getCurrentHash() == data.slideId) {
 		$(".paper").html(data.noteText);
 	}
 });
@@ -17,7 +17,7 @@ $( ".paper" ).keypress(function() {
 });
 
 var saveNoteData = function () {
-	socket.emit('notes-server', {slideId: currentHash, noteText: $( ".paper" ).html()});
+	socket.emit('notes-server', {slideId: getCurrentHash(), noteText: $( ".paper" ).html()});
 }
 
 });
