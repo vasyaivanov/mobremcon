@@ -38,7 +38,14 @@ $(function() {
     // Menu visualization
     $(".allData").hide();
   	if(window.location.hash) {
-  		$(window.location.hash).show();
+      if(window.location.hash == "#myPres"){
+        if(moveToDomainPres() == false) {
+          $("#myPres").show();
+        }
+      }
+      else {
+        $(window.location.hash).show();      
+      }
   	}
   	else {
   		$(".mainData").show();

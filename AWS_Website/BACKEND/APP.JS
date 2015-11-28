@@ -509,28 +509,23 @@ app.use(function (req, res, next) {
 
   var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
-	if(customHash != '' && req.hostname.split('.')[0] != 'www') {
-		Slide.find({ scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, docs) {
-			if(docs.length > 0) {
-				docs.forEach(function(data){
-					User.findOne({ _id: data.uid }).exec(function (errU, docU) {
-						if(docU) {
-							if(req.hostname.split('.')[0] == docU.domain) {
-                req.url = "/" + data.sid;
+	if(customHash != '' && req.hostname.split('.')[0] != 'www' && !path.extname(customHash)) {
+    User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
+        if(docU) {
+          Slide.findOne({ scid : { $regex : new RegExp("^" + customHash + "$" , "i") }, uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
+              if(doc) {
+                req.url = "/" + doc.sid;
                 next();
-							}
-							else {
-                //next();
               }
-						}
-						else {next();}
-					});
-				});
-			}
-			else {
-				next();
-			}
-		});
+              else {
+                res.send("Presentation was not found");
+              }
+          });
+        }
+        else {
+          res.send("Can't find user:" + req.hostname);
+        }
+    });
 	}
 	else {
 		next();
