@@ -315,8 +315,8 @@
 
 			<% slides.forEach(function(slide){ %>
 				<tr id="slide_<%= slide.sid %>">
-				<td width="150"><a href="/<%= slide.sid %>"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
-				<td><a href="/<%= slide.sid %>"><%= slide.title %></a><br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete slide</a></td>
+				<td width="150"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
+				<td><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>"><%= slide.title %></a><br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete slide</a></td>
 				</tr>
 			<%  }); %>
 
