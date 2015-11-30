@@ -13,7 +13,8 @@ var url = require('url')
   , cookieParser = require('cookie-parser')
   , HTML5_UPLOADER = false
   , supportUplExtensions = [".ppt", ".pptx"]
-  , LOG_COORD = true;
+  , LOG_COORD = true
+  , LOG_GENERAL = true;
 var start = process.hrtime();
 
 function resetElapsedTime() {
@@ -47,8 +48,10 @@ function pollUpdate () {
 	}
 	pollStatisticsString += pollStatisticsArray[i]; // the last element has no '\n"
 	pollAnswersString += pollAnswerArray[i]; // the last element has no '\n"
-	console.log("MA: pollVote pollUpdate pollAnswerArray: " + JSON.stringify(pollAnswersString));
-	console.log("MA: pollVote pollUpdate pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
+	if(LOG_GENERAL) {
+		console.log("MA: pollVote pollUpdate pollAnswerArray: " + JSON.stringify(pollAnswersString));
+		console.log("MA: pollVote pollUpdate pollStatisticsArray: " + JSON.stringify(pollStatisticsString));
+	}
 	module.parent.exports.io.sockets.emit('pollUpdate', { answers : pollAnswersString, statistics : pollStatisticsString });
 }
 
@@ -136,19 +139,21 @@ function notifyNofUsersChanged(socket, hash, local) {
     } else {
         socket.broadcast.emit("nof-users", data);
     }
-    //console.log("nof-users emitted Users: " + data.nof_users + " for hash: " + data.hash);
+	if(LOG_GENERAL) {
+		console.log("nof-users emitted Users: " + data.nof_users + " for hash: " + data.hash);
+	}
 }
 
 module.parent.exports.io.use(function (socket, next) {
-    //console.log("Query: ", socket.handshake.query);
-    // return the result of next() to accept the connection.
     if (socket.handshake.query.type == "user" && typeof socket.handshake.query.hash !== 'undefined') {
         if (isNaN(nofUsers[socket.handshake.query.hash]) || nofUsers[socket.handshake.query.hash] < 0) {
             nofUsers[socket.handshake.query.hash] = 0;
         }
         nofUsers[socket.handshake.query.hash]++;
 		notifyNofUsersChanged(socket, socket.handshake.query.hash);
-        //console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+		if(LOG_GENERAL) {
+			console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+		}
         return next();
     }
     // call next() with an Error if you need to reject the connection.
@@ -175,8 +180,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         nofUsers[socket.handshake.query.hash] = 0;
                     }
 					notifyNofUsersChanged(socket, socket.handshake.query.hash);
-                    //console.log("User disconnected");
-                    //console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+					if(LOG_GENERAL) {
+						console.log("User disconnected");
+						console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+					}
                 }
               if (typeof people[socket.id] !== "undefined") { //this handles the refresh of the name screen
                   purge(socket, "disconnect");
@@ -189,10 +196,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           var uploadDir = path.join(www_dir, "UPLOAD/");
           function uploadStarted(name){
               resetElapsedTime();
-              console.log("UPLOAD started  file: " + name);
+			  if(LOG_GENERAL) {
+				console.log("UPLOAD started  file: " + name);
+			  }
           }
           function uploadProgress(name){
-              console.log("UPLOAD progress file: " + name);
+			  if(LOG_GENERAL) {
+				console.log("UPLOAD progress file: " + name);
+			  }
           }
           function uploadError(type,name) {
               var data = {};
@@ -212,10 +223,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
           if (HTML5_UPLOADER) {
               socket.on('uploadStarted', function (data) {
-                  console.log('uploadStarted event', data);
+				  if(LOG_GENERAL) {
+					console.log('uploadStarted event', data);
+				  }
                });
               socket.on('uploadFile', function (data) {
-                  console.log('uploadFile event', data);
+				  if(LOG_GENERAL) {
+					console.log('uploadFile event', data);
+				  }
               });
           } else {
               var uploader = new SocketIOFileUploadServer();
@@ -278,15 +293,21 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 						if (!err) {
 								module.parent.exports.deleteFolderRecursive(hashPath);
 								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
-									console.log('Deleting notes.....');
+									if(LOG_GENERAL) {
+										console.log('Deleting notes.....');
+									}
 									module.parent.exports.chatSchema.remove({ sid: data.sid }, function(err2) {
-										console.log('Deleting chats...');
+										if(LOG_GENERAL) {
+											console.log('Deleting chats...');
+										}
 										socket.emit("client-deleteSlide", {sid: data.sid});
 									});
 								});
 						}
 						else {
+							if(LOG_GENERAL) {
 								console.log("Can't delete the slide" + data.sid);
+							}
 						}
 					});
 				}
@@ -294,7 +315,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       	});
 
           socket.on('pollStarted', function (data) {
-              console.log("JD: received from remote this data: " + JSON.stringify(data));
+			  if(LOG_COORD) {
+				console.log("JD: received from remote this data: " + JSON.stringify(data));
+			  }
               pollStatisticsArray = new Array();
               pollAnswerArray = new Array();
               pollAnswerArray = data.answers.split("\n");
@@ -304,40 +327,40 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   pollStatisticsArray[i] = 0; //initialize statistics to 0
                   pollAnswersString += pollAnswerArray[i] + "\n";
               }
-              console.log("MA: pollStarted pollAnswerArray: " + JSON.stringify(pollStatisticsArray));
-              console.log("MA: pollStarted pollStatisticsArray: " + JSON.stringify(pollAnswerArray));
               module.parent.exports.io.sockets.emit('pollUpdate', { answers : pollAnswersString, statistics : pollStatisticsString });
           });
 
           socket.on('pollVote', function (data) {
-              console.log("JD: received from remote this data: " + JSON.stringify(data));
-              console.log("MA: pollStatisticsArray on current vote: " + JSON.stringify(pollStatisticsArray));
+			  if(LOG_COORD) {
+				console.log("JD: received from remote this data: " + JSON.stringify(data));
+				console.log("MA: pollStatisticsArray on current vote: " + JSON.stringify(pollStatisticsArray));
+			  }
               if (pollStatisticsArray.length == 0) // empty statistics, let the voting commence!
               {
                   pollAnswerArray = data.answers.split("\n");
                   for (i = 0; i < pollAnswerArray.length; i++) {
                       pollStatisticsArray[i] = 0; //initialize statistics to 0
                   }
-                  console.log("MA: pollVote pollAnswerArray: " + JSON.stringify(pollAnswerArray));
-                  console.log("MA: pollVote pollStatisticsArray: " + JSON.stringify(pollStatisticsArray));
               }
               pollStatisticsArray[data.vote - 1] += 1;
               pollUpdate();
           });
 
           socket.on('changeSlideRequest', function (data) {
-            console.log("JD: received changeSlideRequest from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
+			  if(LOG_COORD) {
+				console.log("JD: received changeSlideRequest from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
+			  }
       		// WE MUST TO CHECK USER FOR PRESENTER VAR!!!
-      		module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-      			if(docs){
-      				module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: docs.sid});
-      			}
-      			else if(data.slideID == 'A1') {
-      				//if(userSession.userRole == 10) {
-      					module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: 'A1'});
-      				//}
-      			}
-      		});
+				module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
+					if(docs){
+						module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: docs.sid});
+					}
+					else if(data.slideID == 'A1') {
+						//if(userSession.userRole == 10) {
+							module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: 'A1'});
+						//}
+					}
+				});
           });
 
       	socket.on('notes-server', function (data) {
@@ -351,13 +374,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		var currentUserId = userSession.currentUserId;
 
       	    if(fs.existsSync(slidePath) == true) {
-      			//console.log('Slide was found');
       			if(currentUserId && data.slideId) {
       				module.parent.exports.NoteScheme.find({uid : currentUserId, sid: slideId }, function (err, docs) {
       					if (!docs.length){
-      						//console.log('Inserting new note...');
-      						// Adding new note
-      						//console.log("Current user" + currentUserId);
+							if(LOG_GENERAL) {
+								console.log('Inserting new note...');
+								console.log("Current user" + currentUserId);
+							}
+
       						var note = new module.parent.exports.NoteScheme({uid: currentUserId,sid: slideId, note: data.noteText, tmp: tmpNote});
       						note.save(function(err, saved) {
       								if(err) console.error('Can\'t insert a new note: ' + err);
@@ -366,20 +390,19 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       					else {
       						module.parent.exports.NoteScheme.update({ uid : currentUserId, sid: slideId }, {$set: { note: data.noteText, tmp: tmpNote, updated: Date.now()}}, {upsert: false},
       							function (err, numAffected) {
-      								if(numAffected > 0) {console.log("Updated rows: " + numAffected)}
+									if(LOG_GENERAL) {
+										if(numAffected.nModified == 1) {console.log("Updated rows: " + numAffected)}
+									}
       							}
       						);
       					}
       					if(data.init == 1 && docs.length) {
-      						//console.log("Notes initializing, returning note...");
+							if(LOG_GENERAL) {
+								console.log("Notes initializing, returning note...");
+							}
       						socket.emit('notes-client', {slideId: slideId, noteText: docs[0].note});
       					}
       				});
-
-
-      				/*else {
-      					console.log("Note socket received data: " + data.noteText);
-      				}*/
       			}
       		}
           });
@@ -437,7 +460,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           socket.on('deleteDomain-server', function (data) {
 			module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $unset: { domain: ""}}, function(errU,docsU) {
 				module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId }, {$set: { domainSet: 0, scid: null }}, {multi: true, upsert: false},
-					function (err, numAffected) {console.log(numAffected)}
+					function (err, numAffected) {
+						if(LOG_GENERAL) {
+							console.log(numAffected);
+						}
+					}
 				);
 				socket.emit('deleteDomain-client', {removed : 1 });
 			});
@@ -460,7 +487,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 									if(data.start == 1) {
 										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
 											module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId, domainSet: 0 }, {$set: { domainSet: 1 }}, {multi: true, upsert: false},
-												function (err, numAffected) {console.log(numAffected); console.log(err);}
+												function (err, numAffected) {
+													if(LOG_GENERAL) {
+														console.log(numAffected);
+														console.log(err);
+													}
+												}
 											);
 											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
 										});
@@ -473,7 +505,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 									var available = 0;
 									if(docs._id == userSession.currentUserId) {available = 1;}
 									else {
-										console.log('Domain is not available...');
+										if(LOG_GENERAL) {
+											console.log('Domain is not available...');
+										}
 									}
 									socket.emit('renameDomain-client', {available : available,  newDomainName: data.newDomainName});
 								}
@@ -484,13 +518,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			}
           });
 
-          //socket.emit('cc', { hello: 0 });
           socket.on('cc', function (data) {
-              console.log("-------------- JD: received CLOSED CAPTIONING: " + data);
-              console.log(data.my);
+			  if(LOG_COORD) {
+				console.log("-------------- JD: received CLOSED CAPTIONING: " + data);
+				console.log(data.my);
+			  }
               module.parent.exports.io.sockets.emit('ccBroadcast', { hello: data.my });
-      		//module.parent.exports.io.sockets.emit('changeSlideBroadcast',clients);
-      		//socket.emit('changeSlideBroadcast', { hello: 1 });
           });
 
           // receive laser coordinates from the remote
@@ -630,15 +663,18 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('updatePassword', function (data) {
-              console.log("updatePassword to: " + data.password + " currentHash=" + data.currentHash);
+			 if(LOG_GENERAL) {
+				console.log("updatePassword to: " + data.password + " currentHash=" + data.currentHash);
+			 }
       		module.parent.exports.slideCheckPresenter(data.currentHash, userSession.currentUserId , function(sfound, spresenter, stitle, spassword) {
       				if(spresenter == 1 && sfound == 1) {
       					module.parent.exports.SlideScheme.find({ sid: data.currentHash }, function (err, docs) {
-      						console.log(docs);
       						if(docs && docs.length){
       							module.parent.exports.SlideScheme.update({ sid: data.currentHash }, {$set: { password: data.password}}, {upsert: false},
       								function (err, numAffected) {
-      									if(numAffected > 0) {console.log("Password set: " + numAffected)}
+										if(LOG_GENERAL) {
+											if(numAffected) {console.log("Password set: " + numAffected)}
+										}
       								}
       							);
       						}
@@ -652,10 +688,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
       			if(sfound == 1 && data.password == spassword) {
       				socket.emit('checkSlidePassword-client',{result: 1});
-      				console.log('Password is correct');
+					if(LOG_GENERAL) {
+						console.log('Password is correct');
+					}
       			}else{
                       socket.emit('checkSlidePassword-client',{result: 2});
-                      console.log('Password is not correct');
+					  if(LOG_GENERAL) {
+						console.log('Password is not correct');
+					  }
                   }
       		});
       	});
@@ -855,43 +895,48 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('requestDownloadPresentation', function (data) {
-              console.log('Recieved Request to Dowloading presentation, hash:', data.hash);
+			  if(LOG_GENERAL) {
+				console.log('Recieved Request to Dowloading presentation, hash:', data.hash);
+			  }
               getHashPresentation(data.hash, function (err, fileName) {
                   if (err) {
                       console.error(err);
                   } else {
-                      console.log('Sending Response to Download Presentation: ', fileName);
+					  if(LOG_GENERAL) {
+						console.log('Sending Response to Download Presentation: ', fileName);
+					  }
                       socket.emit('responseDownloadPresentation', { 'fileName': fileName });
                   }
               });
           });
 
           socket.on('presenterVideoChat', function (data) {
-              console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + 'data.open=' + data.open + ' videoChat in ' + data.hash);
+			  if(LOG_COORD) {
+				console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + 'data.open=' + data.open + ' videoChat in ' + data.hash);
+			  }
               module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
-                console.log('Presenter: ' + spresenter + ' ' + sfound)
-          			if(spresenter == 1 && sfound == 1) {
-						console.log(data.open);
+          		if(spresenter == 1 && sfound == 1) {
                     module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: false},
                         function (err, numAffected) {
                             if(!err) {
                               module.parent.exports.io.sockets.emit('broadcastVideoChat', data );
-                              console.log("isVideoChatOpen set to " + data.open + " numAffected: " + numAffected)}
-                        }
-                    );
-					}
+							}
+						}
+					);
+				}
               });
 
           });
           socket.on('presenterScreensharing', function (data) {
-              console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
+			  if(LOG_COORD) {
+				console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
+			  }
               module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId, function(sfound, spresenter, stitle, spassword) {
           				if(spresenter == 1 && sfound == 1) {
                     module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isScreensharingOpen: data.open}}, {upsert: false},
                         function (err, numAffected) {
                             if(!err) {
                               module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
-                              console.log("isScreensharingOpen set to " + data.open + " numAffected: " + numAffected)
                             }
                         }
                     );

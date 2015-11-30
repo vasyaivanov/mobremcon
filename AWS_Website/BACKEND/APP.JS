@@ -20,6 +20,7 @@ var express = require('express')
   , appPort = 8081
   , ioPort = 1337
   , sessionIdCookie = "sliteCurrUser"
+  , LOG_GENERAL = true
   , paypalIpn = require('paypal-ipn');
 
 var app = express();
@@ -208,7 +209,9 @@ var User = mongoose.model('User', userSchema);
 module.exports.UserScheme = User;
 
 function addUser(password, email, callback) {
-   console.log("MA: new user2: " + password + " " + email);
+	if(LOG_GENERAL) {
+		console.log("MA: new user2: " + password + " " + email);
+	}
 
   // Seed a user
   var user = new User({ email: email, password: password });
