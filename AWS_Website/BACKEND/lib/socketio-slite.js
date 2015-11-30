@@ -148,7 +148,7 @@ module.parent.exports.io.use(function (socket, next) {
         }
         nofUsers[socket.handshake.query.hash]++;
 		notifyNofUsersChanged(socket, socket.handshake.query.hash);
-        console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+        //console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
         return next();
     }
     // call next() with an Error if you need to reject the connection.
@@ -163,8 +163,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           if (pollAnswerArray.length > 0) {
               pollUpdate();
           }
-          console.log('CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id + ' UserAgent:' + socket.handshake.headers['user-agent']);
-
+          console.log('SOCKET CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id + ' UserAgent:' + socket.handshake.headers['user-agent']);
+          console.log('--------------');
             socket.on('disconnect', function () {
                 if (socket.handshake.query.type === 'user' && typeof socket.handshake.query.hash !== 'undefined') {
                     if (isNaN(nofUsers[socket.handshake.query.hash])) {
@@ -175,13 +175,15 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                         nofUsers[socket.handshake.query.hash] = 0;
                     }
 					notifyNofUsersChanged(socket, socket.handshake.query.hash);
-                    console.log("User disconnected");
-                    console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+                    //console.log("User disconnected");
+                    //console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
                 }
               if (typeof people[socket.id] !== "undefined") { //this handles the refresh of the name screen
                   purge(socket, "disconnect");
               }
-              console.log('DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
+              console.log('SOCKET DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
+              console.log('--------------');
+
           });
 
           var uploadDir = path.join(www_dir, "UPLOAD/");
@@ -353,9 +355,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       			if(currentUserId && data.slideId) {
       				module.parent.exports.NoteScheme.find({uid : currentUserId, sid: slideId }, function (err, docs) {
       					if (!docs.length){
-      						console.log('Inserting new note...');
+      						//console.log('Inserting new note...');
       						// Adding new note
-      						console.log("Current user" + currentUserId);
+      						//console.log("Current user" + currentUserId);
       						var note = new module.parent.exports.NoteScheme({uid: currentUserId,sid: slideId, note: data.noteText, tmp: tmpNote});
       						note.save(function(err, saved) {
       								if(err) console.error('Can\'t insert a new note: ' + err);
@@ -369,7 +371,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       						);
       					}
       					if(data.init == 1 && docs.length) {
-      						console.log("Notes initializing, returning note...");
+      						//console.log("Notes initializing, returning note...");
       						socket.emit('notes-client', {slideId: slideId, noteText: docs[0].note});
       					}
       				});

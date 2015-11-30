@@ -371,17 +371,25 @@ app.use(passport.session());
 // Set session
 app.use(function (req, res, next) {
 
-if((req.method == "POST" && req.url == "/paypal") || (req.url == "/google32d58b5279af5365.html")) {
+if(!path.extname(req.url.substring(1))) {
+  console.log("PAGE_REQUEST: " + new Date().toLocaleDateString('en-US') + ", page: " + req.hostname + req.url + ', ' +  ((req.headers['user-agent']) ? req.headers['user-agent'] : 'bot'));
+  console.log('--------------');
+
+}
+
+if(req.method == "POST" && req.url == "/paypal") {
 	next();
 }
 else {
-  setUserSession(req,res,function(userId) {
+	setUserSession(req,res,function(userId) {
 		var readQueryStr = "";
 		if(req.url.indexOf('?') > 0) {
 			readQueryStr = req.url;
 			readQueryStr = readQueryStr.replace(/(.+)\?/g,"")
 		}
-		if(userId == 0 && req.query.auth != 1 && req.headers['user-agent'].match(/(bot|spider)/i) == null) {
+		var userAgent = (req.headers['user-agent']) ? req.headers['user-agent'] : 'bot';
+		if(userId == 0 && req.query.auth != 1 && userAgent.match(/(bot|spider)/i) == null) {
+			console.log("Redirect, setting new session cookie...")
 			if(readQueryStr != '') {
 				readQueryStr = '?' + readQueryStr + '&auth=1';
 			}
@@ -429,7 +437,7 @@ else {
 					}
 				}
 				else {
-					// Initialize new session
+					//console.log("Initialize new session");
 					if(typeof UserData[userId] === 'undefined') {UserData[userId] = {};}
 					if(req.user) UserData[userId].domain = req.user.domain
 					UserData[userId].currentUserId = userId
@@ -467,6 +475,23 @@ else {
     });
 }
 });
+
+// If session expired - remove old cookie
+app.use(function (req, res, next) {
+	User.findOne({ _id : req.cookies[sessionIdCookie] }, function (err, checkUser) {
+		if(!req.user && checkUser) {
+			var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+			console.log("User has old cookie. Remove it");
+			res.clearCookie(sessionIdCookie , {  domain: '.' + domainClear });
+			res.redirect("/");
+
+		}
+		else {
+			next();
+		}
+	});
+});
+
 
 // Calculate user slides size sum & slides count
 var getUserUploadStatus = function (userId, callback) {
@@ -507,25 +532,25 @@ app.use(function (req, res, next) {
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 
-  var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	if(customHash != '' && req.hostname.split('.')[0] != 'www' && !path.extname(customHash)) {
-    User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
-        if(docU) {
-          Slide.findOne({ $or: [{sid: customHash} ,  {scid: { $regex : new RegExp("^" + customHash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
-              if(doc) {
-                req.url = "/" + doc.sid;
-                next();
-              }
-              else {
-                res.send("Presentation was not found");
-              }
-          });
-        }
-        else {
-          res.send("Can't find user:" + req.hostname);
-        }
-    });
+		User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
+			if(docU) {
+			  Slide.findOne({ $or: [{sid: customHash} ,  {scid: { $regex : new RegExp("^" + customHash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
+				  if(doc) {
+					req.url = "/" + doc.sid;
+					next();
+				  }
+				  else {
+					res.send("Presentation was not found");
+				  }
+			  });
+			}
+			else {
+			  res.send("Can't find user:" + req.hostname);
+			}
+		});
 	}
 	else {
 		next();
@@ -534,6 +559,7 @@ app.use(function (req, res, next) {
 
 // Visualize slides
 app.use(function (req, res, next) {
+
 	var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
@@ -636,7 +662,6 @@ app.use(function (req, res, next) {
 			}
 		//}
 	});
-
 });
 
 // ROUTES
@@ -660,7 +685,7 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 					if(err) console.error('Can\'t add billing info' + err);
 				});
 
-				if(req.body["payment_status"] == "Completed") {
+				if(req.body["payment_status"] == "Completed" && Plans[req.body.item_number].role != 'undefined') {
 					var dateG = new Date(req.body["payment_date"]);
 					dateG.setFullYear(dateG.getFullYear()+1);
 
@@ -681,8 +706,6 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 
 				}
 			}
-
-
 		}
 		else {
 			Slide.update({  sid : req.body["option_selection1"]}, { $set: { paypalTransaction: req.body["txn_id"], paypalPayed: 1 }}).exec();
@@ -765,40 +788,42 @@ function setUserSession(req, res, callback) {
 		callback(0);
 		//callback(newUserId);
    }
-   else {
-	// User loged in, but has older, random generated id
-	if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
-		//console.log("-----------Setting new user id");
-		oldUserId = req.cookies[sessionIdCookie];
-		res.cookie(sessionIdCookie, req.user._id.toString() , {  domain: '.' + domainClear, expires: expDate });
-
-		// Update user Notes
-		Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
-			function (err, numAffected) {
-				if(err) console.log(err);
-				if(numAffected > 0) {console.log("Remaped notes: " + numAffected)}
-		});
-		// Update user slides
-		var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;
-    var paypalPayed = (domainSet == 1) ? 1 : 0;
-		Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet, paypalPayed: paypalPayed }}, {multi: true, upsert: false},
-			function (err, numAffected) {
-				if(err) console.log(err);
-				if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
-		});
-		// Send page reload
-		callback(0);
-	}
 	else {
-		//console.log("-------------User is set");
-		callback(req.cookies[sessionIdCookie]);
+		
+		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+		// User loged in, but has older, random generated id
+		if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
+			//console.log("-----------Setting new user id");
+			oldUserId = req.cookies[sessionIdCookie];
+			res.cookie(sessionIdCookie, req.user._id.toString() , {  domain: '.' + domainClear, expires: expDate });
+
+			// Update user Notes
+			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
+				function (err, numAffected) {
+					if(err) console.log(err);
+					if(numAffected > 0) {console.log("Remaped notes: " + numAffected)}
+			});
+			// Update user slides
+			var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;
+			var paypalPayed = (domainSet == 1) ? 1 : 0;
+				Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet, paypalPayed: paypalPayed }}, {multi: true, upsert: false},
+					function (err, numAffected) {
+						if(err) console.log(err);
+						if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
+				});
+				// Send page reload
+				callback(0);
+		}
+		else {
+			//console.log("-------------User is set");
+			callback(req.cookies[sessionIdCookie]);
+		}
 	}
-   }
 }
 // Index page
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
-
+	
   var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	var domainSplit = req.hostname.split('.');
@@ -864,7 +889,7 @@ router.get(rootRegExp, function (req, res){
 							moment: moment,
 							expire: expire,
 							userData: UserData[req.cookies[sessionIdCookie]],
-              domains: []
+							domains: []
 						});
 					});
 				});
@@ -884,8 +909,8 @@ router.get(rootRegExp, function (req, res){
   					slides: [],
   					expire: '',
   					userData: { restrictions: rolesRestrictions[0] },
-            domains: customDomains,
-            clearDomain: domainClear
+					domains: customDomains,
+					clearDomain: domainClear
   				});
         });
 			}
