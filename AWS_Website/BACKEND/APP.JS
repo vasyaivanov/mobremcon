@@ -392,7 +392,6 @@ else {
 		}
 		var userAgent = (req.headers['user-agent']) ? req.headers['user-agent'] : 'bot';
 		if(userId == 0 && req.query.auth != 1 && userAgent.match(/(bot|spider)/i) == null) {
-			console.log("Redirect, setting new session cookie...")
 			if(readQueryStr != '') {
 				readQueryStr = '?' + readQueryStr + '&auth=1';
 			}
