@@ -849,7 +849,7 @@ $( window ).load(function() {
     socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
-            window.open(getClearUrl() + '/' + data.fileName);
+            window.open("/" + getCurrentHash() + '/' + data.fileName);
         }
     });
 
