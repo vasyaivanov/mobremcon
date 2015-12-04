@@ -87,7 +87,7 @@ socketWebrtc.on('sharing-client', function (data) {
 		
 		participants.onstreamended = function(event) {
 			if(event.type == "remote" && event.userid == data.moderatorId) {
-				alert("Lost video connection with presenter. Reconnecting...");
+				console.log("Lost video connection with presenter. Reconnecting...");
 				location.reload();
 			}
 		};
