@@ -54,13 +54,16 @@ connection.onstream = function(event) {
 		sharingPresenterSocket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
 		$( "#screensharing" ).append(event.mediaElement);
 		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-			$("#" + event.streamid).hide();
+			/*$("#" + event.streamid).hide();
 			$("#sharing_starting").show();
 			setTimeout(function(){
 				event.mediaElement.play();
 				$("#" + event.streamid).show();
 				$("#sharing_starting").hide();
-			}, 1000);
+			}, 1000);*/
+				event.mediaElement.muted = false;
+ 				event.mediaElement.volume = 1;
+				event.mediaElement.play();
 		}
 	}
 
