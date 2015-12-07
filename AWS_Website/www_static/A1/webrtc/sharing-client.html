@@ -28,6 +28,14 @@ else {
 
 function start() {
 	participants = new RTCMultiConnection('prezera-screen');
+
+	participants.bandwidth = {
+		audio: 128,
+		video: 256,
+		data: 1638400,
+		screen: 300
+	};
+
 	participants.setCustomSocketHandler(FirebaseConnection);
 	participants.session = {
 			screen: true,
