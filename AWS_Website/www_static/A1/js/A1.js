@@ -206,10 +206,12 @@ function showHideScreensharing() {
 	}
 
     if (!isScreensharingOn) {
+			//document.getElementById('screensharingiframe').contentWindow.start();
 		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
         isScreensharingOn = 1;
     } else {
 		$("#screensharingiframe").attr("src","");
+				//document.getElementById('screensharingiframe').contentWindow.stopSession();
         isScreensharingOn = 0;
     }
 

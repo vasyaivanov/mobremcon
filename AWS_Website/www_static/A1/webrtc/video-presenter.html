@@ -38,9 +38,15 @@ if(parent.window.isScreensharingOn == 1) {
 
 var MODERATOR_EXTRA      = {};       // empty extra-data
 
-if(typeof videoPresenterSocket !== 'undefined') {
-	alert('videoPresenterSocket is already defined!');
+var videoPresenterSocket;
+
+if(typeof parent.socket != "undefined") {
+	videoPresenterSocket = parent.socket
 }
+else {
+	videoPresenterSocket = io.connect(document.location.hostname + ':' + location.port);
+}
+
 var videoPresenterSocket = io.connect(document.location.hostname + ':' + location.port);
 var moderator     = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
 moderator.autoCloseEntireSession = true;

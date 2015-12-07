@@ -19,7 +19,16 @@ video {
 </style>
 <script>
 // DUPLICATE SOCKET
-var socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
+
+var videoClientSocket;
+
+if(typeof parent.socket != "undefined") {
+	videoClientSocket = parent.socket
+}
+else {
+	videoClientSocket = io.connect(document.location.hostname + ':' + location.port);
+}
+
 var participants = new RTCMultiConnection('slite-video');
 
 participants.sdpConstraints.mandatory = {
@@ -28,7 +37,7 @@ participants.sdpConstraints.mandatory = {
 	IceRestart: true
 };
 
-socketWebrtc.on('sharing-client', function (data) {
+videoClientSocket.on('sharing-client', function (data) {
 	startSession(data.moderatorId, data.chatMode);
 	function startSession(moderatorId, chatMode) {
 		var MODERATOR_CHANNEL_ID = 'slite-video'; // channel-id
@@ -97,7 +106,7 @@ socketWebrtc.on('sharing-client', function (data) {
 });
 
 function start() {
-	socketWebrtc.emit("sharing-server", {hash: '<%= hash %>'});
+	videoClientSocket.emit("sharing-server", {hash: '<%= hash %>'});
 }
 
 function addStream() {

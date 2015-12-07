@@ -1,7 +1,8 @@
 <html>
 <head>
-<script src="/A1/js/webrtc/RTCMultiConnection.js"></script>
-<script src="/A1/js/webrtc/firebase.js"></script>
+<script src="/A1/js/webrtc/RTCMultiConnection.min.js"></script>
+<script src="//cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+<script src="/A1/js/webrtc/FirebaseConnection.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
 audio {
@@ -14,46 +15,44 @@ video {
 </style>
 <script>
 // DUPLICATE SOCKET
-var socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
+var hashScreen = '<%= hash %>-screen';
+var sharingClientSocket;
+var participants;
 
-
-socketWebrtc.on('sharing-client', function (data) {
-	startSession(data.moderatorId);
-	function startSession(moderatorId) {
-		var MODERATOR_CHANNEL_ID = 'slite-screen'; // channel-id
-		var MODERATOR_SESSION_ID = '<%= hash %>-screen';    // room-id
-		var MODERATOR_ID         = '' + moderatorId + '';    // user-id
-		var MODERATOR_SESSION    = {         // media-type
-			oneway: true
-		};
-
-		var MODERATOR_EXTRA      = {};       // empty extra-data
-
-		var participants = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
-		participants.join({
-						sessionid: MODERATOR_SESSION_ID,
-						userid:    MODERATOR_ID,
-						extra:     MODERATOR_EXTRA,
-						session:   MODERATOR_SESSION
-		});
-		
-		participants.onstreamended = function(event) {
-			if(event.type == "remote" && event.userid == data.moderatorId) {
-				console.log("Lost video connection with presenter. Reconnecting...");
-				location.reload();
-			}
-		};
-		
-	}
-
-});
+if(typeof parent.socket != "undefined") {
+	sharingClientSocket = parent.socket
+}
+else {
+	sharingClientSocket = io.connect(document.location.hostname + ':' + location.port);
+}
 
 function start() {
-	socketWebrtc.emit("sharing-server", {hash: '<%= hash %>'});
+	participants = new RTCMultiConnection('prezera-screen');
+	participants.setCustomSocketHandler(FirebaseConnection);
+	participants.session = {
+			screen: true,
+			audio: true,
+			oneway: true
+	};
+
+	participants.join(hashScreen);
+
+	participants.onstreamended = function(event) {
+		if(event.type == "remote" && event.userid == hashScreen) {
+			console.log("Lost video connection with presenter. Reconnecting...");
+			location.reload();
+		}
+	};
+}
+
+function stopSession() {
+	participants.leave();
 }
 
 </script>
 </head>
 <body onload="start()">
+	<div id="screensharing"></div>
+	<div id="audiosharing"></div>
 </body>
 </html>

@@ -79,10 +79,15 @@ function getUrlParam(sParam)
 
 $( window ).load(function() {
   //setup "global" variables first
-  if(typeof chatSocket !== 'undefined') {
-    alert('chatSocket is already defined!');
-  }
-  var chatSocket = io.connect(document.location.hostname + ':' + location.port);
+	var chatSocket;
+	if(typeof parent.socket != "undefined") {
+		chatSocket = parent.socket
+	}
+	else {
+		chatSocket = io.connect(document.location.hostname + ':' + location.port);
+	}
+  
+  //var chatSocket = io.connect(document.location.hostname + ':' + location.port);
   var myRoomID = null;
 
   $("form").submit(function(event) {
