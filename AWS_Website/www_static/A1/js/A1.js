@@ -912,8 +912,13 @@ $( window ).load(function() {
 		// Reload video frame if two way signal communication signal was sent
 		if(data.reload > 0) {
 			if(data.reload == 2) {
-				document.getElementById("videoframe").contentWindow.changeClass();
-				document.getElementById("videoframe").contentWindow.addStream();
+				if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+						location.href="/" + getCurrentHash();
+				}
+				else {
+					document.getElementById("videoframe").contentWindow.changeClass();
+					document.getElementById("videoframe").contentWindow.addStream();
+				}
 			}
 			else if(data.reload == 1) {
 				document.getElementById("videoframe").contentWindow.location.reload();

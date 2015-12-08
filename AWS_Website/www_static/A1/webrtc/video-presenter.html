@@ -1,7 +1,7 @@
 <html>
 <head>
 <script src="/A1/js/webrtc/RTCMultiConnection.js"></script>
-<script src="/A1/js/webrtc/firebase.js"></script>
+<script src="//cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
@@ -28,13 +28,8 @@ var MODERATOR_ID         = '<%= userId%>';    // user-id
 var MODERATOR_SESSION    = {         // media-type
     audio: true,
     video: true,
+	oneway: true
 };
-
-if(parent.window.isScreensharingOn == 1) {
-	MODERATOR_SESSION    = {
-		video: true
-	};
-}
 
 var MODERATOR_EXTRA      = {};       // empty extra-data
 
@@ -49,6 +44,13 @@ else {
 
 var videoPresenterSocket = io.connect(document.location.hostname + ':' + location.port);
 var moderator     = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
+moderator.bandwidth = {
+	audio: 128,
+	video: 256,
+	data: 1638400,
+	screen: 300
+};
+moderator.firebase = 'shining-fire-9184';
 moderator.autoCloseEntireSession = true;
 moderator.session = MODERATOR_SESSION;
 moderator.userid  = MODERATOR_ID;
@@ -57,7 +59,7 @@ moderator.extra   = MODERATOR_EXTRA;
 moderator.sdpConstraints.mandatory = {
     OfferToReceiveAudio: true,
     OfferToReceiveVideo: true,
-	IceRestart: true
+		IceRestart: true
 };
 
 moderator.onstream = function(event) {

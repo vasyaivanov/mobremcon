@@ -1,8 +1,7 @@
 <html>
 <head>
-<script src="/A1/js/webrtc/RTCMultiConnection.min.js"></script>
+<script src="/A1/js/webrtc/RTCMultiConnection.js"></script>
 <script src="//cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
-<script src="/A1/js/webrtc/FirebaseConnection.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
@@ -15,18 +14,26 @@ video {
 }
 </style>
 <script>
-var sharingPresenterSocket;
+// DUPLICATE SOCKET
+var socket = io.connect(document.location.hostname + ':' + location.port);
+var MODERATOR_CHANNEL_ID = 'slite-screen'; // channel-id
+var MODERATOR_SESSION_ID = '<%= hash %>-screen';    // room-id
+var MODERATOR_ID         = '<%= userId%>';    // user-id
 
-if(typeof parent.socket != "undefined") {
-	sharingPresenterSocket = parent.socket
-}
-else {
-	sharingPresenterSocket = io.connect(document.location.hostname + ':' + location.port);
-}
 
-var connection  = new RTCMultiConnection('prezera-screen');
+var MODERATOR_SESSION    = {         // media-type
+	audio: true,
+	screen: true
+};
 
-connection.bandwidth = {
+
+
+var MODERATOR_EXTRA      = {};       // empty extra-data
+
+var moderator     = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
+
+
+moderator.bandwidth = {
 	audio: 128,
 	video: 256,
 	data: 1638400,
@@ -34,55 +41,47 @@ connection.bandwidth = {
 };
 
 
+moderator.firebase = 'shining-fire-9184';
 
-connection.session = {
-		screen: true,
-		audio: true,
-		oneway: true
-};
+moderator.autoCloseEntireSession = true;
+moderator.session = MODERATOR_SESSION;
+moderator.userid  = MODERATOR_ID;
+moderator.extra   = MODERATOR_EXTRA;
 
-connection.sdpConstraints.mandatory = {
-		OfferToReceiveAudio: false,
-		OfferToReceiveVideo: false
-};
-
-connection.setCustomSocketHandler(FirebaseConnection);
-
-connection.onstream = function(event) {
-
-	if(event.stream.isScreen) {
-		sharingPresenterSocket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
+moderator.onstream = function(event) {
+	if(event.isScreen) {
+		socket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
 		$( "#screensharing" ).append(event.mediaElement);
 		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-			/*$("#" + event.streamid).hide();
+			$("#" + event.streamid).hide();
 			$("#sharing_starting").show();
 			setTimeout(function(){
 				event.mediaElement.play();
 				$("#" + event.streamid).show();
 				$("#sharing_starting").hide();
-			}, 1000);*/
-				event.mediaElement.muted = false;
- 				event.mediaElement.volume = 1;
-				event.mediaElement.play();
+			}, 1000);
 		}
 	}
 
-	if (event.stream.isAudio) {
+	if (event.isAudio) {
+		// Only for GC.
 		$( "#audiosharing" ).append(event.mediaElement);
 	}
 };
 
 function startSession() {
-	connection.open('<%= hash %>-screen');
+	moderator.open({
+		dontTransmit: true,
+		sessionid:    MODERATOR_SESSION_ID
+	});
 }
-
 function stopSession() {
-	connection.disconnect();
+	moderator.close();
 }
 
 </script>
 </head>
-<body onload="start()">
+<body onload="">
 <div id="screensharing"></div>
 <div id="audiosharing"></div>
 
@@ -122,56 +121,53 @@ var getChromeExtensionStatus = function (callback) {
 	};
 }
 
-function start() {
+getChromeExtensionStatus(function(result) {
+	if(result == 'not-installed') {
+		$('#install_chrome_extension').show();
+	}
+	else if(result == 'installed-enabled') {
+		startSession();
+	}
+	else {
+		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+			moderator.onMediaError = function(error) {
+				console.log(error);
+				if(error.name == 'PermissionDeniedError') {
+					window.postMessage({
+						enableScreenCapturing: true,
+						domains: window.location.hostname
+					}, "*");
 
-	getChromeExtensionStatus(function(result) {
-		if(result == 'not-installed') {
-			$('#install_chrome_extension').show();
-		}
-		else if(result == 'installed-enabled') {
-			startSession();
+					$("#install_firefox_extension").show();
+				}
+			};
+			$("#startRecording").prop('disabled', false);
 		}
 		else {
-			if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-				connection.onMediaError = function(error) {
-					console.log(error);
-					if(error.name == 'PermissionDeniedError') {
-						window.postMessage({
-							enableScreenCapturing: true,
-							domains: window.location.hostname
-						}, "*");
-
-						$("#install_firefox_extension").show();
-					}
-				};
-				$("#startRecording").prop('disabled', false);
-			}
-			else {
-				alert("We only support the latest versions of Google Chrome and FireFox")
-			}
+			alert("We only support the latest versions of Google Chrome and FireFox")
 		}
+	}
 
-		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-			startSession();
-		}
+	if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+		startSession();
+	}
 
-	});
+});
 
-	window.addEventListener("message", function(event) {
-	    var addonMessage = event.data;
+window.addEventListener("message", function(event) {
+    var addonMessage = event.data;
 
-	    if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
+    if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
 
-	    if(addonMessage.enabledScreenCapturing === true) {
-				var new_url = document.URL + '&reload=1'
-				location.href = new_url;
-	    }
-	    else {
-	        // reason === 'user-rejected'
-	        alert(addonMessage.reason);
-	    }
-	}, false);
-}
+    if(addonMessage.enabledScreenCapturing === true) {
+			var new_url = document.URL + '&reload=1'
+			location.href = new_url;
+    }
+    else {
+        // reason === 'user-rejected'
+        alert(addonMessage.reason);
+    }
+}, false);
 
 
 function reloadFFPlugin() {

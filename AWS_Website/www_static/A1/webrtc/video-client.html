@@ -1,7 +1,7 @@
 <html>
 <head>
 <script src="/A1/js/webrtc/RTCMultiConnection.js"></script>
-<script src="/A1/js/webrtc/firebase.js"></script>
+<script src="//cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
@@ -31,10 +31,20 @@ else {
 
 var participants = new RTCMultiConnection('slite-video');
 
+participants.bandwidth = {
+	audio: 128,
+	video: 256,
+	data: 1638400,
+	screen: 300
+};
+
+
+participants.firebase = 'shining-fire-9184';
+
 participants.sdpConstraints.mandatory = {
     OfferToReceiveAudio: true,
     OfferToReceiveVideo: true,
-	IceRestart: true
+		IceRestart: true
 };
 
 videoClientSocket.on('sharing-client', function (data) {
@@ -47,7 +57,8 @@ videoClientSocket.on('sharing-client', function (data) {
 
 		if(chatMode == 1) {
 			MODERATOR_SESSION    = {
-				oneway: true
+				audio: false,
+				video: false
 			};
 		}
 		else if(chatMode == 2) {
@@ -92,8 +103,8 @@ videoClientSocket.on('sharing-client', function (data) {
 				$( "#audiosharing" ).append(event.mediaElement);
 			}
 		};
-	
-		
+
+
 		participants.onstreamended = function(event) {
 			if(event.type == "remote" && event.userid == data.moderatorId) {
 				console.log("Lost video connection with presenter. Reconnecting...");
@@ -118,6 +129,7 @@ function addStream() {
 		video: true,
 		audio: true
 	});
+
 }
 
 function changeClass() {
