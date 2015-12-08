@@ -13,9 +13,15 @@ video {
 }
 </style>
 <script>
-// DUPLICATE SOCKET
-var socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
 
+var socketWebrtc;
+
+if(typeof parent.socket != "undefined") {
+	socketWebrtc = parent.socket
+}
+else {
+	socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
+}
 
 socketWebrtc.on('sharing-client', function (data) {
 	startSession(data.moderatorId);
