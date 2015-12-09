@@ -107,10 +107,10 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
   $("#main-chat-screen").hide();
   $("#errors").hide();
   //$("#name").focus();
-  $("#join").attr('disabled', 'disabled');
+  //$("#join").attr('disabled', 'disabled');
 
   if ($("#name").val() === "") {
-    $("#join").attr('disabled', 'disabled');
+    //$("#join").attr('disabled', 'disabled');
   }
 
   //enter screen

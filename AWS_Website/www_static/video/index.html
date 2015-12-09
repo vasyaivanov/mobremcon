@@ -25,8 +25,10 @@
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script>
   var accessToken = '<%= token %>';
-  var presenter = <%= presenter %>;  
+  var presenter = <%= presenter %>;
+  var username = "<%= user %>";
   </script>
   <script src="quickstart.js"></script>
+  <iframe id="chat" width="300" height="300" src="/chat.html?presentation=testPres" style="position: absolute; top: 10px; left: 10px"  scrolling="no" frameborder="0"></iframe>
   </body>
 </html>

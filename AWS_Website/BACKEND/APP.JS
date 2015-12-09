@@ -1076,7 +1076,6 @@ router.get('/record.html', function (req, res){
 });
 
 router.get(new RegExp('^/video/(index\.html)?$'), function (req, res) {
-	console.log("WELCOME TO VIDEO!")
 	var AccessToken = require('twilio').AccessToken;
 	// Substitute your Twilio AccountSid and ApiKey details
 	var ACCOUNT_SID = 'AC066339c9614f030f60c239ce61e5307b';
@@ -1096,7 +1095,7 @@ router.get(new RegExp('^/video/(index\.html)?$'), function (req, res) {
 	grant.configurationProfileSid = 'VSc492521f04edbafda6af34c8e211afe0';
 	accessToken.addGrant(grant);
 	var jwt = accessToken.toJwt();
-	res.render(path.join(www_dir,www_static_dir , 'video/index.html'), {token: jwt, presenter: presenter});
+	res.render(path.join(www_dir,www_static_dir , 'video/index.html'), {token: jwt, presenter: presenter, user: accessToken.identity});
 });
 
 

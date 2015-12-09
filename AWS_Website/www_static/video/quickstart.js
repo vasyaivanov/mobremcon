@@ -25,9 +25,13 @@ function clientConnected() {
   document.getElementById('invite-controls').style.display = 'block';
   log("Connected to Twilio. Listening for incoming Invites as '" + conversationsClient.identity + "'");
 
+  	$( "#chat" ).contents().find( "#name" ).val(username);
+	setTimeout(function(){
+		$( "#chat" ).contents().find( "#join" ).click();
+	}, 1000);
+
 	if(presenter == 0) {
 		$("#invite-to").val("presenter");
-		//setTimeout(function(){ $("#stopRecording").click() }, 500);
 		runTwilio();
 	}
 	else {
