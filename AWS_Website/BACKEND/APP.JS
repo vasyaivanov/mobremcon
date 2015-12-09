@@ -1089,7 +1089,7 @@ var accessToken = new AccessToken(ACCOUNT_SID,API_KEY_SID,API_KEY_SECRET);
 accessToken.identity = 'example-user';
 
 var grant = new AccessToken.ConversationsGrant();
-grant.configurationProfileSid = 'configurationProfileSid';
+grant.configurationProfileSid = 'VSc492521f04edbafda6af34c8e211afe0';
 accessToken.addGrant(grant);
 
 var jwt = accessToken.toJwt();
