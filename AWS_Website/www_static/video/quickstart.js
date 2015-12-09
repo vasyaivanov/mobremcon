@@ -25,13 +25,25 @@ function clientConnected() {
   document.getElementById('invite-controls').style.display = 'block';
   log("Connected to Twilio. Listening for incoming Invites as '" + conversationsClient.identity + "'");
 
+	if(presenter == 0) {
+		$("#invite-to").val("presenter");
+		//setTimeout(function(){ $("#stopRecording").click() }, 500);
+		runTwilio();
+	}
+	else {
+		$("#invite-to").hide();
+		$("#button-invite").hide();
+	}
+  
   conversationsClient.on('invite', function (invite) {
     log('Incoming invite from: ' + invite.from);
     invite.accept().then(conversationStarted);
   });
 
-  // bind button to create conversation
-  document.getElementById('button-invite').onclick = function () {
+  // bind button to create conversation.
+ //   document.getElementById('button-invite').onclick = function () {
+ // document.getElementById('button-invite').onclick = function () {
+   function runTwilio() {
     var inviteTo = document.getElementById('invite-to').value;
 
     if (activeConversation) {
@@ -47,6 +59,10 @@ function clientConnected() {
         conversationStarted,
         function (error) {
           log('Unable to create conversation');
+		  if(error.name == 'CONVERSATION_CREATE_FAILED') {
+			  log('Unable to create conversation....Reconnecting...' + new Date());
+			  setTimeout(function(){ runTwilio() }, 5000);
+		  }
           console.error('Unable to create conversation', error);
         }
       );

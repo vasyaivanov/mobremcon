@@ -14,7 +14,7 @@
     <div id="invite-controls">
       <p class="instructions">Invite another Conversations Client</p>
       <input id="invite-to" type="text" placeholder="Identity to send an invite to" />
-      <button id="button-invite">Send Invite</button>
+      <button id="button-invite">Connect</button>
     </div>
     <div id="log">
       <p>&gt;&nbsp;<span id="log-content">Preparing to listen</span>...</p>
@@ -22,8 +22,10 @@
   </div><!-- /controls -->
   <script src="https://media.twiliocdn.com/sdk/js/common/v0.1/twilio-common.min.js"></script>
   <script src="https://media.twiliocdn.com/sdk/js/conversations/v0.11/twilio-conversations.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script>
   var accessToken = '<%= token %>';
+  var presenter = <%= presenter %>;  
   </script>
   <script src="quickstart.js"></script>
   </body>

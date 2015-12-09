@@ -1076,26 +1076,26 @@ router.get('/record.html', function (req, res){
 });
 
 router.get('/video/index.html', function (req, res) {
-var AccessToken = require('twilio').AccessToken;
-
-// Substitute your Twilio AccountSid and ApiKey details
-var ACCOUNT_SID = 'AC066339c9614f030f60c239ce61e5307b';
-var API_KEY_SID = 'SKebc6b891be532615c9ec223cc9d0691c';
-var API_KEY_SECRET = 'GQCRbQObWtmuEsWYGf3AdttlyfJ3XPVp';
-
-// Create an Access Token
-var accessToken = new AccessToken(ACCOUNT_SID,API_KEY_SID,API_KEY_SECRET);
-
-accessToken.identity = 'example-user';
-
-var grant = new AccessToken.ConversationsGrant();
-grant.configurationProfileSid = 'VSc492521f04edbafda6af34c8e211afe0';
-accessToken.addGrant(grant);
-
-var jwt = accessToken.toJwt();
-
-res.render(path.join(www_dir,www_static_dir , 'video/index.html'), {token: jwt});
-
+	var AccessToken = require('twilio').AccessToken;
+	// Substitute your Twilio AccountSid and ApiKey details
+	var ACCOUNT_SID = 'AC066339c9614f030f60c239ce61e5307b';
+	var API_KEY_SID = 'SKebc6b891be532615c9ec223cc9d0691c';
+	var API_KEY_SECRET = 'GQCRbQObWtmuEsWYGf3AdttlyfJ3XPVp';
+	// Create an Access Token
+	var accessToken = new AccessToken(ACCOUNT_SID,API_KEY_SID,API_KEY_SECRET);
+	var presenter = 0;
+	if(req.query.presenter == 1) {
+		presenter = 1;
+		accessToken.identity = 'presenter';
+	}
+	else {
+		accessToken.identity = 'user' + Math.floor(Math.random() * (9999 - 1));
+	}
+	var grant = new AccessToken.ConversationsGrant();
+	grant.configurationProfileSid = 'VSc492521f04edbafda6af34c8e211afe0';
+	accessToken.addGrant(grant);
+	var jwt = accessToken.toJwt();
+	res.render(path.join(www_dir,www_static_dir , 'video/index.html'), {token: jwt, presenter: presenter});
 });
 
 
