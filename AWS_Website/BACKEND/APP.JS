@@ -1075,7 +1075,8 @@ router.get('/record.html', function (req, res){
     }
 });
 
-router.get('/video/index.html', function (req, res) {
+router.get(new RegExp('^/video/(index\.html)?$'), function (req, res) {
+	console.log("WELCOME TO VIDEO!")
 	var AccessToken = require('twilio').AccessToken;
 	// Substitute your Twilio AccountSid and ApiKey details
 	var ACCOUNT_SID = 'AC066339c9614f030f60c239ce61e5307b';
