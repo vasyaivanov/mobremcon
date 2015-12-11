@@ -37,12 +37,13 @@
     "mongoose-simple-random": "",
     "request": "",
     "paypal-ipn": "",
-	"scmp": "",
-	"jwt-simple": "",
-	"q": "",
-	"jsonwebtoken": "",
-	"deprecate": "",
-	"string.prototype.startswith": ""
+  	"scmp": "",
+  	"jwt-simple": "",
+  	"q": "",
+  	"jsonwebtoken": "",
+  	"deprecate": "",
+  	"string.prototype.startswith": "",
+    "aws-sdk": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -20,17 +20,29 @@ function onCacheReady(addedFiles){
     console.log('Cache ready, number of entries=' + addedFiles);
 }
 
-function initCache(callback) {
+function initCache(slidesScheme, callback) {
     cacheReady = false;
     cache.clear(function (err) {
         if (err) {
             console.error('Error clearing cache: ' + err);
             callback(err);
         } else {
-            var findFileReg = new RegExp('^' + slitesReg + '$');
+			// Cache gets data from DB
+			slidesScheme.find({}, function (err, slidesDoc) {
+				slidesDoc.forEach(function(doc) {
+					cache.set(doc.sid, true, function (err, value) {
+						if (err) {
+							console.error('Error setting cache: ' + err);
+						}
+					});				
+				});
+				onCacheReady(slidesDoc.length);
+                callback(null);
+			});
+            /*var findFileReg = new RegExp('^' + slitesReg + '$');
             var slitesFullPath = path.join(www_dir, slitesDir);
             var todo = 0, done = 0;
-            
+
             console.log('Scanning "' + slitesFullPath + '" for hash cache');
             fs.readdir(slitesFullPath, function (err, files) {
                 if (err) {
@@ -68,18 +80,18 @@ function initCache(callback) {
                     onCacheReady(todo);
                     callback(null);
                 }
-            }); // fs.readdir ...
+            });*/ // fs.readdir ...
         } // if (err) {...}else {...
     }); // cache.clear(...
 };
 
 
-exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, callback){
+exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, slidesScheme , callback){
     www_dir = new_dir;
     slitesDir = newSlitesDir;
     staticDir = newstaticDir;
     slitesReg = newSlitesReg;
-    initCache(callback);
+    initCache(slidesScheme, callback);
 }
 
 var Slite = function (sliteParams, callback) {
@@ -96,7 +108,7 @@ var Slite = function (sliteParams, callback) {
         callback(msg);
         throw msg;
     }
-    
+
     this.reserveHash(function (err) {
         if (err) {
             callback(err);
@@ -227,7 +239,7 @@ Slite.prototype.getUploadFullFileName = function () {
     var self = this;
     return path.join(self.getHashDir(), self.params.uploadFileName);
 }
-   
+
 exports.youTube = function (youtube_hash, slite_hash, curr_slide) {
     fs.readFile(path.join(www_dir, staticDir, "A1/youtube_tmpl.html"), "utf8", function (err, data) {
         if (err) {

@@ -27,7 +27,7 @@ function resetElapsedTime() {
 }
 
 function elapsedTime(note) {
-    var precision = 0; // 0 decimal places  
+    var precision = 0; // 0 decimal places
     var elapsed = process.hrtime(start)[1] / 1000000;
     // divide by a million to get nano to milliseconds
     console.log(note + ' in: ' + process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms"); // print message + time
@@ -36,8 +36,8 @@ function elapsedTime(note) {
 }
 
 module.exports.isReservedHashFileName = function (file) {
-    var reserved = (file === 'index.html' || 
-                    file.match(/img[0-9]*.(html|jpg)$/i) || 
+    var reserved = (file === 'index.html' ||
+                    file.match(/img[0-9]*.(html|jpg)$/i) ||
                     file.match(/text[0-9]*.html$/i));
     return reserved;
 };
@@ -49,13 +49,13 @@ module.exports.isExtentionSupported = function (fileName) {
     }
     ext = ext.substring(1);
     var index = SUPPORTED_EXTENSIONS.indexOf(ext);
-    return (index != -1); 
+    return (index != -1);
 }
 
 function sliteError(slite, err, onSliteCompleteCallback) {
     console.error('ERROR WHILE UPLOADING/CONVERTING slite: ' + err);
     if (typeof slite !== 'undefined' && !DEBUG) {
-        console.log('deleting hash'); 
+        console.log('deleting hash');
         slite.deleteHash(true, function () {
             console.log('Deleted folder and hash due to an error');
         });
@@ -68,7 +68,7 @@ function sliteError(slite, err, onSliteCompleteCallback) {
 
 module.exports.convert = function (pathName, origName, socket, opt, onSliteCompleteCallback, onQueueCompleteCallback) {
     elapsedTime("UPLOAD complete file: " + pathName + " converting...");
-    
+
     var uploadExtention = path.extname(pathName);
     var uploadFileName = UPLOAD_FILE_TITLE + uploadExtention;
     var initialFileName = path.basename(pathName);
@@ -81,7 +81,7 @@ module.exports.convert = function (pathName, origName, socket, opt, onSliteCompl
         onSliteCompleteCallback: onSliteCompleteCallback,
         opt: opt
     };
-    
+
     var slite = new prepare_slite.Slite(sliteParams, function (err) {
         var hashDir = slite.getHashDir();
         var convertedFileName = UPLOAD_FILE_TITLE + '.' + CONVERSION_FORMAT;
@@ -145,7 +145,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
         READ_COEFF = 2.5,
         FINAL_COEFF = 0.9,
         proc = -1;
-    
+
     function deleteUploadFile(deletedFile) {
         fs.unlink(deletedFile, function (err) {
             console.log('DELETED presentation: ' + deletedFile);
@@ -154,7 +154,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             }
         });
     }
-    
+
     function reportProgress(msg, noTime) {
         if (numSlides > 0) {
             var sum = 0;
@@ -171,11 +171,11 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             msg += ' PROGRESS: ' + proc + '%';
         }
         slite.getParams().socket.emit("uploadProgress", {
-            slide: curSlide + 1, 
-            slides: numSlides, 
-            percentage: proc, 
-            message: msg, 
-            name: slite.getParams().initialFileName, 
+            slide: curSlide + 1,
+            slides: numSlides,
+            percentage: proc,
+            message: msg,
+            name: slite.getParams().initialFileName,
             time: timeSpent
         });
         if (noTime) {
@@ -185,9 +185,9 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             return elapsedTime(msg);
         }
     };
-    
+
     reportProgress('STARTED conversion', true); //     display 0%
-    
+
     console.log('PARSING: ' + uploadFullFileName);
     var xmlDeleter = numSlidesParser(uploadFullFileName, { xmlPath: XML_PATH, leaveXML: true }, function (err, data) {
         if (err) {
@@ -199,7 +199,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
         }
     });
     if (DEBUG) console.log(xmlDeleter);
-    
+
     // Watch all .js files/dirs in process.cwd()
     console.log('GAZE Starting with: ' + hashDir);
     var gaze;
@@ -228,7 +228,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                     curSlide = num;
                     readDone = true;
                     var msg = 'CONVERTION';
-                    //if(numSlides === 0) 
+                    //if(numSlides === 0)
                     msg += ' Slide:' + (curSlide + 1);
                     slideTimeSum += reportProgress(msg);
                 } else {
@@ -238,7 +238,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
         });
     });
     console.log('GAZE Started');
-    
+
     var unoconvPathname = path.join(__dirname, 'unoconv'),
 
                 // CONVERSION
@@ -248,7 +248,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
     //unoconv_cmd = "python " + unoconvPathname + ' -e PixelWidth=1024 -e Compression=75%' + ' -f ' + CONVERSION_FORMAT + ' -o ' + hashDir + ' ' + uploadFullFileName;   // milti-platform version
     //unoconv_cmd = '/opt/libreoffice4.2/program/soffice.bin --headless --convert-to html:impress_html_Export --outdir ' + hashDir + ' ' + uploadFullFileName; // not a mutli-platform version
     console.log(unoconv_cmd);
-    
+
     exec(unoconv_cmd, function (err, stdout, stderr) {
         //err = 'UNOCONV ERROR TEST';
         if (err !== null) {
@@ -260,13 +260,13 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
         finalDone = true;
         finalTime = reportProgress('FINAL stage: ' + slite.hashValue);
         var convertedHtml = path.join(hashDir, UPLOAD_FILE_TITLE + '.' + CONVERSION_FORMAT);
-        
+
         function finish() {
             if(DEBUG) {console.log("finish()");}
             unwatchGaze();
             slite.setNumSlides(numSlides);
             console.log("SLITE file: " + uploadFullFileName + " Slides:" + slite.num_slides);
-            
+
             // Saving slide to DB
             var titleS = slite.getParams().origName;
             titleS = titleS.replace(/\.[^/.]+$/, "");
@@ -274,7 +274,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             if (opt.stitle) {
                 titleS = opt.stitle;
             }
-            
+
             module.parent.exports.readSlideSize(hashDir, function (sizec) {
                 if(DEBUG) {console.log("Read slite size: " + sizec);}
 				var domainSet = (opt.domain == 1 && opt.domainSet == 1) ? 1 : 0;
@@ -290,19 +290,27 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                         console.log("Saved Scheme: ");
                         console.log(saved);
                     }
-                    if (err) { 
-                        console.error('Can\'t insert a new Slide ' + err); 
-                    } else if (slite.getParams().opt.noSocketRet !== 1) {
-                        if(DEBUG) {console.log("Socket emitting: slitePrepared");}
-                        slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
-                        if(DEBUG) {console.log("Socket emitted: slitePrepared");}
+                    if (err) {
+                        console.error('Can\'t insert a new Slide ' + err);
                     }
-                    if(DEBUG){console.log("Executing onSliteCompleteCallback");}
-                        onSliteCompleteCallback && onSliteCompleteCallback(err);
-                    if(DEBUG){console.log("onQueueCompleteCallback is executed");}
-                });                 
-            });                    
-                
+
+					// Move files to S3
+					moveFilesToS3(function() {
+						// Remove hash dir
+						opt.removeDirFunc(hashDir);
+						if (slite.getParams().opt.noSocketRet !== 1) {
+							if(DEBUG) {console.log("Socket emitting: slitePrepared");}
+							slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
+							if(DEBUG) {console.log("Socket emitted: slitePrepared");}
+						}
+
+						if(DEBUG){console.log("Executing onSliteCompleteCallback");}
+							onSliteCompleteCallback && onSliteCompleteCallback(err);
+						if(DEBUG){console.log("onQueueCompleteCallback is executed");}
+					});
+                });
+            });
+
                         /*slite.generateHtml(function (err) {
                             if (err) {
                                 sliteError(err, hashDir, onSliteCompleteCallback);
@@ -315,14 +323,14 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                             averageSlideTime = slideTimeSum / numSlides;
                             if (numSlides >= 1) console.log('Average time per slide: ' + Math.round(averageSlideTime) + ' ms');
                             if (numSlides >= 1 && averageSlideTime) {
-                                console.log('P:%d(%d) R:%d(%d) F:%d(%d)', 
-                                        (parseTime / averageSlideTime).toFixed(2), PARSE_COEFF, 
-                                        (readTime / averageSlideTime).toFixed(2), READ_COEFF, 
+                                console.log('P:%d(%d) R:%d(%d) F:%d(%d)',
+                                        (parseTime / averageSlideTime).toFixed(2), PARSE_COEFF,
+                                        (readTime / averageSlideTime).toFixed(2), READ_COEFF,
                                         (finalTime / averageSlideTime).toFixed(2), FINAL_COEFF);
                             }
                             console.log('\n');
-                                   
-                                   
+
+
                             // Do not return finish callback if crawler uploads
                             if(slite.getParams().opt.noSocketRet != 1) {
                                 slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
@@ -330,7 +338,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                             else {
                                 onConvertCallback(1);
                             }
-                            
+
                             // delete XML
                             if (typeof xmlDeleter != 'undefined') {
                                 xmlDeleter.deleteXML(xmlDeleter);
@@ -338,17 +346,30 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
 
                             // rename presentation to the original name
                             var origFullFileName = path.join(hashDir, slite.getParams().origName);
-                            fs.rename(uploadFullFileName, origFullFileName, function (err) {    
+                            fs.rename(uploadFullFileName, origFullFileName, function (err) {
                                 if (err) {
                                     console.error('Error renaming file: ' + err);
                                     deleteUploadFile(uploadFullFileName);
                                     return;
                                 }
                                 console.log('RENAMED file: ' + uploadFullFileName + ' to:' + origFullFileName);
-                            }); 
+                            });
                         });*/
         }; // function finish() {
-        
+
+		function moveFilesToS3(callback) {
+			var extExpToS3 = ['.jpeg','.jpg','.ppt', '.pptx'];
+			fs.readdirSync(hashDir).forEach(function(file,index){
+			  if(extExpToS3.indexOf(path.extname(file)) != -1) {
+				var fileBuffer = fs.readFileSync(hashDir + '/' + file);
+				opt.AWS_S3.putObject({Bucket: opt.AWS_S3_BUCKET, Key: slite.hashValue + '/' + file, Body: fileBuffer}, function(err, data) {
+					if (err) console.log(err)
+				 });
+			  }
+			});
+			callback();
+		} 
+		
         if (numSlides === 0 || isNaN(numSlides) || !numSlides) {
             fs.readFile(convertedHtml, 'utf8', function (err, data) {
                 if (err) {
@@ -376,14 +397,14 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                     }
                 }
                 console.log('NUM SLIDES from html: ' + numSlides);
-                
+
                 finish();
             }); // fs.readFile ...
         } else {
             finish();
         }
                     //return;
-            
+
 
                     // delete presentation in UPLOAD dir
     }); // exec ...

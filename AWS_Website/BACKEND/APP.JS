@@ -21,12 +21,31 @@ var express = require('express')
   , ioPort = 1337
   , sessionIdCookie = "sliteCurrUser"
   , LOG_GENERAL = true
+  , AWS = require('aws-sdk')
+  , AWS_S3_BUCKET = "prezera-"
+  , os = require('os')
+  , DEBUG = false
   , paypalIpn = require('paypal-ipn');
+
+// AWS API config
+AWS.config.region = 'us-west-1';
+// Conf AWS S3
+var AWS_S3 = new AWS.S3({accessKeyId: 'AKIAJS3WIRCZVAXER3XQ',secretAccessKey: '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', region: 'us-west-1'});
+module.exports.AWS_S3 = AWS_S3;
+
+// Create a new bucket for domain
+var hostname = os.hostname().replace(".","");
+AWS_S3_BUCKET = AWS_S3_BUCKET + hostname;
+module.exports.AWS_S3_BUCKET = AWS_S3_BUCKET
+
+AWS_S3.createBucket({Bucket: AWS_S3_BUCKET}	, function(err, data) {
+  if (err) console.log("Storage bucket response: " + err.code);
+  else     console.log("Storage bucket created:" + data);
+});
 
 var app = express();
 module.exports.app = app;
 module.exports.sessionIdCookie = sessionIdCookie;
-
 
 mongoose.connect('localhost', 'test');
 var db = mongoose.connection;
@@ -619,30 +638,23 @@ app.use(function (req, res, next) {
 						jpgOptions.lastModified = false;
 					}
 
-					var jpgPathname = path.join(wwwSlites, hash, afterHash);    // www/slites/hash/img*.jpg
-					//console.log('filePathname: ' + jpgPathname);
-					res.sendFile(jpgPathname, jpgOptions, function (err) {
-						if (err) {
-							console.log(err + ' sending img file: ' + jpgPathname);
-						}
-					});
+					// Redirect to Amazon S3
+					res.redirect(getS3fileUrl(hash + "/" + afterHash ));
+
 				} else if (hash && afterHash.match(/download\s*(\/?|\\)?$/i)) {
 					var hashPath = path.join(wwwSlites, hash);
 					console.log('Downloading presentation from: ', hashPath);
-					socketIoSlite.getHashPresentation(hash, function (err, fileName) {
-						if (err) {
-							console.error(err);
-						} else {
-							var fileOptions = { lastModified: true, maxAge: 0 };
-							var fileToSend = path.join(hashPath, fileName);
-							console.log("Sending presentation: " + fileToSend);
-							res.sendFile(fileToSend, fileOptions, function (err) {
-								if (err) {
-									console.log('Error while sending presentation file:' + fileToSend, err);
-								}
-							});
+					var supportUplExtensions = [".ppt", ".pptx"];
+					
+					// Get File from Amazon S3
+					AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: hash}, function(err, data) {
+					  data.Contents.forEach(function(content) {
+						if(supportUplExtensions.indexOf(path.extname(content.Key)) != -1) {
+							res.redirect(getS3fileUrl(content.Key));
 						}
+					  });
 					});
+					
 				} else {                                                    // all other files from www_static folder
 					console.log('Arbitrary hash file: ' + afterHash);
 					var fileOptions = { lastModified: true, maxAge: 0 };
@@ -791,7 +803,7 @@ function setUserSession(req, res, callback) {
 		//callback(newUserId);
    }
 	else {
-		
+
 		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 		// User loged in, but has older, random generated id
 		if((req.user) && (req.user._id != req.cookies[sessionIdCookie])) {
@@ -825,7 +837,7 @@ function setUserSession(req, res, callback) {
 // Index page
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
-	
+
   var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	var domainSplit = req.hostname.split('.');
@@ -1177,15 +1189,19 @@ module.exports.deleteFolderRecursive = function(path) {
 			module.exports.deleteFolderRecursive(curPath);
 		  } else {
 			fs.unlink(curPath, function (err) {
-			   if (err) console.log("Can't delete file " + err);
-			  console.log(curPath + 'successfully deleted');
+				if(DEBUG) {
+					if (err) console.log("Can't delete file " + err);
+					console.log(curPath + 'successfully deleted');
+				}
 			});
 		  }
 		});
 
 		fs.rmdir(path, function (err) {
-		  if (err) console.log("Can't delete folder " + err);
-			console.log(path + 'successfully deleted');
+			if(DEBUG) {
+				if (err) console.log("Can't delete folder " + err);
+				console.log(path + 'successfully deleted');
+			}
 		});
 	}
 }
@@ -1215,6 +1231,29 @@ function deleteOldHashFolders() {
 	});
 }
 
+function getS3fileUrl(path) {
+	var params = {Bucket: AWS_S3_BUCKET, Key: path};
+	var url = AWS_S3.getSignedUrl('getObject', params);
+	return (url) ? url : null;
+}
+
+
+function deleteS3path(path) {
+	
+	AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: path}, function(err, data) {
+	  params = {Bucket: AWS_S3_BUCKET};
+	  params.Delete = {};
+	  params.Delete.Objects = [];
+
+	  data.Contents.forEach(function(content) {
+		params.Delete.Objects.push({Key: content.Key});
+	  });
+
+	  AWS_S3.deleteObjects(params, function(err, data) {});
+	});
+}
+
+module.exports.deleteS3path = deleteS3path;
 
 function readUserRights(userId, callback) {
 	User.findOne({_id: userId }, function (err, userDoc) {

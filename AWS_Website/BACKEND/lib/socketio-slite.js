@@ -36,7 +36,7 @@ exports.setDir = function (new_dir, newSlitesDir, newstaticDir, newSlitesReg, ca
     slitesDir = newSlitesDir;
     staticDir = newstaticDir;
     slitesReg = newSlitesReg;
-	prepare_slite.setDir(www_dir, slitesDir, staticDir, slitesReg, callback);
+	prepare_slite.setDir(www_dir, slitesDir, staticDir, slitesReg, module.parent.exports.SlideScheme, callback);
 }
 
 function pollUpdate () {
@@ -218,7 +218,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               socket.emit("sliteConversionError", data);
           }
           function uploadComplete(name, origName) {
-              converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: userSession.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: userSession.userAuth, ssite: socket.handshake.headers.host, hashSize: module.parent.exports.slitesHashLen, domain: userSession.restrictions.domain, domainSet: userSession.domainSet});
+              converter.convert(name, origName, socket, {www_dir: www_dir, slitesDir: slitesDir, sliteRegExp: SLIDE_REG_EXP, uploadDir: uploadDir, userSessionId: userSession.currentUserId, SlidesScheme: module.parent.exports.SlideScheme,  userAuth: userSession.userAuth, ssite: socket.handshake.headers.host, hashSize: module.parent.exports.slitesHashLen, domain: userSession.restrictions.domain, domainSet: userSession.domainSet, AWS_S3: module.parent.exports.AWS_S3, AWS_S3_BUCKET: module.parent.exports.AWS_S3_BUCKET, removeDirFunc: module.parent.exports.deleteFolderRecursive});
           }
 
           if (HTML5_UPLOADER) {
@@ -236,12 +236,11 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               var uploader = new SocketIOFileUploadServer();
       		uploader.dir = uploadDir;
       		uploader.listen(socket);
-			uploader.maxFileSize = userSession.restrictions.maxSlideSize;
+          uploader.maxFileSize = userSession.restrictions.maxSlideSize;
 
-              uploader.on("start", function (event) {
-      				console.log();
-      				uploadStarted(event.file.name);
-               });
+          uploader.on("start", function (event) {
+  				      uploadStarted(event.file.name);
+          });
 
       		uploader.on("progress", function (event) {
       			uploadProgress(event.file.pathName);
@@ -291,7 +290,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 				if(spresenter == 1 && sfound == 1) {
 					module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
 						if (!err) {
-								module.parent.exports.deleteFolderRecursive(hashPath);
+								module.parent.exports.deleteS3path(data.sid);
+								//module.parent.exports.deleteFolderRecursive(hashPath);
 								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
 									if(LOG_GENERAL) {
 										console.log('Deleting notes.....');
@@ -894,7 +894,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   purge(socket, "leaveRoom");
           });
 
-          socket.on('requestDownloadPresentation', function (data) {
+		  // We don't use this function
+          /*socket.on('requestDownloadPresentation', function (data) {
 			  if(LOG_GENERAL) {
 				console.log('Recieved Request to Dowloading presentation, hash:', data.hash);
 			  }
@@ -908,7 +909,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                       socket.emit('responseDownloadPresentation', { 'fileName': fileName });
                   }
               });
-          });
+          });*/
 
           socket.on('presenterVideoChat', function (data) {
 			  if(LOG_COORD) {

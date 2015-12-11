@@ -293,8 +293,9 @@ function getCurrentHash() {
 }
 
 function downloadPresentation() {
-    console.log('Sending Request to Download Presentation in Hash: ' + getCurrentHash());
-    socket.emit('requestDownloadPresentation', { 'hash': getCurrentHash() });
+    /*console.log('Sending Request to Download Presentation in Hash: ' + getCurrentHash());
+    socket.emit('requestDownloadPresentation', { 'hash': getCurrentHash() });*/
+	window.open("/" + getCurrentHash() + '/download');
     showHideMenu(true);
 }
 
@@ -848,12 +849,13 @@ $( window ).load(function() {
   if (!isFile) {
       //socket = io.connect(document.location.hostname + ':' + location.port);
 
-    socket.on('responseDownloadPresentation', function (data) {
+	// We don't use this function
+    /*socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
             window.open("/" + getCurrentHash() + '/' + data.fileName);
         }
-    });
+    });*/
 
     socket.on('ccBroadcast', function (data) {
         $('#closedCaptioningPanel').hide();
