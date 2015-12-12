@@ -33,9 +33,6 @@ AWS.config.region = 'us-west-1';
 var AWS_S3 = new AWS.S3({accessKeyId: 'AKIAJS3WIRCZVAXER3XQ',secretAccessKey: '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', region: 'us-west-1'});
 module.exports.AWS_S3 = AWS_S3;
 
-
-//test comment
-
 // Create a new bucket for domain
 var hostname = os.hostname().replace(".","");
 AWS_S3_BUCKET = AWS_S3_BUCKET + hostname;
