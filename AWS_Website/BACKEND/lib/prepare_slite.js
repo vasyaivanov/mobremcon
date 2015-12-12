@@ -181,6 +181,8 @@ Slite.prototype.reserveHash = function (callback) {
     var self = this;
     self.count++;
     self.hashValue = self.getHash();
+	// Clear cache online
+	initCache(this.params.opt.SlidesScheme, function(){});
     // get the value
     cache.get(self.hashValue, function (err, value) {
         if (self.count > self.maxNumTries) {
