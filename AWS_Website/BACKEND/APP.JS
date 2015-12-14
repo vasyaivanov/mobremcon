@@ -34,13 +34,17 @@ var AWS_S3 = new AWS.S3({accessKeyId: 'AKIAJS3WIRCZVAXER3XQ',secretAccessKey: 'l
 module.exports.AWS_S3 = AWS_S3;
 
 // Create a new bucket for domain
-var hostname = os.hostname().replace(".","");
+var hostname = (os.hostname().split('.')[0]) ? (os.hostname().split('.')[0]) : "default";
 AWS_S3_BUCKET = AWS_S3_BUCKET + hostname;
 module.exports.AWS_S3_BUCKET = AWS_S3_BUCKET
 
 AWS_S3.createBucket({Bucket: AWS_S3_BUCKET}	, function(err, data) {
-  if (err) console.log("Storage bucket response: " + err.code);
-  else     console.log("Storage bucket created:" + data);
+  if (err) {
+	  console.log("Storage bucket response: " + err.code);
+  }
+  else {
+	  console.log("Storage bucket created:" + data.Location);
+  }
 });
 
 var app = express();
