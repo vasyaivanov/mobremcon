@@ -989,6 +989,23 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 			});
 		});	
 
+		socket.on('check-presentation-key', function(data, callback){
+			console.log(data);
+			// Errors: 1 - prese not found, 2 - wrong key, 3 - access granted
+			module.parent.exports.slideCheckPresenter(data.id, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+				if(sfound == 0) {
+					callback(1);
+				}
+				else if(sfound == 1 && data.key != presentationKey) {
+					callback(2);
+				}
+				else {
+					callback(3);
+				}
+ 			});
+		});
+
+		
       }
     }
 

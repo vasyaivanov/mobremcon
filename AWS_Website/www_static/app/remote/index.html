@@ -31,37 +31,67 @@
     <script src="/js/jquery-ui.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 	<script>
-	function showLogin() {
+	$( document ).ready(function() {
+		var socket = io.connect(document.location.hostname + ':' + location.port);
+		
 		$("#slideLogin").show();
-	}
-	
-	function show(id) {
-		if(typeof id != 'undefined') {
-			$(".alldata").hide();
-			$("#" + id).show();
+		
+		function show(id) {
+			if(typeof id != 'undefined') {
+				$(".alldata").hide();
+				$("#" + id).show();
+			}
 		}
-	}
+		
+		$(document).on("click", "#pres_login_button", function () {
+			if($("#pres_id").val() == "") {
+				showError("Enter presentation ID");
+			}
+			else if($("#pres_key").val() == "") {
+				showError("Enter presentation key");		
+			}
+			else {
+				socket.emit("check-presentation-key", {id: $("#pres_id").val(), key: $("#pres_key").val()} , function(data) {
+					if(data == 1) {
+						showError("Presentation was't found");
+					}
+					else if(data == 2) {
+						showError("Wrong key");					
+					}
+					else {
+						showError("Key accepted, opening to presentation...");	
+					}
+				});
+			}
+		});
+		
+		function showError(text) {
+			$("#noticeForm").show();
+			$("#noticeForm").text(text);
+		}
+	});
+	
 	</script>
 </head>
 
-<body class='mainbackground' onload="showLogin()">
+<body class='mainbackground'>
 
     <section id="slideLogin" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
 
         <div class="loginbody">
 				<!--h3>Sign In</h3-->
-				<h4 id="loginError" style="color: #FF0000; display:none"></h4>
-                <form role="form" id="signInForm">
+				<h4 id="noticeForm" style="color: #FF0000; display:none"></h4>
+                <form role="form" id="pres_login">
                     <div class="form-group">
                         <label for="Username">Presentation ID:</label>
-                        <input id="signinEmail" type="email" class="form-control" placeholder="Enter presentation ID">
+                        <input id="pres_id" class="form-control" placeholder="Enter presentation ID">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Presentation Key: </label>
-                        <input id="signinPassword" type="password" class="form-control" name="password" placeholder="Enter presentation key">
+                        <input id="pres_key"  type="password" class="form-control" name="password" placeholder="Enter presentation key">
                     </div>
-                    <input type="button" id="buttonSignIn" value="Open presentation" class="btn btn-default"/>
+                    <input type="button" id="pres_login_button" value="Open presentation" class="btn btn-default"/>
 				</form>
 					<a href="javascript:show('getKey');">How to get a presentation ID & Key?</a>
             </div>
