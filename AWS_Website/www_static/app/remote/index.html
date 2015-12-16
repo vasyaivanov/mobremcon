@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title></title>
+    <title>App remote control</title>
     <meta name="title" content="Live online presentations" />
     <meta name="description" content="Free online web presentations. Social chat, video presentation, personal presentation notes, password protection and much more." />
     <meta name="keywords" content="web presentations, web presentation, presentation, powerpoint, free, free online presentation, free presentation, slide, slides, free slides, powerpoint replacement">
@@ -30,28 +30,37 @@
     <script src="/js/client.min.js"></script>
     <script src="/js/jquery-ui.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+	<!--script src="http://jsconsole.com/remote.js?F1F7FCE6-BC71-4006-85A9-571BDB8DBB01"></script-->
 	<script>
 	$( document ).ready(function() {
 		var socket = io.connect(document.location.hostname + ':' + location.port);
+
+		if(localStorage.getItem("presentationsLocal")) {
+			$.each(JSON.parse(localStorage.getItem("presentationsLocal")), function(i, item) {			
+				$.ajax({
+					type: "get", url: "/"  + i + "/img0.jpg",
+					success: function (data, text) {
+						console.log(i);
+					},
+					error: function (request, status, error) {
+						alert(request.responseText);
+					}
+				});				
+
+			});
+		}
 		
 		$("#slideLogin").show();
-		
-		function show(id) {
-			if(typeof id != 'undefined') {
-				$(".alldata").hide();
-				$("#" + id).show();
-			}
-		}
 		
 		$(document).on("click", "#pres_login_button", function () {
 			if($("#pres_id").val() == "") {
 				showError("Enter presentation ID");
 			}
-			else if($("#pres_key").val() == "") {
+			else if($("#pres_pass").val() == "") {
 				showError("Enter presentation key");		
 			}
 			else {
-				socket.emit("check-presentation-key", {id: $("#pres_id").val(), key: $("#pres_key").val()} , function(data) {
+				socket.emit("check-presentation-key", {id: $("#pres_id").val(), key: $("#pres_pass").val()} , function(data) {
 					if(data == 1) {
 						showError("Presentation was't found");
 					}
@@ -59,7 +68,13 @@
 						showError("Wrong key");					
 					}
 					else {
-						showError("Key accepted, opening to presentation...");	
+						showError("Key accepted, opening to presentation...");
+						var data = {};
+						if(localStorage.getItem("presentationsLocal")) {
+							data = JSON.parse(localStorage.getItem("presentationsLocal"));
+						}
+						data[$("#pres_id").val()] = $("#pres_pass").val();
+						localStorage.setItem("presentationsLocal", JSON.stringify(data));
 					}
 				});
 			}
@@ -70,6 +85,13 @@
 			$("#noticeForm").text(text);
 		}
 	});
+	
+	function show(id) {
+		if(typeof id != 'undefined') {
+			$(".alldata").hide();
+			$("#" + id).show();
+		}
+	}
 	
 	</script>
 </head>
@@ -88,10 +110,13 @@
                         <input id="pres_id" class="form-control" placeholder="Enter presentation ID">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Presentation Key: </label>
-                        <input id="pres_key"  type="password" class="form-control" name="password" placeholder="Enter presentation key">
+                        <label for="exampleInputPassword1">Presentation password: </label>
+                        <input id="pres_pass"  type="password" class="form-control" name="password" placeholder="Enter presentation password">
                     </div>
+					<span class="btn-group">
                     <input type="button" id="pres_login_button" value="Open presentation" class="btn btn-default"/>
+					<input type="button" onclick="show('myPres')" value="My presentations" class="btn btn-default"/>
+					</span>
 				</form>
 					<a href="javascript:show('getKey');">How to get a presentation ID & Key?</a>
             </div>
@@ -104,9 +129,19 @@
           <h4>How to get a presentation ID & Key?</h4>
 		  <ul>
 			<li>Open your presentation in a web browser</li>
-			<li>Open main meny and click 'Get presentation key'<br><img src="/app/remote/img/getkey.png"></li>
+			<li>Open main meny and click 'Get presenter password'<br><img src="/app/remote/img/getkey.png"></li>
 			<li>After that the system will show you your presentation access credentials</li>
 		  </ul>
+		  <a href="javascript:show('slideLogin')">Go back</a>
+		 </div>	 
+	</section>
+	
+	
+	<section id="myPres" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="simplePage"><br>
+          <h4>My presentations</h4>
+
 		  <a href="javascript:show('slideLogin')">Go back</a>
 		 </div>	 
 	</section>

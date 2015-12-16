@@ -354,7 +354,7 @@ function getPresentationKey() {
 	socket.emit('get-presentation-key', { sid: getCurrentHash()}, function(confirmation){
 		if(confirmation.key > 0) {
 			showHideMenu(true);
-			alert("Presentation ID: " + confirmation.id + "\n" + "Presentation key: " + confirmation.key);
+			alert("Presentation ID: " + confirmation.id + "\n" + "Presenter password: " + confirmation.key);
 
 		}
 	});
