@@ -165,7 +165,8 @@ var slidesSchema = mongoose.Schema({
   isOnlinePresentation: { type: Number,  default: 0,  max: 1 },
   hidden: { type: Number,  default: 0 , max: 1},
   domainSet: {type: Number,  default: 0 , max: 1 },
-  slidesNum: {type: Number}
+  slidesNum: {type: Number},
+  presentationKey: {type: Number}
 });
 
 slidesSchema.plugin(mongooserand);
@@ -1020,7 +1021,19 @@ slideCheckPresenter = function(hashId, currentUserId , callback) {
 	if(currentUserId) {
 		Slide.findOne({sid : hashId }).exec(function (err, doc) {
 			if( doc ) {
-				callback(1,(doc.uid == currentUserId) ? 1 : 0,doc.title,doc.password, (doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, doc.scid, (doc.isVideoChatOpen) ? 1 : "0", (doc.isScreensharingOpen) ? 1 : "0", (doc.slidesNum > 0) ? doc.slidesNum : 1, (doc.domainSet) ? 1 : 0);
+				callback(
+					1, // [0] - Prese found
+					(doc.uid == currentUserId) ? 1 : 0, // [1] Is presenter?
+					doc.title, // [2] Pres title
+					doc.password, // [3] Pres access password
+					(doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
+					doc.scid, // [5] Pres custom ID
+					(doc.isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
+					(doc.isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
+					(doc.slidesNum > 0) ? doc.slidesNum : 1, // [8] Num of slides
+					(doc.domainSet) ? 1 : 0, // [9] Is domain set for this account?
+					(doc.presentationKey) ? doc.presentationKey : 0 //[10] Access key for presentation
+				); 
 			} else {
 				callback(0,0,"","", 0, "");
 			}

@@ -956,8 +956,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
 
       	socket.on('server-userRestrictions', function (data) {
-      			socket.emit('client-userRestrictions',{maxFileSize: userSession.restrictions.maxSlideSize});
-            });
+      		socket.emit('client-userRestrictions',{maxFileSize: userSession.restrictions.maxSlideSize});
+        });
 
 		socket.on("get-nof-users", function (data) {
 			if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
@@ -969,8 +969,25 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 				module.parent.exports.UserData[module.parent.exports.getCookie(socket.handshake.headers.cookie,module.parent.exports.sessionIdCookie)].noUploadForUser = uplStatus;
 				callback(uplStatus);
 			});
-
 		});
+
+		socket.on('get-presentation-key', function(data, callback){
+      		module.parent.exports.slideCheckPresenter(data.sid, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+				if(sfound == 1 && spresenter == 1) {
+					if(presentationKey == 0) {
+						var genKey = Math.floor(Math.random() * (9999 - 1111) + 1111);
+						module.parent.exports.SlideScheme.update({  sid : data.sid }, { $set: { presentationKey: genKey }}, function(errU,docsU) {
+							if(docsU.nModified > 0) {
+								callback({id: data.sid, key: genKey});
+							}
+						});
+					}
+					else {
+						callback({id: data.sid, key: presentationKey});
+					}
+				}
+			});
+		});	
 
       }
     }

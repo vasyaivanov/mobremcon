@@ -350,6 +350,16 @@ function showHidePasswordCreateOverlay() {
     showHideMenu(true);
 }
 
+function getPresentationKey() {
+	socket.emit('get-presentation-key', { sid: getCurrentHash()}, function(confirmation){
+		if(confirmation.key > 0) {
+			showHideMenu(true);
+			alert("Presentation ID: " + confirmation.id + "\n" + "Presentation key: " + confirmation.key);
+
+		}
+	});
+}
+
 function submitPassword() {
     var pwd = document.getElementById("presentationPassword").value;
     socket.emit('updatePassword', { 'password': pwd, 'currentHash': getCurrentHash()});
@@ -435,6 +445,7 @@ function disableNonPresenterMenues() {
     disableMenuItem("#menuShowHideRemote");
 	disableMenuItem("#menuOpenVideoChat");
 	disableMenuItem("#menuPassword");
+	disableMenuItem("#menuPresKey");
 	disableMenuItem("#menuOpenScreensharing");
 	disableMenuItem("#menuRenamePresentation");
 	disableMenuItem("#menuOpenRecording");

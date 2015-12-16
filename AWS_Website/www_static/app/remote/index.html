@@ -1,0 +1,87 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title></title>
+    <meta name="title" content="Live online presentations" />
+    <meta name="description" content="Free online web presentations. Social chat, video presentation, personal presentation notes, password protection and much more." />
+    <meta name="keywords" content="web presentations, web presentation, presentation, powerpoint, free, free online presentation, free presentation, slide, slides, free slides, powerpoint replacement">
+	<meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <!-- Bootstrap Core CSS -->
+    <link href="/new_template/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- Custom CSS -->
+    <link href="/new_template/css/stylish-portfolio.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/new_template/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- jQuery -->
+    <script src="/new_template/js/jquery.js"></script>
+    <script src="/new_template/js/customJs.js"></script>
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/new_template/js/bootstrap.min.js"></script>
+
+    <script src="/js/client.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+	<script>
+	function showLogin() {
+		$("#slideLogin").show();
+	}
+	
+	function show(id) {
+		if(typeof id != 'undefined') {
+			$(".alldata").hide();
+			$("#" + id).show();
+		}
+	}
+	</script>
+</head>
+
+<body class='mainbackground' onload="showLogin()">
+
+    <section id="slideLogin" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+
+        <div class="loginbody">
+				<!--h3>Sign In</h3-->
+				<h4 id="loginError" style="color: #FF0000; display:none"></h4>
+                <form role="form" id="signInForm">
+                    <div class="form-group">
+                        <label for="Username">Presentation ID:</label>
+                        <input id="signinEmail" type="email" class="form-control" placeholder="Enter presentation ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Presentation Key: </label>
+                        <input id="signinPassword" type="password" class="form-control" name="password" placeholder="Enter presentation key">
+                    </div>
+                    <input type="button" id="buttonSignIn" value="Open presentation" class="btn btn-default"/>
+				</form>
+					<a href="javascript:show('getKey');">How to get a presentation ID & Key?</a>
+            </div>
+    </section>	
+	
+	
+	<section id="getKey" class="login mainbackground allData">
+        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="simplePage"><br>
+          <h4>How to get a presentation ID & Key?</h4>
+		  <ul>
+			<li>Open your presentation in a web browser</li>
+			<li>Open main meny and click 'Get presentation key'<br><img src="/app/remote/img/getkey.png"></li>
+			<li>After that the system will show you your presentation access credentials</li>
+		  </ul>
+		  <a href="javascript:show('slideLogin')">Go back</a>
+		 </div>	 
+	</section>
+
+ 
+</body>
+
+</html>
