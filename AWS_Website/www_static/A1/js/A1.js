@@ -2,6 +2,16 @@ var socket;
 var isFile = RegExp(/^file:.*/i).test(document.location.href);
 var royalSlider;
 var hashUsers = -1;
+var presentPassword;
+
+if(localStorage.getItem("presentationsLocal")) {
+	var presentations = JSON.parse(localStorage.getItem("presentationsLocal"));
+	presentPassword = (presentations[currentHash]) ? (presentations[currentHash]) : 0;
+	
+	if(presenter == 0 && presentPassword > 0) {
+		$("#backButtonMobile").show();
+	}
+}
 
 if(navigator.userAgent.indexOf("Firefox") != -1 )  {
 	var uMatch = navigator.userAgent.match(/Firefox\/(.*)$/),
@@ -478,6 +488,9 @@ function isLocalhost() {
 function isPresenter() {
 	if( typeof presenter !== 'undefined') {
 		var result = presenter > 0 ? true : false;
+		if(presentPassword > 0) {
+			result = true;
+		}
 		var location = document.location + "";
 		if(location && location.indexOf("file") === 0){ //localhost case
 			result = true;
@@ -976,10 +989,3 @@ function getClearUrl() {
     return url;
 }
 
-
-//$('#prev').click(function() {
-  //  alert('prev');
-    /*socket.emit('changeSlideRequest', { my:102, slide:currSlideNum });
-    currSlideNum--;
-    $("#notes").text(notesArray[currSlideNum]);*/
-//});

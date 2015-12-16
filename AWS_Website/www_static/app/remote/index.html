@@ -36,17 +36,18 @@
 		var socket = io.connect(document.location.hostname + ':' + location.port);
 
 		if(localStorage.getItem("presentationsLocal")) {
-			$.each(JSON.parse(localStorage.getItem("presentationsLocal")), function(i, item) {			
-				$.ajax({
-					type: "get", url: "/"  + i + "/img0.jpg",
-					success: function (data, text) {
-						console.log(i);
-					},
-					error: function (request, status, error) {
-						alert(request.responseText);
-					}
-				});				
+			$.each(JSON.parse(localStorage.getItem("presentationsLocal")), function(key, value) {
+				socket.emit("check-presentation-key", {id: key, key: value, check: 1} , function(data) {
+					if(data.code == 3) {
+						var mySlide = "";
+						mySlide += '<tr id="slide_'+ key  +'">';
+						mySlide += '<td width="150"><a href="/' + key + '"><img src="/'+ key +'/img0.jpg" class="img-rounded" width="90%"></a></td>';
+						mySlide += '<td><a href="/' + key + '">'+data.title+'</a></td>';
+						mySlide += '</tr>';
+						$("#myPresTable").append(mySlide);
 
+					}
+				});
 			});
 		}
 		
@@ -61,10 +62,10 @@
 			}
 			else {
 				socket.emit("check-presentation-key", {id: $("#pres_id").val(), key: $("#pres_pass").val()} , function(data) {
-					if(data == 1) {
+					if(data.code == 1) {
 						showError("Presentation was't found");
 					}
-					else if(data == 2) {
+					else if(data.code == 2) {
 						showError("Wrong key");					
 					}
 					else {
@@ -75,6 +76,7 @@
 						}
 						data[$("#pres_id").val()] = $("#pres_pass").val();
 						localStorage.setItem("presentationsLocal", JSON.stringify(data));
+						location.href="/" + $("#pres_id").val();
 					}
 				});
 			}
@@ -141,7 +143,9 @@
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage"><br>
           <h4>My presentations</h4>
+			<table id="myPresTable" class="table" style="max-width: 100%">
 
+			</table>
 		  <a href="javascript:show('slideLogin')">Go back</a>
 		 </div>	 
 	</section>

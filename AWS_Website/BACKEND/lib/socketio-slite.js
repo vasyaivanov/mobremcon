@@ -347,20 +347,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('changeSlideRequest', function (data) {
-			  if(LOG_COORD) {
-				console.log("JD: received changeSlideRequest from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
-			  }
-      		// WE MUST TO CHECK USER FOR PRESENTER VAR!!!
-				module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-					if(docs){
-						module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: docs.sid});
+			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+				if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
+					if(LOG_COORD) {
+						console.log("JD: received changeSlideRequest from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
 					}
-					else if(data.slideID == 'A1') {
-						//if(userSession.userRole == 10) {
-							module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: 'A1'});
-						//}
-					}
-				});
+					module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: data.slideID});
+				}
+			});
           });
 
       	socket.on('notes-server', function (data) {
@@ -528,88 +522,53 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
           // receive laser coordinates from the remote
             socket.on('laserCoords', function (data) {
-              if (LOG_COORD) {
-                // 2 next lines are logs for testing
-                console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
-              }
-              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-              // send coordinates on to the display (RECEIVER_POWERPOINT.html)
-                if(docs){
-                  data.slideID = docs.sid;
-                  socket.broadcast.emit('moveLaser', data);
-                  socket.emit('moveLaser', data);
-                }
-      			else if(data.slideID == 'A1') {
-      				//if(userSession.userRole == 10) {
-                    socket.broadcast.emit('moveLaser', data);
-      		        socket.emit('moveLaser', data);
-      				//}
-      			}
-              });
-              //socket.broadcast.emit('moveLaser', data);
+				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
+						if (LOG_COORD) {
+							console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
+						}
+						socket.broadcast.emit('moveLaser', data);
+						socket.emit('moveLaser', data);
+					}
+				});
           });
 
           socket.on('drawCoords', function (data) {
-              if (LOG_COORD) {
-                console.log("drawCoords received: " + data.slideID);
-                console.log("X: " + data.x + ", " + "Y: " + data.y);
-              }
-              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-                if(docs){
-                  data.slideID = docs.sid;
-                  socket.broadcast.emit('drawCoords', data);
-                  socket.emit('drawCoords', data);
-                 } else if(data.slideID == 'A1') {
-      				//if(userSession.userRole == 10) {
-                    socket.broadcast.emit('drawCoords', data);
-      			    socket.emit('drawCoords', data);
-      				//}
-      			}
-              });
+			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+				if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
+					if (LOG_COORD) {
+						console.log("drawCoords received: " + data.slideID);
+						console.log("X: " + data.x + ", " + "Y: " + data.y);
+					}
+					socket.broadcast.emit('drawCoords', data);
+					socket.emit('drawCoords', data);
+				}
+			});
           });
 
           socket.on('laserOn', function (data) {
-              if (LOG_COORD) {
-                console.log("laserOn received: " + data.slideID);
-                console.log("X: " + data.x + ", " + "Y: " + data.y);
-              }
-              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-                if(docs){
-                  data.slideID = docs.sid;
-                  socket.broadcast.emit('laserOn', data);
-                  socket.emit('laserOn', data);
-                }
-      			else if(data.slideID == 'A1') {
-      				//if(userSession.userRole == 10) {
-                    socket.broadcast.emit('laserOn', data);
-      			    socket.emit('laserOn', data);
-      				//}
-      			}
-              });
-              //socket.broadcast.emit('laserOn', data);
+			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+				if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
+					if (LOG_COORD) {
+						console.log("laserOn received: " + data.slideID);
+						console.log("X: " + data.x + ", " + "Y: " + data.y);
+					}
+					socket.broadcast.emit('laserOn', data);
+					socket.emit('laserOn', data);
+				}
+			});
           });
 
             socket.on('laserOff', function (data) {
-              if (LOG_COORD) {
-                console.log("laser off: " + data);
-              }
-
-              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-                if(docs){
-                  data.slideID = docs.sid;
-				  socket.broadcast.emit('laserOff', data);
-				  socket.emit('laserOff', data);
-                }
-      			else if(data.slideID == 'A1') {
-      				//if(userSession.userRole == 10) {
-					  socket.broadcast.emit('laserOff', data);
-					  socket.emit('laserOff', data);
-      				//}
-      			}
-              });
-
-              socket.broadcast.emit('laserOff', data);
-              socket.emit('laserOff', data);
+				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
+						if (LOG_COORD) {
+							console.log("laser off: " + data);
+						}
+						socket.broadcast.emit('laserOff', data);
+						socket.emit('laserOff', data);
+					}
+				});
           });
 
           socket.on('shake', function (data) {
@@ -618,42 +577,27 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawStart', function (data) {
-              if (LOG_COORD) {
-                console.log("drawstart: " + data.slideID);
-              }
-              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-                if(docs){
-                  data.slideID = docs.sid;
-                  socket.broadcast.emit('drawStart', data);
-                  socket.emit('drawStart', data);
-                }
-      			else if(data.slideID == 'A1') {
-      				//if(userSession.userRole == 10) {
-                    socket.broadcast.emit('drawStart', data);
-      			    socket.emit('drawStart', data);
-      				//}
-      			}
-              });
+				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
+						if (LOG_COORD) {
+							console.log("drawstart: " + data.slideID);
+						}
+						socket.broadcast.emit('drawStart', data);
+						socket.emit('drawStart', data);
+					}
+				});
           });
 
           socket.on('drawStop', function (data) {
-              if (LOG_COORD) {
-                console.log("drawstop: " + data);
-              }
-              module.parent.exports.SlideScheme.findOne({	$or: [{sid: data.slideID} ,  {scid: data.slideID}]}, function (err, docs) {
-                if(docs){
-                  data.slideID = docs.sid;
-				  socket.broadcast.emit('drawStop', data);
-				  socket.emit('drawStop', data);
-                }
-      			else if(data.slideID == 'A1') {
-      				//if(userSession.userRole == 10) {
-					  socket.broadcast.emit('drawStop', data);
-					  socket.emit('drawStop', data);
-      				//}
-      			}
-              });
-
+				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
+						if (LOG_COORD) {
+							console.log("drawstop: " + data);
+						}
+						socket.broadcast.emit('drawStop', data);
+						socket.emit('drawStop', data);
+					}
+				});
           });
 
           socket.on('insertVideoId', function (data) {
@@ -990,17 +934,23 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 		});	
 
 		socket.on('check-presentation-key', function(data, callback){
-			console.log(data);
 			// Errors: 1 - prese not found, 2 - wrong key, 3 - access granted
 			module.parent.exports.slideCheckPresenter(data.id, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
+				var ret = {};
 				if(sfound == 0) {
-					callback(1);
+					ret.code = 1;
+					callback(ret);
 				}
 				else if(sfound == 1 && data.key != presentationKey) {
-					callback(2);
+					ret.code = 2;
+					callback(ret);
 				}
 				else {
-					callback(3);
+					ret.code = 3;
+					if(data.check == 1) {
+						ret.title = stitle;
+					}
+					callback(ret);
 				}
  			});
 		});

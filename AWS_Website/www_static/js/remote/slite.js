@@ -131,10 +131,10 @@ function touchStart(event) {
         // Laser immediately for presenter
         $( "#redDot" ).css("visibility", "visible");
         moveLaserTo(per.x, per.y);
-        socket.emit('laserOn', {x: per.x, y: per.y, slideID: currentHash});
+        socket.emit('laserOn', {x: per.x, y: per.y, slideID: currentHash, presPass: presentPassword});
     } else if (DRAW === interactionType) {
         drawTo('down', per.x, per.y);
-        socket.emit('drawStart',{x: per.x, y: per.y , slideID: currentHash});
+        socket.emit('drawStart',{x: per.x, y: per.y , slideID: currentHash, presPass: presentPassword});
     }
 };
 
@@ -142,10 +142,10 @@ function touchEnd(event) {
     event.preventDefault();
     if (LASER === interactionType) {
         $( "#redDot" ).css("visibility", "hidden");
-        socket.emit('laserOff', {slideID: currentHash});
+        socket.emit('laserOff', {slideID: currentHash, presPass: presentPassword});
     } else if (DRAW === interactionType) {
         drawTo('up');
-        socket.emit('drawStop', {slideID: currentHash});
+        socket.emit('drawStop', {slideID: currentHash, presPass: presentPassword});
     }
 };
 
@@ -158,23 +158,21 @@ function getNumSlides() {
 function prevSlideRemote() {
     prevSlideLocal();
     console.log('prevSlideRemote');
-    //if (currSlideNum <= 0) return;
     currSlideNum--;
     if (currSlideNum < 0) {
         currSlideNum = getNumSlides() - 1;
     }
-    socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: currentHash});
+    socket.emit('changeSlideRequest', { my:102, slide:currSlideNum, slideID: currentHash, presPass: presentPassword});
     //$("#notes").text(notesArray[currSlideNum]);
 };
 function nextSlideRemote() {
     nextSlideLocal();
     console.log('nextSlideRemote');
-    //if (currSlideNum >= getSlideNumber()-1) return;
     currSlideNum++;
     if (currSlideNum >= getNumSlides()) {
         currSlideNum = 0;
     }
-    socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: currentHash});
+    socket.emit('changeSlideRequest', { my:101, slide:currSlideNum, slideID: currentHash, presPass: presentPassword});
     //$("#notes").text(notesArray[currSlideNum]);
 };
 
@@ -266,13 +264,13 @@ function touchMove(event) {
         case LASER: {
             // Draw immediately for presenter
             moveLaserTo(per.x, per.y);
-            socket.emit('laserCoords', { x:per.x,  y:per.y,  slideID: currentHash});
+            socket.emit('laserCoords', { x:per.x,  y:per.y,  slideID: currentHash, presPass: presentPassword});
             break;
         }
         case DRAW: {
           // Draw immediately for presenter
           drawTo('move', per.x, per.y);
-          socket.emit('drawCoords', { x:per.x, y:per.y , slideID: currentHash});
+          socket.emit('drawCoords', { x:per.x, y:per.y , slideID: currentHash, presPass: presentPassword});
           break;
         }
         default: {

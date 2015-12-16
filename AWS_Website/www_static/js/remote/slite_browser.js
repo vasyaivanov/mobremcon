@@ -92,7 +92,7 @@ function onMouseMove(event) {
             moveLaserTo(per.x, per.y);
             socket.emit('laserCoords', { x: per.x,
                                          y: per.y,
-                                         slideID: currentHash });
+                                         slideID: currentHash , presPass: presentPassword});
             break;
         }
         case DRAW: {
@@ -100,7 +100,7 @@ function onMouseMove(event) {
             drawTo('move', per.x, per.y);
             socket.emit('drawCoords', { x: per.x,
                                         y: per.y,
-                                        slideID: currentHash });
+                                        slideID: currentHash , presPass: presentPassword});
             break;
         }
         default: {
@@ -122,12 +122,12 @@ function onMouseMove(event) {
         moveLaserTo(per.x, per.y);
         socket.emit('laserOn', {x: per.x,
                                 y: per.y,
-                                slideID: currentHash});
+                                slideID: currentHash, presPass: presentPassword});
     } else if(interactionType === DRAW) {
         drawTo('down', per.x, per.y);
         socket.emit('drawStart',{x: per.x,
                                  y: per.y,
-                                 slideID: currentHash});
+                                 slideID: currentHash, presPass: presentPassword});
     }
 });
 
@@ -137,10 +137,10 @@ $( '#currentSlide' ).mouseup(function(event) {
     // Only turn off laser if we are in laser mode
     if(interactionType === LASER) {
         $( "#redDot" ).css("visibility", "hidden");
-        socket.emit('laserOff', {slideID: currentHash});
+        socket.emit('laserOff', {slideID: currentHash, presPass: presentPassword});
     } else if(interactionType === DRAW) {
         drawTo('up');
-        socket.emit('drawStop', {slideID: currentHash});
+        socket.emit('drawStop', {slideID: currentHash, presPass: presentPassword});
     }
 });
 
