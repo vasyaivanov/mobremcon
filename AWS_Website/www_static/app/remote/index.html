@@ -50,15 +50,15 @@
 				});
 			});
 		}
-		
+
 		$("#slideLogin").show();
-		
+
 		$(document).on("click", "#pres_login_button", function () {
 			if($("#pres_id").val() == "") {
 				showError("Enter presentation ID");
 			}
 			else if($("#pres_pass").val() == "") {
-				showError("Enter presentation key");		
+				showError("Enter presentation key");
 			}
 			else {
 				socket.emit("check-presentation-key", {id: $("#pres_id").val(), key: $("#pres_pass").val()} , function(data) {
@@ -66,7 +66,7 @@
 						showError("Presentation was't found");
 					}
 					else if(data.code == 2) {
-						showError("Wrong key");					
+						showError("Wrong key");
 					}
 					else {
 						showError("Key accepted, opening to presentation...");
@@ -81,20 +81,20 @@
 				});
 			}
 		});
-		
+
 		function showError(text) {
 			$("#noticeForm").show();
 			$("#noticeForm").text(text);
 		}
 	});
-	
+
 	function show(id) {
 		if(typeof id != 'undefined') {
 			$(".alldata").hide();
 			$("#" + id).show();
 		}
 	}
-	
+
 	</script>
 </head>
 
@@ -108,11 +108,11 @@
 				<h4 id="noticeForm" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="pres_login">
                     <div class="form-group">
-                        <label for="Username">Presentation ID:</label>
+                        <h3>Presentation ID</h3>
                         <input id="pres_id" class="form-control" placeholder="Enter presentation ID">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Presentation password: </label>
+                        <h3>Presentation password</h3>
                         <input id="pres_pass"  type="password" class="form-control" name="password" placeholder="Enter presentation password">
                     </div>
 					<span class="btn-group">
@@ -120,37 +120,37 @@
 					<input type="button" onclick="show('myPres')" value="My presentations" class="btn btn-default"/>
 					</span>
 				</form>
-					<a href="javascript:show('getKey');">How to get a presentation ID & Key?</a>
+					<a href="javascript:show('getKey');">How to get a presentation ID & password?</a>
             </div>
-    </section>	
-	
-	
+    </section>
+
+
 	<section id="getKey" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage"><br>
-          <h4>How to get a presentation ID & Key?</h4>
+          <h3>How to get a presentation ID & password?</h3>
 		  <ul>
 			<li>Open your presentation in a web browser</li>
 			<li>Open main meny and click 'Get presenter password'<br><img src="/app/remote/img/getkey.png"></li>
 			<li>After that the system will show you your presentation access credentials</li>
 		  </ul>
 		  <a href="javascript:show('slideLogin')">Go back</a>
-		 </div>	 
+		 </div>
 	</section>
-	
-	
+
+
 	<section id="myPres" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage"><br>
-          <h4>My presentations</h4>
+          <h3>My presentations</h3>
 			<table id="myPresTable" class="table" style="max-width: 100%">
 
 			</table>
 		  <a href="javascript:show('slideLogin')">Go back</a>
-		 </div>	 
+		 </div>
 	</section>
 
- 
+
 </body>
 
 </html>

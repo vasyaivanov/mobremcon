@@ -426,57 +426,10 @@ video#bgvid {
     background-size: cover;
 }
 
-@media screen and (max-device-width: 1024px) {
-        video#bgvid {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        min-width: 5%;
-        min-height:100%;
-        width: auto;
-        z-index: -100;
-        -webkit-transform: translateX(-50%) translateY(-50%);
-        transform: translateX(-50%) translateY(-50%);
-        background-size: cover;
-    }
-	
-	#sidebar-wrapper {
-		z-index: 1000;
-		position: fixed;
-		right: 0;
-		width: 250px;
-		height: 100%;
-		margin-right: -250px;
-		overflow-y: auto;
-		background: #222;
-		-webkit-transition: all 0.4s ease 0s;
-		-moz-transition: all 0.4s ease 0s;
-		-ms-transition: all 0.4s ease 0s;
-		-o-transition: all 0.4s ease 0s;
-		transition: all 0.4s ease 0s;
-		font-size: 1.3em
-	}
-	.uploadButton {
-	  position: absolute;
-	  top: 50%;
-	  left: 50%;
-	  transform: translateX(-50%) translateY(-50%);
-	  width: 250px;
-	  height: 50px;
-	  border-color: #4D68B6;
-	  font-weight: normal;
-	  vertical-align: middle;
-	  background: #00147C;
-	  color: #84A4E0;
-	  font-size: 1.3em;
-	}
-	
-	.mainLogo {
-		
-		font-size: 5em;
-	}
-
+.mainLogo {
+  font-size: 10vw;
 }
+
 
 .upload {
     margin: 30px auto;
@@ -544,6 +497,65 @@ table {
 }
 
 
+
+
+@media screen and (max-device-width: 1024px) {
+        video#bgvid {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 5%;
+        min-height:100%;
+        width: auto;
+        z-index: -100;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        background-size: cover;
+    }
+
+	#sidebar-wrapper {
+		z-index: 1000;
+		position: fixed;
+		right: 0;
+		width: 250px;
+		height: 100%;
+		margin-right: -250px;
+		overflow-y: auto;
+		background: #222;
+		-webkit-transition: all 0.4s ease 0s;
+		-moz-transition: all 0.4s ease 0s;
+		-ms-transition: all 0.4s ease 0s;
+		-o-transition: all 0.4s ease 0s;
+		transition: all 0.4s ease 0s;
+		font-size: 1.3em
+	}
+	.uploadButton {
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  transform: translateX(-50%) translateY(-50%);
+	  width: 250px;
+	  height: 50px;
+	  border-color: #4D68B6;
+	  font-weight: normal;
+	  vertical-align: middle;
+	  background: #00147C;
+	  color: #84A4E0;
+	  font-size: 1.3em;
+	}
+
+	.mainLogo {
+		font-size: 5em;
+	}
+
+  input {
+      font-size: 80px;
+   }
+
+   a {
+     font-size: 18px;
+   }
+}
 
 /*.uploadDialog {
     position: fixed;
