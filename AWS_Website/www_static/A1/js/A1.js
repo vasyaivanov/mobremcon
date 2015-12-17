@@ -364,8 +364,10 @@ function getPresentationKey() {
 	socket.emit('get-presentation-key', { sid: getCurrentHash()}, function(confirmation){
 		if(confirmation.key > 0) {
 			showHideMenu(true);
-			alert("Presentation ID: " + confirmation.id + "\n" + "Presenter password: " + confirmation.key);
-
+			//alert("Presentation ID: " + confirmation.id + "\n" + "Presenter password: " + confirmation.key);
+			$("#getPassResult").html("<b>Presentation ID:</b> " + confirmation.id + "<br>" + "<b>Presenter password:</b> " + confirmation.key);
+			$('#presPassOverlay').fadeIn(400);
+			
 		}
 	});
 }
@@ -588,6 +590,9 @@ $('#closeInsertVideoSlideOverlay').click(function () {
 });
 $('#closeHelpOverlay').click(function () {
     showHideHelpOverlay();
+});
+$('#closePassOverlay').click(function () {
+	$('#presPassOverlay').fadeOut(400);
 });
 $('#closeRenamePresentationOverlay').click(function () {
     showHideRenamePresentationOverlay();
