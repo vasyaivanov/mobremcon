@@ -382,6 +382,16 @@ input.renameSlide {
     text-shadow: 1px 1px #ffffff;
 }
 
+.remoteControlTitle {
+    font-size:12px;
+    margin-top: 0.01%;
+    position: absolute;
+    margin-right: 5%;
+    color: #000061;
+    opacity: 0.6;
+    text-shadow: 1px 1px #ffffff;
+}
+
 .center {
     text-align: center;
     margin-bottom: 4%;

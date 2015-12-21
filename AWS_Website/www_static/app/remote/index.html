@@ -101,7 +101,7 @@
 <body class='mainbackground'>
 
     <section id="slideLogin" class="login mainbackground allData">
-        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="col-xs-12 remoteTitle">PRE<span style='color:red'>Z</span>ERA</div>
 
         <div class="loginbody">
 				<!--h3>Sign In</h3-->
@@ -126,7 +126,7 @@
 
 
 	<section id="getKey" class="login mainbackground allData">
-        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="col-xs-12 remoteControlTitle">PRE<span style='color:red'>Z</span>ERA</div>
         <div class="simplePage"><br>
           <h3>How to get a presentation ID & password?</h3>
 		  <ul>
@@ -134,19 +134,19 @@
 			<li>Open main meny and click 'Get presenter password'<br><img src="/app/remote/img/getkey.png"></li>
 			<li>After that the system will show you your presentation access credentials</li>
 		  </ul>
-		  <a href="javascript:show('slideLogin')">Go back</a>
+			<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>
 		 </div>
 	</section>
 
 
 	<section id="myPres" class="login mainbackground allData">
-        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="col-xs-12 remoteControlTitle" remoteControlTitle>PRE<span style='color:red'>Z</span>ERA</div>
         <div class="simplePage"><br>
           <h3>My presentations</h3>
 			<table id="myPresTable" class="table" style="max-width: 100%">
 
 			</table>
-		  <a href="javascript:show('slideLogin')">Go back</a>
+			<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>
 		 </div>
 	</section>
 
