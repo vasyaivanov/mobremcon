@@ -30,7 +30,7 @@ var express = require('express')
 // AWS API config
 AWS.config.region = 'us-west-1';
 // Conf AWS S3
-var AWS_S3 = new AWS.S3({accessKeyId: 'AKIAJS3WIRCZVAXER3XQ',secretAccessKey: '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', region: 'us-west-1'});
+var AWS_S3 = new AWS.S3({accessKeyId: 'AKIAIBNEWFLTKT5CY42Q',secretAccessKey: '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', region: 'us-west-1'});
 module.exports.AWS_S3 = AWS_S3;
 
 // Create a new bucket for domain
