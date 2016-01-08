@@ -16,6 +16,25 @@ body {
     font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+#noticeForm{
+    position:fixed;
+    margin-top:6px;
+}
+
+
+.backLink{
+    float:left;
+    position:fixed; 
+    top:0px;
+    left:5px;
+    color:black;
+    text-decoration:underline;
+}
+
+.remoteTitle{
+    text-align: center;
+}
+
 .text-vertical-center {
     display: table-cell;
     text-align: center;

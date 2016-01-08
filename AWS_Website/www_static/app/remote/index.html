@@ -58,7 +58,7 @@
 				showError("Enter presentation ID");
 			}
 			else if($("#pres_pass").val() == "") {
-				showError("Enter presentation key");
+				showError("Enter presentation password");
 			}
 			else {
 				socket.emit("check-presentation-key", {id: $("#pres_id").val(), key: $("#pres_pass").val()} , function(data) {
@@ -126,7 +126,8 @@
 
 
 	<section id="getKey" class="login mainbackground allData">
-        <div class="col-xs-12 remoteControlTitle">PRE<span style='color:red'>Z</span>ERA</div>
+		<center>
+        <div class="col-xs-12 remoteTitle">PRE<span style='color:red'>Z</span>ERA</div>
         <div class="simplePage"><br>
           <h3>How to get a presentation ID & password?</h3>
 		  <ul>
@@ -134,20 +135,25 @@
 			<li>Open main meny and click 'Get presenter password'<br><img src="/app/remote/img/getkey.png"></li>
 			<li>After that the system will show you your presentation access credentials</li>
 		  </ul>
-			<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>
+		  	<a href="javascript:show('slideLogin')" class="backLink">Back to Home</a>
+			<!--<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>-->
 		 </div>
+		</center>
 	</section>
 
 
 	<section id="myPres" class="login mainbackground allData">
-        <div class="col-xs-12 remoteControlTitle" remoteControlTitle>PRE<span style='color:red'>Z</span>ERA</div>
+		<center>
+        <div class="col-xs-12 remoteTitle" remoteControlTitle>PRE<span style='color:red'>Z</span>ERA</div>
         <div class="simplePage"><br>
           <h3>My presentations</h3>
 			<table id="myPresTable" class="table" style="max-width: 100%">
 
 			</table>
-			<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>
+			<!--<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>-->
+			<a href="javascript:show('slideLogin')" class="backLink">Back to Home</a>
 		 </div>
+		</center>
 	</section>
 
 
