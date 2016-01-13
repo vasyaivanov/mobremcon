@@ -100,6 +100,16 @@
 
 <body class='mainbackground'>
 
+	<!-- Navigation -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li><a href="javascript:show('getKey');" onclick="show('getKey');" data-index="one" class="menuLink">How to get id and password?</a></li>
+			<li><a href="javascript:show('myPres');" onclick="show('myPres')" data-index="one" class="menuLink">My Presentations</a></li>
+        </ul>
+    </nav>
+
     <section id="slideLogin" class="login mainbackground allData">
         <div class="col-xs-12 remoteTitle">PRE<span style='color:red'>Z</span>ERA</div>
 
@@ -108,11 +118,11 @@
 				<h4 id="noticeForm" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="pres_login">
                     <div class="form-group">
-                        <h3>Presentation ID</h3>
+                        <div class="textFieldTitle">Presentation ID</div>
                         <input id="pres_id" class="form-control" placeholder="Enter presentation ID" style="text-transform: lowercase;">
                     </div>
                     <div class="form-group">
-                        <h3>Presentation password</h3>
+                        <div class="textFieldTitle">Presentation password</div>
                         <input id="pres_pass"  type="password" class="form-control" name="password" placeholder="Enter presentation password">
                     </div>
 					<span class="btn-group">
