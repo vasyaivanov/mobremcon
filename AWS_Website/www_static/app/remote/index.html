@@ -118,34 +118,32 @@
 				<h4 id="noticeForm" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="pres_login">
                     <div class="form-group">
-                        <input id="pres_id" class="login-form-control" placeholder="Enter presentation ID" style="text-transform: lowercase;">
+                        <input id="pres_id" class="login-form-control" placeholder="enter presentation ID" style="text-transform: lowercase;">
                     </div>
                     <div class="form-group">
-                        <input id="pres_pass" type="password" class="login-form-control" name="password" placeholder="Enter presentation password">
+                        <input id="pres_pass" type="password" class="login-form-control" name="password" placeholder="enter presentation password">
                     </div>
 					<span class="btn-group" id="buttonGroup">
                     	<input type="button" id="pres_login_button" value="Open presentation" class="btn btn-default">
 					</span>
+					<center style="margin-top:10px"><a href="javascript:showView('getKey');">How to get a presentation ID &amp; password?</a></center>
 				</form>
-					<center><a href="javascript:showView('getKey');">How to get a presentation ID &amp; password?</a></center>
             </div>
     </section>
 
 
 	<section id="getKey" class="login mainbackground allData">
-		<center>
         <div class="col-xs-12 remoteTitle">PRE<span style='color:red'>Z</span>ERA</div>
-        <div class="simplePage"><br>
-          <h3>How to get a presentation ID & password?</h3>
+        <div class="simplePage">
+          <h3 style='text-align:center; margin-top:0px;'>How to get a presentation ID & password?</h3>
 		  <ul>
 			<li>Open your presentation in a web browser</li>
 			<li>Open main meny and click 'Get presenter password'<br><img src="/app/remote/img/getkey.png"></li>
 			<li>After that the system will show you your presentation access credentials</li>
 		  </ul>
-		  	<a href="javascript:showView('slideLogin')" class="backLink">Back to Home</a>
+		  	<a href="javascript:showView('slideLogin')" class="backLink">&#9664; Back to Home.</a>
 			<!--<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>-->
 		 </div>
-		</center>
 	</section>
 
 
@@ -158,7 +156,7 @@
 
 			</table>
 			<!--<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>-->
-			<a href="javascript:showView('slideLogin')" class="backLink">Back to Home</a>
+			<a href="javascript:showView('slideLogin')" class="backLink">&#9664; Back to Home.</a>
 		 </div>
 		</center>
 	</section>
