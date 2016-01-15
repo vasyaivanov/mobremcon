@@ -35,6 +35,8 @@ $(function() {
         });
     });
 
+
+
     // Menu visualization
     $(".allData").hide();
   	if(window.location.hash) {
@@ -50,6 +52,7 @@ $(function() {
   	else {
   		$(".mainData").show();
   	}
+
 
     $( ".loginUser" ).click(function() {
         $(".allData").hide();
@@ -72,10 +75,15 @@ $(function() {
     });
 
 
+
     $( ".menuLink" ).click(function() {
-  		$(".allData").hide();
-  		$(".mainData").show();
+      if(!$(this).hasClass('appMenuLink')){
+        $(".allData").hide();
+    		$(".mainData").show();
+      }
     });
+
+
 
     //show sign up hide everything else
     $( ".signUpUser" ).click(function() {

@@ -9,27 +9,27 @@
     <meta name="keywords" content="web presentations, web presentation, presentation, powerpoint, free, free online presentation, free presentation, slide, slides, free slides, powerpoint replacement">
 	<meta name="viewport" content="width=device-width, initial-scale=0.9">
     <!-- Bootstrap Core CSS -->
-    <link href="/new_template/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../new_template/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <!-- Custom CSS -->
-    <link href="/new_template/css/stylish-portfolio.css" rel="stylesheet">
+    <link href="../../new_template/css/stylish-portfolio.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="/new_template/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../../new_template/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 
     <!-- jQuery -->
-    <script src="/new_template/js/jquery.js"></script>
-    <script src="/new_template/js/customJs.js"></script>
+    <script src="../../new_template/js/jquery.js"></script>
+    <script src="../../new_template/js/customJs.js"></script>
 
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="/new_template/js/bootstrap.min.js"></script>
+    <script src="../../new_template/js/bootstrap.min.js"></script>
 
-    <script src="/js/client.min.js"></script>
-    <script src="/js/jquery-ui.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="../../js/client.min.js"></script>
+    <script src="../../js/jquery-ui.min.js"></script>
+    <script src="https://www.prezera.com/socket.io/socket.io.js"></script>
 	<!--script src="http://jsconsole.com/remote.js?F1F7FCE6-BC71-4006-85A9-571BDB8DBB01"></script-->
 	<script>
 	$( document ).ready(function() {
@@ -88,7 +88,7 @@
 		}
 	});
 
-	function show(id) {
+	function showView(id) {
 		if(typeof id != 'undefined') {
 			$(".alldata").hide();
 			$("#" + id).show();
@@ -105,32 +105,29 @@
     <nav id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li><a href="javascript:show('getKey');" onclick="show('getKey');" data-index="one" class="menuLink">How to get id and password?</a></li>
-			<li><a href="javascript:show('myPres');" onclick="show('myPres')" data-index="one" class="menuLink">My Presentations</a></li>
+            <li><a onclick="showView('getKey');" data-index="one" class="menuLink appMenuLink">How to get id and password?</a></li>
+			<li><a onclick="showView('myPres')" data-index="one" class="menuLink appMenuLink">My Presentations</a></li>
         </ul>
     </nav>
 
     <section id="slideLogin" class="login mainbackground allData">
         <div class="col-xs-12 remoteTitle">PRE<span style='color:red'>Z</span>ERA</div>
 
-        <div class="loginbody">
+			<div class="loginbody">
 				<!--h3>Sign In</h3-->
 				<h4 id="noticeForm" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="pres_login">
                     <div class="form-group">
-                        <div class="textFieldTitle">Presentation ID</div>
-                        <input id="pres_id" class="form-control" placeholder="Enter presentation ID" style="text-transform: lowercase;">
+                        <input id="pres_id" class="login-form-control" placeholder="Enter presentation ID" style="text-transform: lowercase;">
                     </div>
                     <div class="form-group">
-                        <div class="textFieldTitle">Presentation password</div>
-                        <input id="pres_pass"  type="password" class="form-control" name="password" placeholder="Enter presentation password">
+                        <input id="pres_pass" type="password" class="login-form-control" name="password" placeholder="Enter presentation password">
                     </div>
-					<span class="btn-group">
-                    <input type="button" id="pres_login_button" value="Open presentation" class="btn btn-default"/>
-					<input type="button" onclick="show('myPres')" value="My presentations" class="btn btn-default"/>
+					<span class="btn-group" id="buttonGroup">
+                    	<input type="button" id="pres_login_button" value="Open presentation" class="btn btn-default">
 					</span>
 				</form>
-					<a href="javascript:show('getKey');">How to get a presentation ID & password?</a>
+					<center><a href="javascript:showView('getKey');">How to get a presentation ID &amp; password?</a></center>
             </div>
     </section>
 
@@ -145,7 +142,7 @@
 			<li>Open main meny and click 'Get presenter password'<br><img src="/app/remote/img/getkey.png"></li>
 			<li>After that the system will show you your presentation access credentials</li>
 		  </ul>
-		  	<a href="javascript:show('slideLogin')" class="backLink">Back to Home</a>
+		  	<a href="javascript:showView('slideLogin')" class="backLink">Back to Home</a>
 			<!--<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>-->
 		 </div>
 		</center>
@@ -161,7 +158,7 @@
 
 			</table>
 			<!--<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>-->
-			<a href="javascript:show('slideLogin')" class="backLink">Back to Home</a>
+			<a href="javascript:showView('slideLogin')" class="backLink">Back to Home</a>
 		 </div>
 		</center>
 	</section>
