@@ -1,8 +1,8 @@
 <html>
 <head>
 <script src="/A1/js/webrtc/RTCMultiConnection.js"></script>
-<script src="/A1/js/webrtc/firebase.js"></script>
 <script src="/A1/js/webrtc/RecordRTC.js"></script>
+<script src="/A1/js/webrtc/firebase.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <style>
@@ -90,8 +90,7 @@ $( document ).ready(function() {
 				h2 = document.createElement('p');
 				h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>';
 				$( "#video_result" ).append(h2);
-				//window.open(URL.createObjectURL(blob.video));
-				moderator.saveToDisk(blob.video, parent.document.title + '.webm');
+				moderator.saveToDisk(blob.video, parent.document.title + '.mp4');
 			});
 
 			moderator.streams.stop();
@@ -207,11 +206,11 @@ $( document ).ready(function() {
 
 	window.addEventListener("message", function(event) {
 		var addonMessage = event.data;
-	
-		
+
+
 		if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
-		
-		
+
+
 		if(addonMessage.enabledScreenCapturing === true) {
 			var new_url = document.URL + '&reload=1'
 			location.href = new_url;
@@ -242,7 +241,7 @@ function reloadFFPlugin() {
 function stopRec() {
 	$('#recording', window.parent.document).animate({ "width": "0", "clear": "both" },1);
 	setTimeout(function(){ $("#stopRecording").click() }, 500);
-	
+
 }
 
 </script>
