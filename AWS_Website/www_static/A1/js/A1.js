@@ -111,15 +111,14 @@ function hideNavigationButtons(){
 function toggleMainWindow() {
 	if(isCommentsOpen || isVideoChatOn){
 		//reduce main window
-    $(".rsContainer").css("float", "right");
-		$(".rsContainer").animate({ "width": "80%", "clear": "both" },300);
-		$("#navButtons").animate({"left":"10%"},300);
+		$(".rsContainer").animate({ "width": "80%", "clear":"both"},1, function() {		$(".rsContainer").css("float", "right");});
+		$("#navButtons").animate({"left":"10%"},1);
 	}
 
 	if( (!isCommentsOpen && !isVideoChatOn) ){
 		//put main window back to full size
-    $(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-		$("#navButtons").animate({"left":"0%"},300);
+    $(".rsContainer").animate({"width":"100%", "clear":"both"},1);
+		$("#navButtons").animate({"left":"0%"},1);
 	}
 	resizeCanvas();
 }
