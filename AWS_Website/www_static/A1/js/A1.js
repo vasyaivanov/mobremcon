@@ -7,7 +7,7 @@ var presentPassword;
 if(localStorage.getItem("presentationsLocal")) {
 	var presentations = JSON.parse(localStorage.getItem("presentationsLocal"));
 	presentPassword = (presentations[currentHash]) ? (presentations[currentHash]) : 0;
-	
+
 	if(presenter == 0 && presentPassword > 0) {
 		$("#backButtonMobile").show();
 	}
@@ -111,19 +111,15 @@ function hideNavigationButtons(){
 function toggleMainWindow() {
 	if(isCommentsOpen || isVideoChatOn){
 		//reduce main window
-        $(".rsContainer").css("float", "right");
-		$(".rsContainer").animate({ "width": "77%", "clear": "both" },300);
-        //$(".rsContainer").css({ "width": "77%", "clear": "both" });
-		$(".navButtonPrev").animate({"left":"25%"},300);
-		//$(".navButton").animate({"padding-top":"15%"},300);
+    $(".rsContainer").css("float", "right");
+		$(".rsContainer").animate({ "width": "80%", "clear": "both" },300);
+		$("#navButtons").animate({"left":"10%"},300);
 	}
 
 	if( (!isCommentsOpen && !isVideoChatOn) ){
 		//put main window back to full size
-        $(".rsContainer").animate({"width":"100%", "clear":"both"},300);
-        //$(".rsContainer").css({ "width": "100%", "clear": "both" });
-		$(".navButtonPrev").animate({"left":"0%"},300);
-		//$(".navButton").animate({"padding-top":"30%"},300);
+    $(".rsContainer").animate({"width":"100%", "clear":"both"},300);
+		$("#navButtons").animate({"left":"0%"},300);
 	}
 	resizeCanvas();
 }
@@ -367,7 +363,7 @@ function getPresentationKey() {
 			//alert("Presentation ID: " + confirmation.id + "\n" + "Presenter password: " + confirmation.key);
 			$("#getPassResult").html("<b>Presentation ID:</b> " + confirmation.id + "<br>" + "<b>Presenter password:</b> " + confirmation.key);
 			$('#presPassOverlay').fadeIn(400);
-			
+
 		}
 	});
 }
@@ -819,7 +815,7 @@ $( window ).load(function() {
             slider.appendSlide(slide_html);
         } else { // !staticSlite
             var slide_html = "<div style='text-align:center; position: relative' id=slide class='rsContent'>"
-						           + "<img src='" + slide_html_path + "' height='100% width='76%' style='position: absolute;left: 0px;  right:0;     margin-left:auto;     margin-right:auto;'>";
+						           + "<img src='" + slide_html_path + "' height=\"100%\" width=\"76%\" style=\"position: absolute;left: 0px;  right:0; margin-left:auto; margin-right:auto;\">";
 					               //+ "<div class='rsTmb'>"
 					               //+ "<h5>SLIDE" + slide + "</h5>"
 						           //+ "     <span>Slide " + slide + " here</span>"
@@ -993,4 +989,3 @@ function getClearUrl() {
     var url = [location.protocol, '//', location.host, location.pathname].join('');
     return url;
 }
-
