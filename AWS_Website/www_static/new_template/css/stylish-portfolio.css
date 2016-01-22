@@ -499,12 +499,21 @@ input.renameSlide {
 
 .loginbody {
     position: fixed;
-    top: 10%;
-    left: 15%;
-    width: 75%;
+    top: 20%;
+    left: 30%;
+    width: 35%
     /* top: 50%; */
     /* left: 50%; */
     /* transform: translateX(-50%) translateY(-50%); */
+}
+
+#loginEmailFormGroup {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#loginPasswordFormGroup {
+    margin-bottom: 10px;
 }
 
 form {
