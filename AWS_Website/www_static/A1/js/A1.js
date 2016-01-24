@@ -814,7 +814,7 @@ $( window ).load(function() {
             slider.appendSlide(slide_html);
         } else { // !staticSlite
             var slide_html = "<div style='text-align:center; position: relative' id=slide class='rsContent'>"
-						           + "<img src='" + slide_html_path + "' height=\"100%\" style=\"position: absolute;left: 0px;  right:0; margin-left:auto; margin-right:auto;\">";
+						           + "<img id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "' style=\"position: absolute;left: 0px;  right:0; margin-left:auto; margin-right:auto;\">";
 					               //+ "<div class='rsTmb'>"
 					               //+ "<h5>SLIDE" + slide + "</h5>"
 						           //+ "     <span>Slide " + slide + " here</span>"
@@ -822,6 +822,8 @@ $( window ).load(function() {
             slider.appendSlide(slide_html);
         }
     }
+
+		var tSlider = $(".royalSlider").data('royalSlider');
 
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
@@ -869,6 +871,8 @@ $( window ).load(function() {
             default:
         }
     });
+
+		resizeImages();
 
   if (!isFile) {
       //socket = io.connect(document.location.hostname + ':' + location.port);
@@ -987,4 +991,25 @@ $( window ).load(function() {
 function getClearUrl() {
     var url = [location.protocol, '//', location.host, location.pathname].join('');
     return url;
+}
+
+function resizeImages() {
+		if($("#actualSlide_1")[0].naturalWidth == 0) {
+			setTimeout(function() {resizeImages()},1000);
+		}
+		else {
+		for(i = 1; i<= number_of_slides ;i ++) {
+			var image = $("#actualSlide_" + i);
+			var imgW = image[0].naturalWidth;
+			var imgH = image[0].naturalHeight;
+			var ratio = imgW/imgH;
+
+			if(ratio > 1.4) {
+				image.animate({ "width": "100%", "clear":"both"},300);
+			}
+			else {
+				image.animate({ "height": "100%", "clear":"both"},300);
+			}
+	  }
+	}
 }
