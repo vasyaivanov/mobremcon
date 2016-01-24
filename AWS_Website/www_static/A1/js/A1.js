@@ -38,6 +38,14 @@ socket.on('connect', function (data) {
     console.log('Connected: ');
 });
 
+socket.on("disconnect", function(err) {
+	console.log("Lost connection");
+});
+
+
+socket.on("reconnect", function(err) {
+	console.log("Reconnected");
+});
 
 function isMobile() {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -1005,6 +1013,7 @@ function resizeImages() {
 			var ratio = imgW/imgH;
 
 			if(ratio > 1.4) {
+				image.animate({ "height": "100%", "clear":"both"},300);
 				image.animate({ "width": "100%", "clear":"both"},300);
 			}
 			else {
