@@ -828,6 +828,9 @@ $( window ).load(function() {
 						           //+ "     <span>Slide " + slide + " here</span>"
 						           //+ "</div> </div>";
             slider.appendSlide(slide_html);
+						// Resize images
+						var resizer = new Resizer({imgid:slide});
+						resizer.checkImage();
         }
     }
 
@@ -880,7 +883,6 @@ $( window ).load(function() {
         }
     });
 
-		resizeImages();
 
   if (!isFile) {
       //socket = io.connect(document.location.hostname + ':' + location.port);
@@ -1001,24 +1003,44 @@ function getClearUrl() {
     return url;
 }
 
-function resizeImages() {
-		if($("#actualSlide_1")[0].naturalWidth == 0) {
-			setTimeout(function() {resizeImages()},1000);
+var Resizer = function (params) {
+	this.params = params;
+	this.count=0;
+	this.maxattempts = 10;
+	this.timeout = 0;
+	this.checkImage = function() {
+		var self = this;
+		self.count++;
+		self.image = $("#actualSlide_" + self.params.imgid);
+		if(typeof self.image[0] == "undefined") {
+			//console.log("Image" + self.params.imgid + " not loaded. Running again. ");
+			if(self.count < self.maxattempts) {
+				self.timeout = setTimeout(function(){self.checkImage()},1000);
+			}
 		}
 		else {
-		for(i = 1; i<= number_of_slides ;i ++) {
-			var image = $("#actualSlide_" + i);
-			var imgW = image[0].naturalWidth;
-			var imgH = image[0].naturalHeight;
-			var ratio = imgW/imgH;
-
-			if(ratio > 1.4) {
-				image.animate({ "height": "100%", "clear":"both"},300);
-				image.animate({ "width": "100%", "clear":"both"},300);
+			//console.log("Image found, getting the actual image size.");
+			if(self.image[0].naturalWidth == 0) {
+				if(self.count < self.maxattempts) {
+					self.timeout = setTimeout(function(){self.checkImage()},1000);
+				}
 			}
 			else {
-				image.animate({ "height": "100%", "clear":"both"},300);
+				// If everything is ok - resize image
+				self.image.imgW = self.image[0].naturalWidth;
+				self.image.imgH = self.image[0].naturalHeight;
+				self.ratio = self.image.imgW/self.image.imgH;
+
+				if(self.ratio > 1.4) {
+					self.image.animate({ "height": "100%", "clear":"both"},300);
+					self.image.animate({ "width": "100%", "clear":"both"},300);
+				}
+				else {
+					self.image.animate({ "height": "100%", "clear":"both"},300);
+				}
 			}
-	  }
+		}
 	}
+
+
 }
