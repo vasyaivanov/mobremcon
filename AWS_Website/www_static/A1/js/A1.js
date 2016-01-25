@@ -119,15 +119,17 @@ function hideNavigationButtons(){
 function toggleMainWindow() {
 	if(isCommentsOpen || isVideoChatOn){
 		//reduce main window
-		$(".rsContainer").animate({ "width": "80%", "clear":"both"},1, function() {		$(".rsContainer").css("float", "right");});
-		$("#navButtons").animate({"left":"10%"},1);
+		//"clear":"both",
+		$(".rsContainer").css({"width": "80%", "float": "right"});
+		$("#navButtons").css({"left":"10%"});
 	}
 
 	if( (!isCommentsOpen && !isVideoChatOn) ){
 		//put main window back to full size
-    $(".rsContainer").animate({"width":"100%", "clear":"both"},1);
-		$("#navButtons").animate({"left":"0%"},1);
+    $(".rsContainer").css({"width":"100%", "float":"center"});
+		$("#navButtons").css({"left":"0%"});
 	}
+
 	resizeCanvas();
 }
 
@@ -778,7 +780,7 @@ $( window ).load(function() {
         slidesSpacing: 0,
         loop: false,
         loopRewind: true,
-        numImagesToPreload: 999,
+        numImagesToPreload: number_of_slides,
         video: {
             autoHideArrows: true,
             autoHideControlNav: false,
@@ -821,12 +823,11 @@ $( window ).load(function() {
 					       + "</div> </div>";
             slider.appendSlide(slide_html);
         } else { // !staticSlite
-            var slide_html = "<div style='text-align:center; position: relative' id=slide class='rsContent'>"
-						           + "<img id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "' style=\"position: absolute;left: 0px;  right:0; margin-left:auto; margin-right:auto;\">";
-					               //+ "<div class='rsTmb'>"
-					               //+ "<h5>SLIDE" + slide + "</h5>"
-						           //+ "     <span>Slide " + slide + " here</span>"
-						           //+ "</div> </div>";
+            var slide_html = "<div id='slide' class='rsContent'>"
+						           + "<img class=\"rsImg\" id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "' style=\"display: block; position: absolute;left: 0px;  right:0; margin-left:auto; margin-right:auto;\">"
+					             + "</div>";
+
+
             slider.appendSlide(slide_html);
 						// Resize images
 						var resizer = new Resizer({imgid:slide});
@@ -1026,18 +1027,12 @@ var Resizer = function (params) {
 				}
 			}
 			else {
+				if(self.params.imgid == number_of_slides) {
+					$("#loadingPage").hide();
+				}
 				// If everything is ok - resize image
-				self.image.imgW = self.image[0].naturalWidth;
-				self.image.imgH = self.image[0].naturalHeight;
-				self.ratio = self.image.imgW/self.image.imgH;
-
-				if(self.ratio > 1.4) {
-					self.image.animate({ "height": "100%", "clear":"both"},300);
-					self.image.animate({ "width": "100%", "clear":"both"},300);
-				}
-				else {
-					self.image.animate({ "height": "100%", "clear":"both"},300);
-				}
+				self.image.animate({ "height": self.image[0].height * 100 / window.innerHeight + "%", "clear":"both"},300);
+				self.image.animate({ "width": self.image[0].width * 100 / window.innerWidth + "%", "clear":"both"},300);
 			}
 		}
 	}
