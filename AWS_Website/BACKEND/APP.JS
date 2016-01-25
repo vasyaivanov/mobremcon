@@ -30,7 +30,7 @@ var express = require('express')
 // AWS API config
 AWS.config.region = 'us-west-1';
 // Conf AWS S3
-var AWS_S3 = new AWS.S3({accessKeyId: 'AKIAIBNEWFLTKT5CY42Q',secretAccessKey: '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', region: 'us-west-1'});
+var AWS_S3 = new AWS.S3({accessKeyId: 'AKIAIGX33XUYUNICCJCQ',secretAccessKey: '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', region: 'us-west-1'});
 module.exports.AWS_S3 = AWS_S3;
 
 // Create a new bucket for domain
@@ -650,7 +650,7 @@ app.use(function (req, res, next) {
 					var hashPath = path.join(wwwSlites, hash);
 					console.log('Downloading presentation from: ', hashPath);
 					var supportUplExtensions = [".ppt", ".pptx"];
-					
+
 					// Get File from Amazon S3
 					AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: hash}, function(err, data) {
 					  data.Contents.forEach(function(content) {
@@ -659,7 +659,7 @@ app.use(function (req, res, next) {
 						}
 					  });
 					});
-					
+
 				} else {                                                    // all other files from www_static folder
 					console.log('Arbitrary hash file: ' + afterHash);
 					var fileOptions = { lastModified: true, maxAge: 0 };
@@ -1033,7 +1033,7 @@ slideCheckPresenter = function(hashId, currentUserId , callback) {
 					(doc.slidesNum > 0) ? doc.slidesNum : 1, // [8] Num of slides
 					(doc.domainSet) ? 1 : 0, // [9] Is domain set for this account?
 					(doc.presentationKey) ? doc.presentationKey : 0 //[10] Access key for presentation
-				); 
+				);
 			} else {
 				callback(0,0,"","", 0, "");
 			}
@@ -1256,7 +1256,7 @@ function getS3fileUrl(path) {
 
 
 function deleteS3path(path) {
-	
+
 	AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: path}, function(err, data) {
 	  params = {Bucket: AWS_S3_BUCKET};
 	  params.Delete = {};
