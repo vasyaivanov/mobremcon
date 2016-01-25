@@ -119,17 +119,15 @@ function hideNavigationButtons(){
 function toggleMainWindow() {
 	if(isCommentsOpen || isVideoChatOn){
 		//reduce main window
-		//"clear":"both",
-		$(".rsContainer").css({"width": "80%", "float": "right"});
+		$("#video-gallery").animate({"width": "80%"},300);
 		$("#navButtons").css({"left":"10%"});
 	}
 
 	if( (!isCommentsOpen && !isVideoChatOn) ){
 		//put main window back to full size
-    $(".rsContainer").css({"width":"100%", "float":"center"});
+    $("#video-gallery").animate({"width":"100%"},300);
 		$("#navButtons").css({"left":"0%"});
 	}
-
 	resizeCanvas();
 }
 
@@ -705,7 +703,7 @@ if(!navigator.mozGetUserMedia && !isChrome){
 
 var _channelHash = "9WDXH6OH-6K73NMI";
 
-window.onresize = function () {
+/*window.onresize = function () {
     setTimeout(function(){
         $( "#video-gallery" ).width("100%");
         $( "#video-gallery" ).height("100%");
@@ -715,7 +713,7 @@ window.onresize = function () {
         //scaleVideos();
         //resizeCanvas();
     }, 60);
-};
+};*/
 
 function updateTitle() {
     var newTitle = "";
@@ -824,7 +822,7 @@ $( window ).load(function() {
             slider.appendSlide(slide_html);
         } else { // !staticSlite
             var slide_html = "<div id='slide' class='rsContent'>"
-						           + "<img class=\"rsImg\" id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "' style=\"display: block; position: absolute;left: 0px;  right:0; margin-left:auto; margin-right:auto;\">"
+						           + "<img class=\"rsImg\" id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "'>"
 					             + "</div>";
 
 
