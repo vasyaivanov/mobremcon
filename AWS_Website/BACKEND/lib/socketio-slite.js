@@ -358,7 +358,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
       	socket.on('notes-server', function (data) {
-
+          console.log(data);
       		var slideId = data.slideId.replace(/[^a-zA-Z0-9]/g,"");
       		var slidePath = www_dir + slitesDir + '/' + slideId + '/';
       		var tmpNote = userSession.userAuth ? 0 : 1;
@@ -367,38 +367,37 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		}
       		var currentUserId = userSession.currentUserId;
 
-      	    if(fs.existsSync(slidePath) == true) {
-      			if(currentUserId && data.slideId) {
+          module.parent.exports.slideCheckPresenter(data.slideId, currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
+      	    if(sfound == 1) {
       				module.parent.exports.NoteScheme.find({uid : currentUserId, sid: slideId }, function (err, docs) {
-      					if (!docs.length){
-							if(LOG_GENERAL) {
-								console.log('Inserting new note...');
-								console.log("Current user" + currentUserId);
-							}
+    					if (!docs.length) {
+  							if(LOG_GENERAL) {
+  								console.log('Inserting new note...');
+  								console.log("Current user" + currentUserId);
+  							}
 
-      						var note = new module.parent.exports.NoteScheme({uid: currentUserId,sid: slideId, note: data.noteText, tmp: tmpNote});
-      						note.save(function(err, saved) {
-      								if(err) console.error('Can\'t insert a new note: ' + err);
-      							});
-      					}
-      					else {
-      						module.parent.exports.NoteScheme.update({ uid : currentUserId, sid: slideId }, {$set: { note: data.noteText, tmp: tmpNote, updated: Date.now()}}, {upsert: false},
-      							function (err, numAffected) {
-									if(LOG_GENERAL) {
-										if(numAffected.nModified == 1) {console.log("Updated rows: " + numAffected)}
-									}
-      							}
-      						);
-      					}
-      					if(data.init == 1 && docs.length) {
-							if(LOG_GENERAL) {
-								console.log("Notes initializing, returning note...");
-							}
-      						socket.emit('notes-client', {slideId: slideId, noteText: docs[0].note});
-      					}
-      				});
-      			}
-      		}
+    						var note = new module.parent.exports.NoteScheme({uid: currentUserId,sid: slideId, note: data.noteText, tmp: tmpNote});
+    						note.save(function(err, saved) {
+    								if(err) console.error('Can\'t insert a new note: ' + err);
+    						});
+        				}
+        				else {
+        						module.parent.exports.NoteScheme.update({ uid : currentUserId, sid: slideId }, {$set: { note: data.noteText, tmp: tmpNote, updated: Date.now()}}, {upsert: false},
+          						function (err, numAffected) {
+    									  if(LOG_GENERAL) {
+    										  if(numAffected.nModified == 1) {console.log("Updated rows: " + numAffected)}
+    									  }
+          					});
+        				}
+        				if(data.init == 1 && docs.length) {
+    							if(LOG_GENERAL) {
+    								console.log("Notes initializing, returning note...");
+    							}
+        					socket.emit('notes-client', {slideId: slideId, noteText: docs[0].note});
+        				}
+              });
+      		   }
+           });
           });
 
           socket.on('renameHash-server', function (data) {
@@ -931,7 +930,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 					}
 				}
 			});
-		});	
+		});
 
 		socket.on('check-presentation-key', function(data, callback){
 			// Errors: 1 - prese not found, 2 - wrong key, 3 - access granted
@@ -955,7 +954,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
  			});
 		});
 
-		
+
       }
     }
 
