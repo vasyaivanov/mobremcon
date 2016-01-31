@@ -263,18 +263,18 @@
     <section id="login" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
 
-        <div class="loginbody">
+        <div class="loginbodyWeb">
 				<h1>Sign In</h1>
 				<h4 id="loginError" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="signInForm">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
                     <div class="form-group" id="loginEmailFormGroup">
                         <label for="Username">Email</label>
-                        <input id="signinEmail" type="email" class="form-control" name="email" placeholder="Enter email">
+                        <input id="signinEmail" type="email" class="form-control loginTestInput" name="email" placeholder="Enter email">
                     </div>
                     <div class="form-group" id="loginPasswordFormGroup">
                         <label for="exampleInputPassword1">Password</label>
-                        <input id="signinPassword" type="password" class="form-control" name="password" placeholder="Password">
+                        <input id="signinPassword" type="password" class="form-control loginTestInput" name="password" placeholder="Password">
                     </div>
                     <input type="button" id="buttonSignIn" value="Sign In" class="btn btn-default"/>
                 </form>

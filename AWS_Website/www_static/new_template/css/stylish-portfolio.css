@@ -71,6 +71,11 @@ body {
     /* transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s; */
 }
 
+.loginTestInput{
+    height: 50px;
+    font-size: 18px;
+}
+
 #buttonGroup {
     position: relative;
     display: inline-block;
@@ -100,8 +105,14 @@ body {
     text-decoration:underline;
 }
 
+#howToGetPresentationId {
+    font-size: 20px;
+    padding-top: 30px;
+}
+
 .remoteTitle{
     text-align: center;
+    font-size: 30px;
 }
 
 .text-vertical-center {
@@ -229,11 +240,12 @@ hr.small {
 #sidebar-wrapper.active {
     right: 250px;
     width: 450px;
-    -webkit-transition: all 0.4s ease 0s;
-    -moz-transition: all 0.4s ease 0s;
-    -ms-transition: all 0.4s ease 0s;
-    -o-transition: all 0.4s ease 0s;
-    transition: all 0.4s ease 0s;
+    background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+        -webkit-transition: all 0.4s ease 0s;
+        -moz-transition: all 0.4s ease 0s;
+        -ms-transition: all 0.4s ease 0s;
+        -o-transition: all 0.4s ease 0s;
+        transition: all 0.4s ease 0s;
 }
 
 .toggle {
@@ -500,8 +512,18 @@ input.renameSlide {
 .loginbody {
     position: fixed;
     top: 20%;
-    left: 30%;
-    width: 35%
+    left: 20%;
+    width: 70%
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translateX(-50%) translateY(-50%); */
+}
+
+.loginbodyWeb {
+    position: fixed;
+    top: 20%;
+    left: 32%;
+    width: 40%
     /* top: 50%; */
     /* left: 50%; */
     /* transform: translateX(-50%) translateY(-50%); */
