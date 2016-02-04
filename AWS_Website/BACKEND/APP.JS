@@ -569,11 +569,11 @@ app.use(function (req, res, next) {
 			if(docU) {
 			  Slide.findOne({ $or: [{sid: customHash} ,  {scid: { $regex : new RegExp("^" + customHash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
 				  if(doc) {
-					req.url = "/" + doc.sid;
+					req.url = "/p/" + doc.sid;
 					next();
 				  }
 				  else {
-					res.send("Presentation was not found");
+					       res.send("Presentation was not found");
 				  }
 			  });
 			}

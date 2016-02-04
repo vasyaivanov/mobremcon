@@ -277,7 +277,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
 
             module.parent.exports.readSlideSize(hashDir, function (sizec) {
                 if(DEBUG) {console.log("Read slite size: " + sizec);}
-				var domainSet = (opt.domain == 1 && opt.domainSet == 1) ? 1 : 0;
+				        var domainSet = (opt.domain == 1 && opt.domainSet == 1) ? 1 : 0;
                 var addSlide = new opt.SlidesScheme({ uid: opt.userSessionId, sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides, domainSet: domainSet });
                 if(DEBUG) {
                     console.log("OTP: ");
@@ -295,21 +295,21 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                     }
 
 					// Move files to S3
-					moveFilesToS3(function() {
-						// Remove hash dir
-						opt.removeDirFunc(hashDir);
-						if (slite.getParams().opt.noSocketRet !== 1) {
-							if(DEBUG) {console.log("Socket emitting: slitePrepared");}
-							slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
-							if(DEBUG) {console.log("Socket emitted: slitePrepared");}
-						}
+      					moveFilesToS3(function() {
+      						// Remove hash dir
+      						opt.removeDirFunc(hashDir);
+      						if (slite.getParams().opt.noSocketRet !== 1) {
+      							if(DEBUG) {console.log("Socket emitting: slitePrepared");}
+      							slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
+      							if(DEBUG) {console.log("Socket emitted: slitePrepared");}
+      						}
 
-						if(DEBUG){console.log("Executing onSliteCompleteCallback");}
-							onSliteCompleteCallback && onSliteCompleteCallback(err);
-						if(DEBUG){console.log("onQueueCompleteCallback is executed");}
-					});
+                  if(DEBUG){console.log("Executing onSliteCompleteCallback");}
+                  onSliteCompleteCallback && onSliteCompleteCallback(err);
+                  if(DEBUG){console.log("onQueueCompleteCallback is executed");}
+                  });
                 });
-            });
+              });
 
                         /*slite.generateHtml(function (err) {
                             if (err) {
@@ -357,19 +357,47 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                         });*/
         }; // function finish() {
 
-		function moveFilesToS3(callback) {
-			var extExpToS3 = ['.jpeg','.jpg','.ppt', '.pptx'];
-			fs.readdirSync(hashDir).forEach(function(file,index){
-			  if(extExpToS3.indexOf(path.extname(file)) != -1) {
-				var fileBuffer = fs.readFileSync(hashDir + '/' + file);
-				opt.AWS_S3.putObject({Bucket: opt.AWS_S3_BUCKET, Key: slite.hashValue + '/' + file, Body: fileBuffer}, function(err, data) {
-					if (err) console.log(err)
-				 });
-			  }
-			});
-			callback();
-		} 
-		
+    		function moveFilesToS3(callback) {
+          var extExpToS3 = ['.jpeg','.jpg','.ppt', '.pptx'];
+    			fs.readdirSync(hashDir).forEach(function(file,index){
+    			  if(extExpToS3.indexOf(path.extname(file)) != -1) {
+    				var fileBuffer = fs.readFileSync(hashDir + '/' + file);
+    				opt.AWS_S3.putObject({Bucket: opt.AWS_S3_BUCKET, Key: slite.hashValue + '/' + file, Body: fileBuffer}, function(err, data) {
+    					if (err) console.log(err)
+    				 });
+    			  }
+    			});
+    			callback();
+
+
+          // S3 Upload control, future use
+          /*var totalNum = 0;
+          var files = {};
+
+          fs.readdirSync(hashDir).forEach(function(file,index){
+    			  if(extExpToS3.indexOf(path.extname(file)) != -1) {
+                files[totalNum] = file;
+                totalNum++;
+            }
+          });
+
+          move(0);
+
+          function move(f) {
+            if(f < totalNum) {
+              console.log(f);
+              var fileBuffer = fs.readFileSync(hashDir + '/' + files[f]);
+      				opt.AWS_S3.putObject({Bucket: opt.AWS_S3_BUCKET, Key: slite.hashValue + '/' + files[f], Body: fileBuffer}, function(err, data) {
+                move(f+1);
+      				});
+            }
+            else {
+              callback();
+            }
+          }*/
+
+    		}
+
         if (numSlides === 0 || isNaN(numSlides) || !numSlides) {
             fs.readFile(convertedHtml, 'utf8', function (err, data) {
                 if (err) {

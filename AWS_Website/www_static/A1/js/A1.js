@@ -306,9 +306,7 @@ function getCurrentHash() {
 }
 
 function downloadPresentation() {
-    /*console.log('Sending Request to Download Presentation in Hash: ' + getCurrentHash());
-    socket.emit('requestDownloadPresentation', { 'hash': getCurrentHash() });*/
-	window.open("/p/" + getCurrentHash() + '/download');
+		window.open("/p/" + getCurrentHash() + '/download');
     showHideMenu(true);
 }
 
