@@ -308,7 +308,7 @@ function getCurrentHash() {
 function downloadPresentation() {
     /*console.log('Sending Request to Download Presentation in Hash: ' + getCurrentHash());
     socket.emit('requestDownloadPresentation', { 'hash': getCurrentHash() });*/
-	window.open("/" + getCurrentHash() + '/download');
+	window.open("/p/" + getCurrentHash() + '/download');
     showHideMenu(true);
 }
 
@@ -803,7 +803,7 @@ $( window ).load(function() {
 		number_of_slides = 13;
     }
     for (var slide = 1; slide <= number_of_slides; ++slide) {
-        var slide_html_path = slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
+        var slide_html_path = '/p' + slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
         var slider = $(".royalSlider").data('royalSlider');
         if (staticSlite) // we did not do any replacement!
         {

@@ -285,39 +285,38 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('server-deleteSlide', function (data) {
-      		var hashPath = path.join(www_dir, slitesDir, data.sid);
-      		module.parent.exports.slideCheckPresenter(data.sid, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
-				if(spresenter == 1 && sfound == 1) {
-					module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
-						if (!err) {
-								module.parent.exports.deleteS3path(data.sid);
-								//module.parent.exports.deleteFolderRecursive(hashPath);
-								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
-									if(LOG_GENERAL) {
-										console.log('Deleting notes.....');
-									}
-									module.parent.exports.chatSchema.remove({ sid: data.sid }, function(err2) {
-										if(LOG_GENERAL) {
-											console.log('Deleting chats...');
-										}
-										socket.emit("client-deleteSlide", {sid: data.sid});
-									});
-								});
-						}
-						else {
-							if(LOG_GENERAL) {
-								console.log("Can't delete the slide" + data.sid);
-							}
-						}
-					});
-				}
-			});
-      	});
+        		var hashPath = path.join(www_dir, slitesDir, data.sid);
+        		module.parent.exports.slideCheckPresenter(data.sid, userSession.currentUserId , function(retData) {
+      				if(retData.isPresenter == 1 && retData.found == 1) {
+      					module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
+      						if (!err) {
+      								module.parent.exports.deleteS3path(data.sid);
+      								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
+      									if(LOG_GENERAL) {
+      										console.log('Deleting notes.....');
+      									}
+      									module.parent.exports.chatSchema.remove({ sid: data.sid }, function(err2) {
+      										if(LOG_GENERAL) {
+      											console.log('Deleting chats...');
+      										}
+      										socket.emit("client-deleteSlide", {sid: data.sid});
+      									});
+      								});
+      						}
+      						else {
+      							if(LOG_GENERAL) {
+      								console.log("Can't delete the slide" + data.sid);
+      							}
+      						}
+      					});
+      				}
+      			});
+      	  });
 
           socket.on('pollStarted', function (data) {
-			  if(LOG_COORD) {
-				console.log("JD: received from remote this data: " + JSON.stringify(data));
-			  }
+    			  if(LOG_COORD) {
+    				console.log("JD: received from remote this data: " + JSON.stringify(data));
+    			  }
               pollStatisticsArray = new Array();
               pollAnswerArray = new Array();
               pollAnswerArray = data.answers.split("\n");
@@ -331,10 +330,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('pollVote', function (data) {
-			  if(LOG_COORD) {
-				console.log("JD: received from remote this data: " + JSON.stringify(data));
-				console.log("MA: pollStatisticsArray on current vote: " + JSON.stringify(pollStatisticsArray));
-			  }
+      			  if(LOG_COORD) {
+      				console.log("JD: received from remote this data: " + JSON.stringify(data));
+      				console.log("MA: pollStatisticsArray on current vote: " + JSON.stringify(pollStatisticsArray));
+      			  }
               if (pollStatisticsArray.length == 0) // empty statistics, let the voting commence!
               {
                   pollAnswerArray = data.answers.split("\n");
@@ -347,14 +346,14 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('changeSlideRequest', function (data) {
-			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-				if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
-					if(LOG_COORD) {
-						console.log("JD: received changeSlideRequest from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
-					}
-					module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: data.slideID});
-				}
-			});
+      			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(retData) {
+      				if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+      					if(LOG_COORD) {
+      						console.log("JD: received changeSlideRequest from remote. data.my= "+data.my + " slide="+data.slide+" slideID="+data.slideID);
+      					}
+      					module.parent.exports.io.sockets.emit('changeSlideBroadcast', { hello: data.my, slide: data.slide, slideID: data.slideID});
+      				}
+      			});
           });
 
       	socket.on('notes-server', function (data) {
@@ -367,8 +366,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		}
       		var currentUserId = userSession.currentUserId;
 
-          module.parent.exports.slideCheckPresenter(data.slideId, currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
-      	    if(sfound == 1) {
+          module.parent.exports.slideCheckPresenter(data.slideId, currentUserId , function(retData) {
+      	    if(retData.found == 1) {
       				module.parent.exports.NoteScheme.find({uid : currentUserId, sid: slideId }, function (err, docs) {
     					if (!docs.length) {
   							if(LOG_GENERAL) {
@@ -401,173 +400,169 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('renameHash-server', function (data) {
-      		// db.slides.find({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: new Date(ISODate()-1*60000) } })
-      		var delPaypalTimeoutDate = new Date(new Date() - 10*60000).toISOString();
-      		module.parent.exports.SlideScheme.update({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: delPaypalTimeoutDate } }, { $set: { scid: null, paypalTmpExp: null, paypalPayed: 0 }}).exec();
-      		module.parent.exports.slideCheckPresenter(data.slideId, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed) {
-      				if(spresenter == 1 && sfound == 1) {
-      					if(data.newHashName.length > 30 || data.newHashName.length < 5) {
-      						socket.emit('renameHash-client', {slideId: data.slideId, available : 0});
-      					}
-      					else {
-							var domainClear = 'www.' + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0];
+        		var delPaypalTimeoutDate = new Date(new Date() - 10*60000).toISOString();
+        		module.parent.exports.SlideScheme.update({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: delPaypalTimeoutDate } }, { $set: { scid: null, paypalTmpExp: null, paypalPayed: 0 }}).exec();
+        		module.parent.exports.slideCheckPresenter(data.slideId, userSession.currentUserId , function(retData) {
+        				if(retData.isPresenter == 1 && retData.found == 1) {
+        					if(data.newHashName.length > 30 || data.newHashName.length < 5) {
+        						socket.emit('renameHash-client', {slideId: data.slideId, available : 0});
+        					}
+        					else {
+      							var domainClear = 'www.' + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0];
 
-							var searchParams = {};
-							searchParams.scid = { $regex : new RegExp("^" + data.newHashName + "$" , "i") };
-							searchParams.site = domainClear;
+      							var searchParams = {};
+      							searchParams.scid = { $regex : new RegExp("^" + data.newHashName + "$" , "i") };
+      							searchParams.site = domainClear;
 
-							if(userSession.restrictions.domain == 1 && userSession.domainSet == 1) {
-								searchParams.uid = userSession.currentUserId;
-							}
-							else {
-								searchParams.domainSet = 0;
-							}
-
-      						module.parent.exports.SlideScheme.findOne( searchParams , function (err, doc) {
-      							if (!doc){
-      								if(data.start == 1 && spayed == 1) {
-      									module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: spayed }}, function(errU,docsU) {
-      										if (!err) {
-      											socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: spayed, site: (userSession.domain) ? userSession.domain + "."  + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0] : ""});
-      										}
-      									});
-      								}
-									else {
-										socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: spayed});
-									}
+      							if(userSession.restrictions.domain == 1 && userSession.domainSet == 1) {
+      								searchParams.uid = userSession.currentUserId;
       							}
       							else {
-      								var available = 0;
-      								if(doc.sid == data.slideId) {available = 1;}
-      								socket.emit('renameHash-client', {slideId: data.slideId, available : available,  newHashName: data.newHashName});
+      								searchParams.domainSet = 0;
       							}
-      						});
-      					}
 
-      					//
-      				}
-      			}
-      		);
+        						module.parent.exports.SlideScheme.findOne( searchParams , function (err, doc) {
+        							if (!doc) {
+        								if(data.start == 1 && retData.payed == 1) {
+        									module.parent.exports.SlideScheme.update({  sid : data.slideId }, { $set: { scid: data.newHashName, paypalTmpExp: Date.now(), paypalPayed: retData.payed }}, function(errU,docsU) {
+        										if (!err) {
+        											socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: retData.payed, site: (userSession.domain) ? userSession.domain + "."  + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0] : ""});
+        										}
+        									});
+        								}
+      									else {
+      										socket.emit('renameHash-client', {slideId: data.slideId, available : 1, start: (data.start == 1) ? 1:0, newHashName: data.newHashName, payed: retData.payed});
+      									}
+        							}
+        							else {
+        								var available = 0;
+        								if(doc.sid == data.slideId) {available = 1;}
+        								socket.emit('renameHash-client', {slideId: data.slideId, available : available,  newHashName: data.newHashName});
+        							}
+        						});
+        					}
+        				}
+        		});
           });
 
           socket.on('deleteDomain-server', function (data) {
-			module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $unset: { domain: ""}}, function(errU,docsU) {
-				module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId }, {$set: { domainSet: 0, scid: null }}, {multi: true, upsert: false},
-					function (err, numAffected) {
-						if(LOG_GENERAL) {
-							console.log(numAffected);
-						}
-					}
-				);
-				socket.emit('deleteDomain-client', {removed : 1 });
-			});
-		  });
+      			module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $unset: { domain: ""}}, function(errU,docsU) {
+      				module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId }, {$set: { domainSet: 0, scid: null }}, {multi: true, upsert: false},
+      					function (err, numAffected) {
+      						if(LOG_GENERAL) {
+      							console.log(numAffected);
+      						}
+      					}
+      				);
+      				socket.emit('deleteDomain-client', {removed : 1 });
+      			});
+		      });
 
           socket.on('renameDomain-server', function (data) {
-			// WWW is not allowed to rename
-			if(data.newDomainName.toLowerCase() == 'www') {
-				socket.emit('renameDomain-client', {available: 0,  newDomainName: data.newDomainName});
-			}
-			else {
-				if(userSession.restrictions.domain == 1) {
-					if(data.newDomainName.length > 30) {
-						socket.emit('renameDomain-client', {available : 0});
-					}
-					else {
-						module.parent.exports.UserScheme.findOne({ domain : { $regex : new RegExp("^" + data.newDomainName + "$" , "i") } },
-							function (err, docs) {
-								if (!docs){
-									if(data.start == 1) {
-										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
-											module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId, domainSet: 0 }, {$set: { domainSet: 1 }}, {multi: true, upsert: false},
-												function (err, numAffected) {
-													if(LOG_GENERAL) {
-														console.log(numAffected);
-														console.log(err);
-													}
-												}
-											);
-											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
-										});
-									}
-									else {
-										socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
-									}
-								}
-								else {
-									var available = 0;
-									if(docs._id == userSession.currentUserId) {available = 1;}
-									else {
-										if(LOG_GENERAL) {
-											console.log('Domain is not available...');
-										}
-									}
-									socket.emit('renameDomain-client', {available : available,  newDomainName: data.newDomainName});
-								}
-							}
-						);
-					}
-				}
-			}
+      			// WWW is not allowed to rename
+      			if(data.newDomainName.toLowerCase() == 'www') {
+      				socket.emit('renameDomain-client', {available: 0,  newDomainName: data.newDomainName});
+      			}
+      			else {
+      				if(userSession.restrictions.domain == 1) {
+      					if(data.newDomainName.length > 30) {
+      						socket.emit('renameDomain-client', {available : 0});
+      					}
+      					else {
+      						module.parent.exports.UserScheme.findOne({ domain : { $regex : new RegExp("^" + data.newDomainName + "$" , "i") } },
+      							function (err, docs) {
+      								if (!docs){
+      									if(data.start == 1) {
+      										module.parent.exports.UserScheme.update({  _id : userSession.currentUserId }, { $set: { domain: data.newDomainName}}, function(errU,docsU) {
+      											module.parent.exports.SlideScheme.update({ uid: userSession.currentUserId, domainSet: 0 }, {$set: { domainSet: 1 }}, {multi: true, upsert: false},
+      												function (err, numAffected) {
+      													if(LOG_GENERAL) {
+      														console.log(numAffected);
+      														console.log(err);
+      													}
+      												}
+      											);
+      											socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
+      										});
+      									}
+      									else {
+      										socket.emit('renameDomain-client', {available : 1, start: (data.start == 1) ? 1:0, newDomainName: data.newDomainName, err: err});
+      									}
+      								}
+      								else {
+      									var available = 0;
+      									if(docs._id == userSession.currentUserId) {available = 1;}
+      									else {
+      										if(LOG_GENERAL) {
+      											console.log('Domain is not available...');
+      										}
+      									}
+      									socket.emit('renameDomain-client', {available : available,  newDomainName: data.newDomainName});
+      								}
+      							}
+      						);
+      					}
+      				}
+      			}
           });
 
           socket.on('cc', function (data) {
-			  if(LOG_COORD) {
-				console.log("-------------- JD: received CLOSED CAPTIONING: " + data);
-				console.log(data.my);
-			  }
-              module.parent.exports.io.sockets.emit('ccBroadcast', { hello: data.my });
+    			  if(LOG_COORD) {
+    				console.log("-------------- JD: received CLOSED CAPTIONING: " + data);
+    				console.log(data.my);
+    			  }
+            module.parent.exports.io.sockets.emit('ccBroadcast', { hello: data.my });
           });
 
           // receive laser coordinates from the remote
-            socket.on('laserCoords', function (data) {
-				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
-						if (LOG_COORD) {
-							console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
-						}
-						socket.broadcast.emit('moveLaser', data);
-						socket.emit('moveLaser', data);
-					}
-				});
+          socket.on('laserCoords', function (data) {
+    				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(retData) {
+    					if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+    						if (LOG_COORD) {
+    							console.log("Laser coords Received: X: " + data.x + ", " + "Y: " + data.y);
+    						}
+    						socket.broadcast.emit('moveLaser', data);
+    						socket.emit('moveLaser', data);
+    					}
+    				});
           });
 
           socket.on('drawCoords', function (data) {
-			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-				if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
-					if (LOG_COORD) {
-						console.log("drawCoords received: " + data.slideID);
-						console.log("X: " + data.x + ", " + "Y: " + data.y);
-					}
-					socket.broadcast.emit('drawCoords', data);
-					socket.emit('drawCoords', data);
-				}
-			});
+      			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(retData) {
+      				if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+      					if (LOG_COORD) {
+      						console.log("drawCoords received: " + data.slideID);
+      						console.log("X: " + data.x + ", " + "Y: " + data.y);
+      					}
+      					socket.broadcast.emit('drawCoords', data);
+      					socket.emit('drawCoords', data);
+      				}
+      			});
           });
 
           socket.on('laserOn', function (data) {
-			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-				if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
-					if (LOG_COORD) {
-						console.log("laserOn received: " + data.slideID);
-						console.log("X: " + data.x + ", " + "Y: " + data.y);
-					}
-					socket.broadcast.emit('laserOn', data);
-					socket.emit('laserOn', data);
-				}
-			});
+      			module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(retData) {
+      				if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+      					if (LOG_COORD) {
+      						console.log("laserOn received: " + data.slideID);
+      						console.log("X: " + data.x + ", " + "Y: " + data.y);
+      					}
+      					socket.broadcast.emit('laserOn', data);
+      					socket.emit('laserOn', data);
+      				}
+      			});
           });
 
-            socket.on('laserOff', function (data) {
-				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
-						if (LOG_COORD) {
-							console.log("laser off: " + data);
-						}
-						socket.broadcast.emit('laserOff', data);
-						socket.emit('laserOff', data);
-					}
-				});
+          socket.on('laserOff', function (data) {
+    				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(retData) {
+    					if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+    						if (LOG_COORD) {
+    							console.log("laser off: " + data);
+    						}
+    						socket.broadcast.emit('laserOff', data);
+    						socket.emit('laserOff', data);
+    					}
+    				});
           });
 
           socket.on('shake', function (data) {
@@ -576,27 +571,27 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('drawStart', function (data) {
-				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
-						if (LOG_COORD) {
-							console.log("drawstart: " + data.slideID);
-						}
-						socket.broadcast.emit('drawStart', data);
-						socket.emit('drawStart', data);
-					}
-				});
+    				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(retData) {
+    					if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+    						if (LOG_COORD) {
+    							console.log("drawstart: " + data.slideID);
+    						}
+    						socket.broadcast.emit('drawStart', data);
+    						socket.emit('drawStart', data);
+    					}
+    				});
           });
 
           socket.on('drawStop', function (data) {
-				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-					if(sfound == 1 && (spresenter == 1 || data.presPass == presentationKey)) {
-						if (LOG_COORD) {
-							console.log("drawstop: " + data);
-						}
-						socket.broadcast.emit('drawStop', data);
-						socket.emit('drawStop', data);
-					}
-				});
+    				module.parent.exports.slideCheckPresenter(data.slideID, userSession.currentUserId , function(retData) {
+    					if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+    						if (LOG_COORD) {
+    							console.log("drawstop: " + data);
+    						}
+    						socket.broadcast.emit('drawStop', data);
+    						socket.emit('drawStop', data);
+    					}
+    				});
           });
 
           socket.on('insertVideoId', function (data) {
@@ -606,42 +601,43 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
           socket.on('updatePassword', function (data) {
-			 if(LOG_GENERAL) {
-				console.log("updatePassword to: " + data.password + " currentHash=" + data.currentHash);
-			 }
-      		module.parent.exports.slideCheckPresenter(data.currentHash, userSession.currentUserId , function(sfound, spresenter, stitle, spassword) {
-      				if(spresenter == 1 && sfound == 1) {
-      					module.parent.exports.SlideScheme.find({ sid: data.currentHash }, function (err, docs) {
-      						if(docs && docs.length){
-      							module.parent.exports.SlideScheme.update({ sid: data.currentHash }, {$set: { password: data.password}}, {upsert: false},
-      								function (err, numAffected) {
-										if(LOG_GENERAL) {
-											if(numAffected) {console.log("Password set: " + numAffected)}
-										}
-      								}
-      							);
-      						}
-      					});
-      				}
-      			}
-      		);
+            if(LOG_GENERAL) {
+              console.log("updatePassword to: " + data.password + " currentHash=" + data.currentHash);
+            }
+        		module.parent.exports.slideCheckPresenter(data.currentHash, userSession.currentUserId , function(retData) {
+        				if(retData.isPresenter == 1 && retData.found == 1) {
+        					module.parent.exports.SlideScheme.find({ sid: data.currentHash }, function (err, docs) {
+        						if(docs && docs.length){
+        							module.parent.exports.SlideScheme.update({ sid: data.currentHash }, {$set: { password: data.password}}, {upsert: false},
+        								function (err, numAffected) {
+      										if(LOG_GENERAL) {
+      											if(numAffected) {console.log("Password set: " + numAffected)}
+      										}
+        								}
+        							);
+        						}
+        					});
+        				}
+        			}
+        		);
           });
 
-      	socket.on('checkSlidePassword-server', function (data) {
-      		module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
-      			if(sfound == 1 && data.password == spassword) {
-      				socket.emit('checkSlidePassword-client',{result: 1});
-					if(LOG_GENERAL) {
-						console.log('Password is correct');
-					}
-      			}else{
-                      socket.emit('checkSlidePassword-client',{result: 2});
-					  if(LOG_GENERAL) {
-						console.log('Password is not correct');
-					  }
-                  }
-      		});
-      	});
+        	socket.on('checkSlidePassword-server', function (data) {
+        		module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(retData) {
+        			if(retData.found == 1 && data.password == retData.password) {
+        				socket.emit('checkSlidePassword-client',{result: 1});
+      					if(LOG_GENERAL) {
+      						console.log('Password is correct');
+      					}
+        			}
+              else {
+                socket.emit('checkSlidePassword-client',{result: 2});
+    					  if(LOG_GENERAL) {
+    						    console.log('Password is not correct');
+    					  }
+              }
+        		});
+        	});
 
           socket.on("joinserver", function(name, device, fn) {
               var exists = false;
@@ -837,51 +833,30 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   purge(socket, "leaveRoom");
           });
 
-		  // We don't use this function
-          /*socket.on('requestDownloadPresentation', function (data) {
-			  if(LOG_GENERAL) {
-				console.log('Recieved Request to Dowloading presentation, hash:', data.hash);
-			  }
-              getHashPresentation(data.hash, function (err, fileName) {
-                  if (err) {
-                      console.error(err);
-                  } else {
-					  if(LOG_GENERAL) {
-						console.log('Sending Response to Download Presentation: ', fileName);
-					  }
-                      socket.emit('responseDownloadPresentation', { 'fileName': fileName });
-                  }
-              });
-          });*/
-
           socket.on('presenterVideoChat', function (data) {
-			  if(LOG_COORD) {
-				console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + 'data.open=' + data.open + ' videoChat in ' + data.hash);
-			  }
-              module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(sfound, spresenter, stitle, spassword) {
-          		if(spresenter == 1 && sfound == 1) {
-                    module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: false},
-                        function (err, numAffected) {
-                            if(!err) {
-                              module.parent.exports.io.sockets.emit('broadcastVideoChat', data );
-							}
-						}
-					);
-				}
+              if(LOG_COORD) {
+                    console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + 'data.open=' + data.open + ' videoChat in ' + data.hash);
+              }
+              module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId ,function(retData) {
+                if(retData.isPresenter == 1 && retData.found == 1) {
+                  module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: false},
+                    function (err, numAffected) {
+                      if(!err) {module.parent.exports.io.sockets.emit('broadcastVideoChat', data );}
+                    }
+                  );
+                }
               });
-
           });
+
           socket.on('presenterScreensharing', function (data) {
-			  if(LOG_COORD) {
-				console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
-			  }
-              module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId, function(sfound, spresenter, stitle, spassword) {
-          				if(spresenter == 1 && sfound == 1) {
+              if(LOG_COORD) {
+                console.log('Recieved request from presenter to ' + (data.open ? 'open' : 'close') + ' screensharing in ' + data.hash);
+              }
+              module.parent.exports.slideCheckPresenter(data.hash, userSession.currentUserId, function(retData) {
+          				if(retData.isPresenter == 1 && retData.found == 1) {
                     module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isScreensharingOpen: data.open}}, {upsert: false},
                         function (err, numAffected) {
-                            if(!err) {
-                              module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});
-                            }
+                            if(!err) {module.parent.exports.io.sockets.emit('broadcastScreensharing', { open: data.open, hash: data.hash});}
                         }
                     );
                   }
@@ -902,57 +877,57 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       		socket.emit('client-userRestrictions',{maxFileSize: userSession.restrictions.maxSlideSize});
         });
 
-		socket.on("get-nof-users", function (data) {
-			if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
-			notifyNofUsersChanged(socket, data.hash, true);
-		});
+    		socket.on("get-nof-users", function (data) {
+    			if (typeof data === "undefined" || data.hash === "undefined" || data.hash === null) return;
+    			notifyNofUsersChanged(socket, data.hash, true);
+    		});
 
-		socket.on('checkUserUploadStatus', function(data, callback){
-			module.parent.exports.getUserUploadStatus(userSession.currentUserId, function(uplStatus) {
-				module.parent.exports.UserData[module.parent.exports.getCookie(socket.handshake.headers.cookie,module.parent.exports.sessionIdCookie)].noUploadForUser = uplStatus;
-				callback(uplStatus);
-			});
-		});
+    		socket.on('checkUserUploadStatus', function(data, callback){
+    			module.parent.exports.getUserUploadStatus(userSession.currentUserId, function(uplStatus) {
+    				module.parent.exports.UserData[module.parent.exports.getCookie(socket.handshake.headers.cookie,module.parent.exports.sessionIdCookie)].noUploadForUser = uplStatus;
+    				callback(uplStatus);
+    			});
+    		});
 
-		socket.on('get-presentation-key', function(data, callback){
-      		module.parent.exports.slideCheckPresenter(data.sid, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-				if(sfound == 1 && spresenter == 1) {
-					if(presentationKey == 0) {
-						var genKey = Math.floor(Math.random() * (9999 - 1111) + 1111);
-						module.parent.exports.SlideScheme.update({  sid : data.sid }, { $set: { presentationKey: genKey }}, function(errU,docsU) {
-							if(docsU.nModified > 0) {
-								callback({id: data.sid, key: genKey});
-							}
-						});
-					}
-					else {
-						callback({id: data.sid, key: presentationKey});
-					}
-				}
-			});
-		});
+    		socket.on('get-presentation-key', function(data, callback){
+          		module.parent.exports.slideCheckPresenter(data.sid, userSession.currentUserId , function(retData) {
+    				if(retData.found == 1 && retData.isPresenter == 1) {
+    					if(retData.presentationKey == 0) {
+    						var genKey = Math.floor(Math.random() * (9999 - 1111) + 1111);
+    						module.parent.exports.SlideScheme.update({  sid : data.sid }, { $set: { presentationKey: genKey }}, function(errU,docsU) {
+    							if(docsU.nModified > 0) {
+    								callback({id: data.sid, key: genKey});
+    							}
+    						});
+    					}
+    					else {
+    						callback({id: data.sid, key: retData.presentationKey});
+    					}
+    				}
+    			});
+    		});
 
-		socket.on('check-presentation-key', function(data, callback){
-			// Errors: 1 - prese not found, 2 - wrong key, 3 - access granted
-			module.parent.exports.slideCheckPresenter(data.id, userSession.currentUserId , function(sfound, spresenter, stitle, spassword, spayed, scid, isVideoChatOpen, isScreensharingOpen, slidesNum, domainSet, presentationKey) {
-				var ret = {};
-				if(sfound == 0) {
-					ret.code = 1;
-					callback(ret);
-				}
-				else if(sfound == 1 && data.key != presentationKey) {
-					ret.code = 2;
-					callback(ret);
-				}
-				else {
-					ret.code = 3;
-					if(data.check == 1) {
-						ret.title = stitle;
-					}
-					callback(ret);
-				}
- 			});
-		});
+    		socket.on('check-presentation-key', function(data, callback){
+    			// Errors: 1 - prese not found, 2 - wrong key, 3 - access granted
+    			module.parent.exports.slideCheckPresenter(data.id, userSession.currentUserId , function(retData) {
+    				var ret = {};
+            if(retData.found == 1 && data.key == retData.presentationKey) {
+              ret.code = 3;
+    					if(data.check == 1) {
+    						ret.title = retData.title;
+    					}
+    					callback(ret);
+    				}
+    				else if(retData.found == 0) {
+    					ret.code = 1;
+    					callback(ret);
+    				}
+    				else {
+    					ret.code = 2;
+    					callback(ret);
+    				}
+     			});
+    		});
 
 
       }

@@ -509,8 +509,12 @@ app.use(function (req, res, next) {
 			var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 			console.log("User has old cookie. Remove it");
 			res.clearCookie(sessionIdCookie , {  domain: '.' + domainClear });
-			res.redirect("/");
-
+      if(req.url) {
+        res.redirect(req.url);
+      }
+      else {
+			  res.redirect("/");
+      }
 		}
 		else {
 			next();
@@ -586,7 +590,55 @@ app.use(function (req, res, next) {
 // Visualize slides
 app.use(function (req, res, next) {
 
-	var customHash = req.url.substring(1);
+  if(req.url.match(slitesRegMW)) {
+    res.redirect("/p" + req.url );
+  }
+  else {
+    if(req.url.match(/^\/(p|m)\/.+/gi)) {
+      var url_split = req.url.split("/");
+      var hash = url_split[2];
+      var additional_param = url_split[3];
+      if(url_split.length > 4) {
+        res.redirect("/");
+      }
+      else {
+        slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
+          if(data.found == 1) {
+            // Slide was found,
+            if(typeof additional_param == 'undefined') {
+							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole });
+            }
+            else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
+              var extTsPos = additional_param.indexOf('.jpg?ts=', 4);
+              if (extTsPos !== -1) {
+                additional_param = additional_param.substring(0, extTsPos + 4);
+              }
+              res.redirect(getS3fileUrl(hash + "/" + additional_param ));
+            }
+            else if(additional_param.match(/download\s*(\/?|\\)?$/i)) {
+              var supportUplExtensions = [".ppt", ".pptx"];
+              AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: hash}, function(err, data) {
+                data.Contents.forEach(function(content) {
+                if(supportUplExtensions.indexOf(path.extname(content.Key)) != -1) {
+                  res.redirect(getS3fileUrl(content.Key));
+                }
+                });
+              });
+            }
+          }
+          else {
+            res.status(404);
+            res.send('Presentation wasn\'t found');
+          }
+        });
+      }
+    }
+    else {
+      next();
+    }
+  }
+
+	/*var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
 	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 	Slide.findOne( {scid : { $regex : new RegExp("^" + customHash + "$" , "i") } , paypalPayed: 1, site: domainClear, domainSet: 0 }).exec(function (err, doc) {
@@ -595,7 +647,12 @@ app.use(function (req, res, next) {
         req.url = "/" + doc.sid;
       }
 			var match = req.url.match(slitesRegMW);
-			if (match) {                                                     // if hash found in url
+
+      if(match) {
+        //res.redirect("/p" + req.url );
+      }
+
+			if (match) {                                                 // if hash found in url
 				if (req.url[req.url.length - 1] === '/') {
 					req.url = req.url.slice(0, -1);
 					//console.log("removed trailing slash");
@@ -680,7 +737,7 @@ app.use(function (req, res, next) {
 				next();
 			}
 		//}
-	});
+	});*/
 });
 
 // ROUTES
@@ -1019,21 +1076,23 @@ module.exports.readSlideSize = readSlideSize;
 // Render remote control
 slideCheckPresenter = function(hashId, currentUserId , callback) {
 	if(currentUserId) {
-		Slide.findOne({sid : hashId }).exec(function (err, doc) {
+    Slide.findOne({ $or: [{sid: hashId} ,  {scid: { $regex : new RegExp("^" + hashId + "$" , "i") }}]}).exec(function (err, doc) {
+		//Slide.findOne({sid : hashId }).exec(function (err, doc) {
 			if( doc ) {
-				callback(
-					1, // [0] - Prese found
-					(doc.uid == currentUserId) ? 1 : 0, // [1] Is presenter?
-					doc.title, // [2] Pres title
-					doc.password, // [3] Pres access password
-					(doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
-					doc.scid, // [5] Pres custom ID
-					(doc.isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
-					(doc.isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
-					(doc.slidesNum > 0) ? doc.slidesNum : 1, // [8] Num of slides
-					(doc.domainSet) ? 1 : 0, // [9] Is domain set for this account?
-					(doc.presentationKey) ? doc.presentationKey : 0 //[10] Access key for presentation
-				);
+				callback({
+          sid: doc.sid, // Slide ID
+					found: 1, // [0] - Presentation found
+					isPresenter: (doc.uid == currentUserId) ? 1 : 0, // [1] Is presenter?
+					title: doc.title, // [2] Pres title
+					password: doc.password, // [3] Pres access password
+					payed: (doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
+					scid: doc.scid, // [5] Pres custom ID
+					isVideoChatOpen: (doc.isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
+					isScreensharingOpen: (doc.isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
+					slidesNum: (doc.slidesNum > 0) ? doc.slidesNum : 1, // [8] Num of slides
+					domainSet: (doc.domainSet) ? 1 : 0, // [9] Is domain set for this account?
+					presentationKey: (doc.presentationKey) ? doc.presentationKey : 0 //[10] Access key for presentation
+				});
 			} else {
 				callback(0,0,"","", 0, "");
 			}
@@ -1052,11 +1111,11 @@ router.get('/screensharing.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
-				if(sfound == 1 && spresenter == 1) {
+			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
+				if(data.found == 1 && data.isPresenter == 1) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
-				else if(sfound == 1 && spresenter == 0) {
+				else if(data.found == 1 && data.isPresenter == 0) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
@@ -1072,11 +1131,11 @@ router.get('/video.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
-				if(sfound == 1 && spresenter == 1) {
+			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
+				if(data.found == 1 && data.isPresenter == 1) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
-				else if(sfound == 1 && spresenter == 0) {
+				else if(data.found == 1 && data.isPresenter == 0) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
@@ -1093,8 +1152,8 @@ router.get('/record.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(sfound, spresenter, stitle, spassword) {
-				if(sfound == 1 && spresenter == 1) {
+			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
+				if(data.found == 1 && data.isPresenter == 1) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/record.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {

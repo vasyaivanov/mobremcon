@@ -32,7 +32,7 @@ socket.on('renameHash-client', function (data) {
 							redirUrl = window.location.protocol + "//" + data.site + "/" + data.newHashName
 						}
 						else {
-							redirUrl =  "/" + data.newHashName
+							redirUrl =  "/p/" + data.newHashName
 						}
 						if(isInIFrame() == true) {
 							parent.window.location.href= redirUrl;
