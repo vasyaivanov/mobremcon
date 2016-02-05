@@ -278,7 +278,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             module.parent.exports.readSlideSize(hashDir, function (sizec) {
                 if(DEBUG) {console.log("Read slite size: " + sizec);}
 				        var domainSet = (opt.domain == 1 && opt.domainSet == 1) ? 1 : 0;
-                var addSlide = new opt.SlidesScheme({ uid: opt.userSessionId, sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides, domainSet: domainSet });
+                var addSlide = new opt.SlidesScheme({ uid: opt.userSessionId, sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides, domainSet: domainSet, paypalPayed: ((domainSet == 1) ? 1 : 0) });
                 if(DEBUG) {
                     console.log("OTP: ");
                     console.log(opt);
@@ -294,13 +294,15 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                         console.error('Can\'t insert a new Slide ' + err);
                     }
 
-					// Move files to S3
+					      // Move files to S3
+                slite.getParams().socket.emit("uploadProgress", { msg: "Preparing presentation...", percentage: "100" });
+
       					moveFilesToS3(function() {
-      						// Remove hash dir
+    						  // Remove hash dir
       						opt.removeDirFunc(hashDir);
       						if (slite.getParams().opt.noSocketRet !== 1) {
       							if(DEBUG) {console.log("Socket emitting: slitePrepared");}
-      							slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
+      							slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, domain: opt.domainName, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
       							if(DEBUG) {console.log("Socket emitted: slitePrepared");}
       						}
 
@@ -359,7 +361,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
 
     		function moveFilesToS3(callback) {
           var extExpToS3 = ['.jpeg','.jpg','.ppt', '.pptx'];
-    			fs.readdirSync(hashDir).forEach(function(file,index){
+    			/*fs.readdirSync(hashDir).forEach(function(file,index){
     			  if(extExpToS3.indexOf(path.extname(file)) != -1) {
     				var fileBuffer = fs.readFileSync(hashDir + '/' + file);
     				opt.AWS_S3.putObject({Bucket: opt.AWS_S3_BUCKET, Key: slite.hashValue + '/' + file, Body: fileBuffer}, function(err, data) {
@@ -367,11 +369,10 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
     				 });
     			  }
     			});
-    			callback();
+    			callback();*/
 
-
-          // S3 Upload control, future use
-          /*var totalNum = 0;
+          // S3 Upload control
+          var totalNum = 0;
           var files = {};
 
           fs.readdirSync(hashDir).forEach(function(file,index){
@@ -385,7 +386,6 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
 
           function move(f) {
             if(f < totalNum) {
-              console.log(f);
               var fileBuffer = fs.readFileSync(hashDir + '/' + files[f]);
       				opt.AWS_S3.putObject({Bucket: opt.AWS_S3_BUCKET, Key: slite.hashValue + '/' + files[f], Body: fileBuffer}, function(err, data) {
                 move(f+1);
@@ -394,7 +394,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             else {
               callback();
             }
-          }*/
+          }
 
     		}
 

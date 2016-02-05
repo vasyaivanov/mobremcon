@@ -306,7 +306,11 @@ function getCurrentHash() {
 }
 
 function downloadPresentation() {
-		window.open("/p/" + getCurrentHash() + '/download');
+		addPimg = "/p/";
+		if(location.hostname.split('.')[0] != "www") {
+			addPimg = "";
+		}
+		window.open(addPimg + getCurrentHash() + '/download');
     showHideMenu(true);
 }
 
@@ -800,8 +804,15 @@ $( window ).load(function() {
         slite = '';
 		number_of_slides = 13;
     }
+
+		var addPimg = "/p";
+
+		if(location.hostname.split('.')[0] != "www") {
+			addPimg = "";
+		}
+
     for (var slide = 1; slide <= number_of_slides; ++slide) {
-        var slide_html_path = '/p' + slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
+        var slide_html_path = addPimg + slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
         var slider = $(".royalSlider").data('royalSlider');
         if (staticSlite) // we did not do any replacement!
         {

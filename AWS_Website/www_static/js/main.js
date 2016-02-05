@@ -3,12 +3,12 @@ $(document).ready(function () {
         var url = [location.protocol, '//', location.host, location.pathname].join('');
         return url;
     }
- 
+
     function getClearHost() {
         var url = [location.protocol, '//', location.host].join('');
         return url;
     }
-    
+
     function getCurrentHash() {
         var hash = document.location.href;
         if (hash[hash.length - 1] === '/') {
@@ -31,11 +31,11 @@ $(document).ready(function () {
     if(typeof mainSocket !== 'undefined') {
         alert('mainSocket is already defined!');
     }
-    
+
     var mainSocket = io.connect(document.location.hostname + ':' + location.port);
 
 	mainSocket.emit("server-userRestrictions");
-	
+
     function setUploadMessage(title) {
         progressLabel.text(title);
     }
@@ -47,29 +47,29 @@ $(document).ready(function () {
     progressbar.progressbar({
         value:  false
     });
-                
+
     function openUploadDialog(msg) {
         var url = getClearUrl();
         document.location = url + "#upload_presentation";
         setUploadMessage(msg);
     };
-	
-	// Delete user slide	
-	
+
+	// Delete user slide
+
 	$(".deleteSlide").click(function(){
 		var slideId = $(this).attr('slideId');
 		if(slideId) {
 			mainSocket.emit('server-deleteSlide', { sid: slideId });
 		}
 	});
-	
+
 	mainSocket.on("client-deleteSlide", function (data) {
 		//alert(data.sid);
 		$( "#slide_" + data.sid).hide();
 	});
 
 	checkUploadStatus();
-	
+
 	$("#menu-toggle").click(function() {
 		checkUploadStatus();
 	});
@@ -85,7 +85,7 @@ $(document).ready(function () {
 				$("#uploadFalse").hide();
 			}
 		});
-	}	
+	}
 
     function updateProgress(data) {
         var printMsg = false, newLine = false;
@@ -111,8 +111,8 @@ $(document).ready(function () {
             var n = data.error ? 100 :  parseInt(data.percentage, 10);
             progressbar.progressbar("value", n);
         }
-    } 
-      
+    }
+
     if (HTML5_UPLOADER) {
         function fileChosen(event){
             var files = document.getElementById('uploadPresentation').files;
@@ -138,7 +138,7 @@ $(document).ready(function () {
             }
         }
 
-        if (window.File && window.FileReader) { //These are the relevant HTML5 objects that we are going to use 
+        if (window.File && window.FileReader) { //These are the relevant HTML5 objects that we are going to use
             //document.getElementById('uploadPresentation').addEventListener('click', function () { alert('click');});
             document.getElementById('uploadPresentation').addEventListener('change', fileChosen);
         }
@@ -151,13 +151,13 @@ $(document).ready(function () {
 			var siofu = new SocketIOFileUpload(mainSocket);
 			siofu.chunkSize = 0;
 			siofu.maxFileSize = loadData.maxFileSize;
-			siofu.listenOnInput(document.getElementById("uploadPresentation"));		
+			siofu.listenOnInput(document.getElementById("uploadPresentation"));
 
 			siofu.addEventListener("choose", function(event){
 				console.log("Upload file(s) chosen: " + event.files[0].name);
 				openUploadDialog('Uploading: ' + event.files[0].name);
 			});
-				
+
 			siofu.addEventListener("start", function(event){
 				console.log("Upload started: " + event.file.name);
 			});
@@ -166,7 +166,7 @@ $(document).ready(function () {
 				console.log("Upload successful: " + event.file.name);
 				setUploadMessage('Converting presentation...');
 			});
-			
+
 			siofu.addEventListener("error", function(event){
 				var data = [];
 				data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
@@ -179,8 +179,8 @@ $(document).ready(function () {
 				setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
 			});
 		});
-    } 
-    
+    }
+
 	mainSocket.on("uploadProgress", function (data) {
         var msg = "Upload Progress";
         if (data.percentage >= 0) {
@@ -197,14 +197,21 @@ $(document).ready(function () {
     });
 
     mainSocket.on('slitePrepared', function (data) {
+      console.log(data);
         console.log('File converted: ' + JSON.stringify(data));
         data.msg = 'Converted successfully!\nYOU WILL BE FORWARDED TO THE URL TO SHARE.';
         data.percentage = 100;
         updateProgress(data);
-        setTimeout(function () {
-            var url = getClearHost() + '/' + data.hash;
-            window.location = url;
-        }, 1000); // forward after 1 sec
+        var urlRedirect;
+
+        if(typeof data.domain != "undefined") {
+          var urlRedirect = "//" + data.domain + "." + location.hostname.split('.').reverse()[1] + '.' + location.hostname.split('.').reverse()[0] + "/" + data.hash;
+        }
+        else {
+          urlRedirect = getClearHost() + '/p/' + data.hash;
+        }
+        window.location = urlRedirect;
+
     });
 
     mainSocket.on('sliteConversionError', function (rdata) {
@@ -230,17 +237,17 @@ $(document).ready(function () {
 
 
     });
-	
+
     $('#createPresentation').click(function(){
 		window.location = window.location + "editor";
     });
-	
+
 	replaceDomainName();
 
     if(navigator.userAgent.match(/(iPhone|iPad)/i)) {
 		//$('.uploadfile').css('display', 'none');
    };
-   
+
    // Logging in
    $("#buttonSignIn").click(function() {
 		$.ajax({
@@ -259,12 +266,12 @@ $(document).ready(function () {
 					$("#loginError").html("Successfully logged in...");
 					$("#signInForm").hide();
 					setTimeout(function(){ location.href="/"; }, 1000);
-					
+
 				}
 		   }
 		 });
    });
-   
+
    // Logging in
    $("#buttonSignUp").click(function() {
 		$.ajax({
@@ -293,7 +300,7 @@ $(document).ready(function () {
 				else if(data.error == 5) {
 					err_text = "Password does not match the confirm password.";
 				}
-				
+
 				if(data.error > 0) {
 					$("#signupError").html(err_text);
 					$("#signupError").show();
@@ -302,9 +309,9 @@ $(document).ready(function () {
 					$("#signUpForm").hide();
 					$("#signupError").text("Successfully registered...");
 					$("#signupError").show();
-					
+
 					var redirectUrl = '/';
-					
+
 					if(data.account) {
 						redirectUrl += '?account=' + data.account;
 					}
@@ -332,4 +339,3 @@ function replaceDomainName() {
 function delSlide(slideId) {
 	deleteSlide(slideId);
 }
-

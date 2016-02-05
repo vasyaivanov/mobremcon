@@ -436,14 +436,16 @@ else {
 				if(userId == 0) {
 					console.log('Bot or crawler: ' + req.url + ' : ' + req.headers['user-agent']);
 					var split_hash = req.path.split("/");
-					var hash = req.path.replace("/","");
-					if(split_hash.length == 2) {
+					var hash = split_hash[2];
+          var additional_param = split_hash[3];
+          console.log(additional_param);
+					if(split_hash.length == 3) {
 						Slide.findOne({	$or: [{sid: hash} ,  {scid: hash}]}, function (err, doc) {
 							if(doc){
 								var images = '';
 								if(doc.slidesNum > 0) {
 									for (i=0;i<=doc.slidesNum; i++) {
-										images += "<img width='70%' src='/" + doc.sid + "/img" + i +".jpg'><br>"
+										images += "<img width='70%' src='/p/" + doc.sid + "/img" + i +".jpg'><br>"
 									}
 								}
 								res.render(path.join(www_dir, www_static_dir, "fake_slide.html"), {
@@ -452,13 +454,16 @@ else {
 								});
 							}
 							else {
-								// No slide
 								next();
 							}
 						});
 					}
+          else if(additional_param) {
+            // Render other stuff
+            req.url = req.url.replace(/(\&|\?)?auth=1/g,"");
+            next();
+          }
 					else {
-						// Not a slide
 						next();
 					}
 				}
@@ -559,21 +564,28 @@ module.exports.UserData = {};
 
 // Visualize custom domain slide
 app.use(function (req, res, next) {
-	var customHash = req.url.substring(1);
-	customHash = customHash.replace(/^\?/,"");
+  var url_split = req.url.split("/");
+  var hash = url_split[1];
+  var additional_param = url_split[2];
 
 	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
-	if(customHash != '' && req.hostname.split('.')[0] != 'www' && !path.extname(customHash)) {
-		User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
-			if(docU) {
-			  Slide.findOne({ $or: [{sid: customHash} ,  {scid: { $regex : new RegExp("^" + customHash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
+	if(hash != '' && req.hostname.split('.')[0] != 'www' /*&& !path.extname(customHash)*/) {
+	   User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
+  		if(docU) {
+			  Slide.findOne({ $or: [{sid: hash} ,  {scid: { $regex : new RegExp("^" + hash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
 				  if(doc) {
-					req.url = "/p/" + doc.sid;
-					next();
+            req.body.thisisdomain = 1;
+            if(typeof additional_param == 'undefined') {
+              req.url = "/p/" + doc.sid;
+            }
+            else {
+              req.url = "/p/" + doc.sid + "/" + additional_param;
+            }
+  					next();
 				  }
 				  else {
-					       res.send("Presentation was not found");
+					  next();
 				  }
 			  });
 			}
@@ -590,53 +602,88 @@ app.use(function (req, res, next) {
 // Visualize slides
 app.use(function (req, res, next) {
 
-  if(req.url.match(slitesRegMW)) {
-    res.redirect("/p" + req.url );
+  // compatibilities with old names
+  var checkName = req.url;
+  checkName = checkName.replace(/^\//,"");
+  checkName = checkName.replace(/(\?|\=)/gi,"");
+
+  var currentUser;
+
+  if(typeof req.cookies[sessionIdCookie] != "undefined") {
+    currentUser = UserData[req.cookies[sessionIdCookie]].currentUserId;
   }
   else {
-    if(req.url.match(/^\/(p|m)\/.+/gi)) {
-      var url_split = req.url.split("/");
-      var hash = url_split[2];
-      var additional_param = url_split[3];
-      if(url_split.length > 4) {
-        res.redirect("/");
+    currentUser = 0;
+  }
+
+    slideCheckPresenter({ hashId: checkName, currentUserId: currentUser, domainReq: 0, created: {$lte: new Date("2016-02-05") } }, function(data) {
+      if(data.found == 1) {
+        if(data.scid) {
+          res.redirect("/p/" + data.scid );
+        }
+        else {
+          res.redirect("/p/" + data.sid );
+        }
       }
       else {
-        slideCheckPresenter(hash, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
-          if(data.found == 1) {
-            // Slide was found,
-            if(typeof additional_param == 'undefined') {
-							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole });
+        /*if(req.url.match(slitesRegMW) && req.body.thisisdomain != 1) {
+          res.redirect("/p" + req.url );
+        }
+        else {*/
+          if(req.url.match(/^\/(p|m)\/.+/gi)) {
+            var url_split = req.url.split("/");
+            var hash = url_split[2];
+            var additional_param = url_split[3];
+            if(url_split.length > 4) {
+              res.redirect("/");
             }
-            else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
-              var extTsPos = additional_param.indexOf('.jpg?ts=', 4);
-              if (extTsPos !== -1) {
-                additional_param = additional_param.substring(0, extTsPos + 4);
-              }
-              res.redirect(getS3fileUrl(hash + "/" + additional_param ));
-            }
-            else if(additional_param.match(/download\s*(\/?|\\)?$/i)) {
-              var supportUplExtensions = [".ppt", ".pptx"];
-              AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: hash}, function(err, data) {
-                data.Contents.forEach(function(content) {
-                if(supportUplExtensions.indexOf(path.extname(content.Key)) != -1) {
-                  res.redirect(getS3fileUrl(content.Key));
+            else {
+              slideCheckPresenter({ hashId: hash, currentUserId: currentUser, domainReq: (req.body.thisisdomain) ? 1 : 0 }, function(data) {
+                if(data.found == 1) {
+                  if(data.presDomain != req.hostname.split('.')[0]) {
+                    res.status(404);
+                    res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 404, text: "Presentation wasn't found"});
+                    //var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+                    //res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://' + domainClear);
+                  }
+                  else {
+                    // Slide was found,
+                    if(typeof additional_param == 'undefined') {
+        							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole });
+                    }
+                    else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
+                      var extTsPos = additional_param.indexOf('.jpg?ts=', 4);
+                      if (extTsPos !== -1) {
+                        additional_param = additional_param.substring(0, extTsPos + 4);
+                      }
+                      res.redirect(getS3fileUrl(hash + "/" + additional_param ));
+                    }
+                    else if(additional_param.match(/download\s*(\/?|\\)?$/i)) {
+                      var supportUplExtensions = [".ppt", ".pptx"];
+                      AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: hash}, function(err, data) {
+                        data.Contents.forEach(function(content) {
+                        if(supportUplExtensions.indexOf(path.extname(content.Key)) != -1) {
+                          res.redirect(getS3fileUrl(content.Key));
+                        }
+                        });
+                      });
+                    }
+                  }
                 }
-                });
+                else {
+                  res.status(404);
+                  res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 404, text: "Presentation wasn't found"});
+                }
               });
             }
           }
           else {
-            res.status(404);
-            res.send('Presentation wasn\'t found');
+            next();
           }
-        });
+        //}
       }
-    }
-    else {
-      next();
-    }
-  }
+    });
+
 
 	/*var customHash = req.url.substring(1);
 	customHash = customHash.replace(/^\?/,"");
@@ -1074,32 +1121,82 @@ readSlideSize = function(path_to_slide, callback) {
 module.exports.readSlideSize = readSlideSize;
 
 // Render remote control
-slideCheckPresenter = function(hashId, currentUserId , callback) {
-	if(currentUserId) {
-    Slide.findOne({ $or: [{sid: hashId} ,  {scid: { $regex : new RegExp("^" + hashId + "$" , "i") }}]}).exec(function (err, doc) {
-		//Slide.findOne({sid : hashId }).exec(function (err, doc) {
+slideCheckPresenter = function(reqData , callback) {
+
+  var setDomain;
+  var createdFilder;
+  if(typeof reqData.domainReq === "undefined") {
+    setDomain = {$lt: 5};
+  }
+  else {
+    setDomain = {$eq: reqData.domainReq};
+  }
+
+  if(reqData.created) {
+    createdFilder =  reqData.created;
+  }
+  else {
+    createdFilder = { $gte: new Date("1980-01-01") };
+  }
+
+  var search = {
+    $and: [
+      {$or: [
+            {sid: reqData.hashId} ,
+            {scid: { $regex : new RegExp("^" + reqData.hashId + "$" , "i") }}
+          ]},
+      {
+        domainSet: setDomain
+      },
+      {
+        created: createdFilder
+      }
+    ]
+  };
+
+	if(reqData.currentUserId) {
+    Slide.findOne(search).exec(function (err, doc) {
 			if( doc ) {
-				callback({
-          sid: doc.sid, // Slide ID
-					found: 1, // [0] - Presentation found
-					isPresenter: (doc.uid == currentUserId) ? 1 : 0, // [1] Is presenter?
-					title: doc.title, // [2] Pres title
-					password: doc.password, // [3] Pres access password
-					payed: (doc.paypalPayed == 1 || UserData[currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
-					scid: doc.scid, // [5] Pres custom ID
-					isVideoChatOpen: (doc.isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
-					isScreensharingOpen: (doc.isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
-					slidesNum: (doc.slidesNum > 0) ? doc.slidesNum : 1, // [8] Num of slides
-					domainSet: (doc.domainSet) ? 1 : 0, // [9] Is domain set for this account?
-					presentationKey: (doc.presentationKey) ? doc.presentationKey : 0 //[10] Access key for presentation
-				});
+        var presenterData = User.findOne({ _id: doc.uid }, function(err,uData) {
+          var presDomain = "www";
+          if(uData) {
+            presDomain = uData.domain;
+          }
+          callback({
+            sid: doc.sid, // Slide ID
+  					found: 1, // [0] - Presentation found
+  					isPresenter: (doc.uid == reqData.currentUserId) ? 1 : 0, // [1] Is presenter?
+  					title: doc.title, // [2] Pres title
+  					password: doc.password, // [3] Pres access password
+  					payed: (doc.paypalPayed == 1 || UserData[reqData.currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
+  					scid: doc.scid, // [5] Pres custom ID
+  					isVideoChatOpen: (doc.isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
+  					isScreensharingOpen: (doc.isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
+  					slidesNum: (doc.slidesNum > 0) ? doc.slidesNum : 1, // [8] Num of slides
+  					domainSet: (doc.domainSet) ? 1 : 0, // [9] Is domain set for this account?
+  					presentationKey: (doc.presentationKey) ? doc.presentationKey : 0, //[10] Access key for presentation
+            created: doc.created,
+            presDomain: presDomain
+  				});
+
+        });
 			} else {
-				callback(0,0,"","", 0, "");
+				callback({
+          sid: 0,
+					found: 0,
+					isPresenter: 0,
+          payed: 0
+        });
 			}
 		});
 	}
 	else {
-		callback(0,0,"","", 0, "");
+    callback({
+      sid: 0,
+      found: 0,
+      isPresenter: 0,
+      payed: 0
+    });
 	}
 }
 
@@ -1111,7 +1208,7 @@ router.get('/screensharing.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
+			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
 				if(data.found == 1 && data.isPresenter == 1) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
@@ -1131,7 +1228,8 @@ router.get('/video.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
+			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
+        console.log(data);
 				if(data.found == 1 && data.isPresenter == 1) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
@@ -1152,7 +1250,7 @@ router.get('/record.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
-			slideCheckPresenter(hashId, UserData[req.cookies[sessionIdCookie]].currentUserId , function(data) {
+			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
 				if(data.found == 1 && data.isPresenter == 1) {
 					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/record.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
@@ -1207,7 +1305,7 @@ app.use(function (req, res) {
     console.log('404: ' + req.url + ', User-Agent: ' + req.headers['user-agent']);
     res.type('text/html');
     res.status(404);
-    res.send('<h1>404 - Not Found</h1>');
+    res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 404, text: "Not found"});
 });
 
 // custom 500 page
@@ -1218,7 +1316,7 @@ if (app.get('env') === 'development') {
         console.error(err.stack);
         res.status(err.status || 500);
         res.type('text/html');
-        res.send('<h1>500 - Server Error</h1>');
+        res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 500, text: "Server error"});
     });
 }
 
