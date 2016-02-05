@@ -404,6 +404,12 @@ if(!path.extname(req.url.substring(1))) {
 
 }
 
+// Set session for unauth bots
+UserData[0] = {};
+UserData[0].userAuth = 0;
+UserData[0].restrictions = rolesRestrictions[0];
+
+
 if(req.method == "POST" && req.url == "/paypal") {
 	next();
 }
@@ -436,11 +442,42 @@ else {
 				if(userId == 0) {
 					console.log('Bot or crawler: ' + req.url + ' : ' + req.headers['user-agent']);
 					var split_hash = req.path.split("/");
-					var hash = split_hash[2];
+          var hash = split_hash[2];
           var additional_param = split_hash[3];
-          console.log(additional_param);
-					if(split_hash.length == 3) {
-						Slide.findOne({	$or: [{sid: hash} ,  {scid: hash}]}, function (err, doc) {
+          if(req.hostname.split('.')[0] != "www") {
+            var hash = split_hash[1];
+            var additional_param = split_hash[2];
+          }
+
+					//if(split_hash.length == 3) {
+            slideCheckPresenter({ hashId: hash, currentUserId: 0, domainReq: (req.hostname.split('.')[0] == "www") ? 0 : 1, domainName: req.hostname.split('.')[0] }, function(data) {
+              if(data.found == 1) {
+                if(additional_param) {
+                  next();
+                }
+                else {
+                  var images = '';
+                  var addP = "/p/";
+                  if(req.hostname.split('.')[0] != "www") {
+                    addP = "/";
+                  }
+  								if(data.slidesNum > 0) {
+  									for (i=0;i<data.slidesNum; i++) {
+
+  										images += "<img width='70%' src='" + addP + data.sid + "/img" + i +".jpg'><br>"
+  									}
+  								}
+  								res.render(path.join(www_dir, www_static_dir, "fake_slide.html"), {
+  									title: data.title,
+  									img: images
+  								});
+                }
+              }
+              else {
+                next();
+              }
+            });
+						/*Slide.findOne({	$or: [{sid: hash} ,  {scid: hash}]}, function (err, doc) {
 							if(doc){
 								var images = '';
 								if(doc.slidesNum > 0) {
@@ -456,16 +493,11 @@ else {
 							else {
 								next();
 							}
-						});
-					}
-          else if(additional_param) {
-            // Render other stuff
-            req.url = req.url.replace(/(\&|\?)?auth=1/g,"");
-            next();
-          }
+						});*/
+					/*}
 					else {
 						next();
-					}
+					}*/
 				}
 				else {
 					//console.log("Initialize new session");
@@ -1132,6 +1164,10 @@ slideCheckPresenter = function(reqData , callback) {
     setDomain = {$eq: reqData.domainReq};
   }
 
+  /*if(typeof reqData.domainName === "undefined") {
+    reqData.domainName = "www";
+  }*/
+
   if(reqData.created) {
     createdFilder =  reqData.created;
   }
@@ -1154,32 +1190,86 @@ slideCheckPresenter = function(reqData , callback) {
     ]
   };
 
-	if(reqData.currentUserId) {
-    Slide.findOne(search).exec(function (err, doc) {
-			if( doc ) {
-        var presenterData = User.findOne({ _id: doc.uid }, function(err,uData) {
-          var presDomain = "www";
-          if(uData) {
-            presDomain = uData.domain;
-          }
-          callback({
-            sid: doc.sid, // Slide ID
-  					found: 1, // [0] - Presentation found
-  					isPresenter: (doc.uid == reqData.currentUserId) ? 1 : 0, // [1] Is presenter?
-  					title: doc.title, // [2] Pres title
-  					password: doc.password, // [3] Pres access password
-  					payed: (doc.paypalPayed == 1 || UserData[reqData.currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
-  					scid: doc.scid, // [5] Pres custom ID
-  					isVideoChatOpen: (doc.isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
-  					isScreensharingOpen: (doc.isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
-  					slidesNum: (doc.slidesNum > 0) ? doc.slidesNum : 1, // [8] Num of slides
-  					domainSet: (doc.domainSet) ? 1 : 0, // [9] Is domain set for this account?
-  					presentationKey: (doc.presentationKey) ? doc.presentationKey : 0, //[10] Access key for presentation
-            created: doc.created,
-            presDomain: presDomain
-  				});
+	if(typeof reqData.currentUserId != "undefined") {
+    Slide.find(search).exec(function (err, doc) {
+			if( doc.length ) {
 
-        });
+        readPresParams(0);
+
+        var callbackN = {
+            sid: 0,
+            found: 0,
+            isPresenter: 0,
+            payed: 0
+        };
+
+        function readPresParams(i) {
+          if(i >= doc.length) {
+            callback({
+              sid: 0,
+    					found: 0,
+    					isPresenter: 0,
+              payed: 0
+            });
+          }
+          else {
+            var presenterData = User.findOne({ _id: doc[i].uid }, function(err,uData) {
+              var presDomain = "www";
+              if(uData) {
+                presDomain = uData.domain;
+              }
+              var callbackP = {
+                  sid: doc[i].sid, // Slide ID
+        					found: 1, // [0] - Presentation found
+        					isPresenter: (doc[i].uid == reqData.currentUserId) ? 1 : 0, // [1] Is presenter?
+        					title: doc[i].title, // [2] Pres title
+        					password: doc[i].password, // [3] Pres access password
+        					payed: (doc[i].paypalPayed == 1 || UserData[reqData.currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
+        					scid: doc[i].scid, // [5] Pres custom ID
+        					isVideoChatOpen: (doc[i].isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
+        					isScreensharingOpen: (doc[i].isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
+        					slidesNum: (doc[i].slidesNum > 0) ? doc[i].slidesNum : 1, // [8] Num of slides
+        					domainSet: (doc[i].domainSet) ? 1 : 0, // [9] Is domain set for this account?
+        					presentationKey: (doc[i].presentationKey) ? doc[i].presentationKey : 0, //[10] Access key for presentation
+                  created: doc[i].created,
+                  presDomain: presDomain
+              };
+
+              if(typeof reqData.domainName === "undefined") {
+                callback(callbackP);
+              }
+              else if(presDomain == reqData.domainName) {
+                callback(callbackP);
+              }
+              else {
+                readPresParams(i+1);
+              }
+
+            /*  if(presDomain == reqData.domainName) {
+                callback({
+                  sid: doc[i].sid, // Slide ID
+        					found: 1, // [0] - Presentation found
+        					isPresenter: (doc[i].uid == reqData.currentUserId) ? 1 : 0, // [1] Is presenter?
+        					title: doc[i].title, // [2] Pres title
+        					password: doc[i].password, // [3] Pres access password
+        					payed: (doc[i].paypalPayed == 1 || UserData[reqData.currentUserId].restrictions.rename == 1) ? 1 : 0, // [4] Payed pres
+        					scid: doc[i].scid, // [5] Pres custom ID
+        					isVideoChatOpen: (doc[i].isVideoChatOpen) ? 1 : "0", // [6] Is video chat open?
+        					isScreensharingOpen: (doc[i].isScreensharingOpen) ? 1 : "0", // [7] Is Screen Sharing open
+        					slidesNum: (doc[i].slidesNum > 0) ? doc[i].slidesNum : 1, // [8] Num of slides
+        					domainSet: (doc[i].domainSet) ? 1 : 0, // [9] Is domain set for this account?
+        					presentationKey: (doc[i].presentationKey) ? doc[i].presentationKey : 0, //[10] Access key for presentation
+                  created: doc[i].created,
+                  presDomain: presDomain
+        				});
+              }
+              else {
+
+              }*/
+            });
+
+          }
+        }
 			} else {
 				callback({
           sid: 0,
