@@ -106,8 +106,12 @@ body {
 }
 
 #howToGetPresentationId {
-    font-size: 20px;
-    padding-top: 30px;
+    font-size: 3vw;
+    padding-top: 0;
+}
+#img_get_key{
+  width: 30%;
+  height: 30%;
 }
 
 .remoteTitle{
@@ -596,6 +600,7 @@ video#bgvid {
   top: 14%;
   left: 10px;
   width: 99%;
+  max-width: 100%;
 }
 
 a {
@@ -688,7 +693,7 @@ table {
    }
 
    a {
-     font-size: 18px;
+     font-size: 3vw;
    }
 }
 
