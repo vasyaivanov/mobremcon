@@ -327,7 +327,7 @@ console.log('www_dir: ' + www_dir);
 
 // hash redirection
 var slitesDir = "slites";
-var slitesHashLen = 4;
+var slitesHashLen = 5;
 module.exports.slitesHashLen = slitesHashLen;
 var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 // middleware do render slites files from /slites folders
