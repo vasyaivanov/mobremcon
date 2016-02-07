@@ -441,6 +441,7 @@ else {
 			else {
 				if(userId == 0) {
 					console.log('Bot or crawler: ' + req.url + ' : ' + req.headers['user-agent']);
+          req.url = req.url.replace(/(\&|\?)?auth=1/g,"")
 					var split_hash = req.path.split("/");
           var hash = split_hash[2];
           var additional_param = split_hash[3];
@@ -1008,7 +1009,7 @@ router.get(rootRegExp, function (req, res){
 
 		// Paint index page random slides
 		function getRandomSlides(Slide, callback) {
-			Slide.findRandom({site: req.headers.host}, {}, {skip: 0, limit: 10},function(err, result) {
+			Slide.findRandom({site: req.headers.host, domainSet: 0 }, {}, {skip: 0, limit: 10},function(err, result) {
 			  if (!err) {
 				var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
@@ -1064,8 +1065,8 @@ router.get(rootRegExp, function (req, res){
   					slides: [],
   					expire: '',
   					userData: { restrictions: rolesRestrictions[0] },
-					domains: customDomains,
-					clearDomain: domainClear
+					  domains: customDomains,
+					  clearDomain: domainClear
   				});
         });
 			}
