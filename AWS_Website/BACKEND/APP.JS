@@ -1215,7 +1215,7 @@ slideCheckPresenter = function(reqData , callback) {
           else {
             var presenterData = User.findOne({ _id: doc[i].uid }, function(err,uData) {
               var presDomain = "www";
-              if(uData) {
+              if(uData && typeof uData.domain != "undefined" ) {
                 presDomain = uData.domain;
               }
               var callbackP = {
