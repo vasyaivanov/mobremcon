@@ -32,17 +32,16 @@
     <script src="https://www.prezera.com/socket.io/socket.io.js"></script>
 	<!--script src="http://jsconsole.com/remote.js?F1F7FCE6-BC71-4006-85A9-571BDB8DBB01"></script-->
 	<script>
+  var socket = io.connect(document.location.hostname + ':' + location.port);
 	$( document ).ready(function() {
-		var socket = io.connect(document.location.hostname + ':' + location.port);
-
 		if(localStorage.getItem("presentationsLocal")) {
 			$.each(JSON.parse(localStorage.getItem("presentationsLocal")), function(key, value) {
 				socket.emit("check-presentation-key", {id: key, key: value, check: 1} , function(data) {
 					if(data.code == 3) {
 						var mySlide = "";
 						mySlide += '<tr id="slide_'+ key  +'">';
-						mySlide += '<td width="150"><a href="/' + key + '"><img src="/'+ key +'/img0.jpg" class="img-rounded" width="90%"></a></td>';
-						mySlide += '<td><a href="/' + key + '">'+data.title+'</a></td>';
+						mySlide += '<td width="150"><a href="/p/' + key + '"><img src="/p/'+ key +'/img0.jpg" class="img-rounded" width="90%"></a></td>';
+						mySlide += '<td><a href="/p/' + key + '">'+data.title+'</a><br><br><a href="#" onclick="deleteSlide(\''+ key +'\')">Delete slide</a></td>';
 						mySlide += '</tr>';
 						$("#myPresTable").append(mySlide);
 
@@ -76,7 +75,7 @@
 						}
 						data[$("#pres_id").val()] = $("#pres_pass").val();
 						localStorage.setItem("presentationsLocal", JSON.stringify(data));
-						location.href="/" + $("#pres_id").val();
+						location.href="/p/" + $("#pres_id").val();
 					}
 				});
 			}
@@ -86,6 +85,15 @@
 			$("#noticeForm").show();
 			$("#noticeForm").text(text);
 		}
+	});
+
+  function deleteSlide(hashId) {
+    socket.emit('server-deleteSlide', { sid: hashId, presPass: JSON.parse(localStorage.getItem("presentationsLocal"))[hashId] });
+  }
+
+  socket.on("client-deleteSlide", function (data) {
+    console.log(data);
+		$( "#slide_" + data.sid).hide();
 	});
 
 	function showView(id) {

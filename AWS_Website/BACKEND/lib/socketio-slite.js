@@ -287,9 +287,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           socket.on('server-deleteSlide', function (data) {
         		var hashPath = path.join(www_dir, slitesDir, data.sid);
         		module.parent.exports.slideCheckPresenter({ hashId: data.sid, currentUserId: userSession.currentUserId } , function(retData) {
-      				if(retData.isPresenter == 1 && retData.found == 1) {
-      					module.parent.exports.SlideScheme.remove({ uid: userSession.currentUserId, sid: data.sid }, function(err) {
-      						if (!err) {
+      				//if(retData.isPresenter == 1 && retData.found == 1) {
+              if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
+      					module.parent.exports.SlideScheme.remove({ /*uid: userSession.currentUserId,*/ sid: data.sid }, function(err,delData) {
+      						if (!err && delData.result.ok == 1) {
       								module.parent.exports.deleteS3path(data.sid);
       								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
       									if(LOG_GENERAL) {
