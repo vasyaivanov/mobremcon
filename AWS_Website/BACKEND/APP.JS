@@ -653,10 +653,10 @@ app.use(function (req, res, next) {
     slideCheckPresenter({ hashId: checkName, currentUserId: currentUser, domainReq: 0, created: {$lte: new Date("2016-02-05") } }, function(data) {
       if(data.found == 1) {
         if(data.scid) {
-          res.redirect("/p/" + data.scid );
+          res.redirect(301, "/p/" + data.scid );
         }
         else {
-          res.redirect("/p/" + data.sid );
+          res.redirect(301, "/p/" + data.sid );
         }
       }
       else {
