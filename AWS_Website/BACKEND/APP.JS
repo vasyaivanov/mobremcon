@@ -335,6 +335,17 @@ var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 
 // Auto redirect to WWW, if no subdomain
 var trustedDomains = ["prezera-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com", "localhost"];
+
+
+app.use(function (req, res, next) {
+if(trustedDomains.indexOf(req.headers.host) == -1 && req.headers["x-forwarded-proto"] === "http") {
+  res.redirect("https://" + req.headers.host + req.url);
+}
+else {
+  next();
+}
+});
+
 function redirectToWWW(req,res,next) {
 	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 	if(req.hostname.split('.').length == 2) {
