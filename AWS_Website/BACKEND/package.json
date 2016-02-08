@@ -43,7 +43,8 @@
   	"jsonwebtoken": "",
   	"deprecate": "",
   	"string.prototype.startswith": "",
-    "aws-sdk": ""
+    "aws-sdk": "",
+    "twilio": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
