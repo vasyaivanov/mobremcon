@@ -998,7 +998,7 @@ router.get(rootRegExp, function (req, res){
 				});
 			}
 			else {
-				res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear);
+				res.redirect(301, ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear);
 			}
 		});
 	}
