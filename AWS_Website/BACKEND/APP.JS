@@ -604,7 +604,7 @@ app.use(function (req, res, next) {
 
 	var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
-	if(hash != '' && req.hostname.split('.')[0] != 'www' /*&& !path.extname(customHash)*/) {
+	if(hash != '' && req.hostname.split('.')[0] != 'www'  && trustedDomains.indexOf(req.headers.host) == -1 /*&& !path.extname(customHash)*/) {
 	   User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
   		if(docU) {
 			  Slide.findOne({ $or: [{sid: hash} ,  {scid: { $regex : new RegExp("^" + hash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
@@ -624,7 +624,8 @@ app.use(function (req, res, next) {
 			  });
 			}
 			else {
-			  res.send("Can't find user:" + req.hostname);
+        res.status(404);
+        res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 404, text: "User not found"});
 			}
 		});
 	}
