@@ -6,6 +6,7 @@
   , Gaze = require('gaze')
   , prepare_slite = require('./prepare_slite.js')
   , numSlidesParser = require('./num-slides-parser.js')
+  , textParser = require('./text-parser.js')
   , Queue = require('./queue.js');
 
 
@@ -209,6 +210,11 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             console.log('Unwatched gaze');
         }
     }
+    var xmlFullPath  = path.join(hashDir, XML_PATH);
+    var htmlFullPath = path.join();
+    if(DEBUG) console.log("XML FULL PATH: " + xmlFullPath);
+
+
     gaze = new Gaze('*', { cwd: hashDir, interval: 100 }, function (err, watcher) {
         if (err) {
             console.error(error);
@@ -274,6 +280,16 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             if (opt.stitle) {
                 titleS = opt.stitle;
             }
+
+            // psrsing xml dir for texts
+            var res = textParser(xmlFullPath, convertedHtml, function(err) {
+                if(err) {
+                    console.error('Error parsing text: ' + err);
+                } else {
+                    if(DEBUG) console.log("PARSING TEXT IS DONE.");
+                    //
+                }
+            });
 
             module.parent.exports.readSlideSize(hashDir, function (sizec) {
                 if(DEBUG) {console.log("Read slite size: " + sizec);}
@@ -359,7 +375,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                         });*/
         }; // function finish() {
 
-    		function moveFilesToS3(callback) {
+        function moveFilesToS3(callback) {
           var extExpToS3 = ['.jpeg','.jpg','.ppt', '.pptx'];
     			/*fs.readdirSync(hashDir).forEach(function(file,index){
     			  if(extExpToS3.indexOf(path.extname(file)) != -1) {
@@ -395,8 +411,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
               callback();
             }
           }
-
-    		}
+    	}; // function moveFilesToS3(...
 
         if (numSlides === 0 || isNaN(numSlides) || !numSlides) {
             fs.readFile(convertedHtml, 'utf8', function (err, data) {
@@ -435,5 +450,5 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
 
 
                     // delete presentation in UPLOAD dir
-    }); // exec ...
+    }); // exec (unoconv_cmd ...
 };
