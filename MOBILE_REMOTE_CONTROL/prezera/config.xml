@@ -9,10 +9,4 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-
-	<icon src="icon-60@3x.png" gap:platform="ios" width="180" height="180"/>
-
-    <gap:splash src="splash.png">
-
-    <preference name="auto-hide-splash-screen" value="false" />
 </widget>
