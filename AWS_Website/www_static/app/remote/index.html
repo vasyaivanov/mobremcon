@@ -75,7 +75,7 @@
 						}
 						data[$("#pres_id").val()] = $("#pres_pass").val();
 						localStorage.setItem("presentationsLocal", JSON.stringify(data));
-						location.href="/p/" + $("#pres_id").val();
+            setTimeout(function(){location.href="/p/" + $("#pres_id").val();},2000);
 					}
 				});
 			}
