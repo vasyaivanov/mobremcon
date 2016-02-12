@@ -24,7 +24,10 @@
 	</head>
     <body style="padding:0px;margin:0px;" onload="redirect()">
 
-<div class="center-div" id="title">Let's control it!</div>
+	<div class="center-div" style='width:100%; text-align:center; font-size:26px; display:none' id="title">
+		No internet connection.<br>
+		Please connect to internet to use remote control.
+	</div>
 
 	<script>
         var reloadTimer = 0;
@@ -33,7 +36,7 @@
             location.href="https://www.prezera.com/app/remote";
         }
         else {
-            document.getElementById('title').innerText = "No internet connection"
+            document.getElementById('title').style.display="block";
             window.clearTimeout(reloadTimer);
             reloadTimer = window.setTimeout(function(){redirect();}, 5000);
         }
