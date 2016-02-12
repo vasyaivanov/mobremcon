@@ -4,14 +4,39 @@
         <meta charset="utf-8" content="user-scalable=yes">
         <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no' />
             <title>PRESENTATION REMOTE CONTROL</title>
-
+    <style>
+        body {
+            background-color: #0139AB;
+            color: #FFFFFF;
+        }
+        .center-div
+        {
+            position: absolute;
+            margin: auto;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 20px;
+        }
+    </style>
 	</head>
     <body style="padding:0px;margin:0px;" onload="redirect()">
 
+<div class="center-div" id="title">Let's control it!</div>
 
 	<script>
+        var reloadTimer = 0;
 	function redirect () {
-		location.href="https://www.prezera.com/app/remote";
+        if(navigator.onLine) {
+            location.href="https://www.prezera.com/app/remote";
+        }
+        else {
+            document.getElementById('title').innerText = "No internet connection"
+            window.clearTimeout(reloadTimer);
+            reloadTimer = window.setTimeout(function(){redirect();}, 5000);
+        }
 	}
 	</script>
 
