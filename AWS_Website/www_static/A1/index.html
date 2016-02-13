@@ -1,7 +1,7 @@
 ﻿<html>
 <head>
 	<title>Presentation</title>
-    <link rel="shortcut icon" id="favicon" href="../img/favicon.png">
+    <link rel="shortcut icon" id="favicon" href="/img/favicon.png">
 
 	<!-- Video Chat files -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -30,23 +30,23 @@
 		var currentHash = "<%= hash %>";
 		</script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="../js/jquery-2.1.3.min.js"></script>
-    <script src="../js/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="../css/videochat/videochat-style.css">
-    <link rel="stylesheet" href="../css/jquery-ui.min.css">
-    <link class="rs-file" href="../css/royalslider.css" rel="stylesheet">
+    <script src="/js/jquery-2.1.3.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="/css/videochat/videochat-style.css">
+    <link rel="stylesheet" href="/css/jquery-ui.min.css">
+    <link class="rs-file" href="/css/royalslider.css" rel="stylesheet">
     <!-- preview-related stylesheets -->
-    <link href="../css/reset.css" rel="stylesheet">
-    <link href="../css/github.css" rel="stylesheet">
+    <link href="/css/reset.css" rel="stylesheet">
+    <link href="/css/github.css" rel="stylesheet">
     <!-- slider stylesheets -->
-    <link class="rs-file" href="../css/rs-default.css" rel="stylesheet">
-    <link class="rs-file" href="../A1/css/A1.css" rel="stylesheet">
+    <link class="rs-file" href="/css/rs-default.css" rel="stylesheet">
+    <link class="rs-file" href="/A1/css/A1.css" rel="stylesheet">
      <!-- font   -->
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <!-- font awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- remote stylesheet -->
-    <!--<link rel="stylesheet" type="text/css" href="../remote/css/index.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="/remote/css/index.css">-->
 </head>
 
 <body> <!--onresize="resizeCanvas()">-->
@@ -83,8 +83,8 @@
 <img id="recordButton" width="23px" height="23px" style="cursor:pointer;opacity:0.5;position:fixed;top:0px;left:0px;" title="Stop recording" alt="Stop recording" src="/img/stop_recording_button.png">
 </div>
 
-	<!--<img src="../img/RightCurtain.png" id="rightCurtain" class="curtain" />
-	<img src="../img/RightCurtain.png" id="leftCurtain" class="curtain leftCurtain" />-->
+	<!--<img src="/img/RightCurtain.png" id="rightCurtain" class="curtain" />
+	<img src="/img/RightCurtain.png" id="leftCurtain" class="curtain leftCurtain" />-->
  <!-- Google Tag Manager -->
    <!-- <noscript>
         <iframe src="//www.googletagmanager.com/ns.html?id=GTM-NRK9KQ"
@@ -141,15 +141,15 @@
 	<div id="comments">
 			<center><div class='panelTitle' style='position: absolute; left: 7%;'>Live Chat about this presentation</div><center>
 			<div class="closevideo" id="closeChat" style='margin-right: 20px;' title="Close Chat"></div>
-			<iframe id="urlChat" src="../chat.html" style='width:100%;height:92%'></iframe>
+			<iframe id="urlChat" src="/chat.html" style='width:100%;height:92%'></iframe>
 			<script>
-			    document.getElementById('urlChat').src = "../chat.html?presentation=" + currentHash.toUpperCase();
+			    document.getElementById('urlChat').src = "/chat.html?presentation=" + currentHash.toUpperCase();
     		</script>
 	</div>
 
 	<div class='helpOverlay' id='helpOverlay'>
 		<div class="closevideo" id="closeHelpOverlay" style='margin-right:30px;' title="Close Video"></div>
-		<iframe src="../A1/help.html" style='width:100%;height:100%'></iframe>
+		<iframe src="/A1/help.html" style='width:100%;height:100%'></iframe>
 	</div>
 
 	<div class='presPassOverlay' id='presPassOverlay'>
@@ -278,9 +278,9 @@
 	<div class="navButton navButtonPrev" id="navPrev">&#x2039;</div>
 	<div class="navButton navButtonNext" id="navNext">&#x203a;</div>
 
-    <!--<script class="rs-file" src="../js/jquery.royalslider.min.js"></script>-->
-    <script class="rs-file" src="../js/jquery.royalslider.js"></script>
-    <script src="../js/jquery.infinitescroll.js"></script>
+    <!--<script class="rs-file" src="/js/jquery.royalslider.min.js"></script>-->
+    <script class="rs-file" src="/js/jquery.royalslider.js"></script>
+    <script src="/js/jquery.infinitescroll.js"></script>
 
     <!-- VideoChat Javascript -->
     <script>
@@ -289,7 +289,7 @@
     </script>
 
     <!-- syntax highlighter -->
-    <script src="../js/highlight.pack.js"></script>
+    <script src="/js/highlight.pack.js"></script>
     <script> hljs.initHighlightingOnLoad();</script>
 
     <script>
@@ -297,11 +297,11 @@
         var slite = "/<%= hash %>/";
     </script>
 
-    <script src="../A1/js/A1.js"></script>
-    <script src="../A1/js/notes.js"></script>
-    <script src="../A1/js/paypal.js"></script>
+    <script src="/A1/js/A1.js"></script>
+    <script src="/A1/js/notes.js"></script>
+    <script src="/A1/js/paypal.js"></script>
     <!-- Lev: This script controls the laser dot -->
-    <script defer src="../js/LASER_RECEIVER.js"></script>
+    <script defer src="/js/LASER_RECEIVER.js"></script>
     <!-- remote imported-->
     <script src="/js/remote/slite.js"></script>
 
@@ -329,7 +329,7 @@
 			})();
 		}catch(e) {}
 	</script>
-	<div id="redDot"><img src="../img/redDot.png" alt="Laser Pointer"></div>
+	<div id="redDot"><img src="/img/redDot.png" alt="Laser Pointer"></div>
 
 	</div>
 	</body>

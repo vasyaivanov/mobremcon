@@ -82,9 +82,9 @@
 							<td><a href="#" id="open_<%= slide.sid %>"><%= slide.title %></a><br>
 						<% } else { %>
 							<% if(slide.scid != null) { %>
-								<td><a href="/<%= slide.scid %>"><%= slide.title %></a><br>
+								<td><a href="/<%= slide.scid %>/"><%= slide.title %></a><br>
 							<% } else { %>
-								<td><a href="/<%= slide.sid %>"><%= slide.title %></a><br>
+								<td><a href="/<%= slide.sid %>/"><%= slide.title %></a><br>
 							<% } %>
 						<% } %>
 						Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br>

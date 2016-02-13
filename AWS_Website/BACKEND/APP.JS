@@ -667,6 +667,7 @@ app.use(function (req, res, next) {
         }
         else {*/
           if(req.url.match(/^\/(p|m)\/.+/gi)) {
+            var presType = req.url.match(/^\/(.*?)\/.+/i)[1];
             var url_split = req.url.split("/");
             var hash = url_split[2];
             var additional_param = url_split[3];
@@ -685,6 +686,9 @@ app.use(function (req, res, next) {
                   else {
                     // Slide was found,
                     if(typeof additional_param == 'undefined') {
+                      res.redirect(301, "/" + presType + "/" + hash + "/" );
+                    }
+                    else if(additional_param == "") {
         							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole });
                     }
                     else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
@@ -968,7 +972,7 @@ function setUserSession(req, res, callback) {
 				Slide.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id, domainSet: domainSet, paypalPayed: paypalPayed }}, {multi: true, upsert: false},
 					function (err, numAffected) {
 						if(err) console.log(err);
-						if(numAffected > 0) {console.log("Remaped slides: " + numAffected)}
+						if(numAffected.nModified > 0) {console.log("Remaped slides: " + numAffected)}
 				});
 				// Send page reload
 				callback(0);

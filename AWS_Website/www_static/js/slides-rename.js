@@ -28,7 +28,7 @@ $(document).ready(function () {
 		var str = $( "#rsid_" + hashId ).val();
 		if(str) {
 			var loc = location.href.replace("#","");
-			location.href = loc + str;
+			location.href = loc + str + "/";
 
 
 			//window.open(loc + str);
