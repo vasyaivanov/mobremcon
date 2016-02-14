@@ -13,8 +13,17 @@ body {
 	position: fixed;
 	top: 0px;
 	left:0px;
-	color: blue;
 	text-decoration: underline;
+	display: none;
+	font-size: 10px;
+	color: black;
+}
+
+#presentationHashMobile{
+	position: fixed;
+	top: 0px;
+	right:0px;
+	text-decoration: none;
 	display: none;
 	font-size: 10px;
 	color: black;

@@ -10,6 +10,8 @@ if(localStorage.getItem("presentationsLocal")) {
 
 	if(presenter == 0 && presentPassword > 0) {
 		$("#backButtonMobile").show();
+        $("#presentationHashMobile").html("prezera.com/p/" + getCurrentHash());
+        $("#presentationHashMobile").show();
 	}
 }
 
@@ -370,7 +372,7 @@ function getPresentationKey() {
 		if(confirmation.key > 0) {
 			showHideMenu(true);
 			//alert("Presentation ID: " + confirmation.id + "\n" + "Presenter password: " + confirmation.key);
-			$("#getPassResult").html("<b>Presentation ID:</b> " + confirmation.id + "<br>" + "<b>Presenter password:</b> " + confirmation.key);
+			$("#getPassResult").html("<div style='margin-bottom:7px;'><b>Presentation ID:</b> " + confirmation.id + "</div>" + "<div><b>Presenter password:</b> " + confirmation.key + "</div>");
 			$('#presPassOverlay').fadeIn(400);
 
 		}
