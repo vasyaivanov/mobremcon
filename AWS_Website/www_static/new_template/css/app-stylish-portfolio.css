@@ -60,7 +60,7 @@ input.renameSlide {
 
 #noticeForm{
     position:fixed;
-    margin-top:6px;
+    margin:9vw 0 0 21vw;
 }
 
 #pres_login{
@@ -97,7 +97,7 @@ input.renameSlide {
     position: relative;
     display: inline-block;
     vertical-align: middle;
-    margin-top: 10px;
+  /*  margin-top: 10px; */
     width: 100%;
   }
 
@@ -203,7 +203,7 @@ input.renameSlide {
 
 
 .btn {
-    margin: 10px;
+    margin: 1vw;
 }
 .btn-dark {
     border-radius: 0;
@@ -275,8 +275,8 @@ input.renameSlide {
 
 .remoteTitle{
     text-align: center;
-    font-size: 30px;
-    margin-top: 4%;
+    font-size: 5.5vw;
+    margin-top: 2px;
 }
 
 .mainbackground {
