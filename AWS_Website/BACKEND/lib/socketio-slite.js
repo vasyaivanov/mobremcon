@@ -291,14 +291,17 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
               if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
       					module.parent.exports.SlideScheme.remove({ /*uid: userSession.currentUserId,*/ sid: data.sid }, function(err,delData) {
       						if (!err && delData.result.ok == 1) {
+                      if(LOG_GENERAL) {
+                        console.log("Presentation " + data.sid + " deleted");
+                      }
       								module.parent.exports.deleteS3path(data.sid);
       								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
       									if(LOG_GENERAL) {
-      										console.log('Deleting notes.....');
+      										console.log('Deleting notes.....' + data.sid);
       									}
       									module.parent.exports.chatSchema.remove({ sid: data.sid }, function(err2) {
       										if(LOG_GENERAL) {
-      											console.log('Deleting chats...');
+      											console.log('Deleting chats...' + data.sid);
       										}
       										socket.emit("client-deleteSlide", {sid: data.sid});
       									});
