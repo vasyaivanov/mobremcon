@@ -1,0 +1,510 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+h2 {
+    color: black !important;
+}
+
+body {
+    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+a {
+  color: #FFD772;
+}
+
+a:hover {
+	color: #54A7D9;
+}
+
+table {
+	color: #C4CAE3;
+}
+
+.mainbackground {
+    background: -webkit-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    background: -o-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    background: -moz-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#menu-toggle {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.toggle {
+    margin: 5px 5px 0 0;
+}
+
+
+.product {
+    width: 50%;
+    height: 300px;
+    background: url(../img/meeting.jpg) no-repeat center center scroll;
+}
+
+.services {
+    padding: 50px 0;
+}
+
+hr.small {
+    max-width: 100px;
+}
+
+.service-item {
+    margin-bottom: 30px;
+}
+
+/* Portfolio */
+
+.portfolio {
+    padding: 50px 0;
+}
+
+.portfolio-item {
+    margin-bottom: 30px;
+}
+
+.img-portfolio {
+    margin: 0 auto;
+}
+
+.img-portfolio:hover {
+    opacity: 0.8;
+}
+
+.whiteBg {
+    background: rgba(255,255,255,1);
+
+}
+
+.contact {
+    margin-bottom: 20px;
+}
+
+.login {
+	color: white;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+.loginbodyWeb {
+    position: fixed;
+    top: 20%;
+    left: 32%;
+    width: 40%
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translateX(-50%) translateY(-50%); */
+}
+
+.loginbody {
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    width: 70%
+    /* top: 50%; */
+    /* left: 50%; */
+    /* transform: translateX(-50%) translateY(-50%); */
+}
+
+#loginEmailFormGroup {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#loginPasswordFormGroup {
+    margin-bottom: 10px;
+}
+
+form {
+    width: 90%;
+}
+
+.form-group {
+    margin: 0px;
+    border-radius: 0px;
+}
+
+.loginTestInput{
+    height: 50px;
+    font-size: 18px;
+}
+
+.simplePage {
+  position: absolute;
+  top: 14%;
+  left: 10px;
+  width: 99%;
+  max-width: 100%;
+}
+
+.modal-header {
+    border-bottom: 0px !important;
+}
+
+#progressbar {
+    color:#337AB7;
+}
+
+#progressbar {
+    margin-top: 1vh;
+    height:     0px;
+    background: #337ab7;
+
+    /*background-color: blue;*/
+}
+
+.header {
+    display: table;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /*background: url(../img/bg.png) no-repeat center center scroll;*/
+	background: -webkit-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* For Firefox 3.6 to 15 */
+background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Standard syntax */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.title {
+    margin-top: 0.01%;
+    position: absolute;
+    margin-right: 5%;
+	color: #000061;
+    opacity: 0.6;
+    text-shadow: 1px 1px #ffffff;
+}
+.mainLogo {
+  font-size: 10vw;
+}
+
+.center {
+    text-align: center;
+    margin-bottom: 4%;
+}
+
+.text-vertical-center {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.text-vertical-center h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 4.5em;
+    font-weight: 700;
+}
+
+
+.uploadButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 250px;
+  height: 50px;
+  border-color: #4D68B6;
+  font-weight: normal;
+  vertical-align: middle;
+  background: #00147C;
+  color: #84A4E0;
+}
+
+.uploadButton:hover {
+  color: red;
+  border-color: red;
+  font-weight: normal;
+  background-color: #FFFFFF;
+}
+
+
+.ui-progressbar .ui-widget-header {
+     color: red;
+     background: blue repeat-x 50% 50%;
+}
+
+/* Button Upload Presentation*/
+.uploadfile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  cursor:pointer;
+  display: none;
+ }
+
+.uploadfile :hover {
+    cursor:pointer;
+}
+
+input.renameSlide {
+    width: 200px;
+    display: inline-block;
+    font-size: 10px;
+}
+
+.uploadfile input[type="file"] {
+    cursor: inherit;
+    width: inherit;
+    height: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 0;
+    background: none;
+    border: none;
+    opacity: 0;
+}
+
+
+#uploadLabel {
+    font-weight: bold;
+    color: #337ab7;
+    font-size: 2vh;
+}
+
+
+
+/* uploadDialog */
+.uploadDialog {
+    position: fixed;
+    font-family: 'Raleway', sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /*background: rgba(0,0,0,0.8);*/
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+
+.uploadDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+
+.uploadDialog > div {
+/*    width: 50vw;
+    min-width: 100px;
+    max-width: 1000px;
+    padding: 4vh 3.5vw 6vh 3.5vw;
+    border-radius: 1em;
+    margin-left: 25vw;*/
+    margin-top: 35vh;
+
+    position: relative;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+}
+
+.closeUpload {
+    line-height: 4.3vh;
+    top: -2.0vh;
+    width: 2.3vw;
+    right: -1.2vw;
+    -webkit-border-radius: 1.5em;
+    -moz-border-radius: 1.5em;
+    border-radius: 1.5em;
+
+    background: #606061;
+    color: #FFFFFF;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+
+.closeUpload:hover { background: #00d9ff; }
+
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 450px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 55px;
+    font-size: 18px;
+    line-height: 55px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    margin-right: -250px;
+    overflow-y: auto;
+    background: #222;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+#sidebar-wrapper.active {
+    right: 250px;
+    width: 450px;
+    background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+        -webkit-transition: all 0.4s ease 0s;
+        -moz-transition: all 0.4s ease 0s;
+        -ms-transition: all 0.4s ease 0s;
+        -o-transition: all 0.4s ease 0s;
+        transition: all 0.4s ease 0s;
+}
+
+
+
+
+.btn {
+    margin: 10px;
+}
+
+.btn-dark {
+    border-radius: 0;
+    color: #fff;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+    color: #fff;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.btn-light {
+    border-radius: 0;
+    color: #999;
+    /*background-color: rgb(255,255,255);*/
+}
+
+.btn-light:hover,
+.btn-light:focus,
+.btn-light:active {
+    color: #fff;
+    /*background-color: rgba(255,255,255,0.8);*/
+}
+
+@media screen and (max-device-width: 1024px) {
+        video#bgvid {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        min-width: 5%;
+        min-height:100%;
+        width: auto;
+        z-index: -100;
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        background-size: cover;
+    }
+
+	#sidebar-wrapper {
+		z-index: 1000;
+		position: fixed;
+		right: 0;
+		width: 250px;
+		height: 100%;
+		margin-right: -250px;
+		overflow-y: auto;
+		background: #222;
+		-webkit-transition: all 0.4s ease 0s;
+		-moz-transition: all 0.4s ease 0s;
+		-ms-transition: all 0.4s ease 0s;
+		-o-transition: all 0.4s ease 0s;
+		transition: all 0.4s ease 0s;
+		font-size: 1.3em
+	}
+	.uploadButton {
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  transform: translateX(-50%) translateY(-50%);
+	  width: 250px;
+	  height: 50px;
+	  border-color: #4D68B6;
+	  font-weight: normal;
+	  vertical-align: middle;
+	  background: #00147C;
+	  color: #84A4E0;
+	  font-size: 1.3em;
+	}
+
+	.mainLogo {
+		font-size: 5em;
+	}
+
+  input {
+      font-size: 80px;
+   }
+
+   a {
+     font-size: 3vw;
+   }
+}
