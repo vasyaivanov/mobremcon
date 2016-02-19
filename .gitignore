@@ -40,10 +40,8 @@ AWS_Website/UPLOAD/**
 BACKEND/TEST/MA/**
 *.zip
 
-AWS_Website/slites
 AWS_Website/old_slites
 expressLogFile.log
-BACKEND/UPLOADS/
 *.bat
 AWS_Website/BACKEND/node_modules/
 AWS_Website/libreoffice/

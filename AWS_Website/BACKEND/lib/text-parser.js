@@ -36,7 +36,7 @@ module.exports = function (xmlDir, htmlFile, next) {
                             return;
                         } else {
                             if(DEBUG) console.log('FILE #' + f + ' READ');
-                            // quick and dirty parser - expode prone
+                            // quick and dirty parser - expolode prone
                             //if (DEBUG) console.log('Parsing text complete, Object:');                     
                             //if (DEBUG) console.log(data);
                             var strData = data.toString();
