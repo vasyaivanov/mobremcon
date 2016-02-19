@@ -15,7 +15,7 @@ module.exports = function (xmlDir, htmlFile, next) {
         if (DEBUG) console.log('XML Slides dir:\n', files);
         if (err) {
             if (DEBUG) console.log('Error reading XML Slides dir: ', err);
-            next(err);
+            next && next(err);
             return;
         } 
         if (DEBUG) console.log('Number of slides in XML Slides dir: ' + files.length);
@@ -32,7 +32,7 @@ module.exports = function (xmlDir, htmlFile, next) {
                     fs.readFile(filePathName, function (err, data) {
                         if (err) {
                             if (DEBUG) console.error('Parsed text with error', err);
-                            next(err);
+                            next && next(err);
                             return;
                         } else {
                             if(DEBUG) console.log('FILE #' + f + ' READ');
@@ -74,26 +74,26 @@ module.exports = function (xmlDir, htmlFile, next) {
                 // append an invisible text to html file
                 if(text.length === 0) 
                 {
-                    next(null);
+                    next && next(null);
                     return;
                 }
                 if(DEBUG) console.log('TOTAL TEXT:\n' + text);
                 fs.readFile(htmlFile, "utf8", function (err, data) {
                     if (err) {
                         if (DEBUG) console.error('Error reading html file', err);
-                        next(err);
+                        next && next(err);
                         return;
                     } else {
                         var data_replaced = data.replace('</body>', 
-                                                         '<div id="content" style="position: absolute; left: -99999px;">' + text + '</div></body>');
+                                                         '<div id="content" style="position: absolute; left: -9999px;">' + text + '</div></body>');
                         if(DEBUG) console.log("READY HTML FILE:\n" + data_replaced); 
                         fs.writeFile(htmlFile, data_replaced, function (err) {
                             if (err) {
                                 if (DEBUG) console.error('Error writing html file', err);
-                                next(err);
+                                next && next(err);
                              } else {
                                 if(DEBUG) console.log('TEXT APPENDED TO HTML:');
-                                next(null);
+                                next && next(null);
                             }
                         });
                     }
@@ -132,6 +132,6 @@ module.exports = function (xmlDir, htmlFile, next) {
                             //if (DEBUG) console.log('Done parsing, object: ');
                             //if (DEBUG) console.dir(obj);
                         }
-                        next(error, result);
+                        next && next(error, result);
                     });
                     */

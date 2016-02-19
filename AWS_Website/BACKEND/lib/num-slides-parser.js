@@ -40,10 +40,10 @@ module.exports = function (parsedFile, opt, next) {
             if (DEBUG) console.log(w);
             parsedNumSlides = w.slides.length;
             if (DEBUG) console.log(ppt.utils.to_text(w));//.join("\n"));
-            next(null, parsedNumSlides);
+            next && next(null, parsedNumSlides);
         } catch (err) {
             if (DEBUG) console.error('Error while using ppt.readFile():', err);
-            next(err, 0);
+            next && next(err, 0);
         }
     } else {
         if (DEBUG) console.log('starting XML officeParser...');
@@ -84,12 +84,12 @@ module.exports = function (parsedFile, opt, next) {
                         } else {
                             error = new Error('Number of files in slides folder not detemined');
                         }
-                        next(error, parsedNumSlides);
+                        next && next(error, parsedNumSlides);
                         if (!DEBUG && !opt.leaveXML) deleteXML(parsedFile, opt.xmlPath);
                     }
                 });
             } else {
-                next(error, parsedNumSlides);
+                next && next(error, parsedNumSlides);
                 if (!DEBUG && !opt.leaveXML) _deleteXML(parsedFile, opt.xmlPath);
             }               
          }); // officeParser.readFile ..

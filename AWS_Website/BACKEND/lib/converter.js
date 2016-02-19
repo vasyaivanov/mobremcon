@@ -288,46 +288,46 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                 } else {
                     if(DEBUG) console.log("PARSING TEXT IS DONE.");
                     //
-                }
-            });
+                    module.parent.exports.readSlideSize(hashDir, function (sizec) {
+                        if(DEBUG) {console.log("Read slite size: " + sizec);}
+                                var domainSet = (opt.domain == 1 && opt.domainSet == 1) ? 1 : 0;
+                        var addSlide = new opt.SlidesScheme({ uid: opt.userSessionId, sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides, domainSet: domainSet, paypalPayed: ((domainSet == 1) ? 1 : 0) });
+                        if(DEBUG) {
+                            console.log("OTP: ");
+                            console.log(opt);
+                            console.log("Starting new SlidesScheme: ");
+                            console.log(addSlide);
+                        }
+                        addSlide.save(function (err, saved) {
+                            if(DEBUG) {
+                                console.log("Saved Scheme: ");
+                                console.log(saved);
+                            }
+                            if (err) {
+                                console.error('Can\'t insert a new Slide ' + err);
+                            }
 
-            module.parent.exports.readSlideSize(hashDir, function (sizec) {
-                if(DEBUG) {console.log("Read slite size: " + sizec);}
-				        var domainSet = (opt.domain == 1 && opt.domainSet == 1) ? 1 : 0;
-                var addSlide = new opt.SlidesScheme({ uid: opt.userSessionId, sid: slite.hashValue, tmp: ((opt.userAuth) ? 0 : 1), title: titleS, size: ((sizec > 0) ? sizec : 0), desc: opt.sdesc, url: opt.surl, crawled: opt.scrawled, site: opt.ssite, keywords: opt.skeywords, slidesNum: numSlides, domainSet: domainSet, paypalPayed: ((domainSet == 1) ? 1 : 0) });
-                if(DEBUG) {
-                    console.log("OTP: ");
-                    console.log(opt);
-                    console.log("Starting new SlidesScheme: ");
-                    console.log(addSlide);
-                }
-                addSlide.save(function (err, saved) {
-                    if(DEBUG) {
-                        console.log("Saved Scheme: ");
-                        console.log(saved);
-                    }
-                    if (err) {
-                        console.error('Can\'t insert a new Slide ' + err);
-                    }
+                            // Move files to S3
+                            slite.getParams().socket.emit("uploadProgress", { msg: "Preparing presentation...", percentage: "100" });
 
-					      // Move files to S3
-                slite.getParams().socket.emit("uploadProgress", { msg: "Preparing presentation...", percentage: "100" });
+                            moveFilesToS3(function() {
+                                // Remove hash dir
+                                opt.removeDirFunc(hashDir);
+                                if (slite.getParams().opt.noSocketRet !== 1) {
+                                    if(DEBUG) {console.log("Socket emitting: slitePrepared");}
+                                    slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, domain: opt.domainName, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
+                                    if(DEBUG) {console.log("Socket emitted: slitePrepared");}
+                                }
 
-      					moveFilesToS3(function() {
-    						  // Remove hash dir
-      						opt.removeDirFunc(hashDir);
-      						if (slite.getParams().opt.noSocketRet !== 1) {
-      							if(DEBUG) {console.log("Socket emitting: slitePrepared");}
-      							slite.getParams().socket.emit("slitePrepared", { dir: hashDir, hash: slite.hashValue, domain: opt.domainName, slides: slite.num_slides, fileName: slite.getParams().initialFileName });
-      							if(DEBUG) {console.log("Socket emitted: slitePrepared");}
-      						}
+                                if(DEBUG) {console.log("Executing onSliteCompleteCallback");}
+                                onSliteCompleteCallback && onSliteCompleteCallback(err);
+                                if(DEBUG) {console.log("onQueueCompleteCallback is executed");}
+                            }); // moveFilesToS3()
+                        }); // addSlide.save()
+                    }); // module.parent.exports.readSlideSize()
+                } // if(err) ... else ...
+            }); // var res = textParser()
 
-                  if(DEBUG){console.log("Executing onSliteCompleteCallback");}
-                  onSliteCompleteCallback && onSliteCompleteCallback(err);
-                  if(DEBUG){console.log("onQueueCompleteCallback is executed");}
-                  });
-                });
-              });
 
                         /*slite.generateHtml(function (err) {
                             if (err) {
