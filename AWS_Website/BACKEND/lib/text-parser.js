@@ -22,7 +22,7 @@ module.exports = function (xmlDir, htmlFile, next) {
         var text = ''; // accumulator of all text in all pages
  
         function slideLoader(f) {
-            if( f < files.length ) {
+            if( f < files.length ) {    
                 var filename = files[f];
                 if(filename.match(SLIDES_REG_EXP)) // if file is a slide
                 {
@@ -85,7 +85,7 @@ module.exports = function (xmlDir, htmlFile, next) {
                         return;
                     } else {
                         var data_replaced = data.replace('</body>', 
-                                                         '<div id="content" style="display: none;">' + text + '</div></body>');
+                                                         '<div id="content" style="position: absolute; left: -99999px;">' + text + '</div></body>');
                         if(DEBUG) console.log("READY HTML FILE:\n" + data_replaced); 
                         fs.writeFile(htmlFile, data_replaced, function (err) {
                             if (err) {
