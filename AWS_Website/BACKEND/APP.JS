@@ -1242,6 +1242,7 @@ slideCheckPresenter = function(reqData , callback) {
         					domainSet: (doc[i].domainSet) ? 1 : 0, // [9] Is domain set for this account?
         					presentationKey: (doc[i].presentationKey) ? doc[i].presentationKey : 0, //[10] Access key for presentation
                   created: doc[i].created,
+                  videoTwilio: (doc[i].videoTwilio) ? 1 : 0, //[10] Access key for presentation
                   presDomain: presDomain
               };
 
@@ -1329,12 +1330,24 @@ router.get('/video.html', function (req, res){
   else {
 		var hashId = req.query.presentation;
 			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
-        console.log(data);
 				if(data.found == 1 && data.isPresenter == 1) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+          var file = "video-presenter.html";
+          var token = 0;
+          var username = data.sid + '_presenter';
+          if(data.videoTwilio == 1) {
+            token = getTwilioToken(username);
+            file = "v-twilio-presenter.html";
+          }
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/' + file), {token: token, user: username , presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else if(data.found == 1 && data.isPresenter == 0) {
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+          var file = "video-client.html";
+          var token = 0;
+          if(data.videoTwilio == 1) {
+            token = getTwilioToken();
+            file = "v-twilio-client.html";
+          }
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/' + file), {token: token, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
 					res.send("Presentation was not found")
@@ -1360,6 +1373,23 @@ router.get('/record.html', function (req, res){
 			});
     }
 });
+
+
+function getTwilioToken(username) {
+  var AccessToken = require('twilio').AccessToken;
+  // Substitute your Twilio AccountSid and ApiKey details
+  var ACCOUNT_SID = 'AC066339c9614f030f60c239ce61e5307b';
+  var API_KEY_SID = 'SKebc6b891be532615c9ec223cc9d0691c';
+  var API_KEY_SECRET = 'GQCRbQObWtmuEsWYGf3AdttlyfJ3XPVp';
+  // Create an Access Token
+  var accessToken = new AccessToken(ACCOUNT_SID,API_KEY_SID,API_KEY_SECRET);
+  accessToken.identity = username;
+  var grant = new AccessToken.ConversationsGrant();
+  grant.configurationProfileSid = 'VSc492521f04edbafda6af34c8e211afe0';
+  accessToken.addGrant(grant);
+  var jwt = accessToken.toJwt();
+  return jwt;
+}
 
 router.get(new RegExp('^/video/(index\.html)?$'), function (req, res) {
 	var AccessToken = require('twilio').AccessToken;
