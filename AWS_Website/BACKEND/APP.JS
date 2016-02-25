@@ -1344,10 +1344,10 @@ router.get('/video.html', function (req, res){
           var file = "video-client.html";
           var token = 0;
           if(data.videoTwilio == 1) {
-            token = getTwilioToken();
+            token = getTwilioToken(UserData[req.cookies[sessionIdCookie]].currentUserId);
             file = "v-twilio-client.html";
           }
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/' + file), {token: token, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/' + file), {token: token, user: UserData[req.cookies[sessionIdCookie]].currentUserId, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
 				}
 				else {
 					res.send("Presentation was not found")

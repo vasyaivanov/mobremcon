@@ -22,18 +22,14 @@ conversationsClient.listen().then(
 
 // successfully connected!
 function clientConnected() {
-  document.getElementById('invite-controls').style.display = 'block';
   log("Connected to Twilio. Listening for incoming Invites as '" + conversationsClient.identity + "'");
 
 	if(presenter == 0) {
-		$("#invite-to").val("presenter");
 		runTwilio();
 	}
 	else {
     presenterView();
     videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
-		$("#invite-to").hide();
-		$("#button-invite").hide();
 	}
 
   conversationsClient.on('invite', function (invite) {
@@ -42,7 +38,7 @@ function clientConnected() {
   });
 
    function runTwilio() {
-    var inviteTo = document.getElementById('invite-to').value;
+    var inviteTo = hash + "_presenter";
 
     if (activeConversation) {
       // add a participant
@@ -73,13 +69,16 @@ function conversationStarted(conversation) {
   log('In an active Conversation');
   activeConversation = conversation;
   // draw local video, if not already previewing
-  if (!previewMedia) {
+  if (!previewMedia && presenter == 1) {
+    console.log("Open local media");
     conversation.localMedia.attach('#local-media');
   }
   // when a participant joins, draw their video on screen
   conversation.on('participantConnected', function (participant) {
     log("Participant '" + participant.identity + "' connected");
-    participant.media.attach('#remote-media');
+    if(presenter == 0) {
+      participant.media.attach('#remote-media');
+    }
   });
   // when a participant disconnects, note in log
   conversation.on('participantDisconnected', function (participant) {
