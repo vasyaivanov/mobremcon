@@ -167,6 +167,7 @@ var slidesSchema = mongoose.Schema({
   isOnlinePresentation: { type: Number,  default: 0,  max: 1 },
   hidden: { type: Number,  default: 0 , max: 1},
   domainSet: {type: Number,  default: 0 , max: 1 },
+  videoTwilio: { type: Number,  default: 0 , max: 1},
   slidesNum: {type: Number},
   presentationKey: {type: Number}
 });
