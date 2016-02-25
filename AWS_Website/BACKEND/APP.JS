@@ -447,12 +447,8 @@ else {
 					console.log('Bot or crawler: ' + req.url + ' : ' + req.headers['user-agent']);
           req.url = req.url.replace(/(\&|\?)?auth=1/g,"")
 					var split_hash = req.path.split("/");
-          var hash = split_hash[2];
-          var additional_param = split_hash[3];
-          if(req.hostname.split('.')[0] != "www") {
-            var hash = split_hash[1];
-            var additional_param = split_hash[2];
-          }
+          var hash = split_hash[1];
+          var additional_param = split_hash[2];
 
 					//if(split_hash.length == 3) {
             slideCheckPresenter({ hashId: hash, currentUserId: 0, domainReq: (req.hostname.split('.')[0] == "www") ? 0 : 1, domainName: req.hostname.split('.')[0] }, function(data) {
