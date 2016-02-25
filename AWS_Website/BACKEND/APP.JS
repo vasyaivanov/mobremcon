@@ -462,7 +462,7 @@ else {
                 }
                 else {
                   var images = '';
-                  var addP = "/p/";
+                  var addP = "/";
                   if(req.hostname.split('.')[0] != "www") {
                     addP = "/";
                   }
