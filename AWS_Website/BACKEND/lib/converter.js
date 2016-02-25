@@ -285,7 +285,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
             var res = textParser(xmlFullPath, convertedHtml, function(err) {
                 if(err) {
                     console.error('Error parsing text: ' + err);
-                } else {
+                } // else {
                     if(DEBUG) console.log("PARSING TEXT IS DONE.");
                     //
                     module.parent.exports.readSlideSize(hashDir, function (sizec) {
@@ -325,7 +325,7 @@ function convertJob(err, slite, onSliteCompleteCallback) { // start of queue ite
                             }); // moveFilesToS3()
                         }); // addSlide.save()
                     }); // module.parent.exports.readSlideSize()
-                } // if(err) ... else ...
+                //} // if(err) ... else ...
             }); // var res = textParser()
 
 
