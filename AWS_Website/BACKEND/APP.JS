@@ -614,10 +614,10 @@ app.use(function (req, res, next) {
 				  if(doc) {
             req.body.thisisdomain = 1;
             if(typeof additional_param == 'undefined') {
-              req.url = "/p/" + doc.sid;
+              req.url = "/" + doc.sid;
             }
             else {
-              req.url = "/p/" + doc.sid + "/" + additional_param;
+              req.url = "/" + doc.sid + "/" + additional_param;
             }
   					next();
 				  }
@@ -645,6 +645,7 @@ app.use(function (req, res, next) {
   checkName = checkName.replace(/^\//,"");
   checkName = checkName.replace(/(\?|\=)/gi,"");
 
+
   var currentUser;
 
   if(typeof req.cookies[sessionIdCookie] != "undefined") {
@@ -654,76 +655,49 @@ app.use(function (req, res, next) {
     currentUser = 0;
   }
 
-    slideCheckPresenter({ hashId: checkName, currentUserId: currentUser, domainReq: 0, created: {$lte: new Date("2016-02-05") } }, function(data) {
+
+  var url_split = req.url.split("/");
+  var hash = url_split[1];
+  var additional_param = url_split[2];
+
+  slideCheckPresenter({ hashId: hash, currentUserId: currentUser, domainReq: (req.hostname.split('.')[0] == "www") ? 0 : 1, domainName: req.hostname.split('.')[0] }, function(data) {
       if(data.found == 1) {
-        if(data.scid) {
-          res.redirect(301, "/p/" + data.scid );
-        }
-        else {
-          res.redirect(301, "/p/" + data.sid );
-        }
-      }
-      else {
-        /*if(req.url.match(slitesRegMW) && req.body.thisisdomain != 1) {
-          res.redirect("/p" + req.url );
-        }
-        else {*/
-          if(req.url.match(/^\/(p|m)\/.+/gi)) {
-            var presType = req.url.match(/^\/(.*?)\/.+/i)[1];
-            var url_split = req.url.split("/");
-            var hash = url_split[2];
-            var additional_param = url_split[3];
-            if(url_split.length > 4) {
-              res.redirect("/");
+          if(data.presDomain != req.hostname.split('.')[0]) {
+            res.status(404);
+            res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 404, text: "Presentation wasn't found"});
+            //var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+            //res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://' + domainClear);
+          }
+          else {
+            // Slide was found,
+            if(typeof additional_param == 'undefined') {
+              res.redirect(301, "/" + hash + "/" );
             }
-            else {
-              slideCheckPresenter({ hashId: hash, currentUserId: currentUser, domainReq: (req.body.thisisdomain) ? 1 : 0 }, function(data) {
-                if(data.found == 1) {
-                  if(data.presDomain != req.hostname.split('.')[0]) {
-                    res.status(404);
-                    res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 404, text: "Presentation wasn't found"});
-                    //var domainClear = 'www.' + req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
-                    //res.redirect(((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://' + domainClear);
-                  }
-                  else {
-                    // Slide was found,
-                    if(typeof additional_param == 'undefined') {
-                      res.redirect(301, "/" + presType + "/" + hash + "/" );
-                    }
-                    else if(additional_param == "") {
-        							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole });
-                    }
-                    else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
-                      var extTsPos = additional_param.indexOf('.jpg?ts=', 4);
-                      if (extTsPos !== -1) {
-                        additional_param = additional_param.substring(0, extTsPos + 4);
-                      }
-                      res.redirect(getS3fileUrl(hash + "/" + additional_param ));
-                    }
-                    else if(additional_param.match(/download\s*(\/?|\\)?$/i)) {
-                      var supportUplExtensions = [".ppt", ".pptx"];
-                      AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: hash}, function(err, data) {
-                        data.Contents.forEach(function(content) {
-                        if(supportUplExtensions.indexOf(path.extname(content.Key)) != -1) {
-                          res.redirect(getS3fileUrl(content.Key));
-                        }
-                        });
-                      });
-                    }
-                  }
+            else if(additional_param == "") {
+							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole });
+            }
+            else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
+              var extTsPos = additional_param.indexOf('.jpg?ts=', 4);
+              if (extTsPos !== -1) {
+                additional_param = additional_param.substring(0, extTsPos + 4);
+              }
+              res.redirect(getS3fileUrl(hash + "/" + additional_param ));
+            }
+            else if(additional_param.match(/download\s*(\/?|\\)?$/i)) {
+              var supportUplExtensions = [".ppt", ".pptx"];
+              AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: hash}, function(err, data) {
+                data.Contents.forEach(function(content) {
+                if(supportUplExtensions.indexOf(path.extname(content.Key)) != -1) {
+                  res.redirect(getS3fileUrl(content.Key));
                 }
-                else {
-                  res.status(404);
-                  res.render(path.join(www_dir, www_static_dir, 'errors.html'), {errorCode: 404, text: "Presentation wasn't found"});
-                }
+                });
               });
             }
           }
-          else {
-            next();
-          }
-        //}
-      }
+        }
+        else {
+          next();
+        }
     });
 
 

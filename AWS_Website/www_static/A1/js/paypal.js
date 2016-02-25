@@ -32,7 +32,7 @@ socket.on('renameHash-client', function (data) {
 							redirUrl = window.location.protocol + "//" + data.site + "/" + data.newHashName
 						}
 						else {
-							redirUrl =  "/p/" + data.newHashName
+							redirUrl =  "/" + data.newHashName
 						}
 						if(isInIFrame() == true) {
 							parent.window.location.href= redirUrl;
@@ -57,7 +57,7 @@ socket.on('renameHash-client', function (data) {
 
 paypal.renamePresCheck = function (str) {
 	if(str) {
-		var regex = /[^\w\s]/gi;
+		var regex = /[^\w]/gi;
 
 		if(regex.test(str) == true) {
 			$("#newHashRes").html("<font color='red'>You can't use any special symbols.</font>");

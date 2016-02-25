@@ -142,8 +142,8 @@
             <% } else if (noUploadForUser == 2) {%>
 
 				<% randomSlides.forEach(function(slide){ %>
-					<p><a href="https://<%=slide.site%>/p/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/">
-					<img src="/p/<%= slide.sid %>/img0.jpg" class="img-rounded" width="20" title="<%= slide.title %>">
+					<p><a href="https://<%=slide.site%>/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/">
+					<img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="20" title="<%= slide.title %>">
 					<%= slide.title %></a></p>
 				<%  }); %>
 			<% } %>
@@ -319,8 +319,8 @@
       <% if (userData.domainSet == 0) { %>
   			<% slides.forEach(function(slide){ %>
   				<tr id="slide_<%= slide.sid %>">
-  				<td width="150"><a href="/p/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/p/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
-  				<td><a href="/p/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a><br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></td>
+  				<td width="150"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
+  				<td><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a><br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></td>
   				</tr>
   			<%  }); %>
       <% } %>

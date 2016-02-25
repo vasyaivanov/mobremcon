@@ -208,7 +208,7 @@ $(document).ready(function () {
           var urlRedirect = "//" + data.domain + "." + location.hostname.split('.').reverse()[1] + '.' + location.hostname.split('.').reverse()[0] + "/" + data.hash;
         }
         else {
-          urlRedirect = getClearHost() + '/p/' + data.hash;
+          urlRedirect = getClearHost() + '/' + data.hash;
         }
         window.location = urlRedirect;
 

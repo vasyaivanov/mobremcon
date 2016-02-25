@@ -408,12 +408,12 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         		module.parent.exports.SlideScheme.update({scid: {$ne: null} , paypalPayed: "0", paypalTmpExp: {$lt: delPaypalTimeoutDate } }, { $set: { scid: null, paypalTmpExp: null, paypalPayed: 0 }}).exec();
         		module.parent.exports.slideCheckPresenter({ hashId: data.slideId, currentUserId: userSession.currentUserId } , function(retData) {
         				if(retData.isPresenter == 1 && retData.found == 1) {
+                  data.newHashName = data.newHashName.replace(/[^\w]/,"");
         					if(data.newHashName.length > 30 || data.newHashName.length <= module.parent.exports.slitesHashLen) {
         						socket.emit('renameHash-client', {slideId: data.slideId, available : 0});
         					}
         					else {
       							var domainClear = 'www.' + socket.handshake.headers.host.split('.').reverse()[1] + '.' + socket.handshake.headers.host.split('.').reverse()[0];
-
       							var searchParams = {};
       							searchParams.scid = { $regex : new RegExp("^" + data.newHashName + "$" , "i") };
       							searchParams.site = domainClear;

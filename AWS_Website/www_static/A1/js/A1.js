@@ -10,7 +10,7 @@ if(localStorage.getItem("presentationsLocal")) {
 
 	if(presenter == 0 && presentPassword > 0) {
 		$("#backButtonMobile").show();
-        $("#presentationHashMobile").html("prezera.com/p/" + getCurrentHash());
+        $("#presentationHashMobile").html("prezera.com/" + getCurrentHash());
         $("#presentationHashMobile").show();
 	}
 }
@@ -308,10 +308,11 @@ function getCurrentHash() {
 }
 
 function downloadPresentation() {
-		addPimg = "/p/";
+		addPimg = "/";
 		if(location.hostname.split('.')[0] != "www") {
-			addPimg = "";
+			addPimg = "/";
 		}
+		console.log(addPimg + getCurrentHash() + '/download');
 		window.open(addPimg + getCurrentHash() + '/download');
     showHideMenu(true);
 }
@@ -807,7 +808,7 @@ $( window ).load(function() {
 		number_of_slides = 13;
     }
 
-		var addPimg = "/p";
+		var addPimg = "";
 
 		if(location.hostname.split('.')[0] != "www") {
 			addPimg = "";
