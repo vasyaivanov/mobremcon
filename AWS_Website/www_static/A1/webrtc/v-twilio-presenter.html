@@ -1,18 +1,19 @@
 <html>
   <head>
     <title>Twilio Video - Conversations Quickstart</title>
-    <link rel="stylesheet" href="https://media.twiliocdn.com/sdk/quickstart/conversations-quickstart.min.css">
+    <!--link rel="stylesheet" href="https://media.twiliocdn.com/sdk/quickstart/conversations-quickstart.min.css"-->
+    <style>
+      #local-media{width:270px;height:202px;border:1px solid #cececc;}
+      #local-media video{max-width:100%;max-height:100%;border:none}
+    </style>
   </head>
   <body>
   <div id="remote-media"></div>
   <div id="controls">
     <div id="preview">
-      <p class="instructions">Lookin' good!</p>
       <div id="local-media"></div>
-      <button id="button-preview">Preview My Camera</button>
     </div>
     <div id="invite-controls">
-      <p class="instructions">Invite another Conversations Client</p>
       <input id="invite-to" type="text" placeholder="Identity to send an invite to" />
       <button id="button-invite">Connect</button>
     </div>
@@ -23,12 +24,21 @@
   <script src="https://media.twiliocdn.com/sdk/js/common/v0.1/twilio-common.min.js"></script>
   <script src="https://media.twiliocdn.com/sdk/js/conversations/v0.11/twilio-conversations.min.js"></script>
   <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script>
   var accessToken = '<%= token %>';
   var presenter = <%= presenter %>;
   var username = "<%= user %>";
+  var hash = "<%= hash %>";
+  var videoPresenterSocket;
+  if(typeof parent.socket != "undefined") {
+  	videoPresenterSocket = parent.socket
+  }
+  else {
+  	videoPresenterSocket = io.connect(document.location.hostname + ':' + location.port);
+  }
+
   </script>
-  <script src="quickstart.js"></script>
-  <iframe id="chat" width="300" height="300" src="/chat.html?presentation=testPres" style="position: absolute; top: 10px; left: 10px"  scrolling="no" frameborder="0"></iframe>
+  <script src="/A1/js/twilio.js"></script>
   </body>
 </html>

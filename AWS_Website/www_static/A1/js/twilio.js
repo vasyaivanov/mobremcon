@@ -25,28 +25,22 @@ function clientConnected() {
   document.getElementById('invite-controls').style.display = 'block';
   log("Connected to Twilio. Listening for incoming Invites as '" + conversationsClient.identity + "'");
 
-  	$( "#chat" ).contents().find( "#name" ).val(username);
-	setTimeout(function(){
-		$( "#chat" ).contents().find( "#join" ).click();
-	}, 1000);
-
 	if(presenter == 0) {
 		$("#invite-to").val("presenter");
 		runTwilio();
 	}
 	else {
+    presenterView();
+    videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
 		$("#invite-to").hide();
 		$("#button-invite").hide();
 	}
-  
+
   conversationsClient.on('invite', function (invite) {
     log('Incoming invite from: ' + invite.from);
     invite.accept().then(conversationStarted);
   });
 
-  // bind button to create conversation.
- //   document.getElementById('button-invite').onclick = function () {
- // document.getElementById('button-invite').onclick = function () {
    function runTwilio() {
     var inviteTo = document.getElementById('invite-to').value;
 
@@ -101,7 +95,7 @@ function conversationStarted(conversation) {
 };
 
 //  local video preview
-document.getElementById('button-preview').onclick = function () {
+presenterView = function () {
   if (!previewMedia) {
     previewMedia = new Twilio.Conversations.LocalMedia();
     Twilio.Conversations.getUserMedia().then(
