@@ -44,7 +44,7 @@
   	"deprecate": "",
   	"string.prototype.startswith": "",
     "aws-sdk": "",
-    "twilio": ""
+    "opentok": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

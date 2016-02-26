@@ -25,7 +25,9 @@ var express = require('express')
   , AWS_S3_BUCKET = "prezera-"
   , os = require('os')
   , DEBUG = false
-  , paypalIpn = require('paypal-ipn');
+  , paypalIpn = require('paypal-ipn')
+  , OpenTok = require('opentok')
+  , opentok = new OpenTok('45510752', 'de8ff0ffee1f45d1114f3efac327a1eb70db778c');
 
 // AWS API config
 AWS.config.region = 'us-west-1';
@@ -167,8 +169,9 @@ var slidesSchema = mongoose.Schema({
   isOnlinePresentation: { type: Number,  default: 0,  max: 1 },
   hidden: { type: Number,  default: 0 , max: 1},
   domainSet: {type: Number,  default: 0 , max: 1 },
-  videoTwilio: { type: Number,  default: 0 , max: 1},
+  notPTPVideo: { type: Number,  default: 0 , max: 1},
   slidesNum: {type: Number},
+  videoSession: {type: String},
   presentationKey: {type: Number}
 });
 
@@ -1212,7 +1215,8 @@ slideCheckPresenter = function(reqData , callback) {
         					domainSet: (doc[i].domainSet) ? 1 : 0, // [9] Is domain set for this account?
         					presentationKey: (doc[i].presentationKey) ? doc[i].presentationKey : 0, //[10] Access key for presentation
                   created: doc[i].created,
-                  videoTwilio: (doc[i].videoTwilio) ? 1 : 0, //[10] Access key for presentation
+                  notPTPVideo: (doc[i].notPTPVideo) ? 1 : 0, //[10] Access key for presentation
+                  videoSession: doc[i].videoSession,
                   presDomain: presDomain
               };
 
@@ -1299,25 +1303,37 @@ router.get('/video.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
+
 			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
 				if(data.found == 1 && data.isPresenter == 1) {
-          var file = "video-presenter.html";
           var token = 0;
-          var username = data.sid + '_presenter';
-          if(data.videoTwilio == 1) {
-            token = getTwilioToken(username);
-            file = "v-twilio-presenter.html";
+          if(data.notPTPVideo == 1) {
+            openTokSession(hashId,data.videoSession, data.isPresenter, function(token,session) {
+              opentok.startArchive(session, { }, function(err, archive) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  // The id property is useful to save off into a database
+                  console.log("new archive:" + archive.id);
+                }
+              });
+              res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/o-video-pres.html'), {token: token, session: session, hash: hashId});
+            });
           }
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/' + file), {token: token, user: username , presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+          else {
+					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {token: token, user: username , presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+          }
 				}
 				else if(data.found == 1 && data.isPresenter == 0) {
-          var file = "video-client.html";
           var token = 0;
-          if(data.videoTwilio == 1) {
-            token = getTwilioToken(UserData[req.cookies[sessionIdCookie]].currentUserId);
-            file = "v-twilio-client.html";
+          if(data.notPTPVideo == 1) {
+            openTokSession(hashId,data.videoSession, data.isPresenter, function(token,session) {
+              res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/o-video-client.html'), {token: token, session: session});
+            });
           }
-					res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/' + file), {token: token, user: UserData[req.cookies[sessionIdCookie]].currentUserId, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+          else {
+					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {token: token, user: UserData[req.cookies[sessionIdCookie]].currentUserId, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+          }
 				}
 				else {
 					res.send("Presentation was not found")
@@ -1344,46 +1360,40 @@ router.get('/record.html', function (req, res){
     }
 });
 
+function openTokSession(hashId,videoSession, presenter, callback) {
+  var sessionType = {};
+  sessionType[0] = "subscriber";
+  sessionType[1] = "moderator";
 
-function getTwilioToken(username) {
-  var AccessToken = require('twilio').AccessToken;
-  // Substitute your Twilio AccountSid and ApiKey details
-  var ACCOUNT_SID = 'AC066339c9614f030f60c239ce61e5307b';
-  var API_KEY_SID = 'SKebc6b891be532615c9ec223cc9d0691c';
-  var API_KEY_SECRET = 'GQCRbQObWtmuEsWYGf3AdttlyfJ3XPVp';
-  // Create an Access Token
-  var accessToken = new AccessToken(ACCOUNT_SID,API_KEY_SID,API_KEY_SECRET);
-  accessToken.identity = username;
-  var grant = new AccessToken.ConversationsGrant();
-  grant.configurationProfileSid = 'VSc492521f04edbafda6af34c8e211afe0';
-  accessToken.addGrant(grant);
-  var jwt = accessToken.toJwt();
-  return jwt;
+  if(typeof videoSession == "undefined") {
+    opentok.createSession({mediaMode:"routed", archiveMode:'always'}, function(err, session) {
+      Slide.update({ sid: hashId }, {$set: { videoSession : session.sessionId}}, {upsert: false},
+        function (err, numAffected) {
+            if(numAffected.nModified == 1) {
+              openTokToken(session.sessionId, sessionType[presenter], function(token) {
+                callback(token,session.sessionId);
+              });
+            }
+            else {
+              callback(0);
+            }
+      });
+    });
+  }
+  else {
+    openTokToken(videoSession, sessionType[presenter], function(token) {
+      callback(token,videoSession);
+    });
+  }
 }
 
-router.get(new RegExp('^/video/(index\.html)?$'), function (req, res) {
-	var AccessToken = require('twilio').AccessToken;
-	// Substitute your Twilio AccountSid and ApiKey details
-	var ACCOUNT_SID = 'AC066339c9614f030f60c239ce61e5307b';
-	var API_KEY_SID = 'SKebc6b891be532615c9ec223cc9d0691c';
-	var API_KEY_SECRET = 'GQCRbQObWtmuEsWYGf3AdttlyfJ3XPVp';
-	// Create an Access Token
-	var accessToken = new AccessToken(ACCOUNT_SID,API_KEY_SID,API_KEY_SECRET);
-	var presenter = 0;
-	if(req.query.presenter == 1) {
-		presenter = 1;
-		accessToken.identity = 'presenter';
-	}
-	else {
-		accessToken.identity = 'user' + Math.floor(Math.random() * (9999 - 1));
-	}
-	var grant = new AccessToken.ConversationsGrant();
-	grant.configurationProfileSid = 'VSc492521f04edbafda6af34c8e211afe0';
-	accessToken.addGrant(grant);
-	var jwt = accessToken.toJwt();
-	res.render(path.join(www_dir,www_static_dir , 'video/index.html'), {token: jwt, presenter: presenter, user: accessToken.identity});
-});
-
+function openTokToken(sessionId, sessionType, callback) {
+  token = opentok.generateToken(sessionId, {
+    role :       sessionType,
+    expireTime : (new Date().getTime() / 1000)+(7 * 24 * 60 * 60)
+  });
+  callback(token);
+}
 
 router.get('/clearcash', function (req, res){
 	console.log(req.header('x-forwarded-for'))

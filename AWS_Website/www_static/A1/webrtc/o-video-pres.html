@@ -1,0 +1,38 @@
+
+<html>
+  <head></head>
+  <body>
+    <div id='myPublisherDiv'></div>
+    <div id='subscribersDiv'></div>
+
+    <script src='//static.opentok.com/v2/js/opentok.min.js'></script>
+    <script>
+      var apiKey = '45510752';
+      var sessionId = '<%= session %>';
+      var token = '<%= token %>';
+      var hash = '<%= hash %>'
+      var session = OT.initSession(apiKey, sessionId);
+      var videoPresenterSocket;
+      if(typeof parent.socket != "undefined") {
+      	videoPresenterSocket = parent.socket
+      }
+      else {
+      	videoPresenterSocket = io.connect(document.location.hostname + ':' + location.port);
+      }
+
+      session.on({
+          streamCreated: function(event) {
+            session.subscribe(event.stream, 'subscribersDiv', {insertMode: 'append'});
+          }
+      });
+      session.connect(token, function(error) {
+        if (error) {
+          console.log(error.message);
+        } else {
+          session.publish('myPublisherDiv', {width: 320, height: 240});
+          videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
+        }
+      });
+    </script>
+  </body>
+</html>

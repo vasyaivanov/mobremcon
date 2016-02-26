@@ -1,0 +1,29 @@
+
+<html>
+  <head></head>
+  <body>
+    <div id='myPublisherDiv'></div>
+    <div id='subscribersDiv'></div>
+
+    <script src='//static.opentok.com/v2/js/opentok.min.js'></script>
+    <script>
+      var apiKey = '45510752';
+      var sessionId = '<%= session %>';
+      var token = '<%= token %>';
+      var session = OT.initSession(apiKey, sessionId);
+      session.on({
+          streamCreated: function(event) {
+            session.subscribe(event.stream, 'subscribersDiv', {insertMode: 'append'});
+          }
+      });
+
+      session.connect(token, function(error) {
+        if (error) {
+          console.log(error.message);
+        } else {
+
+        }
+      });
+    </script>
+  </body>
+</html>
