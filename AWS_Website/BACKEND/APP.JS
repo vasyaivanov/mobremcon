@@ -23,6 +23,7 @@ var express = require('express')
   , LOG_GENERAL = true
   , AWS = require('aws-sdk')
   , AWS_S3_BUCKET = "prezera-"
+  , AWS_S3_VIDEO_BUCKET = "prezera-video"
   , os = require('os')
   , DEBUG = false
   , paypalIpn = require('paypal-ipn')
@@ -152,6 +153,8 @@ videoUploadsSchema.pre('save', function(next){
 });
 
 var VideoUploads = mongoose.model('uploads', videoUploadsSchema);
+
+module.exports.VideoUploads = VideoUploads;
 
 // User subscription
 var subscriptionSchema =  mongoose.Schema({
@@ -980,6 +983,19 @@ function setUserSession(req, res, callback) {
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
 
+  /*function getVideosUrl(docs, callback) {
+    for(cS=0;cS<docs.length;cS++) {
+      var videoObj = [];
+      docs[cS].video = "";
+      VideoUploads.find({ sid: docs[cS].sid }).sort({'created': 'desc'}).exec(function (err, docsV) {
+        for(cV=0;cV<docsV.length;cV++) {
+          var vidUrl = docsV[cV].opentokId + "/" + docsV[cV].archid + "/archive.mp4";
+          docs[docsV[cV].sid].video.push(getS3fileUrl(vidUrl,1));
+        }
+      });
+    }
+  }*/
+
   var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
 	var domainSplit = req.hostname.split('.');
@@ -1031,22 +1047,28 @@ router.get(rootRegExp, function (req, res){
 			if(typeof req.cookies[sessionIdCookie] != "undefined") {
 				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
 					Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, docExpDate) {
-						var expire = "";
-						if(docExpDate) {expire = docExpDate.end_date}
-						res.render(path.join(www_dir, www_static_dir, indexHtml), {
-							user: req.user,
-							noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
-							randomSlides: randomSlides,
-							userRole: UserData[req.cookies[sessionIdCookie]].userRole,
-							request: req,
-							slides: docs,
-							ERROR_AUTH: 0,
-							error: 0,
-							moment: moment,
-							expire: expire,
-							userData: UserData[req.cookies[sessionIdCookie]],
-							domains: []
-						});
+              /*  getVideosUrl(docs, function(ret) {
+                    console.log(ret);
+                });*/
+
+  						var expire = "";
+  						if(docExpDate) {expire = docExpDate.end_date}
+  						res.render(path.join(www_dir, www_static_dir, indexHtml), {
+  							user: req.user,
+  							noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
+  							randomSlides: randomSlides,
+  							userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+  							request: req,
+  							slides: docs,
+                video: [],
+  							ERROR_AUTH: 0,
+  							error: 0,
+  							moment: moment,
+  							expire: expire,
+  							userData: UserData[req.cookies[sessionIdCookie]],
+  							domains: []
+  						});
+          //  });
 					});
 				});
 			}
@@ -1331,7 +1353,7 @@ router.get('/video.html', function (req, res){
             });
           }
           else {
-					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {token: token, user: username , presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {token: token, presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
 				}
 				else if(data.found == 1 && data.isPresenter == 0) {
@@ -1342,7 +1364,7 @@ router.get('/video.html', function (req, res){
             });
           }
           else {
-					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {token: token, user: UserData[req.cookies[sessionIdCookie]].currentUserId, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {token: token, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
 				}
 				else {
@@ -1547,24 +1569,29 @@ function deleteOldHashFolders() {
 	});
 }
 
-function getS3fileUrl(path) {
-	var params = {Bucket: AWS_S3_BUCKET, Key: path};
+function getS3fileUrl(path,videoBucket) {
+  var lookupBucket = AWS_S3_BUCKET;
+  if(videoBucket == 1) {
+    lookupBucket = AWS_S3_VIDEO_BUCKET;
+  }
+	var params = {Bucket: lookupBucket, Key: path};
 	var url = AWS_S3.getSignedUrl('getObject', params);
 	return (url) ? url : null;
 }
 
 
-function deleteS3path(path) {
-
-	AWS_S3.listObjects({Bucket: AWS_S3_BUCKET, Prefix: path}, function(err, data) {
-	  params = {Bucket: AWS_S3_BUCKET};
+function deleteS3path(path,videoBucket) {
+  var lookupBucket = AWS_S3_BUCKET;
+  if(videoBucket == 1) {
+    lookupBucket = AWS_S3_VIDEO_BUCKET;
+  }
+	AWS_S3.listObjects({Bucket: lookupBucket, Prefix: path}, function(err, data) {
+	  params = {Bucket: lookupBucket};
 	  params.Delete = {};
 	  params.Delete.Objects = [];
-
 	  data.Contents.forEach(function(content) {
-		params.Delete.Objects.push({Key: content.Key});
+		    params.Delete.Objects.push({Key: content.Key});
 	  });
-
 	  AWS_S3.deleteObjects(params, function(err, data) {});
 	});
 }

@@ -289,12 +289,20 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         		module.parent.exports.slideCheckPresenter({ hashId: data.sid, currentUserId: userSession.currentUserId } , function(retData) {
       				//if(retData.isPresenter == 1 && retData.found == 1) {
               if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
-      					module.parent.exports.SlideScheme.remove({ /*uid: userSession.currentUserId,*/ sid: data.sid }, function(err,delData) {
+      					module.parent.exports.SlideScheme.remove({ sid: data.sid }, function(err,delData) {
       						if (!err && delData.result.ok == 1) {
                       if(LOG_GENERAL) {
                         console.log("Presentation " + data.sid + " deleted");
                       }
       								module.parent.exports.deleteS3path(data.sid);
+                      // Removing videos
+                      module.parent.exports.VideoUploads.find({sid : data.sid }, function (err, docs) {
+                        for(i=0;i<docs.length;i++) {
+                          var pathToVideo = docs[i].opentokId + "/" + docs[i].archid + "/";
+                          module.parent.exports.deleteS3path(pathToVideo,1);
+                          docs[i].remove();
+                        }
+                      });
       								module.parent.exports.NoteScheme.remove({ sid: data.sid }, function(err1) {
       									if(LOG_GENERAL) {
       										console.log('Deleting notes.....' + data.sid);
