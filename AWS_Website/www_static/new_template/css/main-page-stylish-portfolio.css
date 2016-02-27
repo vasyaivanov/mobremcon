@@ -24,6 +24,84 @@ table {
 	color: #C4CAE3;
 }
 
+/*progressbar*/
+
+#progressbar {
+    color:#337AB7;
+    margin-top: 1vh;
+    height:     0px;
+    background: #337ab7;
+    /*background-color: blue;*/
+}
+
+#uploadLabel {
+  /*  font-weight: bold; */
+    color: #337ab7;
+    font-size: 1.5vw;
+    margin: 1vw 0 0 3vw;
+   }
+
+.modal-header {
+    border-bottom: 0px !important;
+    min-height: 5px;
+    padding: 0;
+}
+.modal-body{
+  padding: inherit;
+  margin-bottom: 1vw;
+}
+.modal-dialog{
+  margin: 0;
+}
+
+button.close {
+    padding: 3px 10px 1px 1px;
+}
+.ui-progressbar .ui-widget-header {
+     color: red;
+     background: blue repeat-x 50% 50%;
+}
+
+/* uploadDialog */
+.uploadDialog {
+    position: fixed;
+    font-family: 'Raleway', sans-serif;
+    background: rgba(229,229,229,0.9);
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+
+.uploadDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+
+.uploadDialog > div {
+/*    width: 50vw;
+    min-width: 100px;
+    max-width: 1000px;
+    padding: 4vh 3.5vw 6vh 3.5vw;
+    border-radius: 1em;
+    margin-left: 25vw;*/
+    margin: 25vw 30vw 20vw 25vw;
+    width: 50vw;
+    height: 7vw;
+    border-radius: 1em;
+    position: relative;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+}
+
+/* End progressbar*/
+
 .mainbackground {
     background: -webkit-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
     background: -o-linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
@@ -152,22 +230,6 @@ form {
   max-width: 100%;
 }
 
-.modal-header {
-    border-bottom: 0px !important;
-}
-
-#progressbar {
-    color:#337AB7;
-}
-
-#progressbar {
-    margin-top: 1vh;
-    height:     0px;
-    background: #337ab7;
-
-    /*background-color: blue;*/
-}
-
 .header {
     display: table;
     position: relative;
@@ -237,10 +299,6 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
 }
 
 
-.ui-progressbar .ui-widget-header {
-     color: red;
-     background: blue repeat-x 50% 50%;
-}
 
 /* Button Upload Presentation*/
 .uploadfile {
@@ -273,53 +331,6 @@ input.renameSlide {
     background: none;
     border: none;
     opacity: 0;
-}
-
-
-#uploadLabel {
-    font-weight: bold;
-    color: #337ab7;
-    font-size: 2vh;
-}
-
-
-
-/* uploadDialog */
-.uploadDialog {
-    position: fixed;
-    font-family: 'Raleway', sans-serif;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    /*background: rgba(0,0,0,0.8);*/
-    z-index: 99999;
-    opacity:0;
-    -webkit-transition: opacity 400ms ease-in;
-    -moz-transition: opacity 400ms ease-in;
-    transition: opacity 400ms ease-in;
-    pointer-events: none;
-}
-
-.uploadDialog:target {
-    opacity:1;
-    pointer-events: auto;
-}
-
-.uploadDialog > div {
-/*    width: 50vw;
-    min-width: 100px;
-    max-width: 1000px;
-    padding: 4vh 3.5vw 6vh 3.5vw;
-    border-radius: 1em;
-    margin-left: 25vw;*/
-    margin-top: 35vh;
-
-    position: relative;
-    background: #fff;
-    background: -moz-linear-gradient(#fff, #999);
-    background: -webkit-linear-gradient(#fff, #999);
-    background: -o-linear-gradient(#fff, #999);
 }
 
 .closeUpload {
@@ -418,7 +429,19 @@ input.renameSlide {
         transition: all 0.4s ease 0s;
 }
 
+@media screen and (max-device-width: 450px) {
 
+  #sidebar-wrapper.active {
+    right: 250px;
+    width: 98vw;
+    background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
+        -webkit-transition: all 0.4s ease 0s;
+        -moz-transition: all 0.4s ease 0s;
+        -ms-transition: all 0.4s ease 0s;
+        -o-transition: all 0.4s ease 0s;
+        transition: all 0.4s ease 0s;
+  }
+}
 
 
 .btn {
