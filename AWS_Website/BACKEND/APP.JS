@@ -136,6 +136,23 @@ billingSchema.index({txn_id: 1, payment_status: 1, payment_gross: 1}, {unique: t
 var Billing = mongoose.model('billing', billingSchema);
 
 
+// Pres uploads
+
+var videoUploadsSchema =  mongoose.Schema({
+  sid: {type: String},
+  opentokId : {type: String},
+  archid: {type: String},
+  created: { type: Date }
+});
+
+videoUploadsSchema.pre('save', function(next){
+  now = new Date();
+  this.created = now;
+  next();
+});
+
+var VideoUploads = mongoose.model('uploads', videoUploadsSchema);
+
 // User subscription
 var subscriptionSchema =  mongoose.Schema({
   uid: { type: String, trim: true, required: true},
@@ -172,6 +189,7 @@ var slidesSchema = mongoose.Schema({
   notPTPVideo: { type: Number,  default: 0 , max: 1},
   slidesNum: {type: Number},
   videoSession: {type: String},
+  lastArchiveId: {type: String},
   presentationKey: {type: Number}
 });
 
@@ -204,9 +222,9 @@ rolesRestrictions[2] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlid
 rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 10485760000000000000, maxSlideSize: 10485760000000000000, rename: 1, domain: 1};
 
 var Plans = {
-	'1': {desc: 'Silver', price: 5, role: 1},
-	'2': {desc: 'Gold', price: 10, role: 2},
-	'3': {desc: 'GoldUpgrade', price: 5, role: 2}
+	'1': {desc: 'Silver', price: 4.99, role: 1},
+	'2': {desc: 'Gold', price: 9.99, role: 2},
+	'3': {desc: 'GoldUpgrade', price: 4.99, role: 2}
 };
 
 
@@ -1217,6 +1235,7 @@ slideCheckPresenter = function(reqData , callback) {
                   created: doc[i].created,
                   notPTPVideo: (doc[i].notPTPVideo) ? 1 : 0, //[10] Access key for presentation
                   videoSession: doc[i].videoSession,
+                  lastArchiveId: doc[i].lastArchiveId,
                   presDomain: presDomain
               };
 
@@ -1303,20 +1322,11 @@ router.get('/video.html', function (req, res){
   }
   else {
 		var hashId = req.query.presentation;
-
 			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
 				if(data.found == 1 && data.isPresenter == 1) {
           var token = 0;
           if(data.notPTPVideo == 1) {
             openTokSession(hashId,data.videoSession, data.isPresenter, function(token,session) {
-              opentok.startArchive(session, { }, function(err, archive) {
-                if (err) {
-                  console.log(err);
-                } else {
-                  // The id property is useful to save off into a database
-                  console.log("new archive:" + archive.id);
-                }
-              });
               res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/o-video-pres.html'), {token: token, session: session, hash: hashId});
             });
           }
@@ -1366,7 +1376,7 @@ function openTokSession(hashId,videoSession, presenter, callback) {
   sessionType[1] = "moderator";
 
   if(typeof videoSession == "undefined") {
-    opentok.createSession({mediaMode:"routed", archiveMode:'always'}, function(err, session) {
+    opentok.createSession({mediaMode:"routed" /* , archiveMode:'always'*/}, function(err, session) {
       Slide.update({ sid: hashId }, {$set: { videoSession : session.sessionId}}, {upsert: false},
         function (err, numAffected) {
             if(numAffected.nModified == 1) {
@@ -1394,6 +1404,28 @@ function openTokToken(sessionId, sessionType, callback) {
   });
   callback(token);
 }
+
+module.exports.openTokStartRecording = function (hashId, sessionId) {
+  opentok.startArchive(sessionId, function(err, archive) {
+    if (err) {
+      console.log(err);
+    } else {
+      var add_to_arch = new VideoUploads({sid: hashId, opentokId: opentok.apiKey, archid: archive.id });
+      add_to_arch.save(function(err,saved){
+        if(!err) {
+          Slide.update({ sid: hashId }, {$set: { lastArchiveId : archive.id}}, {upsert: false}).exec();
+        }
+      });
+    }
+  });
+}
+
+module.exports.openTokStopRecording = function (sessionId) {
+  opentok.stopArchive(sessionId, function(err, archive) {
+    if (err) return console.log(err);
+  });
+}
+
 
 router.get('/clearcash', function (req, res){
 	console.log(req.header('x-forwarded-for'))

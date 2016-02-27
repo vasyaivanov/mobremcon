@@ -1,6 +1,14 @@
 
 <html>
-  <head></head>
+  <head>
+  <style>
+    #myPublisherDiv {
+      border: 1px solid black;
+      width: 90%    !important;
+      height: 100%   !important;
+    }
+  </style>
+  </head>
   <body>
     <div id='myPublisherDiv'></div>
     <div id='subscribersDiv'></div>
@@ -29,7 +37,7 @@
         if (error) {
           console.log(error.message);
         } else {
-          session.publish('myPublisherDiv', {width: 320, height: 240});
+          session.publish('myPublisherDiv', {width: 320, height: 240, name:""});
           videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
         }
       });

@@ -845,7 +845,15 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                 if(retData.isPresenter == 1 && retData.found == 1) {
                   module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: false},
                     function (err, numAffected) {
-                      if(!err) {module.parent.exports.io.sockets.emit('broadcastVideoChat', data );}
+                      if(!err) {
+                        if(data.open == 1) {
+                          module.parent.exports.openTokStartRecording(retData.sid,retData.videoSession);
+                        }
+                        else {
+                          module.parent.exports.openTokStopRecording(retData.lastArchiveId);
+                        }
+                        module.parent.exports.io.sockets.emit('broadcastVideoChat', data );
+                      }
                     }
                   );
                 }
