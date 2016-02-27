@@ -222,7 +222,7 @@ rolesRestrictions[1] = {maxSlidesCount: 3, maxSlidesSize: 10485760, maxSlideSize
 // Gold account
 rolesRestrictions[2] = {maxSlidesCount: 10000, maxSlidesSize: 104857600, maxSlideSize: 104857600, rename: 1, domain: 1};
 // Admin account
-rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 10485760000000000000, maxSlideSize: 10485760000000000000, rename: 1, domain: 1};
+rolesRestrictions[10] = {maxSlidesCount: 10000, maxSlidesSize: 10485760000000000000, maxSlideSize: 10485760000000000000, rename: 1, domain: 1, video: 1};
 
 var Plans = {
 	'1': {desc: 'Silver', price: 4.99, role: 1},
@@ -983,18 +983,16 @@ function setUserSession(req, res, callback) {
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
 
-  /*function getVideosUrl(docs, callback) {
-    for(cS=0;cS<docs.length;cS++) {
+  function getVideosUrl(hash_search, callback) {
       var videoObj = [];
-      docs[cS].video = "";
-      VideoUploads.find({ sid: docs[cS].sid }).sort({'created': 'desc'}).exec(function (err, docsV) {
+      VideoUploads.find({ sid: hash_search }).sort({'created': 'desc'}).exec(function (err, docsV) {
         for(cV=0;cV<docsV.length;cV++) {
-          var vidUrl = docsV[cV].opentokId + "/" + docsV[cV].archid + "/archive.mp4";
-          docs[docsV[cV].sid].video.push(getS3fileUrl(vidUrl,1));
+          var vidUrl = "video/" + docsV[cV].opentokId + "/" + docsV[cV].archid + "/archive.mp4";
+          videoObj.push(vidUrl);
         }
+        callback(videoObj);
       });
-    }
-  }*/
+  }
 
   var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
 
@@ -1008,7 +1006,19 @@ router.get(rootRegExp, function (req, res){
           owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
         }
 				Slide.find({uid : docs._id }).sort({'created': 'desc'}).exec(function (err, docs) {
-					res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
+
+          readPres(0);
+          function readPres(num) {
+            if(num >= docs.length) {
+              res.render(path.join(www_dir,www_static_dir , 'domain.html'), { owner: owner,	moment: moment, slides: docs, user: req.user , mainDomainGo: ((req.headers['x-forwarded-proto']) ? req.headers['x-forwarded-proto'] : "https") + '://www.' + domainClear, clearDomain: domainSplit[0] + '.' + domainClear, userData: UserData[req.cookies[sessionIdCookie]]});
+            }
+            else {
+              getVideosUrl(docs[num].sid, function(ret) {
+                docs[num].video = ret;
+                readPres(num+1);
+              })
+            }
+          }
 				});
 			}
 			else {
@@ -1047,28 +1057,33 @@ router.get(rootRegExp, function (req, res){
 			if(typeof req.cookies[sessionIdCookie] != "undefined") {
 				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
 					Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, docExpDate) {
-              /*  getVideosUrl(docs, function(ret) {
-                    console.log(ret);
-                });*/
-
-  						var expire = "";
-  						if(docExpDate) {expire = docExpDate.end_date}
-  						res.render(path.join(www_dir, www_static_dir, indexHtml), {
-  							user: req.user,
-  							noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
-  							randomSlides: randomSlides,
-  							userRole: UserData[req.cookies[sessionIdCookie]].userRole,
-  							request: req,
-  							slides: docs,
-                video: [],
-  							ERROR_AUTH: 0,
-  							error: 0,
-  							moment: moment,
-  							expire: expire,
-  							userData: UserData[req.cookies[sessionIdCookie]],
-  							domains: []
-  						});
-          //  });
+            var expire = "";
+            if(docExpDate) {expire = docExpDate.end_date}
+            readPres(0);
+            function readPres(num) {
+              if(num >= docs.length) {
+                res.render(path.join(www_dir, www_static_dir, indexHtml), {
+            			user: req.user,
+            			noUploadForUser: UserData[req.cookies[sessionIdCookie]].noUploadForUser,
+            			randomSlides: randomSlides,
+            			userRole: UserData[req.cookies[sessionIdCookie]].userRole,
+            			request: req,
+            			slides: docs,
+            			ERROR_AUTH: 0,
+            			error: 0,
+            			moment: moment,
+            			expire: expire,
+            			userData: UserData[req.cookies[sessionIdCookie]],
+            			domains: []
+            		});
+              }
+              else {
+                getVideosUrl(docs[num].sid, function(ret) {
+                  docs[num].video = ret;
+                  readPres(num+1);
+                })
+              }
+            }
 					});
 				});
 			}
@@ -1094,6 +1109,11 @@ router.get(rootRegExp, function (req, res){
 			}
 		});
 	}
+});
+
+router.get(new RegExp('^\/video\/'), function (req, res){
+  var video_url = req.url.replace(/^\/video\//,"");
+  res.redirect(getS3fileUrl(video_url,1));
 });
 
 router.post('/signup.html', function (req, res){

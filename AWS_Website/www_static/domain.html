@@ -87,6 +87,18 @@
 								<td><a href="/<%= slide.sid %>/"><%= slide.title %></a><br>
 							<% } %>
 						<% } %>
+
+            <% if(slide.video.length) { %>
+              Video:<br>
+              <% slide.video.forEach(function(video){ %>
+                  <video width="320" height="240" controls>
+                    <source src="<%= video %>" type="video/mp4">
+                      Your browser does not support the video tag.
+                  </video>
+              <%  }); %>
+              <br>
+            <% } %>
+
 						Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br>
 						<% if (owner == 1) { %>
 							Slide URL: https://<%= clearDomain %>&nbsp;/&nbsp;<input type="text" class="renameSlide" id="rsid_<%= slide.sid %>" value="<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>"><div id="rresult_<%= slide.sid %>"></div>

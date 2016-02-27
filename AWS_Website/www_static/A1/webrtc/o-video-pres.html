@@ -37,7 +37,7 @@
         if (error) {
           console.log(error.message);
         } else {
-          session.publish('myPublisherDiv', {width: 320, height: 240, name:""});
+          session.publish('myPublisherDiv', {mirror: false, width: 320, height: 240, name:""});
           videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
         }
       });
