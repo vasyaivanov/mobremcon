@@ -152,7 +152,7 @@ videoUploadsSchema.pre('save', function(next){
   next();
 });
 
-var VideoUploads = mongoose.model('uploads', videoUploadsSchema);
+var VideoUploads = mongoose.model('upload', videoUploadsSchema);
 
 module.exports.VideoUploads = VideoUploads;
 

@@ -314,7 +314,7 @@
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage">
           <h3>My presentations</h3>
-           <table class="table" style="max-width: 100%">           
+           <table class="table" style="max-width: 100%">
       <% if (userData.domainSet == 0) { %>
   			<% slides.forEach(function(slide){ %>
   				<tr id="slide_<%= slide.sid %>">
@@ -323,7 +323,7 @@
           <% if(slide.video.length) { %>
             <br>Video:<br>
             <% slide.video.forEach(function(video){ %>
-                <video width="240" height="120" controls>
+                <video width="320" height="240" controls>
                   <source src="<%= video %>" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
