@@ -19,6 +19,7 @@
     <button id="stopRecBut">Stop recording</button>
     <script src='//static.opentok.com/v2/js/opentok.min.js'></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="/A1/js/frames.js"></script>
     <script>
       var apiKey = '45510752';
       var sessionId = '<%= session %>';
@@ -42,7 +43,7 @@
         if (error) {
           console.log(error.message);
         } else {
-          session.publish('myPublisherDiv', {mirror: false, width: 320, height: 240, name:""}, function (error) {
+          session.publish('myPublisherDiv', {resolution: '1280x720', mirror: false, name:""}, function (error) {
               if(error) {console.log(error)}
               else {
                 console.log("Session started");

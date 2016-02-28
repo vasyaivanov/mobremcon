@@ -1448,7 +1448,8 @@ function openTokToken(sessionId, sessionType, callback) {
 }
 
 module.exports.openTokStartRecording = function (hashId, sessionId, callback) {
-  opentok.startArchive(sessionId, function(err, archive) {
+  //b7a127db-5eff-4686-a876-62c58621287e
+  opentok.startArchive(sessionId, {}, function(err, archive) {
     if (err) {
       console.log(err);
     } else {
