@@ -63,6 +63,18 @@ $(document).ready(function () {
 		}
 	});
 
+  $(".delVideo").click(function(){
+    var object = $(this)
+    var videoId = object.attr('videoId');
+
+    mainSocket.emit('deleteVideo', { videoId: videoId }, function(retData) {
+      if(retData == 1) {
+        document.getElementById(videoId).remove();
+        object.hide();
+      }
+    });
+  });
+
 	mainSocket.on("client-deleteSlide", function (data) {
 		//alert(data.sid);
 		$( "#slide_" + data.sid).hide();

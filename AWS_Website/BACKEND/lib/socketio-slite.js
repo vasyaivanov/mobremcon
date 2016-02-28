@@ -854,11 +854,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   module.parent.exports.SlideScheme.update({ sid: data.hash }, {$set: { isVideoChatOpen: data.open}}, {upsert: false},
                     function (err, numAffected) {
                       if(!err) {
-                        if(data.open == 1) {
-                          module.parent.exports.openTokStartRecording(retData.sid,retData.videoSession);
-                        }
-                        else {
-                          module.parent.exports.openTokStopRecording(retData.lastArchiveId);
+                        if(data.open == 0) {
+                          module.parent.exports.openTokStopRecording(retData.lastArchiveId, function(ret) {});
                         }
                         module.parent.exports.io.sockets.emit('broadcastVideoChat', data );
                       }
@@ -866,6 +863,42 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   );
                 }
               });
+          });
+
+          socket.on('videoRecording', function(data,callback) {
+            module.parent.exports.slideCheckPresenter({ hashId: data.hash, currentUserId: userSession.currentUserId } , function(retData) {
+                if(retData.isPresenter == 1 && retData.found == 1) {
+                    if(data.type == 1) {
+                      module.parent.exports.openTokStartRecording(retData.sid,retData.videoSession, function(ret) {
+                        if(ret == 1) {
+                          callback({code: 1});
+                        }
+                      });
+                    }
+                    else {
+                      module.parent.exports.openTokStopRecording(retData.lastArchiveId, function(ret) {
+                        if(ret == 1) {
+                          callback({code: 1});
+                        }
+                      });
+                    }
+                }
+            });
+          });
+
+          socket.on('deleteVideo', function(data,callback){
+            var splitVideo = data.videoId.split('/');
+            module.parent.exports.VideoUploads.findOne({opentokId : splitVideo[1], archid:  splitVideo[2] }).exec(function (err, doc) {
+              if(doc) {
+                module.parent.exports.slideCheckPresenter({ hashId: doc.sid, currentUserId: userSession.currentUserId } , function(retData) {
+                    if(retData.isPresenter == 1 && retData.found == 1) {
+                      module.parent.exports.deleteS3path(data.videoId,1);
+                      doc.remove();
+                      callback(1);
+                    }
+                });
+              }
+            });
           });
 
           socket.on('presenterScreensharing', function (data) {

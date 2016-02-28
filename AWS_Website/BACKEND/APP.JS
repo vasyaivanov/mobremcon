@@ -1447,7 +1447,7 @@ function openTokToken(sessionId, sessionType, callback) {
   callback(token);
 }
 
-module.exports.openTokStartRecording = function (hashId, sessionId) {
+module.exports.openTokStartRecording = function (hashId, sessionId, callback) {
   opentok.startArchive(sessionId, function(err, archive) {
     if (err) {
       console.log(err);
@@ -1455,6 +1455,7 @@ module.exports.openTokStartRecording = function (hashId, sessionId) {
       var add_to_arch = new VideoUploads({sid: hashId, opentokId: opentok.apiKey, archid: archive.id });
       add_to_arch.save(function(err,saved){
         if(!err) {
+          callback(1);
           Slide.update({ sid: hashId }, {$set: { lastArchiveId : archive.id}}, {upsert: false}).exec();
         }
       });
@@ -1462,9 +1463,11 @@ module.exports.openTokStartRecording = function (hashId, sessionId) {
   });
 }
 
-module.exports.openTokStopRecording = function (sessionId) {
+module.exports.openTokStopRecording = function (sessionId, callback) {
   opentok.stopArchive(sessionId, function(err, archive) {
-    if (err) return console.log(err);
+    if(!err) {
+      callback(1);
+    }
   });
 }
 

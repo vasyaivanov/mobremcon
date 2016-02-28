@@ -5,15 +5,20 @@
     #myPublisherDiv {
       border: 1px solid black;
       width: 90%    !important;
-      height: 100%   !important;
+      height: 90%   !important;
+    }
+    button {
+      display: none;
     }
   </style>
   </head>
   <body>
     <div id='myPublisherDiv'></div>
     <div id='subscribersDiv'></div>
-
+    <button id="startRecBut">Start recording</button>
+    <button id="stopRecBut">Stop recording</button>
     <script src='//static.opentok.com/v2/js/opentok.min.js'></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script>
       var apiKey = '45510752';
       var sessionId = '<%= session %>';
@@ -37,10 +42,36 @@
         if (error) {
           console.log(error.message);
         } else {
-          session.publish('myPublisherDiv', {mirror: false, width: 320, height: 240, name:""});
-          videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
+          session.publish('myPublisherDiv', {mirror: false, width: 320, height: 240, name:""}, function (error) {
+              if(error) {console.log(error)}
+              else {
+                console.log("Session started");
+                $("#startRecBut").show();
+                videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
+              }
+          });
         }
       });
+
+
+      $("#startRecBut").click(function(){
+        videoPresenterSocket.emit("videoRecording", {hash: hash, type: 1}, function(data) {
+          if(data.code == 1) {
+            $("#startRecBut").hide();
+            $("#stopRecBut").show();
+          }
+        });
+      });
+
+      $("#stopRecBut").click(function(){
+        videoPresenterSocket.emit("videoRecording", {hash: hash, type: 0}, function(data) {
+          if(data.code == 1) {
+            $("#startRecBut").show();
+            $("#stopRecBut").hide();
+          }
+        });
+      });
+
     </script>
   </body>
 </html>

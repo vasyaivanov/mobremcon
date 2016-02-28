@@ -323,10 +323,12 @@
           <% if(slide.video.length) { %>
             <br>Video:<br>
             <% slide.video.forEach(function(video){ %>
+              <div id="<%= video %>">
                 <video width="320" height="240" controls>
                   <source src="<%= video %>" type="video/mp4">
                     Your browser does not support the video tag.
-                </video>
+                </video><br><a href="#" class="delVideo" videoId="<%= video %>">Delete</a><br>
+              </div>
             <%  }); %>
           <% } %>
           <br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></td>
