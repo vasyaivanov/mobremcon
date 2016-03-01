@@ -40,8 +40,8 @@
 					if(data.code == 3) {
 						var mySlide = "";
 						mySlide += '<tr id="slide_'+ key  +'">';
-						mySlide += '<td width="150"><a href="/p/' + key + '"><img src="/p/'+ key +'/img0.jpg" class="img-rounded" width="90%"></a></td>';
-						mySlide += '<td><a href="/p/' + key + '">'+data.title+'</a><br><br><a href="#" onclick="deleteSlide(\''+ key +'\')">Delete presentation</a></td>';
+						mySlide += '<td width="150"><a href="/' + key + '"><img src="/'+ key +'/img0.jpg" class="img-rounded" width="90%"></a></td>';
+						mySlide += '<td><a href="/' + key + '">'+data.title+'</a><br><br><a href="#" onclick="deleteSlide(\''+ key +'\')">Delete presentation</a></td>';
 						mySlide += '</tr>';
 						$("#myPresTable").prepend(mySlide);
 
@@ -75,7 +75,7 @@
 						}
 						data[$("#pres_id").val()] = $("#pres_pass").val();
 						localStorage.setItem("presentationsLocal", JSON.stringify(data));
-            setTimeout(function(){location.href="/p/" + $("#pres_id").val();},2000);
+            setTimeout(function(){location.href="/" + $("#pres_id").val();},2000);
 					}
 				});
 			}
