@@ -60,7 +60,7 @@
 				showError("Enter presentation password");
 			}
 			else {
-				socket.emit("check-presentation-key", {id: $("#pres_id").val(), key: $("#pres_pass").val()} , function(data) {
+				socket.emit("check-presentation-key", {id: $("#pres_id").val().toLowerCase(), key: $("#pres_pass").val()} , function(data) {
 					if(data.code == 1) {
 						showError("Presentation was't found");
 					}
@@ -73,9 +73,9 @@
 						if(localStorage.getItem("presentationsLocal")) {
 							data = JSON.parse(localStorage.getItem("presentationsLocal"));
 						}
-						data[$("#pres_id").val()] = $("#pres_pass").val();
+						data[$("#pres_id").val().toLowerCase()] = $("#pres_pass").val();
 						localStorage.setItem("presentationsLocal", JSON.stringify(data));
-            setTimeout(function(){location.href="/" + $("#pres_id").val();},2000);
+            setTimeout(function(){location.href="/" + $("#pres_id").val().toLowerCase();},2000);
 					}
 				});
 			}
@@ -125,7 +125,7 @@
 		<div class="loginbody">
         <form role="form" id="pres_login">
           <div class="form-group">
-            <input id="pres_id" class="login-form-control" placeholder="enter presentation ID" style="text-transform: lowercase;">
+            <input id="pres_id" class="login-form-control" placeholder="enter presentation ID">
           </div>
           <div class="form-group">
             <input id="pres_pass" type="password" class="login-form-control" name="password" placeholder="enter presentation password">

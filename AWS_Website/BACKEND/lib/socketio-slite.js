@@ -963,11 +963,13 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
     		socket.on('check-presentation-key', function(data, callback){
     			// Errors: 1 - prese not found, 2 - wrong key, 3 - access granted
           if(LOG_GENERAL) {
-            console.log('Checking pres key:' + data);
+            console.log('Checking pres key:');
+            console.log(data);
           }
     			module.parent.exports.slideCheckPresenter({ hashId: data.id, currentUserId: userSession.currentUserId } , function(retData) {
             if(LOG_GENERAL) {
-              console.log('Returned data for pres: ' + retData);
+              console.log('Returned data for pres: ');
+              console.log(retData);
             }
     				var ret = {};
             if(retData.found == 1 && data.key == retData.presentationKey) {
