@@ -520,7 +520,7 @@ app.use(function (req, res, next) {
               res.redirect(301, "/" + hash + "/" );
             }
             else if(additional_param == "") {
-							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole });
+							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole, meeting: data.meeting });
             }
             else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
               var extTsPos = additional_param.indexOf('.jpg?ts=', 4);
@@ -942,6 +942,32 @@ router.get(new RegExp('^\/video\/'), function (req, res){
   res.redirect(getS3fileUrl(video_url,1));
 });
 
+router.get(new RegExp('^\/m\/?$'), function (req, res){
+  var prepare_slite = require('./lib/prepare_slite.js');
+  var slite = new prepare_slite.Slite({
+    opt: { hashSize : slitesHashLen, SlidesScheme: Slide}
+  }, function (err) {
+    console.log(err);
+  });
+
+  if(slite.hashValue) {
+    var userSession = UserData[req.cookies[sessionIdCookie]];
+
+    var addMeeting = new Slide({ uid: userSession.currentUserId, sid: slite.hashValue, tmp: 1, size: 0, slidesNum: 0, meeting: 1 });
+
+
+    addMeeting.save(function (err, saved) {
+      if(err) {
+        console.log(err);
+      }
+      else {
+        res.redirect("/" + slite.hashValue + "/");
+      }
+    });
+  }
+
+});
+
 router.post('/signup.html', function (req, res){
   console.log("MA: new user: " + req.body.password + " " + req.body.email);
   var errorCode = 0;
@@ -1104,7 +1130,9 @@ slideCheckPresenter = function(reqData , callback) {
                   notPTPVideo: (doc[i].notPTPVideo) ? 1 : 0, //[10] Access key for presentation
                   videoSession: doc[i].videoSession,
                   lastArchiveId: doc[i].lastArchiveId,
-                  presDomain: presDomain
+                  presDomain: presDomain,
+                  meeting: (doc[i].meeting) ? 1 : 0
+
               };
 
               if(typeof reqData.domainName === "undefined") {

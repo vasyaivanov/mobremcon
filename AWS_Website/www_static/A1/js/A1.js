@@ -833,6 +833,9 @@ $( window ).load(function() {
 					       + "</div> </div>";
             slider.appendSlide(slide_html);
         } else { // !staticSlite
+						if(meeting == 1) {
+							slide_html_path = "/img/blank.png";
+						}
             var slide_html = "<div style='position: relative' id='slide' class='rsContent'>"
 						           + "<img class=\"rsImg\" id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "'>"
 					             + "</div>";
