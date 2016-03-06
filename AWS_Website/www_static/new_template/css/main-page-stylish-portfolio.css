@@ -291,6 +291,22 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
   color: #84A4E0;
 }
 
+
+.startMeetingButton {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 250px;
+  height: 50px;
+  border-color: #4D68B6;
+  font-weight: normal;
+  vertical-align: middle;
+  background: #00147C;
+  color: #84A4E0;
+}
+
+
 .uploadButton:hover {
   color: red;
   border-color: red;

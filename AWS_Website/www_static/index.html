@@ -129,17 +129,17 @@
             <source src="new_template/img/vid2.mp4" type="video/webm" >
         </video>-->
 
-
         <div class="text-vertical-center">
 			<% if (noUploadForUser != 2) { %>
               <div id="uploadTrue" class="uploadfile">
                   <input class="btn uploadButton" onclick="$('#uploadPresentation').click()" type="button" value="Upload presentation">
                   <input type="file" accept="pptx" id="uploadPresentation" style="display: none">
               </div>
+              <div id="uploadFalse"  class="uploadfile">
+                  <button type="button" class="btn uploadButton" onclick="$('.myPres').click()">Limit reached.<br/>Click here to delete.</button>
+              </div>
+              <input class="btn startMeetingButton" onclick="location.href='m/'" type="button" value="Start FREE meeting">
 
-            <div id="uploadFalse"  class="uploadfile">
-                <button type="button" class="btn uploadButton" onclick="$('.myPres').click()">Limit reached.<br/>Click here to delete.</button>
-            </div>
             <% } else if (noUploadForUser == 2) {%>
 
 				<% randomSlides.forEach(function(slide){ %>
@@ -148,6 +148,7 @@
 					<%= slide.title %></a></p>
 				<%  }); %>
 			<% } %>
+
 
       <% if(domains) { %>
         <% domains.forEach(function(domain){ %>
