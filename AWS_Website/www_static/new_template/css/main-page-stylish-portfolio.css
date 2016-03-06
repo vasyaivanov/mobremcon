@@ -306,6 +306,13 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
   color: #84A4E0;
 }
 
+.startMeetingButton:hover {
+  color: red;
+  border-color: red;
+  font-weight: normal;
+  background-color: #FFFFFF;
+}
+
 
 .uploadButton:hover {
   color: red;
