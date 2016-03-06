@@ -786,7 +786,7 @@ function setUserSession(req, res, callback) {
 			Note.update({  uid : oldUserId, tmp: 1 }, { $set: { tmp: 0, uid: req.user._id }}, {multi: true, upsert: false},
 				function (err, numAffected) {
 					if(err) console.log(err);
-					if(numAffected > 0) {console.log("Remaped notes: " + numAffected)}
+					if(numAffected.nModified > 0) {console.log("Remaped notes: " + numAffected)}
 			});
 			// Update user slides
 			var domainSet = (req.user.domain && rolesRestrictions[req.user.role].domain == 1) ? 1 : 0;

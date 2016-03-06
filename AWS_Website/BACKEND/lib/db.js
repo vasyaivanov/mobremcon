@@ -150,7 +150,8 @@ var slidesSchema = mongoose.Schema({
   slidesNum: {type: Number},
   videoSession: {type: String},
   lastArchiveId: {type: String},
-  presentationKey: {type: Number}
+  presentationKey: {type: Number},
+  meeting: {type: Number, default:0 , max: 1}
 });
 
 slidesSchema.plugin(mongooserand);
