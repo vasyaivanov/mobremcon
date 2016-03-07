@@ -12,24 +12,10 @@ module.exports.StartServer = function() {
 
     var io = module.parent.exports.io;
 
-    try {
-        io.on('connection', onConnection);
-    } catch (e) {
-        io = io.listen(app, {
-            log: false,
-            origins: '*:*'
-        });
-
-        io.set('transports', [
-            'websocket', // 'disconnect' EVENT will work only with 'websocket'
-            'xhr-polling',
-            'jsonp-polling'
-        ]);
-
-        io.sockets.on('connection', onConnection);
-    }
+    io.on('connection', onConnection);
 
     function onConnection(socket) {
+        console.log("Signaling server connection" + socket)
         var params = socket.handshake.query;
         var socketMessageEvent = params.msgEvent || 'RTCMultiConnection-Message';
 

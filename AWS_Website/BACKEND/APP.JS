@@ -881,7 +881,7 @@ router.get(rootRegExp, function (req, res){
 
 		getRandomSlides(Slide,function(randomSlides, clearData) {
 			if(typeof req.cookies[sessionIdCookie] != "undefined") {
-				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId }).sort({'created': 'desc'}).exec(function (err, docs) {
+				Slide.find({uid : UserData[req.cookies[sessionIdCookie]].currentUserId, meeting: {$ne: 1} }).sort({'created': 'desc'}).exec(function (err, docs) {
 					Subscription.findOne({uid : req.cookies[sessionIdCookie] }).exec(function (err, docExpDate) {
             var expire = "";
             if(docExpDate) {expire = docExpDate.end_date}
