@@ -1392,6 +1392,8 @@ module.exports.io = io;
 
 var socketIoSlite = require("./lib/socketio-slite.js").setDir(www_dir, slitesDir, www_static_dir, slitesReg, function () { });
 
+var socketIoSignaling = require("./lib/signaling-server.js").StartServer();
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/#login');
