@@ -109,6 +109,7 @@ function onMouseMove(event) {
     }
 };
 
+
  $( '#currentSlide' ).mousedown(function(event) {
     //console.log("mouse down");
     //console.log(event);
