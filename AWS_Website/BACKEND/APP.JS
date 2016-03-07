@@ -1226,6 +1226,9 @@ router.get('/video.html', function (req, res){
               res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/o-video-pres.html'), {token: token, session: session, hash: hashId});
             });
           }
+          else if(data.meeting == 1) {
+            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter-v2.html'), {meeting: data.meeting, token: token, presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+          }
           else {
 					    res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {meeting: data.meeting, token: token, presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
@@ -1236,6 +1239,9 @@ router.get('/video.html', function (req, res){
             openTokSession(hashId,data.videoSession, data.isPresenter, function(token,session) {
               res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/o-video-client.html'), {token: token, session: session});
             });
+          }
+          else if(data.meeting == 1) {
+            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client-v2.html'), {meeting: data.meeting, token: token, presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
           else {
 					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {meeting: data.meeting, token: token, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
