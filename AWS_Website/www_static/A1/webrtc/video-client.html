@@ -19,7 +19,7 @@ video {
 </style>
 <script>
 // DUPLICATE SOCKET
-
+var meeting = <%= meeting %>;
 var videoClientSocket;
 
 if(typeof parent.socket != "undefined") {
@@ -30,6 +30,7 @@ else {
 }
 
 var participants = new RTCMultiConnection('slite-video');
+var connectedClients = {};
 
 participants.bandwidth = {
 	audio: 128,
@@ -55,13 +56,11 @@ videoClientSocket.on('sharing-client', function (data) {
 		var MODERATOR_ID         = '' + moderatorId + '';    // user-id
 		var MODERATOR_SESSION = {};
 
-		if(chatMode == 1) {
+		if(chatMode == 1 && meeting == 0) {
 			MODERATOR_SESSION    = {
-				audio: false,
-				video: false
 			};
 		}
-		else if(chatMode == 2) {
+		else if(chatMode == 2 || meeting == 1) {
 			$( "#videosharing" ).addClass( "videoL" );
 			MODERATOR_SESSION    = {
 				video: true,
@@ -89,6 +88,8 @@ videoClientSocket.on('sharing-client', function (data) {
 					}
 				}
 				else if(event.type == "remote") {
+					console.log(event);
+					connectedClients[event.userid] = event.streamid;
 					$( "#videosharingR" ).append(event.mediaElement);
 					if(navigator.userAgent.indexOf("Firefox") != -1 )  {
 						$("#" + event.streamid).hide();
@@ -104,12 +105,14 @@ videoClientSocket.on('sharing-client', function (data) {
 			}
 		};
 
-
 		participants.onstreamended = function(event) {
 			if(event.type == "remote" && event.userid == data.moderatorId) {
 				console.log("Lost video connection with presenter. Reconnecting...");
-				location.reload();
 			}
+		};
+
+		participants.onleave = function(event){
+			$("#" + connectedClients[event.userid]).remove();
 		};
 
 	}

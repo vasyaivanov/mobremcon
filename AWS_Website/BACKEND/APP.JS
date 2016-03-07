@@ -1227,7 +1227,7 @@ router.get('/video.html', function (req, res){
             });
           }
           else {
-					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {token: token, presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+					    res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {meeting: data.meeting, token: token, presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
 				}
 				else if(data.found == 1 && data.isPresenter == 0) {
@@ -1238,7 +1238,7 @@ router.get('/video.html', function (req, res){
             });
           }
           else {
-					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {token: token, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {meeting: data.meeting, token: token, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
 				}
 				else {

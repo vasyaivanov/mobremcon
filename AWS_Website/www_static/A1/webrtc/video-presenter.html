@@ -21,20 +21,19 @@ video {
 }
 </style>
 <script>
-
+var meeting = <%= meeting %>;
 var MODERATOR_CHANNEL_ID = 'slite-video'; // channel-id
 var MODERATOR_SESSION_ID = '<%= hash %>-video';    // room-id
 var MODERATOR_ID         = '<%= userId%>';    // user-id
 var MODERATOR_SESSION    = {         // media-type
     audio: true,
-    video: true,
-	oneway: true
+    video: true
 };
 
 var MODERATOR_EXTRA      = {};       // empty extra-data
 
 var videoPresenterSocket;
-
+var localStream;
 if(typeof parent.socket != "undefined") {
 	videoPresenterSocket = parent.socket
 }
@@ -74,7 +73,11 @@ moderator.onstream = function(event) {
 					$("#" + event.streamid).show();
 				}, 1000);
 			}
-			videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
+				if(meeting == 1) {
+					$("#type_switch").remove();
+					$( "#videosharing" ).addClass( "videoL" );
+				}
+				videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
 		}
 		else if(event.type == "remote") {
 			$( "#videosharingR" ).append(event.mediaElement);
