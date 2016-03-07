@@ -23,9 +23,8 @@
     </style>
 </head>
 
-<body onload="joinRoom()">
-  <div id="videoL"></div>
-  <div id="videoR"></div>
+<body onload="startRoom()">
+<div id="videoL"></div>
 
         <script src="//cdn.webrtc-experiment.com:443/rmc3.min.js"></script>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -39,26 +38,23 @@
           connection.socketURL = '/';
           connection.enableScalableBroadcast = true;
           connection.session = {
-                audio: true,
-                video: true
+            screen: true,
+            oneway: true
           };
 
-          function joinRoom() {
+          function startRoom() {
                 connection.sdpConstraints.mandatory = {
-                    OfferToReceiveAudio: true,
-                    OfferToReceiveVideo: true
+                  OfferToReceiveAudio: false,
+                  OfferToReceiveVideo: false
                 };
-                connection.join('video-' + hash);
+                connection.open('screen-' + hash);
           }
 
           connection.onstream = function(event) {
-            if(event.type == "local") {
-              connection.getSocket().emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
-              $("#videoL").append(event.mediaElement);
-            }
-            else {
-              $("#videoR").append(event.mediaElement);
-            }
+              if(event.type == "local") {
+                connection.getSocket().emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
+                $("#videoL").append(event.mediaElement);
+              }
           };
 </script>
 

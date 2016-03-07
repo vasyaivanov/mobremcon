@@ -24,7 +24,6 @@
 </head>
 
 <body onload="joinRoom()">
-  <div id="videoL"></div>
   <div id="videoR"></div>
 
         <script src="//cdn.webrtc-experiment.com:443/rmc3.min.js"></script>
@@ -39,16 +38,16 @@
           connection.socketURL = '/';
           connection.enableScalableBroadcast = true;
           connection.session = {
-                audio: true,
-                video: true
+            screen: true,
+            oneway: true
           };
 
           function joinRoom() {
                 connection.sdpConstraints.mandatory = {
-                    OfferToReceiveAudio: true,
-                    OfferToReceiveVideo: true
+                  OfferToReceiveAudio: false,
+                  OfferToReceiveVideo: false
                 };
-                connection.join('video-' + hash);
+                connection.join('screen-' + hash);
           }
 
           connection.onstream = function(event) {

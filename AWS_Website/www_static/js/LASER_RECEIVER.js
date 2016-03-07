@@ -17,6 +17,10 @@ var canvas, ctx, flag = false,
 var paintColor = "red",
     lineThickness = 3;
 
+if(meeting) {
+  paintColor = 'white';
+}
+
 function isThisHash(hash) {
     return ( currentHash === hash );
 }
@@ -41,6 +45,18 @@ function drawTo(res, x, y) {
     //console.log('drawTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
 	if (LOG_DRAWING && res !== 'up') {
         console.log('drawTo: xPer: %.3f yPer: %.3f xOff: %.0f  yOff: %.0f ', x, y, off.x, off.y);
+    }
+    if(meeting == 1) {
+      if(res == 'up') {
+        $('body').css('cursor', 'auto');
+        $('.chalk').hide();
+      }
+      else {
+        $('body').css('cursor', 'none');
+        $('.chalk').show();
+        $('.chalk').css('left', off.x + 'px');
+        $('.chalk').css('top', off.y + 'px');
+      }
     }
     findxy(res, off.x, off.y);
 }

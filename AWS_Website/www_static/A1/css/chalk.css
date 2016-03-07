@@ -1,0 +1,16 @@
+html,body{
+		background:url(/A1/img/chalk/bg.jpg);
+}
+.chalk{
+		width:40px;
+		height:50px;
+		background:url(/A1/img/chalk/chalk.png);
+		position:absolute;
+		display: none;
+		padding:0;
+		margin:0;
+		bottom:0;
+		left:0;
+		cursor:none;
+		z-index:0;
+	}

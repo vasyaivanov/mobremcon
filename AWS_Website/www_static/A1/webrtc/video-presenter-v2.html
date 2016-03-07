@@ -48,7 +48,7 @@
                     OfferToReceiveAudio: true,
                     OfferToReceiveVideo: true
                 };
-                connection.open(hash);
+                connection.open('video-' + hash);
           }
 
           connection.onstream = function(event) {

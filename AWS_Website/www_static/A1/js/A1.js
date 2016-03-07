@@ -151,7 +151,7 @@ function showHideComments() {
 
 var isVideoChatOn = 0;
 function showHideVideoChat() {
-	if(isScreensharingOn == 1) {
+	if(isScreensharingOn == 1 && meeting == 0) {
 		showHideScreensharing()
 	}
 
@@ -216,7 +216,7 @@ $("#recordButton").click(function() {
 
 var isScreensharingOn = 0;
 function showHideScreensharing() {
-	if(isVideoChatOn == 1) {
+	if(isVideoChatOn == 1  && meeting == 0) {
 		showHideVideoChat()
 	}
 
@@ -481,6 +481,10 @@ function meetingMenu() {
 		$("#next").text("CLEAR");
 		$("#prev").remove();
 		$("#videochat").height("100%");
+		$("#screensharing").width("75%");
+		$("#screensharing").css('z-index', 0);
+		$("#closescreensharing").remove();
+		$('body').prepend('<div class="chalk"></div>');
 		$( document ).ready(function() {
 			if(isVideoChatOpen == 0 && isPresenter()) {
 				showHideVideoChat();
