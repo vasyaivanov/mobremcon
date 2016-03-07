@@ -20,8 +20,9 @@ module.exports.StartServer = function() {
         var socketMessageEvent = params.msgEvent || 'RTCMultiConnection-Message';
 
         if (params.enableScalableBroadcast) {
+            console.log("-------- SCALABLE BROADCAST")
             if (!ScalableBroadcast) {
-                ScalableBroadcast = require('./Scalable-Broadcast.js');
+                ScalableBroadcast = require('./scalable-broadcast.js');
             }
             ScalableBroadcast(socket, params.maxRelayLimitPerUser);
         }
