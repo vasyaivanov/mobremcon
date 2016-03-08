@@ -413,7 +413,7 @@ app.use(function (req, res, next) {
 
 // Calculate user slides size sum & slides count
 var getUserUploadStatus = function (userId, callback) {
-	Slide.find({uid : userId }).exec(function (err, docs) {
+	Slide.find({uid : userId, meeting: {$ne: 1} }).exec(function (err, docs) {
 		if( docs ) {
 			var slidesMB = 0;
 			for(i=0;i<docs.length;i++) {
@@ -456,7 +456,7 @@ app.use(function (req, res, next) {
 	if(hash != '' && req.hostname.split('.')[0] != 'www'  && trustedDomains.indexOf(req.headers.host) == -1 /*&& !path.extname(customHash)*/) {
 	   User.findOne({ domain: req.hostname.split('.')[0] }).exec(function (errU, docU) {
   		if(docU) {
-			  Slide.findOne({ $or: [{sid: hash} ,  {scid: { $regex : new RegExp("^" + hash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1 }).exec(function (err, doc) {
+			  Slide.findOne({ $or: [{sid: hash} ,  {scid: { $regex : new RegExp("^" + hash + "$" , "i") }}] , uid: docU._id , paypalPayed: 1, site: domainClear, domainSet: 1, meeting: {$ne: 1} }).exec(function (err, doc) {
 				  if(doc) {
             req.body.thisisdomain = 1;
             if(typeof additional_param == 'undefined') {
@@ -809,6 +809,22 @@ function setUserSession(req, res, callback) {
 var rootRegExp = new RegExp('^/($|index(\.html)?$)');
 router.get(rootRegExp, function (req, res){
 
+  // Remove meetings older than 5 hours
+  Slide.find({created: {$lt: new Date((new Date())-1000*60*60*5)}, meeting: 1},function(err,docsV) {
+    if(docsV.length) {
+      for(cV=0;cV<docsV.length;cV++) {
+        module.exports.deletePresentation(docsV[cV].sid,function(ret) {
+          if (ret == 1) {
+            if(LOG_GENERAL) {
+              console.log("Deleted old meeting ");
+            }
+          }
+        });
+      }
+    }
+  })
+
+
   function getVideosUrl(hash_search, callback) {
       var videoObj = [];
       VideoUploads.find({ sid: hash_search }).sort({'created': 'desc'}).exec(function (err, docsV) {
@@ -831,7 +847,7 @@ router.get(rootRegExp, function (req, res){
         if(typeof req.cookies[sessionIdCookie] != "undefined") {
           owner = (docs._id == UserData[req.cookies[sessionIdCookie]].currentUserId && req.user) ? 1 : 0;
         }
-				Slide.find({uid : docs._id }).sort({'created': 'desc'}).exec(function (err, docs) {
+				Slide.find({uid : docs._id, meeting: {$ne: 1} }).sort({'created': 'desc'}).exec(function (err, docs) {
 
           readPres(0);
           function readPres(num) {
@@ -861,7 +877,7 @@ router.get(rootRegExp, function (req, res){
 
 		// Paint index page random slides
 		function getRandomSlides(Slide, callback) {
-			Slide.findRandom({site: req.headers.host, domainSet: 0 }, {}, {skip: 0, limit: 10},function(err, result) {
+			Slide.findRandom({site: req.headers.host, domainSet: 0, meeting: {$ne: 1} }, {}, {skip: 0, limit: 10},function(err, result) {
 			  if (!err) {
 				var returnRes = '<!-- Elastislide Carousel --><ul id="carousel" class="elastislide-list">';
 
@@ -1209,7 +1225,7 @@ router.get('/screensharing.html', function (req, res){
 				}
 				else if(data.found == 1 && data.isPresenter == 0) {
           if(data.meeting == 1) {
-            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/screen-client-v2.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});  
+            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/screen-client-v2.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
           else {
 					  res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
@@ -1438,6 +1454,38 @@ module.exports.deleteFolderRecursive = function(path) {
 			}
 		});
 	}
+}
+
+module.exports.deletePresentation = function(hashId, callback) {
+  Slide.remove({ sid: hashId }, function(err,delData) {
+    if (!err && delData.result.ok == 1) {
+      deleteS3path(hashId);
+      VideoUploads.find({sid : hashId }, function (err, docs) {
+        if(LOG_GENERAL) {
+          console.log("Deleting videos..." + hashId);
+        }
+        for(i=0;i<docs.length;i++) {
+          var pathToVideo = docs[i].opentokId + "/" + docs[i].archid + "/";
+          deleteS3path(pathToVideo,1);
+          docs[i].remove();
+        }
+      });
+      Note.remove({ sid: hashId }, function(err1) {
+        if(LOG_GENERAL) {
+          console.log('Deleting notes.....' + hashId);
+        }
+        Chat.remove({ sid: hashId }, function(err2) {
+          if(LOG_GENERAL) {
+            console.log('Deleting chats...' + hashId);
+          }
+          callback(1);
+        });
+      });
+    }
+    else {
+      callback(0);
+    }
+  });
 }
 
 function deleteOldHashFolders() {

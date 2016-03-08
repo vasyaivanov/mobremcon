@@ -1,5 +1,6 @@
 html,body{
-		background:url(/A1/img/chalk/bg.jpg);
+		/*background:url(/A1/img/chalk/bg.jpg);*/
+		background-color: #DCDCDC;
 }
 .chalk{
 		width:40px;

@@ -86,7 +86,7 @@ $( window ).load(function() {
 	else {
 		chatSocket = io.connect(document.location.hostname + ':' + location.port);
 	}
-  
+
   //var chatSocket = io.connect(document.location.hostname + ':' + location.port);
   var myRoomID = null;
 
@@ -334,7 +334,7 @@ chatSocket.on("history", function(data) {
   } else {
     $("#msgs").append("<li><strong><span class='text-warning'>No past messages in this room.</li>");
   }
-  
+
 $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
 
 });
@@ -358,12 +358,12 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
       }
       if (obj.roomName === getUrlParam("presentation"))
       {
-        if (obj.socketId === chatSocket.id) {
+        if (obj.socketId === "/#" + chatSocket.id) {
           s = "<li class=\"list-group-item\"><span class='text-danger'>"
         } else {
           s = "<li class=\"list-group-item\"><span class='text-success'>"
         }
-        $('#people').append(s + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>");
+        $('#people').append(s + obj.name + "</span> <i class=\"fa fa-"+obj.device+"\"></i> " + html /* + " <a href=\"#\" class=\"whisper btn btn-xs\">whisper</a></li>"*/);
       }
     });
 
@@ -379,7 +379,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
   });
 
   chatSocket.on("chat", function(person, msg) {
-    if (person.socketId === chatSocket.id) {
+    if ( person.socketId == "/#" + chatSocket.id) {
       s = "<li><strong><span class='text-danger'>"
     } else {
       s = "<li><strong><span class='text-success'>"
@@ -417,7 +417,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
   chatSocket.on("sendRoomID", function(data) {
     myRoomID = data.id;
   });
-  
+
   chatSocket.on("reconnect", function(data) {
 	setTimeout(function() {
 		toggleChatWindow();
@@ -431,7 +431,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
 
   chatSocket.on("disconnect", function(){
     $("#msgs").append("<li><strong><span class='text-warning'>Our chat server is not available. Reconnecting...</span></strong></li>");
-	
+
 	$( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
     $("#msg").attr("disabled", "true");
     $("#send").attr("disabled", "true");

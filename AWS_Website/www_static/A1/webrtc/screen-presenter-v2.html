@@ -9,22 +9,35 @@
     	display: block;
         width: 100%;
     }
-    #videoR {
-      width: 90%;
-    	position: static;
-      margin-bottom: 10px;
-      border: 1px solid #CCCCCC;
-    }
     #videoL {
-      width: 90%;
-    	border: 1px solid #3F7FBF;
-      margin-bottom: 10px;
+      width: 100%;
+    	position: static;
     }
     </style>
 </head>
 
-<body onload="startRoom()">
+<body>
 <div id="videoL"></div>
+
+<ul>
+	<li id="install_chrome_extension" style="display: none">
+		<a href="https://chrome.google.com/webstore/detail/screen-capturing/ajhifddimkapgcifgcodmmfdlknahffk" target="_blank">Click <b>here</b> to install Chrome Presenter Extension (audience don't need it)</a>
+	</li>
+
+	<li id="install_firefox_extension" style="display: none">
+		<a href="#" onclick="reloadFFPlugin()">Click here to install Firefox Presenter Extension (audience don't need it)</a>
+	</li>
+
+	<li id="installing_firefox_extension" style="display: none">
+		Installing FF plugin...
+	</li>
+
+
+	<li id="sharing_starting" style="display: none">
+		Starting screen sharing...
+	</li>
+
+</ul>
 
         <script src="//cdn.webrtc-experiment.com:443/rmc3.min.js"></script>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -56,6 +69,79 @@
                 $("#videoL").append(event.mediaElement);
               }
           };
+
+
+          var getChromeExtensionStatus = function (callback) {
+          	if (!!navigator.mozGetUserMedia) return callback('not-chrome');
+
+          	var extensionid = 'ajhifddimkapgcifgcodmmfdlknahffk';
+
+          	var image = document.createElement('img');
+          	image.src = 'chrome-extension://' + extensionid + '/icon.png';
+          	image.onload = function () {
+          		callback('installed-enabled');
+          	};
+          	image.onerror = function () {
+          		callback('not-installed');
+          	};
+          }
+
+          getChromeExtensionStatus(function(result) {
+          	if(result == 'not-installed') {
+          		$('#install_chrome_extension').show();
+          	}
+          	else if(result == 'installed-enabled') {
+          		startRoom();
+          	}
+          	else {
+          		if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+          			connection.onMediaError = function(error) {
+          				//if(error.name == 'PermissionDeniedError') {
+          					window.postMessage({
+          						enableScreenCapturing: true,
+          						domains: window.location.hostname
+          					}, "*");
+
+          					$("#install_firefox_extension").show();
+          				//}
+          			};
+          		}
+          		else {
+          			alert("We only support the latest versions of Google Chrome and FireFox")
+          		}
+          	}
+
+          	if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+          		startRoom();
+          	}
+
+          });
+
+          window.addEventListener("message", function(event) {
+              var addonMessage = event.data;
+
+              if(!addonMessage || typeof addonMessage.enabledScreenCapturing === 'undefined') return;
+
+              if(addonMessage.enabledScreenCapturing === true) {
+          			var new_url = document.URL + '&reload=1'
+          			location.href = new_url;
+              }
+              else {
+                  // reason === 'user-rejected'
+                  alert(addonMessage.reason);
+              }
+          }, false);
+
+
+          function reloadFFPlugin() {
+          	$("#install_firefox_extension").hide();
+
+          	xpi={'Enable Screen Capturing in Firefox':'https://addons.mozilla.org/firefox/downloads/file/363432/enable_screen_capturing_in_firefox-1.0.007-fx.xpi?src=dp-btn-primary'};
+          	InstallTrigger.install(xpi,function () {alert('test')});
+
+          	$("#installing_firefox_extension").show();
+          	setTimeout(function(){ location.reload(); }, 5000);
+          }
 </script>
 
 </body>

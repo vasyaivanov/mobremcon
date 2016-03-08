@@ -478,17 +478,33 @@ function meetingMenu() {
 		$("#menuPresKey").remove();
 		$("#menuMyPres").remove();
 		$("#menuRenamePresentation").remove();
+		$("#menuOpenRecording").remove();
 		$("#next").text("CLEAR");
 		$("#prev").remove();
 		$("#videochat").height("100%");
+		$("#videochat").width("220px");
+		$("#comments").css("right","0px");
+		$("#comments").height("30px");
+		$("#comments").width("220px");
 		$("#screensharing").width("75%");
-		$("#screensharing").css('z-index', 0);
+		$("#navButtons").width("85%");
+		//$("#screensharing").css('z-index', 0);
 		$("#closescreensharing").remove();
 		$('body').prepend('<div class="chalk"></div>');
 		$( document ).ready(function() {
 			if(isVideoChatOpen == 0 && isPresenter()) {
 				showHideVideoChat();
 			}
+			showHideComments();
+			$("#comments").hover(
+			    function(){
+			        $("#comments").height("330px");
+							$( "#urlChat" ).height("300px");
+			    },
+			    function(){
+			        $("#comments").height("30px");
+			    }
+			);
 		});
 	}
 }

@@ -57,7 +57,7 @@
 <body> <!--onresize="resizeCanvas()">-->
 
 <div id="loadingPage" class="centerText">
-<img src="/A1/img/loading_spinner.gif" width="50">
+<img src="/A1/img/loading_spinner.gif" width="20">
 </div>
 
 <div class='orientationOverlay' id='orientationOverlay'>
@@ -67,7 +67,7 @@
 
 <div id="mainSlide">
 
-	<div class="UI botRow" id="navButtons" style="display: none">
+	<div class="UI botRow" id="navButtons">
 			<div class="UI button button_unpressed" id="prev" style="height:50px; line-height:50px;">
 					<span style="font-size:2em; vertical-align:top; float:left; padding-right:10px; padding-left:30px;">&lt;</span>
 					<span style="vertical-align:top;float:left;">PREV</span>
@@ -145,9 +145,9 @@
 	</div>
 
 	<div id="comments">
-			<center><div class='panelTitle' style='position: absolute; left: 7%;'>Live Chat about this presentation</div><center>
+			<center><div class='panelTitle' style='position: absolute; left: 7%;'>Live chat</div><center>
 			<div class="closevideo" id="closeChat" style='margin-right: 20px;' title="Close Chat"></div>
-			<iframe id="urlChat" src="/chat.html" style='width:100%;height:92%'></iframe>
+			<iframe id="urlChat" src="/chat.html" style='width:100%;height:100%'></iframe>
 			<script>
 			    document.getElementById('urlChat').src = "/chat.html?presentation=" + currentHash.toUpperCase();
     		</script>

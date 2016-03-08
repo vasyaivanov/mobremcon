@@ -179,6 +179,17 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                     if (nofUsers[socket.handshake.query.hash] < 0) {
                         nofUsers[socket.handshake.query.hash] = 0;
                     }
+                    // Remove users if 0 in room;
+                    if(nofUsers[socket.handshake.query.hash] == 0) {
+                      module.parent.exports.slideCheckPresenter({ hashId: socket.handshake.query.hash, currentUserId: userSession.currentUserId } , function(retData) {
+                        if (retData.found == 1 && retData.meeting == 1) {
+                          module.parent.exports.deletePresentation(socket.handshake.query.hash, function(ddd){
+                            console.log(ddd);
+                          });
+                        }
+
+                      });
+                    }
 					notifyNofUsersChanged(socket, socket.handshake.query.hash);
 					if(LOG_GENERAL) {
 						console.log("User disconnected");
@@ -289,7 +300,17 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         		module.parent.exports.slideCheckPresenter({ hashId: data.sid, currentUserId: userSession.currentUserId } , function(retData) {
       				//if(retData.isPresenter == 1 && retData.found == 1) {
               if(retData.found == 1 && (retData.isPresenter == 1 || data.presPass == retData.presentationKey)) {
-      					module.parent.exports.SlideScheme.remove({ sid: data.sid }, function(err,delData) {
+                module.parent.exports.deletePresentation(data.sid, function(ret){
+                  if(ret == 1) {
+                    socket.emit("client-deleteSlide", {sid: data.sid});
+                  }
+                  else {
+                    if(LOG_GENERAL) {
+      								console.log("Can't delete the slide" + data.sid);
+      							}
+                  }
+                });
+      					/*module.parent.exports.SlideScheme.remove({ sid: data.sid }, function(err,delData) {
       						if (!err && delData.result.ok == 1) {
                       if(LOG_GENERAL) {
                         console.log("Presentation " + data.sid + " deleted");
@@ -311,7 +332,6 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       										if(LOG_GENERAL) {
       											console.log('Deleting chats...' + data.sid);
       										}
-      										socket.emit("client-deleteSlide", {sid: data.sid});
       									});
       								});
       						}
@@ -320,7 +340,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       								console.log("Can't delete the slide" + data.sid);
       							}
       						}
-      					});
+      					});*/
       				}
       			});
       	  });
