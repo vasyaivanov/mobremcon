@@ -1,4 +1,9 @@
 $(document).ready(function () {
+
+    if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+      $(".startMeetingButton").show();
+    }
+
     function getClearUrl() {
         var url = [location.protocol, '//', location.host, location.pathname].join('');
         return url;
@@ -34,7 +39,7 @@ $(document).ready(function () {
 
     var mainSocket = io.connect(document.location.hostname + ':' + location.port);
 
-	mainSocket.emit("server-userRestrictions");
+    mainSocket.emit("server-userRestrictions");
 
     function setUploadMessage(title) {
         progressLabel.text(title);
@@ -159,38 +164,38 @@ $(document).ready(function () {
             alert("Your Browser Doesn't Support The File API Please Update Your Browser");
         }
     } else {
-		mainSocket.on("client-userRestrictions", function (loadData) {
-			var siofu = new SocketIOFileUpload(mainSocket);
-			siofu.chunkSize = 0;
-			siofu.maxFileSize = loadData.maxFileSize;
-			siofu.listenOnInput(document.getElementById("uploadPresentation"));
+  		mainSocket.on("client-userRestrictions", function (loadData) {
+  			var siofu = new SocketIOFileUpload(mainSocket);
+  			siofu.chunkSize = 0;
+  			siofu.maxFileSize = loadData.maxFileSize;
+  			siofu.listenOnInput(document.getElementById("uploadPresentation"));
 
-			siofu.addEventListener("choose", function(event){
-				console.log("Upload file(s) chosen: " + event.files[0].name);
-				openUploadDialog('Uploading: ' + event.files[0].name);
-			});
+  			siofu.addEventListener("choose", function(event){
+  				console.log("Upload file(s) chosen: " + event.files[0].name);
+  				openUploadDialog('Uploading: ' + event.files[0].name);
+  			});
 
-			siofu.addEventListener("start", function(event){
-				console.log("Upload started: " + event.file.name);
-			});
+  			siofu.addEventListener("start", function(event){
+  				console.log("Upload started: " + event.file.name);
+  			});
 
-			siofu.addEventListener("complete", function(event){
-				console.log("Upload successful: " + event.file.name);
-				setUploadMessage('Converting presentation...');
-			});
+  			siofu.addEventListener("complete", function(event){
+  				console.log("Upload successful: " + event.file.name);
+  				setUploadMessage('Converting presentation...');
+  			});
 
-			siofu.addEventListener("error", function(event){
-				var data = [];
-				data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
-				if(event.code == 1) {
-					data.msg = "File is too big for upload."
-				}
-				data.error = true;
-				data.percentage = 100;
-				updateProgress(data);
-				setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
-			});
-		});
+  			siofu.addEventListener("error", function(event){
+  				var data = [];
+  				data.msg = 'Server error!\nPlease try uploading again. If fails again contact support.';
+  				if(event.code == 1) {
+  					data.msg = "File is too big for upload."
+  				}
+  				data.error = true;
+  				data.percentage = 100;
+  				updateProgress(data);
+  				setTimeout(function(){ window.location = getClearUrl(); }, 10000); // reload after 10 sec
+  			});
+  		});
     }
 
 	mainSocket.on("uploadProgress", function (data) {
@@ -254,7 +259,7 @@ $(document).ready(function () {
 		window.location = window.location + "editor";
     });
 
-	replaceDomainName();
+	  replaceDomainName();
 
     if(navigator.userAgent.match(/(iPhone|iPad)/i)) {
 		//$('.uploadfile').css('display', 'none');
@@ -345,7 +350,6 @@ function replaceDomainName() {
 		htmlBody = htmlBody.replace(/Slite/g, hostname);
 		element.html(htmlBody);
 	}
-	//str = str.replace(/Slite&#8482;/g, hostname);
 }
 
 function delSlide(slideId) {

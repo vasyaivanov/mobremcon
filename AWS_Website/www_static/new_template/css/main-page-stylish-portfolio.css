@@ -304,6 +304,7 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
   vertical-align: middle;
   background: #00147C;
   color: #84A4E0;
+  display: none;
 }
 
 .startMeetingButton:hover {
