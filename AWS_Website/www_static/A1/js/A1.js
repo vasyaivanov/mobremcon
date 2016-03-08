@@ -500,9 +500,13 @@ function meetingMenu() {
 			    function(){
 			        $("#comments").height("330px");
 							$( "#urlChat" ).height("300px");
+							$("#comments").width("300px");
+
 			    },
 			    function(){
 			        $("#comments").height("30px");
+							$("#comments").width("220px");
+
 			    }
 			);
 		});
