@@ -17,7 +17,7 @@ var canvas, ctx, flag = false,
 var paintColor = "red",
     lineThickness = 3;
 
-if(meeting) {
+if(meeting == 1) {
   paintColor = 'white';
 }
 
