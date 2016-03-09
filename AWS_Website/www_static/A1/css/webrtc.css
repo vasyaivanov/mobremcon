@@ -14,13 +14,51 @@ video {
   margin-bottom: 10px;
   position: relative;
 }
-.muteButton {
+.audioBut {
   position: absolute;
-  width: 16px;
-  height: 22px;
-  top: 10px;
-  left: 10px;
+  width: 30px;
+  height: 30px;
+  bottom: 0px;
   cursor: pointer;
   z-index: 999;
-  background-image: url(/A1/img/webrtc/icon_mic.png);
+  opacity: 0.7;
+  background-color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-image: url(/A1/img/webrtc/audio.png);
+}
+.audioMuteBut {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  bottom: 0px;
+  cursor: pointer;
+  z-index: 999;
+  opacity: 0.7;
+  background-color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-image: url(/A1/img/webrtc/audio_mute.png);
+}
+.videoBut {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  bottom: 0px;
+  cursor: pointer;
+  z-index: 999;
+  opacity: 0.7;
+  background-color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-image: url(/A1/img/webrtc/video.png);
+}
+.videoMuteBut {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  bottom: 0px;
+  cursor: pointer;
+  z-index: 999;
+  opacity: 0.7;
+  background-color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-image: url(/A1/img/webrtc/video_mute.png);
 }

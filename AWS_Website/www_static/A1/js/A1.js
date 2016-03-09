@@ -163,8 +163,10 @@ function showHideVideoChat() {
         isVideoChatOn = 0;
     }
 
+
     if (isPresenter() && isVideoChatOn == 0) {
-		socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: getCurrentHash()});
+			// Closing broadcast
+			socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: getCurrentHash()});
     }
 
     var label = $("#videoChatOpenCloseLabel");

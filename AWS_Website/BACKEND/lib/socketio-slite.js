@@ -183,9 +183,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                     if(nofUsers[socket.handshake.query.hash] == 0) {
                       module.parent.exports.slideCheckPresenter({ hashId: socket.handshake.query.hash, currentUserId: userSession.currentUserId } , function(retData) {
                         if (retData.found == 1 && retData.meeting == 1) {
-                          module.parent.exports.deletePresentation(socket.handshake.query.hash, function(ddd){
+                          /*module.parent.exports.deletePresentation(socket.handshake.query.hash, function(ddd){
                             console.log(ddd);
-                          });
+                          });*/
                         }
 
                       });

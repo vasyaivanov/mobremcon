@@ -20,7 +20,10 @@
 
         <script>
           var connection = new RTCMultiConnection();
+          var webrtcA = new webrtc({connection: connection});
+
           var hash = "<%= hash %>";
+          connection.userid = "<%= userId%>";
           connection.socketURL = '/';
           connection.enableScalableBroadcast = true;
           connection.session = {
@@ -39,10 +42,10 @@
           connection.onstream = function(event) {
               if(event.type == "local") {
                 connection.getSocket().emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
-                webrtc.appendElement({connection: connection, element: event.mediaElement, append: "videoL", buttons: {audio: 1, video: 1}});
+                webrtcA.appendElement({element: event.mediaElement, append: "videoL", buttons: {audio: 1, video: 1}});
               }
               else {
-                webrtc.appendElement({connection: connection, element: event.mediaElement, append: "videoR"});
+                webrtcA.appendElement({element: event.mediaElement, append: "videoR", buttons:{ video: 1}});
               }
           };
 </script>
