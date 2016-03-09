@@ -38,7 +38,7 @@ var webrtc = function(params) {
     this.connection.onunmute = function(e) {};
 
     // On disconnect - remove old sessions and element on the page
-    this.connection.onleave = this.connection.streamended = connection.onclose = function(event) {
+    this.connection.onleave = this.connection.streamended = this.connection.onclose = function(event) {
       var userId = params.clients[event.userid];
       userId = userId.replace(/(\{|\})/gi,"");
       $('[id*="'+userId+'"]').remove();

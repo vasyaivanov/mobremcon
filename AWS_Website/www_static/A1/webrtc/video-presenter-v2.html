@@ -18,9 +18,6 @@
         <script src="/socket.io/socket.io.js"></script>
 
         <script>
-          var connection = new RTCMultiConnection();
-          var webrtcA = new webrtc({connection: connection});
-
           var webrtcPresenter = new webrtc({
             roomId: "video-<%= hash %>",
             hashId: "<%= hash %>",
@@ -41,8 +38,8 @@
               },
               sdpConstraints: {
                 mandatory : {
-                  OfferToReceiveAudio: false,
-                  OfferToReceiveVideo: false
+                  OfferToReceiveAudio: true,
+                  OfferToReceiveVideo: true
                 }
               }
             }

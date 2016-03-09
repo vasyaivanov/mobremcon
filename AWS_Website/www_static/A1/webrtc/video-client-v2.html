@@ -4,62 +4,45 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <style>
-    video {
-    	display: block;
-        width: 100%;
-    }
-    #videoR {
-      width: 90%;
-    	position: static;
-      margin-bottom: 10px;
-      border: 1px solid #CCCCCC;
-    }
-    #videoL {
-      width: 90%;
-    	border: 1px solid #3F7FBF;
-      margin-bottom: 10px;
-    }
-    </style>
+    <link rel="stylesheet" href="/A1/css/webrtc.css">
 </head>
 
-<body onload="joinRoom()">
-  <div id="videoL"></div>
-  <div id="videoR"></div>
-
+<body onload="webrtcClient.runWebrtc()">
+<div id="videoL"></div>
+<div id="videoR"></div>
         <script src="//cdn.webrtc-experiment.com:443/rmc3.min.js"></script>
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="/A1/js/webrtc/webrtc.js"></script>
 
         <!-- socket.io for signaling -->
         <script src="/socket.io/socket.io.js"></script>
 
         <script>
-          var connection = new RTCMultiConnection();
-          var hash = "<%= hash %>";
-          connection.socketURL = '/';
-          connection.enableScalableBroadcast = true;
-          connection.session = {
+          var webrtcClient = new webrtc({
+            roomId: "video-<%= hash %>",
+            hashId: "<%= hash %>",
+            type: 2,
+            localDiv: "videoL",
+            remoteDiv: "videoR",
+            buttons: {
+              local: {audio: 1, video: 1},
+              remote: {}
+            },
+            webrtc: {
+              socketURL: "/",
+              enableScalableBroadcast: true,
+              session: {
                 audio: true,
                 video: true
-          };
-
-          function joinRoom() {
-                connection.sdpConstraints.mandatory = {
-                    OfferToReceiveAudio: true,
-                    OfferToReceiveVideo: true
-                };
-                connection.join('video-' + hash);
-          }
-
-          connection.onstream = function(event) {
-            if(event.type == "local") {
-              connection.getSocket().emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
-              $("#videoL").append(event.mediaElement);
+              },
+              sdpConstraints: {
+                mandatory : {
+                  OfferToReceiveAudio: true,
+                  OfferToReceiveVideo: true
+                }
+              }
             }
-            else {
-              $("#videoR").append(event.mediaElement);
-            }
-          };
+          });
 </script>
 
 </body>
