@@ -1,0 +1,26 @@
+video {
+  display: block;
+  width: 100%;
+}
+#videoR {
+  width: 90%;
+  position: relative;
+  margin-bottom: 10px;
+  border: 1px solid #CCCCCC;
+}
+#videoL {
+  width: 90%;
+  border: 1px solid #3F7FBF;
+  margin-bottom: 10px;
+  position: relative;
+}
+.muteButton {
+  position: absolute;
+  width: 16px;
+  height: 22px;
+  top: 10px;
+  left: 10px;
+  cursor: pointer;
+  z-index: 999;
+  background-image: url(/A1/img/webrtc/icon_mic.png);
+}
