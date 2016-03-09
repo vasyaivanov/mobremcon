@@ -1530,13 +1530,15 @@ function deleteS3path(path,videoBucket) {
     lookupBucket = AWS_S3_VIDEO_BUCKET;
   }
 	AWS_S3.listObjects({Bucket: lookupBucket, Prefix: path}, function(err, data) {
-	  params = {Bucket: lookupBucket};
-	  params.Delete = {};
-	  params.Delete.Objects = [];
-	  data.Contents.forEach(function(content) {
-		    params.Delete.Objects.push({Key: content.Key});
-	  });
-	  AWS_S3.deleteObjects(params, function(err, data) {});
+    if(data != null) {
+  	  params = {Bucket: lookupBucket};
+  	  params.Delete = {};
+  	  params.Delete.Objects = [];
+  	  data.Contents.forEach(function(content) {
+  		    params.Delete.Objects.push({Key: content.Key});
+  	  });
+  	  AWS_S3.deleteObjects(params, function(err, data) {});
+    }
 	});
 }
 

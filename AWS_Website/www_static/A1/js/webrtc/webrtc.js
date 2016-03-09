@@ -28,6 +28,7 @@ var webrtc = function(params) {
         }
         else {
           params.clients[event.userid] = event.streamid;
+          console.log(params.clients);
           addClient.appendElement({element: event.mediaElement, append: params.remoteDiv, buttons: params.buttons.remote});
         }
     }
@@ -36,18 +37,11 @@ var webrtc = function(params) {
 
     this.connection.onunmute = function(e) {};
 
+    // On disconnect - remove old sessions and element on the page
     this.connection.onleave = this.connection.streamended = connection.onclose = function(event) {
       var userId = params.clients[event.userid];
-      userId = userId.replace(/\{/gi,"\\{");
-      userId = userId.replace(/\}/gi,"\\}");
-      console.log(userId);
-      $("#audio_" + userId).remove();
-      $("#video_" + userId).remove();
-        /*this.onUserStatusChanged({
-            userid: event.userid,
-            extra: event.extra,
-            status: 'offline'
-        });*/
+      userId = userId.replace(/(\{|\})/gi,"");
+      $('[id*="'+userId+'"]').remove();
     };
 
   }
