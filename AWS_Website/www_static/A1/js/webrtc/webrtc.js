@@ -52,14 +52,20 @@ var newClient = function(connection) {
     var self = {};
     self.data = data;
     self.data.element.controls = false;
-    document.getElementById(self.data.append).appendChild(self.data.element);
+
+    self.elId = 'el_' + self.data.element.id;
+    self.elId = self.elId.replace(/(\{|\})/gi,"");
+
+
+    $("#" + self.data.append).append("<div class=\"videoEl\" id=\""+ self.elId +"\"></div>");
+    document.getElementById(self.elId).appendChild(self.data.element);
     if(typeof self.data.buttons != "undefined") {
       var start = 0;
       for(var key in self.data.buttons){
         if(self.data.buttons[key] == 1) {
           var butName = key + '_' + self.data.element.id;
           butName = butName.replace(/(\{|\})/gi,"");
-          $("#" + self.data.append).append('<div class="'+ key +'But" id="' + butName  + '" type="'+key+'" muted="0" clientId="'+self.data.element.id+'"></div>');
+          $("#" + self.elId).append('<div class="'+ key +'But" id="' + butName  + '" type="'+key+'" muted="0" clientId="'+self.data.element.id+'"></div>');
           $("#" + butName).css("left",  start + "px");
           start = start + $("#" + butName).width();
           document.getElementById(butName).addEventListener("click", this.switch, false);

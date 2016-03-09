@@ -26,14 +26,14 @@
             remoteDiv: "videoR",
             buttons: {
               local: {audio: 1, video: 1},
-              remote: {}
+              remote: {audio: 1}
             },
             webrtc: {
               socketURL: "/",
               enableScalableBroadcast: true,
               session: {
                 audio: true,
-                video: true
+                video: true,
               },
               sdpConstraints: {
                 mandatory : {
