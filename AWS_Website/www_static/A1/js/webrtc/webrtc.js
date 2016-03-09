@@ -1,8 +1,7 @@
 // Start new webrtc session
 var webrtc = function(params) {
-  var clients = {};
   this.params = params;
-
+  params.clients = {};
   this.connection = new RTCMultiConnection();
 
   if(typeof this.params.webrtc != "undefined") {
@@ -13,22 +12,43 @@ var webrtc = function(params) {
 
   this.runWebrtc = function() {
     if(this.params.type == 1) {
-      this.connection.open(this.params.roomId);
+      this.connection.open(this.params.roomId, false);
     }
     else {
       this.connection.join(this.params.roomId);
     }
 
     this.connection.onstream = function(event) {
-        console.log(event);
         var addClient = new newClient(this);
         if(event.type == "local") {
           addClient.appendElement({element: event.mediaElement, append: params.localDiv, buttons: params.buttons.local});
+          if(typeof params.socketRun != "undefined") {
+            this.getSocket().emit(params.socketRun , {open: 1, hash: params.hashId});
+          }
         }
         else {
+          params.clients[event.userid] = event.streamid;
           addClient.appendElement({element: event.mediaElement, append: params.remoteDiv, buttons: params.buttons.remote});
         }
     }
+
+    this.connection.onmute = function(e) {};
+
+    this.connection.onunmute = function(e) {};
+
+    this.connection.onleave = this.connection.streamended = connection.onclose = function(event) {
+      var userId = params.clients[event.userid];
+      userId = userId.replace(/\{/gi,"\\{");
+      userId = userId.replace(/\}/gi,"\\}");
+      console.log(userId);
+      $("#audio_" + userId).remove();
+      $("#video_" + userId).remove();
+        /*this.onUserStatusChanged({
+            userid: event.userid,
+            extra: event.extra,
+            status: 'offline'
+        });*/
+    };
 
   }
 }
@@ -56,26 +76,20 @@ var newClient = function(connection) {
 
   this.switch = function() {
     if($(this).attr('muted') == 0) {
-      var type = {
-        audio: {audio: true},
-        video: {video: true}
-      };
       $(this).attr('muted',1);
       $(this).toggleClass($(this).attr('type') + "But");
       $(this).toggleClass($(this).attr('type') + "MuteBut");
       connection.streamEvents[$(this).attr('clientId')].stream.mute($(this).attr('type'));
     }
     else {
-      var type = {
-        audio: {audio: true},
-        video: {video: true}
-      };
       $(this).attr('muted',0);
       $(this).toggleClass($(this).attr('type') + "But");
       $(this).toggleClass($(this).attr('type') + "MuteBut");
       connection.streamEvents[$(this).attr('clientId')].stream.unmute($(this).attr('type'));
       // Mute local stream inside browser (Chrome bug)
-      document.getElementById($(this).attr('clientId')).muted = true;
+      if(connection.streamEvents[$(this).attr('clientId')].type == "local") {
+        document.getElementById($(this).attr('clientId')).muted = true;
+      }
     }
   }
 

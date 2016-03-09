@@ -24,7 +24,9 @@
 
           var webrtcPresenter = new webrtc({
             roomId: "video-<%= hash %>",
+            hashId: "<%= hash %>",
             type: 1,
+            socketRun: "presenterVideoChat",
             localDiv: "videoL",
             remoteDiv: "videoR",
             buttons: {
@@ -40,38 +42,12 @@
               },
               sdpConstraints: {
                 mandatory : {
-                  OfferToReceiveAudio: true,
-                  OfferToReceiveVideo: true
+                  OfferToReceiveAudio: false,
+                  OfferToReceiveVideo: false
                 }
               }
             }
           });
-
-          /*var hash = "<%= hash %>";
-          connection.socketURL = '/';
-          connection.enableScalableBroadcast = true;
-          connection.session = {
-                audio: true,
-                video: true
-          };
-
-          function startRoom() {
-                connection.sdpConstraints.mandatory = {
-                    OfferToReceiveAudio: true,
-                    OfferToReceiveVideo: true
-                };
-                connection.open('video-' + hash);
-          }
-
-          connection.onstream = function(event) {
-              if(event.type == "local") {
-                connection.getSocket().emit("presenterVideoChat", {open: 1, hash: '<%= hash %>'});
-                webrtcA.appendElement({element: event.mediaElement, append: "videoL", buttons: {audio: 1, video: 1}});
-              }
-              else {
-                webrtcA.appendElement({element: event.mediaElement, append: "videoR", buttons:{ video: 1}});
-              }
-          };*/
 </script>
 
 </body>
