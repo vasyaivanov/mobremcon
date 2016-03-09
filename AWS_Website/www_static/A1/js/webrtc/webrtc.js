@@ -52,11 +52,8 @@ var newClient = function(connection) {
     var self = {};
     self.data = data;
     self.data.element.controls = false;
-
     self.elId = 'el_' + self.data.element.id;
     self.elId = self.elId.replace(/(\{|\})/gi,"");
-
-
     $("#" + self.data.append).append("<div class=\"videoEl\" id=\""+ self.elId +"\"></div>");
     document.getElementById(self.elId).appendChild(self.data.element);
     if(typeof self.data.buttons != "undefined") {
