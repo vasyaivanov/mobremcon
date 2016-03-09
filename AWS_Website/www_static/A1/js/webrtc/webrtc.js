@@ -1,36 +1,50 @@
-/*var webrtc = new Object();
-$( document ).ready(function() {
-  webrtc.appendElement = function(data) {
-    data.element.controls = false;
-    $("#" + data.append).append(data.element);
-    if(typeof data.buttons == "undefined") {
-      data.buttons = {audio: 0, video: 0};
-    }
-    if(data.buttons.audio == 1) {
-      $("#" + data.append).append("<div class=\"muteButton\" id=\""+ data.element.id  +"\" muted=\"0\"></div>");
+// Start new webrtc session
+var webrtc = function(params) {
+  var clients = {};
+  this.params = params;
+
+  this.connection = new RTCMultiConnection();
+
+  if(typeof this.params.webrtc != "undefined") {
+    for(var key in this.params.webrtc){
+      this.connection[key] = this.params.webrtc[key];
     }
   }
 
-  $(document).on('click', '.muteButton', function() {
-    console.log($(this).attr('muted'));
-    //connection.streamEvents['streamid'].stream;
-  });
+  this.runWebrtc = function() {
+    if(this.params.type == 1) {
+      this.connection.open(this.params.roomId);
+    }
+    else {
+      this.connection.join(this.params.roomId);
+    }
 
-});*/
+    this.connection.onstream = function(event) {
+        console.log(event);
+        var addClient = new newClient(this);
+        if(event.type == "local") {
+          addClient.appendElement({element: event.mediaElement, append: params.localDiv, buttons: params.buttons.local});
+        }
+        else {
+          addClient.appendElement({element: event.mediaElement, append: params.remoteDiv, buttons: params.buttons.remote});
+        }
+    }
 
-var webrtc = function(params) {
-  this.params = params;
+  }
+}
+// Append new client
+var newClient = function(connection) {
   this.appendElement = function(data) {
     var self = {};
-    self.connection = this.params.connection;
     self.data = data;
     self.data.element.controls = false;
-    $("#" + self.data.append).append(self.data.element);
+    document.getElementById(self.data.append).appendChild(self.data.element);
     if(typeof self.data.buttons != "undefined") {
       var start = 0;
       for(var key in self.data.buttons){
         if(self.data.buttons[key] == 1) {
           var butName = key + '_' + self.data.element.id;
+          butName = butName.replace(/(\{|\})/gi,"");
           $("#" + self.data.append).append('<div class="'+ key +'But" id="' + butName  + '" type="'+key+'" muted="0" clientId="'+self.data.element.id+'"></div>');
           $("#" + butName).css("left",  start + "px");
           start = start + $("#" + butName).width();
@@ -49,7 +63,7 @@ var webrtc = function(params) {
       $(this).attr('muted',1);
       $(this).toggleClass($(this).attr('type') + "But");
       $(this).toggleClass($(this).attr('type') + "MuteBut");
-      params.connection.streamEvents[$(this).attr('clientId')].stream.mute($(this).attr('type'));
+      connection.streamEvents[$(this).attr('clientId')].stream.mute($(this).attr('type'));
     }
     else {
       var type = {
@@ -59,14 +73,10 @@ var webrtc = function(params) {
       $(this).attr('muted',0);
       $(this).toggleClass($(this).attr('type') + "But");
       $(this).toggleClass($(this).attr('type') + "MuteBut");
-      $(this).prop("volume", 0.1);
-      params.connection.streamEvents[$(this).attr('clientId')].stream.unmute($(this).attr('type'));
+      connection.streamEvents[$(this).attr('clientId')].stream.unmute($(this).attr('type'));
+      // Mute local stream inside browser (Chrome bug)
+      document.getElementById($(this).attr('clientId')).muted = true;
     }
   }
-
-  /*$(document).on('click', '.muteButton', function() {
-    var self = this;
-    console.log(params)
-  });*/
 
 }

@@ -25,6 +25,8 @@ video {
   background-color: #FFFFFF;
   background-repeat: no-repeat;
   background-image: url(/A1/img/webrtc/audio.png);
+  background-size: 30px 30px;
+
 }
 .audioMuteBut {
   position: absolute;
@@ -37,6 +39,7 @@ video {
   background-color: #FFFFFF;
   background-repeat: no-repeat;
   background-image: url(/A1/img/webrtc/audio_mute.png);
+  background-size: 30px 30px;
 }
 .videoBut {
   position: absolute;
@@ -49,6 +52,7 @@ video {
   background-color: #FFFFFF;
   background-repeat: no-repeat;
   background-image: url(/A1/img/webrtc/video.png);
+  background-size: 30px 30px;
 }
 .videoMuteBut {
   position: absolute;
@@ -61,4 +65,5 @@ video {
   background-color: #FFFFFF;
   background-repeat: no-repeat;
   background-image: url(/A1/img/webrtc/video_mute.png);
+  background-size: 30px 30px;
 }

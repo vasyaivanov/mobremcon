@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/A1/css/webrtc.css">
 </head>
 
-<body onload="startRoom()">
+<body onload="webrtcPresenter.runWebrtc()">
 <div id="videoL"></div>
 <div id="videoR"></div>
 
@@ -22,8 +22,32 @@
           var connection = new RTCMultiConnection();
           var webrtcA = new webrtc({connection: connection});
 
-          var hash = "<%= hash %>";
-          connection.userid = "<%= userId%>";
+          var webrtcPresenter = new webrtc({
+            roomId: "video-<%= hash %>",
+            type: 1,
+            localDiv: "videoL",
+            remoteDiv: "videoR",
+            buttons: {
+              local: {audio: 1, video: 1},
+              remote: {audio: 1}
+            },
+            webrtc: {
+              socketURL: "/",
+              enableScalableBroadcast: true,
+              session: {
+                audio: true,
+                video: true
+              },
+              sdpConstraints: {
+                mandatory : {
+                  OfferToReceiveAudio: true,
+                  OfferToReceiveVideo: true
+                }
+              }
+            }
+          });
+
+          /*var hash = "<%= hash %>";
           connection.socketURL = '/';
           connection.enableScalableBroadcast = true;
           connection.session = {
@@ -47,7 +71,7 @@
               else {
                 webrtcA.appendElement({element: event.mediaElement, append: "videoR", buttons:{ video: 1}});
               }
-          };
+          };*/
 </script>
 
 </body>
