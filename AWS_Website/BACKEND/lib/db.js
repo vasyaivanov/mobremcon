@@ -1,6 +1,6 @@
 var mongodb = require('mongodb')
 , mongoose = require('mongoose')
-, bcrypt = require('bcrypt')
+, bcrypt = require('bcryptjs')
 , mongooserand = require('mongoose-simple-random')
 , SALT_WORK_FACTOR = 10
 ;

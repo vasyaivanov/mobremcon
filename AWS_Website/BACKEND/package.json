@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "adm-zip": "^0.4.7",
-    "bcrypt": "*",
+    "bcryptjs": "*",
     "body-parser": "^1.11.0",
     "cacheman-mongo": "^0.1.0",
     "cheerio": "^0.17.0",
