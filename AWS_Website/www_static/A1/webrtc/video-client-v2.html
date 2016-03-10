@@ -26,7 +26,7 @@
             remoteDiv: "videoR",
             buttons: {
               local: {audio: 1, video: 1},
-              remote: {audio: 1}
+              remote: {audio: 1, fullscreen: 1}
             },
             webrtc: {
               socketURL: "/",
@@ -35,12 +35,32 @@
                 audio: true,
                 video: true,
               },
+              // Full HD
+              /*bandwidth: {
+                  audio: 128,
+                  video: 1024,
+                  screen: 1024
+              },*/
               sdpConstraints: {
                 mandatory : {
                   OfferToReceiveAudio: true,
                   OfferToReceiveVideo: true
                 }
               }
+              // Full HD
+              /*,
+              mediaConstraints: {
+                video: {
+                  mandatory: {
+                      maxWidth: 1920,
+                      maxHeight: 1080,
+                      minAspectRatio: 1.77,
+                      minFrameRate: 3,
+                      maxFrameRate: 64
+                  },
+                  optional: []
+                }
+              }*/
             }
           });
 </script>

@@ -10,6 +10,8 @@ var webrtc = function(params) {
     }
   }
 
+  console.log(this.connection);
+
   this.runWebrtc = function() {
     if(this.params.type == 1) {
       this.connection.open(this.params.roomId, false);
@@ -42,6 +44,12 @@ var webrtc = function(params) {
       var userId = params.clients[event.userid];
       userId = userId.replace(/(\{|\})/gi,"");
       $('[id*="'+userId+'"]').remove();
+      // If presenter left the room - closing connection
+      if(event.userid == params.roomId) {
+        if(typeof parent.parent.showHideVideoChat() != "undefined") {
+          parent.parent.showHideVideoChat();
+        }
+      }
     };
 
   }
@@ -72,20 +80,34 @@ var newClient = function(connection) {
   }
 
   this.switch = function() {
-    if($(this).attr('muted') == 0) {
-      $(this).attr('muted',1);
-      $(this).toggleClass($(this).attr('type') + "But");
-      $(this).toggleClass($(this).attr('type') + "MuteBut");
-      connection.streamEvents[$(this).attr('clientId')].stream.mute($(this).attr('type'));
+    if($(this).attr('type') == "fullscreen") {
+      var elem = document.getElementById($(this).attr('clientId'));
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
     }
     else {
-      $(this).attr('muted',0);
-      $(this).toggleClass($(this).attr('type') + "But");
-      $(this).toggleClass($(this).attr('type') + "MuteBut");
-      connection.streamEvents[$(this).attr('clientId')].stream.unmute($(this).attr('type'));
-      // Mute local stream inside browser (Chrome bug)
-      if(connection.streamEvents[$(this).attr('clientId')].type == "local") {
-        document.getElementById($(this).attr('clientId')).muted = true;
+      if($(this).attr('muted') == 0) {
+        $(this).attr('muted',1);
+        $(this).toggleClass($(this).attr('type') + "But");
+        $(this).toggleClass($(this).attr('type') + "MuteBut");
+        connection.streamEvents[$(this).attr('clientId')].stream.mute($(this).attr('type'));
+      }
+      else {
+        $(this).attr('muted',0);
+        $(this).toggleClass($(this).attr('type') + "But");
+        $(this).toggleClass($(this).attr('type') + "MuteBut");
+        connection.streamEvents[$(this).attr('clientId')].stream.unmute($(this).attr('type'));
+        // Mute local stream inside browser (Chrome bug)
+        if(connection.streamEvents[$(this).attr('clientId')].type == "local") {
+          document.getElementById($(this).attr('clientId')).muted = true;
+        }
       }
     }
   }

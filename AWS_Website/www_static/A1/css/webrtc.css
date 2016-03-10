@@ -35,7 +35,6 @@ video {
   background-repeat: no-repeat;
   background-image: url(/A1/img/webrtc/audio.png);
   background-size: 30px 30px;
-
 }
 .audioMuteBut {
   position: absolute;
@@ -74,5 +73,18 @@ video {
   background-color: #FFFFFF;
   background-repeat: no-repeat;
   background-image: url(/A1/img/webrtc/video_mute.png);
+  background-size: 30px 30px;
+}
+.fullscreenBut {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  bottom: 0px;
+  cursor: pointer;
+  z-index: 999;
+  opacity: 0.7;
+  background-color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-image: url(/A1/img/webrtc/fullscreen.png);
   background-size: 30px 30px;
 }
