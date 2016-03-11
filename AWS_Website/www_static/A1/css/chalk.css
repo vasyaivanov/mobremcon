@@ -1,5 +1,9 @@
 html,body{
-		/*background:url(/A1/img/chalk/bg.jpg);*/
+		background:url(/A1/img/chalk/bg.jpg);
+		-webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+	  background-size: cover;
 		background-color: #DCDCDC;
 }
 .chalk{
