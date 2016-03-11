@@ -943,8 +943,18 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
       				socket.emit('sharing-client', {moderatorId: doc.uid, chatMode: doc.isVideoChatOpen})
       			}
       		});
-          });
+        });
 
+        socket.on('start-webrtc-session', function(data,callback) {
+          module.parent.exports.slideCheckPresenter({ hashId: data.hash, currentUserId: userSession.currentUserId } , function(retData) {
+              if(retData.isPresenter == 1 && retData.found == 1) {
+                callback({code: 1});
+              }
+              else {
+                callback({code: 0});
+              }
+          });
+        });
 
       	socket.on('server-userRestrictions', function (data) {
       		socket.emit('client-userRestrictions',{maxFileSize: userSession.restrictions.maxSlideSize});

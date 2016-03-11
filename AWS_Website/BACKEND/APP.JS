@@ -1238,6 +1238,30 @@ router.get('/screensharing.html', function (req, res){
     }
 });
 
+router.get('/vd.html', function (req, res){
+  if(typeof req.cookies[sessionIdCookie] === "undefined") {
+    res.send('No cookie');
+  }
+  else {
+    var hashId = req.query.presentation;
+    slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
+      console.log(UserData[req.cookies[sessionIdCookie]].currentUserId);
+      if(data.found == 1) {
+        if(data.isPresenter == 1) {
+          res.render(path.join(www_dir,www_static_dir , 'vd/video-pr.html'), {hash: hashId});
+        }
+        else {
+          res.render(path.join(www_dir,www_static_dir , 'vd/video-cl.html'), {hash: hashId});
+        }
+      }
+      else {
+        res.send('No pres');
+      }
+    });
+  }
+});
+
+
 router.get('/video.html', function (req, res){
   if(typeof req.cookies[sessionIdCookie] === "undefined") {
     res.redirect('/');
