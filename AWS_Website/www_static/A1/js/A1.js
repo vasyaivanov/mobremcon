@@ -508,9 +508,9 @@ function meetingMenu() {
 			    function(){
 			        $("#comments").height("30px");
 							$("#comments").width("220px");
-
 			    }
 			);
+			copyUrl();
 		});
 	}
 }
@@ -1103,4 +1103,17 @@ var Resizer = function (params) {
 	}
 
 
+}
+
+function copyUrl() {
+	$(".share-div").show();
+	document.getElementById('copyClipboardButton').addEventListener('click', function() {
+		alert("ULR copied to clipboard");
+		clipboard.copy({
+				'text/plain': location.href
+		}).then(
+				function(){console.log('success'); },
+				function(err){console.log('failure', err);
+		});
+});
 }
