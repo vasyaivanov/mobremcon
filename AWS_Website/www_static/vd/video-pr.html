@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
+
 </head>
 
 <body onload="webrtc.startWebrtcSession()">
@@ -13,10 +14,17 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="//cdn.webrtc-experiment.com:443/rmc3.min.js"></script>
         <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
-        <script src="/vd/scalable.js"></script>
+        <script src="/A1/js/webrtc/scalable.js"></script>
         <script>
         var hash = "<%=hash%>";
         var webrtc = new webrtcScalable({
+          webrtc: {
+            session: {
+                audio: true,
+                video: true,
+                oneway: true
+            }
+          },
           roomId: hash,
           div: "video-preview",
           type: 1

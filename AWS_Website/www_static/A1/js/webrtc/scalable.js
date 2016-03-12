@@ -3,6 +3,13 @@ window.getExternalIceServers = false;
 var webrtcScalable = function(params) {
   var rtcClass = this;
   var connection = new RTCMultiConnection();
+
+  if(typeof params.webrtc != "undefined") {
+    for(var key in params.webrtc){
+      connection[key] = params.webrtc[key];
+    }
+  }
+
   rtcClass.wasConnected = 0;
 
   connection.enableScalableBroadcast = true;
@@ -135,11 +142,11 @@ var webrtcScalable = function(params) {
   // Start session
   this.startWebrtcSession = function() {
       var broadcastId = params.roomId;
-      connection.session = {
+      /*connection.session = {
           audio: true,
           video: true,
           oneway: true
-      };
+      };*/
 
       var socket = connection.getSocket();
 
