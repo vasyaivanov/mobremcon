@@ -18,7 +18,7 @@ var webrtcScalable = function(params) {
   rtcClass.disconnected = false;
 
   connection.enableScalableBroadcast = true;
-  connection.maxRelayLimitPerUser = 1;
+  connection.maxRelayLimitPerUser = 2;
   connection.autoCloseEntireSession = true;
   connection.socketURL = '/';
 
