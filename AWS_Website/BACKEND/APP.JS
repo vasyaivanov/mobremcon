@@ -1147,7 +1147,8 @@ slideCheckPresenter = function(reqData , callback) {
                   videoSession: doc[i].videoSession,
                   lastArchiveId: doc[i].lastArchiveId,
                   presDomain: presDomain,
-                  meeting: (doc[i].meeting) ? 1 : 0
+                  meeting: (doc[i].meeting) ? 1 : 0,
+                  presenterId: doc[i].uid
 
               };
 
@@ -1245,7 +1246,6 @@ router.get('/vd.html', function (req, res){
   else {
     var hashId = req.query.presentation;
     slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
-      console.log(UserData[req.cookies[sessionIdCookie]].currentUserId);
       if(data.found == 1) {
         if(data.isPresenter == 1) {
           res.render(path.join(www_dir,www_static_dir , 'vd/video-pr.html'), {hash: hashId});

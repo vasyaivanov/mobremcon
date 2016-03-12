@@ -948,12 +948,17 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
         socket.on('start-webrtc-session', function(data,callback) {
           module.parent.exports.slideCheckPresenter({ hashId: data.hash, currentUserId: userSession.currentUserId } , function(retData) {
               if(retData.isPresenter == 1 && retData.found == 1) {
-                callback({code: 1});
+                callback({code: 1, presId: retData.presenterId});
               }
               else {
-                callback({code: 0});
+                callback({code: 0, presId: retData.presenterId});
               }
           });
+        });
+
+        socket.on('start-webrtc-clients', function(roomId) {
+          console.log("Starting sessions for clients....");
+          socket.broadcast.emit("start-webrtc-clients", roomId);
         });
 
       	socket.on('server-userRestrictions', function (data) {
