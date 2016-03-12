@@ -145,11 +145,6 @@ var webrtcScalable = function(params) {
   // Start session
   this.startWebrtcSession = function() {
       var broadcastId = params.roomId;
-      /*connection.session = {
-          audio: true,
-          video: true,
-          oneway: true
-      };*/
 
       var socket = connection.getSocket();
 
@@ -158,28 +153,33 @@ var webrtcScalable = function(params) {
         rtcClass.disconnected = true;
     	});
 
-
       socket.emit('start-webrtc-session', {hash: broadcastId}, function(res){
         if(res.code == 1) {
           rtcClass.startBroadcast(socket,broadcastId + '-' + res.presId);
-
           socket.on("reconnect", function(err) {
-            console.log("reconnecting");
+            console.log("Reconnecting to server");
             if(rtcClass.disconnected) {
               rtcClass.disconnected = false;
-              rtcClass.startBroadcast(socket,broadcastId + '-' + res.presId);
+              rtcClass.startWebrtcSession();
+              //rtcClass.startBroadcast(socket,broadcastId + '-' + res.presId);
             }
         	});
-
-
         }
         else {
-          console.log(broadcastId + '-' + res.presId);
           socket.emit('check-broadcast-presence', broadcastId + '-' + res.presId, function(isBroadcastExists) {
             // If broadcast exists - join it.
             if(isBroadcastExists) {
               rtcClass.startBroadcast(socket,broadcastId + '-' + res.presId);
             }
+
+            socket.on("reconnect", function(err) {
+              console.log("Reconnecting to server");
+              if(rtcClass.disconnected) {
+                rtcClass.disconnected = false;
+                rtcClass.startWebrtcSession();
+              }
+          	});
+
             // Socket for users who didn't get
             socket.on('start-webrtc-clients', function(roomId) {
               rtcClass.startBroadcast(socket,roomId);
