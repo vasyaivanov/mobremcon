@@ -4,13 +4,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-
+    <style>
+    video {
+      width: 320px;
+      height: 240px;
+    }
+    </style>
 </head>
 
-<body onload="webrtc.startWebrtcSession()">
-        <div class="github-stargazers"></div>
+<body onload="webrtc.startWebrtcSession();startChat()">
         <h1></h1>
         <video id="video-preview" controls loop></video>
+        <iframe width="320" height="300" src="" id="chat"></iframe>
         <script src="/socket.io/socket.io.js"></script>
         <script src="//cdn.webrtc-experiment.com:443/rmc3.min.js"></script>
         <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
@@ -29,6 +34,9 @@
           div: "video-preview",
           type: 1
         });
+        function startChat() {
+          document.getElementById('chat').src = "/chat.html?presentation=" + hash;
+        }
         </script>
 </body>
 
