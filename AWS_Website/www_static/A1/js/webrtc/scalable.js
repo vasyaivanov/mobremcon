@@ -2,7 +2,9 @@ window.getExternalIceServers = false;
 
 var webrtcScalable = function(params) {
   var rtcClass = this;
-  var connection = new RTCMultiConnection();
+  var connection = new RTCMultiConnection(null, {
+    useDefaultDevices: true
+  });
 
 
 
@@ -182,13 +184,19 @@ var webrtcScalable = function(params) {
 
             // Socket for users who didn't get
             socket.on('start-webrtc-clients', function(roomId) {
-              rtcClass.startBroadcast(socket,roomId);
+              if(broadcastId == rtcClass.extractRoomId(roomId)) {
+                rtcClass.startBroadcast(socket,roomId);
+              }
             });
           });
           console.log("You're not a presenter...Trying to connect to the stream");
         }
       });
   };
+
+  this.extractRoomId = function(roomId) {
+    return roomId.split('-')[0];
+  }
 
   this.startBroadcast = function(socket, broadcastId) {
     socket.emit('check-broadcast-presence', broadcastId, function(isBroadcastExists) {
