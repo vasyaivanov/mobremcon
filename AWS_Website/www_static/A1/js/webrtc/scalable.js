@@ -4,13 +4,16 @@ var webrtcScalable = function(params) {
   var rtcClass = this;
   var connection = new RTCMultiConnection();
 
+
+
   if(typeof params.webrtc != "undefined") {
     for(var key in params.webrtc){
       connection[key] = params.webrtc[key];
     }
   }
 
-  rtcClass.wasConnected = 0;
+  rtcClass.wasConnected = false;
+  rtcClass.disconnected = false;
 
   connection.enableScalableBroadcast = true;
   connection.maxRelayLimitPerUser = 1;
@@ -94,7 +97,7 @@ var webrtcScalable = function(params) {
       }
 
       if (connection.isInitiator == false && event.type === 'remote') {
-          rtcClass.wasConnected = 1;
+          rtcClass.wasConnected = true;
           // he is merely relaying the media
           connection.dontCaptureUserMedia = true;
           connection.attachStreams = [event.stream];
@@ -134,7 +137,7 @@ var webrtcScalable = function(params) {
           }
 
           if(connection.DetectRTC.browser.name === 'Chrome') {
-              repeatedlyRecordStream(event.stream);
+              //repeatedlyRecordStream(event.stream);
           }
       }
   };
@@ -150,9 +153,25 @@ var webrtcScalable = function(params) {
 
       var socket = connection.getSocket();
 
+      socket.on("disconnect", function(err) {
+    		console.log("Lost connection");
+        rtcClass.disconnected = true;
+    	});
+
+
       socket.emit('start-webrtc-session', {hash: broadcastId}, function(res){
         if(res.code == 1) {
           rtcClass.startBroadcast(socket,broadcastId + '-' + res.presId);
+
+          socket.on("reconnect", function(err) {
+            console.log("reconnecting");
+            if(rtcClass.disconnected) {
+              rtcClass.disconnected = false;
+              rtcClass.startBroadcast(socket,broadcastId + '-' + res.presId);
+            }
+        	});
+
+
         }
         else {
           console.log(broadcastId + '-' + res.presId);
@@ -176,12 +195,17 @@ var webrtcScalable = function(params) {
         if(!isBroadcastExists) {
             connection.userid = broadcastId;
         }
+        console.log('Broadcast status: ' + isBroadcastExists);
         socket.emit('join-broadcast', {
             broadcastId: broadcastId,
             userid: connection.userid,
             typeOfStreams: connection.session
         });
     });
+  }
+
+  connection.onerror = function(error) {
+    alert(error);
   }
 
   connection.onstreamended = function() {};
