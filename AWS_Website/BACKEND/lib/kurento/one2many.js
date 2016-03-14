@@ -16,12 +16,10 @@ module.exports.StartServer = function(server) {
 
   var path = require('path');
   var url = require('url');
-  var express = require('express');
   var minimist = require('minimist');
   var ws = require('ws');
   var kurento = require('kurento-client');
   var fs    = require('fs');
-  var https = require('https');
 
   var argv = minimist(process.argv.slice(2), {
       default: {
@@ -71,7 +69,7 @@ module.exports.StartServer = function(server) {
 
       ws.on('message', function(_message) {
           var message = JSON.parse(_message);
-          console.log('Connection ' + sessionId + ' received message ', message);
+          //console.log('Connection ' + sessionId + ' received message ', message);
 
           switch (message.id) {
           case 'presenter':
@@ -257,6 +255,9 @@ module.exports.StartServer = function(server) {
   			"ws" : ws
   		}
 
+      console.log(viewers);
+
+
   		if (presenter === null) {
   			stop(sessionId);
   			return callback(noPresenterMessage);
@@ -341,7 +342,7 @@ module.exports.StartServer = function(server) {
       var candidate = kurento.register.complexTypes.IceCandidate(_candidate);
 
       if (presenter && presenter.id === sessionId && presenter.webRtcEndpoint) {
-          console.info('Sending presenter candidate');
+          //console.info('Sending presenter candidate');
           presenter.webRtcEndpoint.addIceCandidate(candidate);
       }
       else if (viewers[sessionId] && viewers[sessionId].webRtcEndpoint) {
@@ -349,7 +350,7 @@ module.exports.StartServer = function(server) {
           viewers[sessionId].webRtcEndpoint.addIceCandidate(candidate);
       }
       else {
-          console.info('Queueing candidate');
+          //console.info('Queueing candidate');
           if (!candidatesQueue[sessionId]) {
               candidatesQueue[sessionId] = [];
           }
