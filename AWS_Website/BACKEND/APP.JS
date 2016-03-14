@@ -1450,6 +1450,9 @@ var socketIoSlite = require("./lib/socketio-slite.js").setDir(www_dir, slitesDir
 
 var socketIoSignaling = require("./lib/signaling-server.js").StartServer();
 
+var kurentoOneToMany = require("./lib/kurento/one2many.js").StartServer(http);
+
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/#login');
