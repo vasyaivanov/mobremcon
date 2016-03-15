@@ -14,13 +14,14 @@ var webrtc = function(params) {
 
   this.runWebrtc = function() {
     if(this.params.type == 1) {
-      this.connection.open(this.params.roomId, false);
+      this.connection.openOrJoin(this.params.roomId, false);
     }
     else {
       this.connection.join(this.params.roomId);
     }
 
     this.connection.onstream = function(event) {
+      console.log(event);
         var addClient = new newClient(this);
         if(event.type == "local") {
           addClient.appendElement({element: event.mediaElement, append: params.localDiv, buttons: params.buttons.local});
@@ -45,11 +46,11 @@ var webrtc = function(params) {
       userId = userId.replace(/(\{|\})/gi,"");
       $('[id*="'+userId+'"]').remove();
       // If presenter left the room - closing connection
-      if(event.userid == params.roomId) {
+      /*if(event.userid == params.roomId) {
         if(typeof parent.parent.showHideVideoChat() != "undefined") {
           parent.parent.showHideVideoChat();
         }
-      }
+      }*/
     };
 
   }
