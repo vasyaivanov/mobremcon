@@ -17,7 +17,7 @@ var webrtc = function(params) {
       this.connection.openOrJoin(this.params.roomId, false);
     }
     else {
-      this.connection.join(this.params.roomId);
+      this.connection.openOrJoin(this.params.roomId);
     }
 
     this.connection.onstream = function(event) {
