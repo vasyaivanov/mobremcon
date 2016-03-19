@@ -9,6 +9,7 @@ var express = require('express')
   , passport = require('passport')
   , util = require('util')
   , LocalStrategy = require('passport-local').Strategy
+  , FacebookStrategy = require('passport-facebook').Strategy
   , path = require('path')
   , converter = require('./lib/converter.js')
   , moment = require('moment')
@@ -160,6 +161,17 @@ passport.use(new LocalStrategy({
   });
 }));
 
+passport.use(new FacebookStrategy({
+    clientID: '573892456117432',
+    clientSecret: '817453edecb49144c682c5ae858c8f15',
+    callbackURL: 'https://www.prezera.loc/login/facebook/return',
+    profileFields: ['id', 'email', 'gender', 'name', 'timezone']
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
+    return done(null, profile);
+  }));
+
 
 var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'}); //use {flags: 'w'} to open in write mode
 
@@ -262,7 +274,6 @@ if(!path.extname(req.url.substring(1))) {
 UserData[0] = {};
 UserData[0].userAuth = 0;
 UserData[0].restrictions = rolesRestrictions[0];
-
 
 if(req.method == "POST" && req.url == "/paypal") {
 	next();

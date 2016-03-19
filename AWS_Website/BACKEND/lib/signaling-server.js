@@ -10,7 +10,7 @@ module.exports.StartServer = function() {
     var shiftedModerationControls = {};
     var ScalableBroadcast;
 
-    var io = module.parent.exports.io;
+    var io = module.parent.exports.io.of('/signaling-server');
 
     io.on('connection', onConnection);
 

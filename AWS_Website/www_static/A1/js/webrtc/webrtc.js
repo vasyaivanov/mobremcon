@@ -26,7 +26,8 @@ var webrtc = function(params) {
         if(event.type == "local") {
           addClient.appendElement({element: event.mediaElement, append: params.localDiv, buttons: params.buttons.local});
           if(typeof params.socketRun != "undefined") {
-            this.getSocket().emit(params.socketRun , {open: 1, hash: params.hashId});
+            parent.socket.emit(params.socketRun , {open: 1, hash: params.hashId});
+            //this.getSocket().emit(params.socketRun , {open: 1, hash: params.hashId});
           }
         }
         else {
