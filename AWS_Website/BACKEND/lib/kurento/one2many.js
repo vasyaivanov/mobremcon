@@ -18,7 +18,7 @@ module.exports.StartServer = function(server) {
   var url = require('url');
   var minimist = require('minimist');
   var ws = require('ws');
-  var kurento = require('kurento-client');
+  var kurento = require('./kurento-client');
   var fs    = require('fs');
 
   var argv = minimist(process.argv.slice(2), {
