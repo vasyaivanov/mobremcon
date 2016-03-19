@@ -48,7 +48,8 @@
     "opentok": "",
     "ws": "~0.7.2",
     "kurento-client": "Kurento/kurento-client-js",
-    "minimist": "^1.1.1"
+    "minimist": "^1.1.1",
+    "password-generator": ""
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

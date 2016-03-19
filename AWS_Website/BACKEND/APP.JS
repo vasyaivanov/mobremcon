@@ -108,17 +108,16 @@ function addUser(password, email, callback) {
  else {*/
    user.save(function(err) {
     if(err) {
-		console.log("DB ERRORRRR +++++++++ " + err);
-	if( err.code === 11000 ) {
-	    err_code = 2;
-	}
-	else {
-	    err_code = 3;
-	}
-
-	callback(err_code);
-
-    } else {
+  		console.log("DB ERRORRRR +++++++++ " + err);
+    	if( err.code === 11000 ) {
+    	    err_code = 2;
+    	}
+    	else {
+    	    err_code = 3;
+    	}
+      callback(err_code);
+    }
+    else {
      console.log('user: ' + user.email + " saved.");
      callback(0);
     }
@@ -137,6 +136,9 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
   User.findById(id, function (err, user) {
+    if(err) {
+      console.log(err);
+    }
     done(err, user);
   });
 });
@@ -162,16 +164,34 @@ passport.use(new LocalStrategy({
 }));
 
 passport.use(new FacebookStrategy({
-    clientID: '573892456117432',
-    clientSecret: '817453edecb49144c682c5ae858c8f15',
-    callbackURL: 'https://www.prezera.loc/login/facebook/return',
-    profileFields: ['id', 'email', 'gender', 'name', 'timezone']
+    clientID: '1635911383349659',
+    clientSecret: 'a3198c2e6d977fd424af4e009f6aece4',
+    callbackURL: '/facebook/return',
+    profileFields: ['id', 'email']
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
-    return done(null, profile);
-  }));
+    User.findOne({ email: profile.emails[0].value }).exec(function (errU, docU) {
+      if(docU) {
+        profile.id = docU._id;
+        return done(null, profile);
+      }
+      else {
+        var generatePassword = require('password-generator');
+        var user = new User({ email: profile.emails[0].value, password: generatePassword(10) });
 
+        user.save(function(err) {
+          if(err) {
+            return done(null, false);
+          }
+          else {
+            profile.id = user._id;
+            return done(null, profile);
+          }
+        });
+      }
+    });
+  })
+);
 
 var expressLogFile = fs.createWriteStream('./expressLogFile.log', {flags: 'w'}); //use {flags: 'w'} to open in write mode
 
@@ -711,25 +731,21 @@ paypalIpn.verify(req.body, {'allow_sandbox': true}, function callback(err, msg) 
 
 });
 
-function changeAccount(userId) {
-
-}
-
 router.get('/paypal', function (req, res, next) {
 
 
-Billing.aggregate([
-        { $group: {
-            _id: '$uid',
-            balance: { $sum: '$payment_gross'}
-        }}
-    ], function (err, results) {
-        if (err) {
-            console.error(err);
-        } else {
-            console.log(results);
-        }
-    });
+  /*Billing.aggregate([
+      { $group: {
+          _id: '$uid',
+          balance: { $sum: '$payment_gross'}
+      }}
+  ], function (err, results) {
+      if (err) {
+          console.error(err);
+      } else {
+          console.log(results);
+      }
+  });*/
 
 	if(req.query.tx) {
 		Billing.findOne({txn_id : req.query.tx }).exec(function (err, doc) {
@@ -1050,21 +1066,6 @@ router.post('/signin.html',
     })(req, res, next);
 });
 
-
-router.get('/logout', function (req, res){
-	req.logout();
-	req.session.destroy(function (err) {
-		if (err) {
-			console.log("MA: logout error: " + err);
-			res.redirect('/logout');
-		}
-		res.clearCookie('connect.sid', { path: '/' });
-		delete UserData[req.cookies[sessionIdCookie]];
-		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
-		res.clearCookie(sessionIdCookie , {  domain: '.' + domainClear });
-		res.redirect('/');
-	});
-});
 
 readSlideSize = function(path_to_slide, callback) {
 	var size = require('du')(path_to_slide, { filter: function (f) { return /\.(ppt|pptx)$/.test(f) } },  function (err, size) {
@@ -1401,6 +1402,24 @@ router.get('/clearcash', function (req, res){
 		deleteOldHashFolders();
 	}
 });
+
+router.get('/logout', function (req, res){
+	req.logout();
+	req.session.destroy(function (err) {
+		if (err) {
+			console.log("MA: logout error: " + err);
+			res.redirect('/logout');
+		}
+		res.clearCookie('connect.sid', { path: '/' });
+		delete UserData[req.cookies[sessionIdCookie]];
+		var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
+		res.clearCookie(sessionIdCookie , {  domain: '.' + domainClear });
+		res.redirect('/');
+	});
+});
+
+
+var addRoutes = require('./lib/routes.js')({router: router, passport: passport });
 
 app.use('/', router);
 
