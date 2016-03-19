@@ -170,26 +170,31 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'email']
   },
   function(accessToken, refreshToken, profile, done) {
-    User.findOne({ email: profile.emails[0].value }).exec(function (errU, docU) {
-      if(docU) {
-        profile.id = docU._id;
-        return done(null, profile);
-      }
-      else {
-        var generatePassword = require('password-generator');
-        var user = new User({ email: profile.emails[0].value, password: generatePassword(10) });
+    if(typeof profile.emails[0].value == "undefined") {
+      return done(null, false);
+    }
+    else {
+      User.findOne({ email: profile.emails[0].value }).exec(function (errU, docU) {
+        if(docU) {
+          profile.id = docU._id;
+          return done(null, profile);
+        }
+        else {
+          var generatePassword = require('password-generator');
+          var user = new User({ email: profile.emails[0].value, password: generatePassword(10) });
 
-        user.save(function(err) {
-          if(err) {
-            return done(null, false);
-          }
-          else {
-            profile.id = user._id;
-            return done(null, profile);
-          }
-        });
-      }
-    });
+          user.save(function(err) {
+            if(err) {
+              return done(null, false);
+            }
+            else {
+              profile.id = user._id;
+              return done(null, profile);
+            }
+          });
+        }
+      });
+    }
   })
 );
 
