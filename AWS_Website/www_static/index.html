@@ -266,6 +266,9 @@
 
         <div class="loginbodyWeb">
 				<h1>Sign In</h1>
+        <% if(request.query['facebook-err'] == 1) { %>
+          <h4 id="facebookError" style="color: #FF0000;">We can not authorize you through the Facebook. Seems like you don't have a valid email in you Facebook profile.</h4>
+        <% } %>
 				<h4 id="loginError" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="signInForm">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
@@ -289,6 +292,9 @@
 
         <div class="loginbodyWeb">
 				<h1>Create account </h1>
+        <% if(request.query['facebook-err'] == 1) { %>
+          <h4 id="facebookError" style="color: #FF0000;">We can not authorize you through the Facebook. Seems like you don't have a valid email in you Facebook profile.</h4>
+        <% } %>
 				<h4 id="signupError" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="signUpForm">
                 <input type="hidden" id="signUpRedirect" name="redirect" value="<%= request.headers.referer %>">

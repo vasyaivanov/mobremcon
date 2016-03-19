@@ -170,7 +170,7 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'email']
   },
   function(accessToken, refreshToken, profile, done) {
-    if(typeof profile.emails[0].value == "undefined") {
+    if(typeof profile.emails == "undefined") {
       return done(null, false);
     }
     else {
@@ -1095,6 +1095,8 @@ slideCheckPresenter = function(reqData , callback) {
   /*if(typeof reqData.domainName === "undefined") {
     reqData.domainName = "www";
   }*/
+
+  reqData.hashId = reqData.hashId.replace(/[^\w\s]/gi,"")
 
   if(reqData.created) {
     createdFilder =  reqData.created;
