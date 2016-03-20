@@ -7,7 +7,6 @@ var webrtcScalable = function(params) {
   });
 
 
-
   if(typeof params.webrtc != "undefined") {
     for(var key in params.webrtc){
       connection[key] = params.webrtc[key];
@@ -18,9 +17,9 @@ var webrtcScalable = function(params) {
   rtcClass.disconnected = false;
 
   connection.enableScalableBroadcast = true;
-  connection.maxRelayLimitPerUser = 2;
+  connection.maxRelayLimitPerUser = 1;
   connection.autoCloseEntireSession = true;
-  connection.socketURL = '/';
+  connection.socketURL = '/signaling-server';
 
   connection.connectSocket(function(socket) {
       socket.on('logs', function(log) {
@@ -163,7 +162,6 @@ var webrtcScalable = function(params) {
             if(rtcClass.disconnected) {
               rtcClass.disconnected = false;
               rtcClass.startWebrtcSession();
-              //rtcClass.startBroadcast(socket,broadcastId + '-' + res.presId);
             }
         	});
         }
@@ -199,6 +197,7 @@ var webrtcScalable = function(params) {
   }
 
   this.startBroadcast = function(socket, broadcastId) {
+    console.log(socket);
     socket.emit('check-broadcast-presence', broadcastId, function(isBroadcastExists) {
         if(!isBroadcastExists) {
             connection.userid = broadcastId;

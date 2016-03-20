@@ -35,6 +35,18 @@ module.exports.StartServer = function() {
             extra: {}
         };
 
+        socket.on('start-webrtc-session', function(data,callback) {
+          var currentUser = module.parent.exports.UserData[module.parent.exports.getCookie(socket.handshake.headers.cookie,module.parent.exports.sessionIdCookie)].currentUserId
+          module.parent.exports.slideCheckPresenter({ hashId: data.hash, currentUserId: currentUser } , function(retData) {
+              if(retData.isPresenter == 1 && retData.found == 1) {
+                callback({code: 1, presId: retData.presenterId});
+              }
+              else {
+                callback({code: 0, presId: retData.presenterId});
+              }
+          });
+        });
+
         socket.on('extra-data-updated', function(extra) {
             try {
                 if (!listOfUsers[socket.userid]) return;
