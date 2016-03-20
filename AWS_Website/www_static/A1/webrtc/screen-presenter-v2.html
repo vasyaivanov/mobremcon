@@ -48,7 +48,7 @@
         <script>
           var connection = new RTCMultiConnection();
           var hash = "<%= hash %>";
-          connection.socketURL = '/';
+          connection.socketURL = '/signaling-server';
           connection.enableScalableBroadcast = true;
           connection.session = {
             screen: true,
@@ -65,7 +65,7 @@
 
           connection.onstream = function(event) {
               if(event.type == "local") {
-                connection.getSocket().emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
+                parent.parent.socket.emit("presenterScreensharing", {open: 1, hash: '<%= hash %>'});
                 $("#videoL").append(event.mediaElement);
               }
           };

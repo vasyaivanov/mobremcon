@@ -40,7 +40,7 @@
     "paypal-ipn": "",
     "aws-sdk": "",
     "opentok": "",
-    "ws": "~0.7.2",
+    "ws": "^0.7.2",
     "minimist": "^1.1.1",
     "password-generator": "",
     "kurento-client": "^6.0.0"

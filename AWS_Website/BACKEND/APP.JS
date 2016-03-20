@@ -224,7 +224,7 @@ var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 var slitesRegMW = new RegExp('^\\/' + slitesReg + '(\\/|$)');
 
 // Auto redirect to WWW, if no subdomain
-var trustedDomains = ["prezera-dev.elasticbeanstalk.com","slite.elasticbeanstalk.com", "localhost"];
+var trustedDomains = ["prezera-dev.elasticbeanstalk.com","prezera-prod.us-west-1.elasticbeanstalk.com","slite.elasticbeanstalk.com", "localhost"];
 
 function redirectToWWW(req,res,next) {
 	var domainClear = req.hostname.split('.').reverse()[1] + '.' + req.hostname.split('.').reverse()[0];
