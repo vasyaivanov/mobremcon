@@ -9,11 +9,14 @@
     <meta name="description" content="Free online web presentations. Social chat, video presentation, personal presentation notes, password protection and much more." />
     <meta name="keywords" content="web presentations, web presentation, presentation, powerpoint, free, free online presentation, free presentation, slide, slides, free slides, powerpoint replacement">
   <meta content="https://www.prezera.com" property="og:url" />
+    <meta content="https://www.prezera.com/img/logo.png" property="og:image" />
+    <link rel="shortcut icon" id="favicon" href="./img/favicon.png">
     <meta name="author" content="PREZERA inc.">
     <link rel="canonical" href="https://www.prezera.com" />
 	<meta name="viewport" content="width=device-width, initial-scale=0.9">
 	<!-- Facebook specific tags -->
-	<meta property="og:image" content="img/Prezera_Logo.png" />
+	<meta property="og:image" content="img/logo.png" />
+	<meta property="og:title" content="Prezera - main page" />
 	<meta property="og:site_name" content="Prezera - live online presentations"/>
 	<meta property="og:description" content="PREZERA.COM™ enables you to present from inside your browser to a remote and in-house audiences. It comes with an iPhone remote control app. PREZERA.COM™ adds a social component inside your presentation allowing audience to connect with each other and presenter. Desktop sharing and video broadcasting make your presentation efficient. PREZERA.COM™ is the best and the simpliest way in the world to explain information from one person to many." />
 
@@ -104,7 +107,7 @@
             </div>
             <div class="modal-body">
                 <h3 id="uploadLabel">Uploading presentation...</h3>
-                <div id="progressbar"></div>
+                    <div id="progressbar"></div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -266,9 +269,6 @@
 
         <div class="loginbodyWeb">
 				<h1>Sign In</h1>
-        <% if(request.query['facebook-err'] == 1) { %>
-          <h4 id="facebookError" style="color: #FF0000;">We can not authorize you through the Facebook. Seems like you don't have a valid email in your Facebook profile.</h4>
-        <% } %>
 				<h4 id="loginError" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="signInForm">
                 <input type="hidden" name="redirect" value="<%= request.headers.referer %>">
@@ -280,8 +280,7 @@
                         <label for="exampleInputPassword1">Password</label>
                         <input id="signinPassword" type="password" class="form-control loginTestInput" name="password" placeholder="Password">
                     </div>
-                    <input type="button" id="buttonSignIn" value="Sign In" class="btn btn-default"/><br>
-                    <a href="/login/facebook"><img src="/img/facebook-button.png"></a>
+                    <input type="button" id="buttonSignIn" value="Sign In" class="btn btn-default"/>
                 </form>
             </div>
     </section>
@@ -290,27 +289,23 @@
     <section id="signUp" class="login mainbackground allData">
         <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
 
-        <div class="loginbodyWeb">
+        <div class="loginbody">
 				<h1>Create account </h1>
-        <% if(request.query['facebook-err'] == 1) { %>
-          <h4 id="facebookError" style="color: #FF0000;">We can not authorize you through the Facebook. Seems like you don't have a valid email in your Facebook profile.</h4>
-        <% } %>
 				<h4 id="signupError" style="color: #FF0000; display:none"></h4>
                 <form role="form" id="signUpForm">
                 <input type="hidden" id="signUpRedirect" name="redirect" value="<%= request.headers.referer %>">
                 <input type="hidden" id="signUpAccType" name="account" value="">
-                  <div class="form-group" id="loginEmailFormGroup">
+                    <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input id="signUpEmail" type="email" class="form-control loginTestInput" name="email" placeholder="Enter email">
+                        <input id="signUpEmail" type="email" class="form-control" name="email" placeholder="Enter email">
                     </div>
-                    <div class="form-group" id="loginPasswordFormGroup">
+                    <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input id="signUpPassword" type="password" class="form-control loginTestInput" name="password" placeholder="Password">
+                        <input id="signUpPassword" type="password" class="form-control" name="password" placeholder="Password">
                     </div>
-                    <input id="buttonSignUp" type="button" value="Create Account" class="btn btn-default"/><br>
-                    <a href="/login/facebook"><img src="/img/facebook-button.png"></a>
+                    <input id="buttonSignUp" type="button" value="Create Account" class="btn btn-default"/>
                 </form>
-              </div>
+            </div>
     </section>
 
 	<% } %>

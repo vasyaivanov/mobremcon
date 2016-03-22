@@ -346,7 +346,7 @@ body {
 	line-height: normal;
 	overflow-x: hidden;
 	overflow-y: hidden;
-	background-color: white;
+	background-color: rgba(119, 119, 119, 0.58);
 }
 
 #recording{

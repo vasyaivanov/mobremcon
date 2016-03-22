@@ -29,7 +29,8 @@ table {
 #progressbar {
     color:#337AB7;
     margin-top: 1vh;
-    height:     0px;
+    height: 15px;
+    width: 0;
     background: #337ab7;
     /*background-color: blue;*/
 }
@@ -38,8 +39,12 @@ table {
   /*  font-weight: bold; */
     color: #337ab7;
     font-size: 1.5vw;
-    margin: 1vw 0 0 3vw;
+    margin: -3vw 0 0 3vw;
    }
+
+.modal-header .close {
+       margin-top: -3vw;
+     }
 
 .modal-header {
     border-bottom: 0px !important;
@@ -53,6 +58,12 @@ table {
 .modal-dialog{
   margin: 0;
 }
+
+.modal-content {
+  border: 0;
+    -webkit-box-shadow: 0;
+    box-shadow: 0;
+  }
 
 button.close {
     padding: 3px 10px 1px 1px;
@@ -91,8 +102,8 @@ button.close {
     margin-left: 25vw;*/
     margin: 25vw 30vw 20vw 25vw;
     width: 50vw;
-    height: 7vw;
-    border-radius: 1em;
+    height: 0;
+    border-radius: 0;
     position: relative;
     background: #fff;
     background: -moz-linear-gradient(#fff, #999);
