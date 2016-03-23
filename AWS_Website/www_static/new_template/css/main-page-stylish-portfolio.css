@@ -21,7 +21,8 @@ a:hover {
 }
 
 table {
-	color: #C4CAE3;
+	color: white;
+  max-width: 100%;
 }
 
 /*progressbar*/
@@ -234,9 +235,10 @@ form {
 }
 
 .simplePage {
-  position: absolute;
-  top: 14%;
+/*  position: absolute; */
+  top: 5%;
   left: 10px;
+  right: 10px;
   width: 99%;
   max-width: 100%;
 }

@@ -4,6 +4,12 @@ body {
 	overflow-y: hidden;
 	overflow-x: hidden;
 }
+.share{
+  color: rgba(255,255,255,0.5);
+  float: left;
+	padding:4px;
+	font-size: 2vw;
+}
 
 #getPassResult{
 	font-size: 30px;

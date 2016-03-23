@@ -317,15 +317,15 @@
 
     <!-- Sign Up -->
     <section id="myPres" class="login mainbackground allData">
-        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
-        <div class="simplePage">
+        <div class="remoteTitle col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
+        <div class="simplePage col-xs-10">
           <h3>My presentations</h3>
-           <table class="table" style="max-width: 100%">
+           <table class="table">
       <% if (userData.domainSet == 0) { %>
   			<% slides.forEach(function(slide){ %>
   				<tr id="slide_<%= slide.sid %>">
-  				<td width="150"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
-  				<td><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a>
+  				<td class="col-md-2" width="150"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
+  				<td class="col-md-8"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a>
           <% if(slide.video.length) { %>
             <br>Video:<br>
             <% slide.video.forEach(function(video){ %>
@@ -345,6 +345,7 @@
            </table>
 
         </div>
+
     </section>
 
 	<% if (userRole > 0) { %>
