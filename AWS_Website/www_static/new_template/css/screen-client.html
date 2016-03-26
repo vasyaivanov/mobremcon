@@ -1,0 +1,76 @@
+<html>
+<head>
+<script src="/A1/js/webrtc/RTCMultiConnection.js"></script>
+<script src="//cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+audio {
+	display: none;
+}
+video {
+	display: block;
+    width: 90%;
+}
+</style>
+<script>
+
+var socketWebrtc;
+
+if(typeof parent.socket != "undefined") {
+	socketWebrtc = parent.socket
+}
+else {
+	socketWebrtc = io.connect(document.location.hostname + ':' + location.port);
+}
+
+socketWebrtc.on('sharing-client', function (data) {
+	startSession(data.moderatorId);
+	function startSession(moderatorId) {
+		var MODERATOR_CHANNEL_ID = 'slite-screen'; // channel-id
+		var MODERATOR_SESSION_ID = '<%= hash %>-screen';    // room-id
+		var MODERATOR_ID         = '' + moderatorId + '';    // user-id
+		var MODERATOR_SESSION    = {         // media-type
+			oneway: true
+		};
+
+		var MODERATOR_EXTRA      = {};       // empty extra-data
+
+		var participants = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
+		
+		participants.bandwidth = {
+			audio: 128,
+			video: 256,
+			data: 1638400,
+			screen: 300
+		};
+
+
+		participants.firebase = 'shining-fire-9184';
+
+		participants.join({
+						sessionid: MODERATOR_SESSION_ID,
+						userid:    MODERATOR_ID,
+						extra:     MODERATOR_EXTRA,
+						session:   MODERATOR_SESSION
+		});
+
+		participants.onstreamended = function(event) {
+			if(event.type == "remote" && event.userid == data.moderatorId) {
+				console.log("Lost video connection with presenter. Reconnecting...");
+				location.reload();
+			}
+		};
+
+	}
+
+});
+
+function start() {
+	socketWebrtc.emit("sharing-server", {hash: '<%= hash %>'});
+}
+
+</script>
+</head>
+<body onload="start()">
+</body>
+</html>

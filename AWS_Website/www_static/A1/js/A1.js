@@ -151,8 +151,8 @@ function showHideComments() {
 
 var isVideoChatOn = 0;
 function showHideVideoChat() {
-	if(isScreensharingOn == 1 && meeting == 0) {
-		showHideScreensharing()
+	if(isScreensharingOn == 1 /*&& meeting == 0*/) {
+		showHideScreensharing();
 	}
 
     if (!isVideoChatOn) {
@@ -218,7 +218,7 @@ $("#recordButton").click(function() {
 
 var isScreensharingOn = 0;
 function showHideScreensharing() {
-	if(isVideoChatOn == 1  && meeting == 0) {
+	if(isVideoChatOn == 1/*&& meeting == 0*/) {
 		showHideVideoChat()
 	}
 
@@ -227,7 +227,12 @@ function showHideScreensharing() {
 		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
         isScreensharingOn = 1;
     } else {
-		$("#screensharingiframe").attr("src","");
+			if(presenter == 1) {
+				$("#screensharingiframe").attr("src","");
+			}
+			else {
+				location.reload();
+			}
 				//document.getElementById('screensharingiframe').contentWindow.stopSession();
         isScreensharingOn = 0;
     }
