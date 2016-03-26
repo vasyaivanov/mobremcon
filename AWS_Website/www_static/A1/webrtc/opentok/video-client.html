@@ -2,10 +2,12 @@
 <html>
   <head>
   <style>
-    #subscribersDiv {
-      width: 90%    !important;
-      height: 100%   !important;
-    }
+
+  #subscribersDiv > div {
+    border: 1px solid black;
+    width: 88%    !important;
+    height: 150px   !important;
+  }
   </style>
   </head>
   <body>
@@ -14,7 +16,7 @@
 
     <script src='//static.opentok.com/v2/js/opentok.min.js'></script>
     <script>
-      var apiKey = '45510752';
+      var apiKey = '<%= apikey %>';
       var sessionId = '<%= session %>';
       var token = '<%= token %>';
       var session = OT.initSession(apiKey, sessionId);
@@ -31,6 +33,15 @@
 
         }
       });
+
+      function changeClass() {
+
+      }
+
+      function addStream() {
+        location.reload();
+      }
+
     </script>
   </body>
 </html>

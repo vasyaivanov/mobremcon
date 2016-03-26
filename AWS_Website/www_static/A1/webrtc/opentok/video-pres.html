@@ -2,26 +2,48 @@
 <html>
   <head>
   <style>
-    #myPublisherDiv {
-      border: 1px solid black;
-      width: 90%    !important;
-      height: 90%   !important;
+    .myPublisherDiv {
+      border: 1px solid blue !important;
+      width: 88%    !important;
+      height: 150px   !important;
     }
+
+    #subscribersDiv > div {
+      border: 1px solid black;
+      width: 88%    !important;
+      height: 150px   !important;
+    }
+
+    .videoL {
+      border: 1px solid blue !important;
+    	position: absolute !important;
+    	width: 80px !important;
+      height: 80px !important;
+    	right: 30px !important;
+      top: 30px !important;
+    	border: 1px solid #3F7FBF !important;
+      z-index: 999 !important;
+    }
+
     button {
       display: none;
     }
   </style>
   </head>
   <body>
-    <div id='myPublisherDiv'></div>
-    <div id='subscribersDiv'></div>
+    <% if (meeting == 0 && presenter == 1) { %>
     <button id="startRecBut">Start recording</button>
     <button id="stopRecBut">Stop recording</button>
+    <button value="0" onclick="switchVideoType()" id="type_switch">Conference</button>
+    <% } %>
+    <div id='myPublisherDiv' class='myPublisherDiv'></div><br>
+    <div id='subscribersDiv'></div>
+
     <script src='//static.opentok.com/v2/js/opentok.min.js'></script>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="/A1/js/frames.js"></script>
     <script>
-      var apiKey = '45510752';
+      var apiKey = '<%= apikey %>';
       var sessionId = '<%= session %>';
       var token = '<%= token %>';
       var hash = '<%= hash %>'
@@ -48,6 +70,7 @@
               else {
                 console.log("Session started");
                 $("#startRecBut").show();
+                $("#type_switch").show();
                 videoPresenterSocket.emit("presenterVideoChat", {open: 1, hash: hash});
               }
           });
@@ -72,6 +95,28 @@
           }
         });
       });
+      <% if (meeting == 0 && presenter == 1) { %>
+      function switchVideoType() {
+      	var switchTo = ($("#type_switch").attr( "value" ) == 0) ? 1 : 0;
+      	if(switchTo == 1) {
+      		$("#type_switch").text("One way");
+          $( "#myPublisherDiv" ).removeClass( "myPublisherDiv" );
+      		$( "#myPublisherDiv" ).addClass( "videoL" );
+      	}
+      	else {
+      		$("#type_switch").text("Conference");
+      		$( "#myPublisherDiv" ).removeClass( "videoL" );
+          $( "#myPublisherDiv" ).addClass( "myPublisherDiv" );
+      	}
+      	$("#type_switch").attr( "value", switchTo );
+
+      	videoPresenterSocket.emit("presenterVideoChat", {open: (switchTo == 1) ? 2 : 1, reload: (switchTo == 1) ? 2 : 1, hash: '<%= hash %>'});
+      }
+      <% } else if(presenter == 0 && meeting == 0) {%>
+        $( "#myPublisherDiv" ).removeClass( "myPublisherDiv" );
+        $( "#myPublisherDiv" ).addClass( "videoL" );
+      <% } %>
+
 
     </script>
   </body>
