@@ -1238,7 +1238,7 @@ router.get('/screensharing.html', function (req, res){
 			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
 				if(data.found == 1 && data.isPresenter == 1) {
           if(data.meeting == 1) {
-            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/screen-presenter-v2.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/screen-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
           else {
             res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-presenter.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
@@ -1246,7 +1246,7 @@ router.get('/screensharing.html', function (req, res){
 				}
 				else if(data.found == 1 && data.isPresenter == 0) {
           if(data.meeting == 1) {
-            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/screen-client-v2.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
+            res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/screen-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
           }
           else {
 					  res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/sharing-client.html'), {hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
