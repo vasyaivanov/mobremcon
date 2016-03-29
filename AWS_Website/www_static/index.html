@@ -23,6 +23,8 @@
 
     <!-- Custom CSS -->
     <link href="new_template/css/main-page-stylish-portfolio.css" rel="stylesheet">
+    <link href="new_template/css/upgrade_accaunt.css" rel="stylesheet">
+    <link href="new_template/css/my_presentation.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
     <link href="new_template/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -313,9 +315,49 @@
               </div>
     </section>
 
-	<% } %>
+<!-- My Presentation -->
+<div class="container-fluid login mainbackground allData" id="myPres">
+  <div class="row col-xs-10 col-sm-10 col-md-10">
 
-    <!-- Sign Up -->
+    <div class="remoteTitle col-xs-12 col-sm-12 col-md-12">
+      <h1>PRE<span style='color:red'>Z</span>ERA</h1>
+      <hr class="separation_line">
+    </div>
+
+    <div class="simplePage col-xs-12 col-md-12 col-xs-12">
+      <h3>My presentations</h3>
+    </div>
+
+  <table class="table">
+    <% if (userData.domainSet == 0) { %>
+    <% slides.forEach(function(slide){ %>
+    <tr id="slide_<%= slide.sid %>">
+    <td class="col-md-2" width="150"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
+    <td class="col-md-8"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a>
+    <% if(slide.video.length) { %>
+     <br>Video:<br>
+     <% slide.video.forEach(function(video){ %>
+       <div id="<%= video %>">
+         <video width="320" height="240" controls>
+           <source src="<%= video %>" type="video/mp4">
+             Your browser does not support the video tag.
+         </video><br><a href="#" class="delVideo" videoId="<%= video %>">Delete</a><br>
+       </div>
+     <%  }); %>
+    <% } %>
+    <br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></td>
+    </tr>
+    <%  }); %>
+    <% } %>
+
+    </table>
+
+</div>
+</div>
+<!-- My Presentation END -->
+<!-- 	<% } %>
+
+    <!--
     <section id="myPres" class="login mainbackground allData">
         <div class="remoteTitle col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
         <div class="simplePage col-xs-10">
@@ -348,7 +390,7 @@
 
     </section>
 
-	<% if (userRole > 0) { %>
+	<% if (userRole > 0) { %> -->
 
 	<!-- Account -->
     <section id="myAccount" class="login mainbackground allData">
@@ -386,117 +428,209 @@
             </div>
     </section>
 
-	<section id="subscription" class="login mainbackground allData">
-        <div class="title col-xs-12"><h1>PRE<span style='color:red'>Z</span>ERA</h1></div>
-        <div class="simplePage">
-          <h3>My subscription</h3>
-           <table class="table" style="max-width: 100%">
 
-					<% if(expire) { %>
-						Your plan is
-						<% if(userRole == 2) { %>
-						<b>Gold</b>
-						<% } else if (userRole == 1) { %>
-						<b>Silver</b>
-						<% } else if (userRole == 10) { %>
+<!-- Upgrade accaunt -->
+<div class="container-fluid login mainbackground allData" id="subscription">
+  <div class="row col-xs-10 col-sm-10 col-md-10">
+
+    <div class="title1 col-xs-12 col-sm-12 col-md-12">
+      <h1>PRE<span style='color:red'>Z</span>ERA</h1>
+      <hr class="separation_line">
+    </div>
+
+    <div class="simplePage1 col-xs-12 col-md-12 col-xs-12">
+      <h3>My subscription</h3>
+    </div>
+
+  <div class="col-md-12 col-xs-12 col-xs-12 ">
+          <% if(expire) { %>
+            Your plan is
+            <% if(userRole == 2) { %>
+            <b>Gold</b>
+            <% } else if (userRole == 1) { %>
+            <b>Silver</b>
+            <% } else if (userRole == 10) { %>
             <b>Administrator</b>
-						<% } %>
-					, valid until  <%= moment(expire).format('MMMM DD, YYYY') %><br>
-					After that date you have 5 days grace period, if you won't renew your account it will be switched to our Basic plan, that's absolutely free!<br>
-					We will notify you before this date.<br><br>
+            <% } %>
+            , valid until  <%= moment(expire).format('MMMM DD, YYYY') %><br>
+            After that date you have 5 days grace period, if you won't renew your account it will be switched to our Basic plan, that's absolutely free!<br>
+            We will notify you before this date.<br><br>
 
-					<% } %>
+          <% } %>
 
-					<!--% } else { %-->
+  <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-3 col-sm-3 col-xs-3">
+      <div class="payment-plan basic"><p id="plan-text">Basic</p><p id="price">FREE</p>
+      </div>
+    </div>
+    <div class="col-md-9 col-sm-9 col-xs-9">
+      <ul class="upgrade_text">
+        <li id="small-screen-price"class="basic"><p id="plan-text">Basic</p><p id="price">FREE</p></li>
+        <li>You can use PREZERA absolutely for free!</br></li>
+        <li>You don't need to register, if you use only one laptop.</br></li>
+        <li>Keep your data safe in the cloud!</br></li>
+        <li>You're allowed to upload up to <b>3</b> slides and <b>10mb</b> and you can also buy a custom name for your slide only for 99c!</br></li>
+          <% if (userRole > 0) { %>
+          <!--input type="button" value="Downgrade to Basic" class="btn btn-default"/ onclick="location='/downgrade.html?plan=0'"-->
+          <% } %>
+      </ul>
+    </div>
 
-						<tr>
-						<td>Basic<br>
-						You can use PREZERA absolutely for free!<br>
-						You don't need to register, if you use only one laptop.<br>
-						Keep your data safe in the cloud!<br>
-						You're allowed to upload up to <b>3</b> slides and <b>10mb</b> and you can also buy a custom name for your slide only for 99c!<br>
-						<% if (userRole > 0) { %>
-							<!--input type="button" value="Downgrade to Basic" class="btn btn-default"/ onclick="location='/downgrade.html?plan=0'"-->
-						<% } %>
+  </div>
 
-						</td>
-						</tr>
-						<tr>
-						<td>Silver<br>
-						The same as our Basic plan + you can get your own domain on PREZERA, example: john.prezera.com<br>
-						Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br>
-						$4.99/year<br>
-						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
-						<% } else { %>
-							<% if (userRole == 2) { %>
-								<!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
-							<% } else if (userRole == 1 || userRole == 10)  { %>
-								Your current plan!
-							<% } else { %>
-								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="silver_account_upgrade">
-								<input type="hidden" name="cmd" value="_s-xclick">
-								<input type="hidden" name="hosted_button_id" value="AK3X6WJ7VWYJS">
-								<input type="hidden" name="on0" value="Account">
-								<input type="hidden" name="on1" value="UserId">
-								<input type="hidden" name="os0" value="Silver">
-								<input type="hidden" name="os1" value="<%= user.id %>">
-								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-								<input type="submit" value="Upgrade to Silver plan" class="btn btn-default">
-								</form>
-							<% } %>
-						<% } %>
-						</td>
-						</tr>
-						<tr>
-						<td>Gold<br>
-						The same as our Silver plan + unlimited presentations + 100mb of space<br>
-						$9.99/year<br>
-						<% if (!user) { %>
-							<input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
-						<% } else { %>
-							<% if (userRole == 2 || userRole == 10) { %>
-								Your current plan!
-							<% } else if (userRole == 1) { %>
-								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
-								<input type="hidden" name="cmd" value="_s-xclick">
-								<input type="hidden" name="hosted_button_id" value="UYUFTGR7GMX54">
-								<input type="hidden" name="on0" value="Account">
-								<input type="hidden" name="on1" value="UserId">
-								<input type="hidden" name="os0" value="Gold upgrade">
-								<input type="hidden" name="os1" value="<%= user.id %>">
-								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-								<input type="submit" value="Upgrade to Gold - 5$" class="btn btn-default">
-								</form>
-							<% } else { %>
-								<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="gold_account_upgrade">
-								<input type="hidden" name="cmd" value="_s-xclick">
-								<input type="hidden" name="hosted_button_id" value="W8DTXXRCVJB6A">
-								<input type="hidden" name="on0" value="Account">
-								<input type="hidden" name="on1" value="UserId">
-								<input type="hidden" name="os0" value="Gold">
-								<input type="hidden" name="os1" value="<%= user.id %>">
-								<img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
-								<input type="submit" value="Upgrade to Gold plan" class="btn btn-default">
-								</form>
-							<% } %>
-						<% } %>
-						</td>
-						</tr>
-					<!--% } %-->
-					<tr>
-					<td>Platinum<br>
-					Get your own, private server!<br>
-					Ask us about the price: <a href="mailto:contactus@prezera.com">contactus@prezera.com</a><br>
-					</td>
-					<tr>
-					</table>
-
-           </table>
-
+  <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-3 col-sm-3 col-xs-3">
+      <div class="payment-plan silver"><p id="plan-text">Silver</p><p id="price"> $4.99/year<br></p>
+          <% if (!user) { %>
+            <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
+          <% } else { %>
+            <% if (userRole == 2) { %>
+              <!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
+            <% } else if (userRole == 1 || userRole == 10)  { %>
+              Your current plan!
+            <% } else { %>
+            <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="silver_account_upgrade">
+              <input type="hidden" name="cmd" value="_s-xclick">
+              <input type="hidden" name="hosted_button_id" value="AK3X6WJ7VWYJS">
+              <input type="hidden" name="on0" value="Account">
+              <input type="hidden" name="on1" value="UserId">
+              <input type="hidden" name="os0" value="Silver">
+              <input type="hidden" name="os1" value="<%= user.id %>">
+              <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+              <input type="submit" value="Upgrade to Silver plan" class="btn btn-default">
+            </form>
+              <% } %>
+            <% } %>
         </div>
-    </section>
+      </div>
+    <div class="col-md-9 col-sm-9 col-xs-9">
+      <ul class="upgrade_text">
+        <li id="small-screen-price"class="silver"><p id="plan-text">Silver</p><p id="price">($4.99/year)</p>
+        <div class="register">  <% if (!user) { %>
+            <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
+            <% } else { %>
+            <% if (userRole == 2) { %>
+              <!--input type="button" value="Downgrade to Silver" class="btn btn-default"/ onclick="location='/downgrade.html?plan=1'"-->
+            <% } else if (userRole == 1 || userRole == 10)  { %>
+              Your current plan!
+            <% } else { %>
+            <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="silver_account_upgrade">
+              <input type="hidden" name="cmd" value="_s-xclick">
+              <input type="hidden" name="hosted_button_id" value="AK3X6WJ7VWYJS">
+              <input type="hidden" name="on0" value="Account">
+              <input type="hidden" name="on1" value="UserId">
+              <input type="hidden" name="os0" value="Silver">
+              <input type="hidden" name="os1" value="<%= user.id %>">
+              <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+              <input type="submit" value="Upgrade to Silver plan" class="btn btn-default">
+            </form>
+            <% } %>
+            <% } %>
+        </div>
+        </li>
+        <li>The same as our Basic plan + you can get your own domain on PREZERA, example: john.prezera.com<br></li>
+        <li>Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br></li>
+        <li>$4.99/year</li>
+      </ul>
+    </div>
 
+  </div>
+
+
+    <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
+      <div class="col-md-3 col-sm-3 col-xs-3">
+        <div class="payment-plan gold"><p id="plan-text">Gold</p><p id="price"> $9.99/year <br></p>
+          <% if (!user) { %>
+            <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
+          <% } else { %>
+            <% if (userRole == 2 || userRole == 10) { %>
+              Your current plan!
+            <% } else if (userRole == 1) { %>
+              <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
+              <input type="hidden" name="cmd" value="_s-xclick">
+              <input type="hidden" name="hosted_button_id" value="UYUFTGR7GMX54">
+              <input type="hidden" name="on0" value="Account">
+              <input type="hidden" name="on1" value="UserId">
+              <input type="hidden" name="os0" value="Gold upgrade">
+              <input type="hidden" name="os1" value="<%= user.id %>">
+              <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+              <input type="submit" value="Upgrade to Gold - 5$" class="btn btn-default">
+              </form>
+            <% } else { %>
+              <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="gold_account_upgrade">
+              <input type="hidden" name="cmd" value="_s-xclick">
+              <input type="hidden" name="hosted_button_id" value="W8DTXXRCVJB6A">
+              <input type="hidden" name="on0" value="Account">
+              <input type="hidden" name="on1" value="UserId">
+              <input type="hidden" name="os0" value="Gold">
+              <input type="hidden" name="os1" value="<%= user.id %>">
+              <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+              <input type="submit" value="Upgrade to Gold plan" class="btn btn-default">
+              </form>
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+      <div class="col-md-9 col-sm-9 col-xs-9">
+        <ul class="upgrade_text">
+          <li id="small-screen-price"class="gold"><p id="plan-text">Gold</p><p id="price">($9.99/year)</p>
+          <div class="register">
+            <% if (!user) { %>
+              <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
+            <% } else { %>
+              <% if (userRole == 2 || userRole == 10) { %>
+                Your current plan!
+              <% } else if (userRole == 1) { %>
+                <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="UYUFTGR7GMX54">
+                <input type="hidden" name="on0" value="Account">
+                <input type="hidden" name="on1" value="UserId">
+                <input type="hidden" name="os0" value="Gold upgrade">
+                <input type="hidden" name="os1" value="<%= user.id %>">
+                <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                <input type="submit" value="Upgrade to Gold - 5$" class="btn btn-default">
+                </form>
+              <% } else { %>
+                <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin: 0px" id="gold_account_upgrade">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="W8DTXXRCVJB6A">
+                <input type="hidden" name="on0" value="Account">
+                <input type="hidden" name="on1" value="UserId">
+                <input type="hidden" name="os0" value="Gold">
+                <input type="hidden" name="os1" value="<%= user.id %>">
+                <img alt="" border="0" src="https://www.sandbox.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                <input type="submit" value="Upgrade to Gold plan" class="btn btn-default">
+                </form>
+              <% } %>
+            <% } %>
+          </div>
+          </li>
+          <li>The same as our Silver plan + unlimited presentations + 100mb of space<br></li>
+          <li>$9.99/year<br></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
+      <div class="col-md-3 col-sm-3 col-xs-3">
+        <div class="payment-plan platinum"><p id="plan-text">Platinum</p> <!-- <p id="price">Call me</p> -->
+        </div>
+      </div>
+      <div class="col-md-9 col-sm-9 col-xs-9">
+        <ul class="upgrade_text">
+          <li id="small-screen-price"class="platinum"><p id="plan-text">Platinum</p>
+          </li>
+          <li>Get your own, private server!<br></li>
+          <li>Ask us about the price: <a href="mailto:contactus@prezera.com" id="mail-price-page">contactus@prezera.com</a><br></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
 
     <!-- Footer -->
 

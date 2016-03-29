@@ -261,7 +261,7 @@ background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);; /* Stan
 
 .title {
     margin-top: 0.01%;
-    position: absolute;
+/*    position: absolute; */
     margin-right: 5%;
 	color: #000061;
     opacity: 0.6;
@@ -466,7 +466,7 @@ input.renameSlide {
         transition: all 0.4s ease 0s;
 }
 
-@media screen and (max-device-width: 450px) {
+@media screen and (min-width: 0px) and (max-width: 450px) {
 
   #sidebar-wrapper.active {
     right: 250px;
