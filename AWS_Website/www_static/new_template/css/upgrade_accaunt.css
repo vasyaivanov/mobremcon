@@ -65,6 +65,7 @@
   height: 18%;
   width: 100%;
   max-width: 100%;
+  max-width: 100%;
   margin-top: 1vw;
   background-color: #FFF;
   overflow: scroll;
@@ -77,9 +78,9 @@
 .payment-plan{
 /*background-color: #2955FF; */
 /* border: 1px solid black; */
-margin: -6px 0 0 -9px;
+margin: 0px 0 0 -3px;
 width: 100%;
-height: 60%;
+height: 100%;
 justify-content: center;
 align-items: center;
 text-align: center;

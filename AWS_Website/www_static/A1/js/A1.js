@@ -505,9 +505,9 @@ function meetingMenu() {
 			showHideComments();
 			$("#comments").hover(
 			    function(){
-			        $("#comments").height("330px");
-							$( "#urlChat" ).height("300px");
-							$("#comments").width("300px");
+			        $("#comments").height("93%");
+							$( "#urlChat" ).height("900px");
+							$("#comments").width("250px");
 
 			    },
 			    function(){

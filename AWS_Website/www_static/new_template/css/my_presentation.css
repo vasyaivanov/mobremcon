@@ -1,0 +1,23 @@
+.presentationUpgrade{
+  border-radius: 4px;
+  border: 1vw solid rgb(28, 28, 150);
+  color: #5C456D;
+  font-size: 14px;
+  line-height: 1.42857143;
+  height: 18%;
+  width: 100%;
+  max-width: 100%;
+  max-width: 100%;
+  margin-top: 1vw;
+  background-color: #FFF;
+  overflow: scroll;
+  min-height: 10px;
+}
+
+.row {
+  margin: 0;
+}
+
+.img-rounded {
+    margin: 1vw;
+}

@@ -327,31 +327,33 @@
     <div class="simplePage col-xs-12 col-md-12 col-xs-12">
       <h3>My presentations</h3>
     </div>
+    <div class="col-md-12 col-xs-12 col-xs-12 ">
 
-  <table class="table">
-    <% if (userData.domainSet == 0) { %>
-    <% slides.forEach(function(slide){ %>
-    <tr id="slide_<%= slide.sid %>">
-    <td class="col-md-2" width="150"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="90%"></a></td>
-    <td class="col-md-8"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a>
-    <% if(slide.video.length) { %>
-     <br>Video:<br>
-     <% slide.video.forEach(function(video){ %>
-       <div id="<%= video %>">
-         <video width="320" height="240" controls>
-           <source src="<%= video %>" type="video/mp4">
-             Your browser does not support the video tag.
-         </video><br><a href="#" class="delVideo" videoId="<%= video %>">Delete</a><br>
-       </div>
-     <%  }); %>
-    <% } %>
-    <br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></td>
-    </tr>
-    <%  }); %>
-    <% } %>
+    <div class="col-md-12 col-sm-12 col-xs-12">
 
-    </table>
-
+      <% if (userData.domainSet == 0) { %>
+  			<% slides.forEach(function(slide){ %>
+  				<div class="presentationUpgrade row" id="slide_<%= slide.sid %>">
+  				<div class="col-md-3 col-sm-3 col-xs-3" width="100%">
+            <a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="100vw" height="100vw"></a></div>
+  				<div class="col-md-6 col-sm-6 col-xs-6"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a>
+          <% if(slide.video.length) { %>
+            <br>Video:<br>
+            <% slide.video.forEach(function(video){ %>
+              <div class="col-md-3 col-sm-3 col-xs-3" id="<%= video %>" border="1 px solid red">
+                <video width="320" height="240" controls>
+                  <source src="<%= video %>" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video><br><a href="#" class="delVideo" videoId="<%= video %>">Delete</a><br>
+              </div>
+            <%  }); %>
+          <% } %>
+          <br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></div>
+        </div>
+  			<%  }); %>
+      <% } %>
+    </div>
+  </div>
 </div>
 </div>
 <!-- My Presentation END -->
@@ -537,7 +539,7 @@
   </div>
 
 
-    <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
+  <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
       <div class="col-md-3 col-sm-3 col-xs-3">
         <div class="payment-plan gold"><p id="plan-text">Gold</p><p id="price"> $9.99/year <br></p>
           <% if (!user) { %>
