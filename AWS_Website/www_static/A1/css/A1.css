@@ -785,13 +785,26 @@ audio, video {
 		margin-right: 7px !important;
 		cursor:pointer;
 		display: inline-block;
-		width: 20px;
-		height: 20px;
-		background: url(../img/close.svg);
+		width: 25px;
+		height: 25px;
+		background: url(../img/webrtc/closeVideo_gray.png);
 		background-size: 20px 20px;
 		background-repeat: no-repeat;
 		z-index: 999;
 	}
+
+	.closecomments {
+		float:right;
+		margin-top:7px;
+		margin-right: 7px !important;
+		cursor:pointer;
+		display: inline-block;
+		visibility: hidden;
+		width: 25px;
+		height: 25px;
+		background-size: 20px 20px;
+		background-repeat: no-repeat;
+		z-index: 999;	}
 
 	.closevideo:hover {
 		background: url(../img/close2.svg);
