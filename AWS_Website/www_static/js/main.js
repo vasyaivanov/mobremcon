@@ -279,8 +279,8 @@ $(document).ready(function () {
 					$("#loginError").show();
 				}
 				else {
-					$("#loginError").show();
-					$("#loginError").html("Successfully logged in...");
+					$("#loginSuccess").show();
+					$("#loginSuccess").html("Successfully logged in...");
 					$("#signInForm").hide();
 					setTimeout(function(){ location.href="/"; }, 1000);
 

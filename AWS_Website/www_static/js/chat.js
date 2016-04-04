@@ -79,13 +79,13 @@ function getUrlParam(sParam)
 
 $( window ).load(function() {
   //setup "global" variables first
-	var chatSocket;
-	if(typeof parent.socket != "undefined") {
-		chatSocket = parent.socket
-	}
-	else {
-		chatSocket = io.connect(document.location.hostname + ':' + location.port);
-	}
+  var chatSocket;
+  if(typeof parent.socket != "undefined") {
+    chatSocket = parent.socket
+  }
+  else {
+    chatSocket = io.connect(document.location.hostname + ':' + location.port);
+  }
 
   //var chatSocket = io.connect(document.location.hostname + ':' + location.port);
   var myRoomID = null;
@@ -97,11 +97,11 @@ $( window ).load(function() {
 $('#msg').keypress(function(event){
 
 var keycode = (event.keyCode ? event.keyCode : event.which);
-	if(keycode == '13'){
-		$("#conversation").animate({
-			scrollTop: $("#conversation")[0].scrollHeight
-		});
-	}
+  if(keycode == '13'){
+    $("#conversation").animate({
+      scrollTop: $("#conversation")[0].scrollHeight
+    });
+  }
 });
 
   $("#main-chat-screen").hide();
@@ -113,9 +113,12 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
     //$("#join").attr('disabled', 'disabled');
   }
 
-  //enter screen
-  $("#nameForm").submit(function() {
-    var name = $("#name").val();
+function submitLoginForm(userName) {
+    var name = userName;
+    if(!userName) {
+      name = $("#name").val();
+    }
+
     var device = "desktop";
     if (navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)) {
       device = "mobile";
@@ -139,7 +142,13 @@ var keycode = (event.keyCode ? event.keyCode : event.which);
         });
       });
     }
-  });
+  }
+
+  // login user right away
+  submitLoginForm((new Date().getTime()).toString(32));
+
+  //enter screen
+  $("#nameForm").submit(submitLoginForm);
 
   $("#name").keypress(function(e){
     var name = $("#name").val();
@@ -389,7 +398,7 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
      $("#"+person.name+"").remove();
      clearTimeout(timeout);
      timeout = setTimeout(timeoutFunction, 0);
-	 $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
+   $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
   });
 
   chatSocket.on("whisper", function(person, msg) {
@@ -419,20 +428,20 @@ $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
   });
 
   chatSocket.on("reconnect", function(data) {
-	setTimeout(function() {
-		toggleChatWindow();
-		toggleNameForm();
-		$("#msgs").empty();
-		$("#msg").removeAttr('disabled');
-		$("#send").removeAttr('disabled');
-		$("#nameForm").submit();
-	}, 60000);
+  setTimeout(function() {
+    toggleChatWindow();
+    toggleNameForm();
+    $("#msgs").empty();
+    $("#msg").removeAttr('disabled');
+    $("#send").removeAttr('disabled');
+    $("#nameForm").submit();
+  }, 60000);
   });
 
   chatSocket.on("disconnect", function(){
     $("#msgs").append("<li><strong><span class='text-warning'>Our chat server is not available. Reconnecting...</span></strong></li>");
 
-	$( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
+  $( "#conversation" ).scrollTop($("#conversation")[0].scrollHeight);
     $("#msg").attr("disabled", "true");
     $("#send").attr("disabled", "true");
   });

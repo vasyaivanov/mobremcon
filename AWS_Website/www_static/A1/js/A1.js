@@ -121,8 +121,8 @@ function hideNavigationButtons(){
 function toggleMainWindow() {
 	if(isCommentsOpen || isVideoChatOn){
 		//reduce main window
-		$("#video-gallery").animate({"width": "80%"},300);
-		$("#navButtons").css({"left":"10%"});
+		//$("#video-gallery").animate({"width": "80%"},300);
+		//$("#navButtons").css({"left":"10%"});
 	}
 
 	if( (!isCommentsOpen && !isVideoChatOn) ){
@@ -133,7 +133,7 @@ function toggleMainWindow() {
 	resizeCanvas();
 }
 
-var isCommentsOpen = false;
+var isCommentsOpen = true;
 function showHideComments() {
     $("#comments").slideToggle();
     $("#comments").css('overflow', 'scroll');
@@ -176,13 +176,13 @@ function showHideVideoChat() {
         $("#videoChatOpenCloseLabel").html("");
     }
 
-    $("#videochat").slideToggle();
+    //$("#videochat").slideToggle();
     /*
 		$("#videochat").css('overflow-x','hidden');
 		$("#videochat").css('overflow-y','scroll');
 		*/
 
-	toggleMainWindow();
+	//toggleMainWindow();
 	showHideMenu(true);
 }
 
@@ -621,6 +621,11 @@ function nextSlideLocal(){
 	slider.next();
 	clearCanvas();
 }
+
+showHideVideoChat();
+isVideoChatOn = 1;
+
+
 $('#prev').click(function() {
 	if (isPresenter()) {
 		prevSlideRemote();
