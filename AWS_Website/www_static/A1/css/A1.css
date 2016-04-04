@@ -787,9 +787,6 @@ audio, video {
 		display: inline-block;
 		width: 25px;
 		height: 25px;
-		background: url(../img/webrtc/closeVideo_gray.png);
-		background-size: 20px 20px;
-		background-repeat: no-repeat;
 		z-index: 999;
 	}
 
@@ -800,20 +797,11 @@ audio, video {
 		cursor:pointer;
 		display: inline-block;
 		visibility: hidden;
-		width: 25px;
-		height: 25px;
-		background-size: 20px 20px;
-		background-repeat: no-repeat;
-		z-index: 999;	}
-
-	.closevideo:hover {
-		background: url(../img/close2.svg);
 		width: 20px;
 		height: 20px;
 		background-size: 20px 20px;
 		background-repeat: no-repeat;
-		z-index: 999;
-	}
+		z-index: 999;	}
 
 	.closeLiveVideo {
 		position: absolute;

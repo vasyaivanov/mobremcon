@@ -155,14 +155,6 @@ function showHideVideoChat() {
 		showHideScreensharing();
 	}
 
-    if (!isVideoChatOn) {
-        isVideoChatOn = 1;
-				$("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
-    } else {
-				$("#videoframe").attr("src","");
-        isVideoChatOn = 0;
-    }
-
 
     if (isPresenter() && isVideoChatOn == 0) {
 			// Closing broadcast
@@ -183,6 +175,21 @@ function showHideVideoChat() {
 		*/
 
 	//toggleMainWindow();
+
+
+
+    if (!isVideoChatOn) {
+        isVideoChatOn = 1;
+                $("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
+                $(".closevideo").css("background", "url(../A1/img/webrtc/closeVideo_gray.png)");
+                $(".closevideo").css("background-repeat", "no-repeat");
+    } else {
+                $("#videoframe").attr("src","");
+                $(".closevideo").css("background", "url(../A1/img/webrtc/closeVideo_gray2.png)");
+                $(".closevideo").css("background-repeat", "no-repeat");
+        isVideoChatOn = 0;
+    }
+    
 	showHideMenu(true);
 }
 
