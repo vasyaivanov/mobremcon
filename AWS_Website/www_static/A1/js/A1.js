@@ -189,7 +189,7 @@ function showHideVideoChat() {
                 $(".closevideo").css("background-repeat", "no-repeat");
         isVideoChatOn = 0;
     }
-    
+
 	showHideMenu(true);
 }
 
@@ -629,8 +629,10 @@ function nextSlideLocal(){
 	clearCanvas();
 }
 
-showHideVideoChat();
-isVideoChatOn = 1;
+if(isPresenter()){
+    showHideVideoChat();
+    isVideoChatOn = 1;
+}
 
 
 $('#prev').click(function() {
