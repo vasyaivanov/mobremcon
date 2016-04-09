@@ -10,7 +10,9 @@
   color: #8A6300;
 
 }
-
+h1{
+  margin-left: 1.5vw;
+}
 
 .separation_line {
     border-bottom: 1px solid #e2e2e2;
@@ -25,7 +27,7 @@
 .col-md-3, .col-xs-3, .col-xs-3{
 
   min-height: 1px;
-  padding-right: 1px;
+  padding-right: 0px;
   padding-left: 1px;
 
   /* position: relative;
@@ -162,6 +164,7 @@ ul{
      margin: 0;
      padding: 0;
 }
+
 .col-xs-3{
 display: none;
 }

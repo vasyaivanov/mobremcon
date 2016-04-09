@@ -386,28 +386,29 @@
   <div class="container-fluid login mainbackground allData" id="myPres">
     <div class="row col-xs-10 col-sm-10 col-md-10">
 
-      <div class="remoteTitle col-xs-12 col-sm-12 col-md-12">
+      <div class="title1  col-xs-12 col-sm-12 col-md-12">
         <h1>PRE<span style='color:red'>Z</span>ERA</h1>
         <hr class="separation_line">
       </div>
 
-      <div class="simplePage col-xs-12 col-md-12 col-xs-12">
+      <div class="simplePage col-xs-12 col-sm-12 col-md-12">
         <h3>My presentations</h3>
       </div>
-      <div class="col-md-12 col-xs-12 col-xs-12 ">
+      <div class="col-md-12 col-sm-12 col-xs-12 ">
 
       <div class="col-md-12 col-sm-12 col-xs-12">
 
         <% if (userData.domainSet == 0) { %>
     			<% slides.forEach(function(slide){ %>
     				<div class="presentationUpgrade row" id="slide_<%= slide.sid %>">
-    				<div class="col-md-3 col-sm-3 col-xs-3" width="100%">
+    				<div class="slidePres col-md-3 col-sm-3 col-xs-3">
               <a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="100vw" height="100vw"></a></div>
-    				<div class="col-md-6 col-sm-6 col-xs-6"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><%= slide.title %></a>
+    				<div class="textPres col-md-6 col-sm-6 col-xs-6"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/" class="presTitle"><%= slide.title %></a>
             <% if(slide.video.length) { %>
               <br>Video:<br>
               <% slide.video.forEach(function(video){ %>
-                <div class="col-md-3 col-sm-3 col-xs-3" id="<%= video %>" border="1 px solid red">
+                <div class="videoPres col-md-3 col-sm-3 col-xs-3" id="<%= video %>">
+                  <p>MKDG</p>
                   <video width="320" height="240" controls>
                     <source src="<%= video %>" type="video/mp4">
                       Your browser does not support the video tag.
@@ -420,6 +421,7 @@
     			<%  }); %>
         <% } %>
       </div>
+
     </div>
   </div>
   </div>
