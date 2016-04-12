@@ -912,8 +912,8 @@ $( window ).load(function() {
 
             slider.appendSlide(slide_html);
 						// Resize images
-						var resizer = new Resizer({imgid:slide});
-						resizer.checkImage();
+					//var resizer = new Resizer({imgid:slide});
+					//	resizer.checkImage();
         }
     }
 
