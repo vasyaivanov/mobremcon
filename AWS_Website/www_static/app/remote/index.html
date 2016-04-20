@@ -135,18 +135,18 @@
 					<span class="btn-group" id="buttonGroup">
             <input type="button" id="pres_login_button" style="font-size:18px;" value="Open presentation" class="btn btn-default">
 					</span>
-					<center><a href="javascript:showView('getKey');">How to get a presentation ID &amp; password?</a></center>
+					<center id="Howtoget"><a href="javascript:showView('getKey');">How to get a presentation ID &amp; password?</a></center>
 				</form>
       </div>
   </div>
 </row>
     </section>
 
-
-	<section id="getKey" class="login mainbackground allData">
-        <div class="col-xs-12 remoteTitle">PRE<span style='color:red'>Z</span>ERA</div>
-        <div class="simplePage">
-          <h3 style='text-align:center; margin-top:3%; font-size:3vw'>How to get a presentation ID & password?</h3>
+<row style="max-height-page">
+	<section id="getKey" class="login mainbackground allData col-xs-12">
+        <div class="col-xs-12 remoteTitleHowtoGet">PRE<span style='color:red'>Z</span>ERA</div>
+        <div class="simplePageHowtoGet">
+          <h3 class ="Howtoget">How to get a presentation ID & password?</h3>
 		      <ul id="howToGetPresentationId">
 			      <li>Open your presentation in a web browser <a href="/#myPres" id="menuMyPres">(My Presentations)</a></li>
 			      <li>Open main menu and click 'Get presenter password'<br><img src="./img/getkey.png" alt="get key" id="img_get_key";></li>
@@ -156,7 +156,7 @@
 			<!--<input type="button" onclick="show('slideLogin')" value="BACK" class="btn btn-default" style="position:fixed;right:1%;top:0%;"/>-->
 		 </div>
 	</section>
-
+</row>
 
 	<section id="myPres" class="login mainbackground allData">
 		<center>
