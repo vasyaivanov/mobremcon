@@ -35,6 +35,10 @@ input.renameSlide {
 .max-height-page{
   max-height: 100%;
 }
+.col-xs-12 {
+    max-width: 100%;
+    margin: 0 0 0 -15px
+  }
 .uploadfile input[type="file"] {
     cursor: inherit;
     width: inherit;
@@ -50,7 +54,7 @@ input.renameSlide {
 
 .loginbody {
 margin: 2vw 10vw 0 15vw;
-width: 80%;
+width: 110%;
 
 /*
     position: fixed;
@@ -66,7 +70,7 @@ width: 80%;
 
 .Howtoget{
   text-align:center;
-  margin-top:3%;
+  margin-top:5vw;
   font-size:3vw;
 }
 
@@ -75,7 +79,7 @@ width: 80%;
 }
 
 #pres_login{
-    width: 90%;
+    width: 100%;
 }
 
 #pres_login_button{
@@ -148,7 +152,8 @@ width: 80%;
 
 #sidebar-wrapper.active {
     right: 250px;
-    width: 450px;
+  /*  width: 450px; */
+    width: 98%;
     background: linear-gradient(to bottom right, #02107B 10%, #0062DA 90%);
         -webkit-transition: all 0.4s ease 0s;
         -moz-transition: all 0.4s ease 0s;
@@ -254,8 +259,8 @@ width: 80%;
 .login-form-control {
     display: block;
     width: 100%;
-    height: 25vh;
-    max-height: 70px;
+    height: 44vh;
+    max-height: 82px;
     padding: 6px 12px;
     font-size: 20px;
     line-height: 1.42857143;
@@ -357,37 +362,38 @@ width: 80%;
   .remoteTitle{
       text-align: center;
       font-size: 10vw;
-      margin-top: 55px;
+      margin-top: 5vw;
       margin-bottom: 5vw;
+      max-width: 100%;
   }
 
   .remoteTitleHowtoGet{
       text-align: center;
-      font-size: 13vw;
-      margin-top: 8%;
+      font-size: 10vw;
+      margin-top: 4vw;
   }
 
   .Howtoget{
     text-align:center;
-    margin-top:3%;
-    font-size: 6vw;
+    margin-top:8vw;
+    font-size: 4vw;
   }
 
   .simplePage {
       position: absolute;
-      top: 22%;
+      top: 22vw;
       left: 5px;
   }
 
   .simplePageHowtoGet {
       position: absolute;
-      top: 15%;
+      top: 15vw;
       left: 0;
   }
 
 .loginbody{
-  width: 100%;
-  margin: 0px 1px 0 17px;
+  width: 120%;
+  margin: 0px 0px 0 0px;
 }
 
 .login-form-control{
@@ -417,12 +423,13 @@ a{
   color: #C7C7C7;
   font-size: 4vw;
 }
-#img_get_key {
+/*#img_get_key {
     width: 90%;
     height: 30%;
-}
+} */
+
 #howToGetPresentationId {
-    font-size: 5vw;
+    font-size: 3vw;
 }
 
 }
