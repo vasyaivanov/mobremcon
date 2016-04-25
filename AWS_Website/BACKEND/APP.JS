@@ -1291,7 +1291,7 @@ router.get('/video.html', function (req, res){
 			slideCheckPresenter({ hashId: hashId, currentUserId: UserData[req.cookies[sessionIdCookie]].currentUserId } , function(data) {
 				if(data.found == 1 && data.isPresenter == 1) {
           var token = 0;
-          if(data.meeting == 1) {
+          /*if(data.meeting == 1) {
             openTokSession(hashId,data.videoSession, data.isPresenter, function(token,session) {
               res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-pres.html'), {presenter: data.isPresenter , meeting: 1, token: token, session: session, hash: hashId, apikey: opentok.apiKey});
             });
@@ -1300,10 +1300,10 @@ router.get('/video.html', function (req, res){
             openTokSession(hashId,data.videoSession, data.isPresenter, function(token,session) {
               res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-pres.html'), {presenter: data.isPresenter , meeting: 0, token: token, session: session, hash: hashId, apikey: opentok.apiKey});
             });
-          }
-          /*if(data.notPTPVideo != 1) {
+          }*/
+          if(data.notPTPVideo != 1) {
             openTokSession(hashId,data.videoSession, 1, function(token,session) {
-              res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-pres.html'), {token: token, session: session, hash: hashId, apikey: opentok.apiKey});
+              res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-pres.html'), {meeting: 0, token: token, session: session, hash: hashId, apikey: opentok.apiKey});
             });
           }
           else if(data.meeting == 1) {
@@ -1311,11 +1311,11 @@ router.get('/video.html', function (req, res){
           }
           else {
 					    res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-presenter.html'), {meeting: data.meeting, token: token, presenter: 1, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
-          }*/
+          }
 				}
 				else if(data.found == 1 && data.isPresenter == 0) {
           var token = 0;
-          if(data.meeting == 1) {
+          /*if(data.meeting == 1) {
             openTokSession(hashId,data.videoSession, 1, function(token,session) {
               res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-pres.html'), {presenter: data.isPresenter, meeting: 1, token: token, session: session, hash: hashId, apikey: opentok.apiKey});
             });
@@ -1331,10 +1331,10 @@ router.get('/video.html', function (req, res){
                 res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-client.html'), {presenter: data.isPresenter, meeting: 0, token: token, session: session, hash: hashId, apikey: opentok.apiKey});
               });
             }
-          }
-          /*if(data.notPTPVideo != 1) {
+          }*/
+          if(data.notPTPVideo != 1) {
             openTokSession(hashId,data.videoSession, 1, function(token,session) {
-              res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-client.html'), {token: token, session: session,  apikey: opentok.apiKey});
+              res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/opentok/video-client.html'), {meeting: 0, token: token, session: session,  apikey: opentok.apiKey});
             });
           }
           else if(data.meeting == 1) {
@@ -1342,7 +1342,7 @@ router.get('/video.html', function (req, res){
           }
           else {
 					       res.render(path.join(www_dir,www_static_dir , 'A1/webrtc/video-client.html'), {meeting: data.meeting, token: token, presenter: 0, hash: hashId, userId: UserData[req.cookies[sessionIdCookie]].currentUserId});
-          }*/
+          }
 				}
 				else {
 					res.send("Presentation was not found")
