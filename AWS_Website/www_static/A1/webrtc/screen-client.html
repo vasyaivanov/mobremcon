@@ -9,7 +9,11 @@ audio {
 }
 video {
 	display: block;
-    width: 90%;
+	width: 75%;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	height: 75%;
 }
 </style>
 <script>
@@ -36,7 +40,7 @@ socketWebrtc.on('sharing-client', function (data) {
 		var MODERATOR_EXTRA      = {};       // empty extra-data
 
 		var participants = new RTCMultiConnection(MODERATOR_CHANNEL_ID);
-		
+
 		participants.bandwidth = {
 			audio: 128,
 			video: 256,
