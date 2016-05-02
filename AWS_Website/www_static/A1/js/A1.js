@@ -5,29 +5,29 @@ var hashUsers = -1;
 var presentPassword;
 
 if(localStorage.getItem("presentationsLocal")) {
-	var presentations = JSON.parse(localStorage.getItem("presentationsLocal"));
-	presentPassword = (presentations[currentHash]) ? (presentations[currentHash]) : 0;
+    var presentations = JSON.parse(localStorage.getItem("presentationsLocal"));
+    presentPassword = (presentations[currentHash]) ? (presentations[currentHash]) : 0;
 
-	if(presenter == 0 && presentPassword > 0) {
-		$("#backButtonMobile").show();
+    if(presenter == 0 && presentPassword > 0) {
+        $("#backButtonMobile").show();
         $("#presentationHashMobile").html("prezera.com/" + getCurrentHash());
         $("#presentationHashMobile").show();
-	}
+    }
 }
 
 if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-	var uMatch = navigator.userAgent.match(/Firefox\/(.*)$/),
-		ffVersion;
-	if (uMatch && uMatch.length > 1) {
-		ffVersion = uMatch[1];
-	}
+    var uMatch = navigator.userAgent.match(/Firefox\/(.*)$/),
+        ffVersion;
+    if (uMatch && uMatch.length > 1) {
+        ffVersion = uMatch[1];
+    }
 
-	if(ffVersion >= 42 && isPresenter()) {
-		$('#menuOpenRecording').show();
-	}
-	/*else {
-		alert("Please update your browser. We support FF version >= 42.0 for screen recording.")
-	}*/
+    if(ffVersion >= 42 && isPresenter()) {
+        $('#menuOpenRecording').show();
+    }
+    /*else {
+        alert("Please update your browser. We support FF version >= 42.0 for screen recording.")
+    }*/
 }
 
 if (!isFile) {
@@ -41,12 +41,12 @@ socket.on('connect', function (data) {
 });
 
 socket.on("disconnect", function(err) {
-	console.log("Lost connection");
+    console.log("Lost connection");
 });
 
 
 socket.on("reconnect", function(err) {
-	console.log("Reconnected");
+    console.log("Reconnected");
 });
 
 function isMobile() {
@@ -60,20 +60,20 @@ function isMobile() {
 
 
 function share(url) {
-	var h = 200;
-	var w = 500;
-	var left = (screen.width/2)-(w/2);
-	 var top = (screen.height/2)-(h/2);
-	window.open(url, 'shareFacebook', 'height=' + h + ', width=' + w + ', top='+top+', left='+left);
-	showHideMenu(true);
+    var h = 200;
+    var w = 500;
+    var left = (screen.width/2)-(w/2);
+     var top = (screen.height/2)-(h/2);
+    window.open(url, 'shareFacebook', 'height=' + h + ', width=' + w + ', top='+top+', left='+left);
+    showHideMenu(true);
 }
 
 function shareFacebook() {
-	share("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href);
+    share("https://www.facebook.com/sharer/sharer.php?u=" + window.location.href);
 }
 
 function shareTwitter() {
-	share("http://twitter.com/share");
+    share("http://twitter.com/share");
 }
 
 function openContactUs() {
@@ -93,25 +93,25 @@ function showHidePersonalNotes() {
     } else {
         $("#personalNotesOpenCloseLabel").html("");
     }
-	$('#personalNotesArea').focus();
+    $('#personalNotesArea').focus();
     showHideMenu(true);
 }
 
 
 function showPreviewsOnMainPage(){
-	//http://jsfiddle.net/q4d9m/2/
+    //http://jsfiddle.net/q4d9m/2/
 }
 
 //var justHidden = false;
 var navigationButtonsTimeout;
 function showHideNavButtons(){
-	//if (!justHidden) {
+    //if (!justHidden) {
     //justHidden = false;
     if(!isRemoteOpen)  {
-		$(".navButton").css('display','block');
-		clearTimeout(navigationButtonsTimeout);
-		navigationButtonsTimeout = setTimeout('$(".navButton").hide(400);', 6000);
-	}
+        $(".navButton").css('display','block');
+        clearTimeout(navigationButtonsTimeout);
+        navigationButtonsTimeout = setTimeout('$(".navButton").hide(400);', 6000);
+    }
 }
 
 function hideNavigationButtons(){
@@ -119,18 +119,18 @@ function hideNavigationButtons(){
 }
 
 function toggleMainWindow() {
-	if(isCommentsOpen || isVideoChatOn){
-		//reduce main window
-		//$("#video-gallery").animate({"width": "80%"},300);
-		//$("#navButtons").css({"left":"10%"});
-	}
+    if(isCommentsOpen || isVideoChatOn){
+        //reduce main window
+        //$("#video-gallery").animate({"width": "80%"},300);
+        //$("#navButtons").css({"left":"10%"});
+    }
 
-	if( (!isCommentsOpen && !isVideoChatOn) ){
-		//put main window back to full size
+    if( (!isCommentsOpen && !isVideoChatOn) ){
+        //put main window back to full size
     $("#video-gallery").animate({"width":"100%"},300);
-		$("#navButtons").css({"left":"0%"});
-	}
-	resizeCanvas();
+        $("#navButtons").css({"left":"0%"});
+    }
+    resizeCanvas();
 }
 
 var isCommentsOpen = true;
@@ -139,26 +139,26 @@ function showHideComments() {
     $("#comments").css('overflow', 'scroll');
     var label = $("#chatOpenCloseLabel");
     if (label.html() == "") {
-		isCommentsOpen = true;
+        isCommentsOpen = true;
         $("#chatOpenCloseLabel").html("Close ");
     } else {
-		isCommentsOpen = false;
+        isCommentsOpen = false;
         $("#chatOpenCloseLabel").html("");
     }
-	toggleMainWindow();
+    toggleMainWindow();
     showHideMenu(true);
 }
 
 var isVideoChatOn = 0;
 function showHideVideoChat() {
-	if(isScreensharingOn == 1 /*&& meeting == 0*/) {
-		showHideScreensharing();
-	}
+    if(isScreensharingOn == 1 /*&& meeting == 0*/) {
+        showHideScreensharing();
+    }
 
 
     if (isPresenter() && isVideoChatOn == 0) {
-			// Closing broadcast
-			socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: getCurrentHash()});
+            // Closing broadcast
+            socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: getCurrentHash()});
     }
 
     var label = $("#videoChatOpenCloseLabel");
@@ -170,11 +170,11 @@ function showHideVideoChat() {
 
     //$("#videochat").slideToggle();
     /*
-		$("#videochat").css('overflow-x','hidden');
-		$("#videochat").css('overflow-y','scroll');
-		*/
+        $("#videochat").css('overflow-x','hidden');
+        $("#videochat").css('overflow-y','scroll');
+        */
 
-	//toggleMainWindow();
+    //toggleMainWindow();
 
 
 
@@ -190,7 +190,7 @@ function showHideVideoChat() {
         isVideoChatOn = 0;
     }
 
-	showHideMenu(true);
+    showHideMenu(true);
 }
 
 
@@ -198,10 +198,10 @@ var isRecordingOn = 0;
 function recording() {
     if (!isRecordingOn) {
         isRecordingOn = 1;
-		$("#recordingframe").attr("src","/record.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
+        $("#recordingframe").attr("src","/record.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
     } else {
-		$('#recording').animate({ "width": "100%", "clear": "both" },300);
-		$("#recordingframe").attr("src","");
+        $('#recording').animate({ "width": "100%", "clear": "both" },300);
+        $("#recordingframe").attr("src","");
         isRecordingOn = 0;
     }
 
@@ -211,36 +211,36 @@ function recording() {
     } else {
         $("#RecordingOpenCloseLabel").html("Start");
     }
-	//$("#recording").hide();
+    //$("#recording").hide();
     $("#recording").slideToggle();
-	showHideMenu(true);
+    showHideMenu(true);
 }
 
 $("#recordButton").click(function() {
-	$("#recStarted").hide();
-	$("#recording").slideToggle();
-	document.getElementById("recordingframe").contentWindow.stopRec();
+    $("#recStarted").hide();
+    $("#recording").slideToggle();
+    document.getElementById("recordingframe").contentWindow.stopRec();
 });
 
 
 var isScreensharingOn = 0;
 function showHideScreensharing() {
-	if(isVideoChatOn == 1/*&& meeting == 0*/) {
-		showHideVideoChat()
-	}
+    if(isVideoChatOn == 1/*&& meeting == 0*/) {
+        showHideVideoChat()
+    }
 
     if (!isScreensharingOn) {
-			//document.getElementById('screensharingiframe').contentWindow.start();
-		$("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
+            //document.getElementById('screensharingiframe').contentWindow.start();
+        $("#screensharingiframe").attr("src","/screensharing.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
         isScreensharingOn = 1;
     } else {
-			if(presenter == 1) {
-				$("#screensharingiframe").attr("src","");
-			}
-			else {
-				location.reload();
-			}
-				//document.getElementById('screensharingiframe').contentWindow.stopSession();
+            if(presenter == 1) {
+                $("#screensharingiframe").attr("src","");
+            }
+            else {
+                location.reload();
+            }
+                //document.getElementById('screensharingiframe').contentWindow.stopSession();
         isScreensharingOn = 0;
     }
 
@@ -257,12 +257,12 @@ function showHideScreensharing() {
 
     $("#screensharing").slideToggle();
     /*
-		$("#screensharing").css('overflow-x','hidden');
-		$("#screensharing").css('overflow-y','scroll');
-		*/
+        $("#screensharing").css('overflow-x','hidden');
+        $("#screensharing").css('overflow-y','scroll');
+        */
 
-	toggleMainWindow();
-	showHideMenu(true);
+    toggleMainWindow();
+    showHideMenu(true);
 }
 
 var isMenuOn = false;
@@ -322,12 +322,12 @@ function getCurrentHash() {
 }
 
 function downloadPresentation() {
-		addPimg = "/";
-		if(location.hostname.split('.')[0] != "www") {
-			addPimg = "/";
-		}
-		console.log(addPimg + getCurrentHash() + '/download');
-		window.open(addPimg + getCurrentHash() + '/download');
+        addPimg = "/";
+        if(location.hostname.split('.')[0] != "www") {
+            addPimg = "/";
+        }
+        console.log(addPimg + getCurrentHash() + '/download');
+        window.open(addPimg + getCurrentHash() + '/download');
     showHideMenu(true);
 }
 
@@ -383,15 +383,15 @@ function showHidePasswordCreateOverlay() {
 }
 
 function getPresentationKey() {
-	socket.emit('get-presentation-key', { sid: getCurrentHash()}, function(confirmation){
-		if(confirmation.key > 0) {
-			showHideMenu(true);
-			//alert("Presentation ID: " + confirmation.id + "\n" + "Presenter password: " + confirmation.key);
-			$("#getPassResult").html("<div style='margin-bottom:7px;'><b>Presentation ID:</b> " + confirmation.id + "</div>" + "<div><b>Presenter password:</b> " + confirmation.key + "</div>");
-			$('#presPassOverlay').fadeIn(400);
+    socket.emit('get-presentation-key', { sid: getCurrentHash()}, function(confirmation){
+        if(confirmation.key > 0) {
+            showHideMenu(true);
+            //alert("Presentation ID: " + confirmation.id + "\n" + "Presenter password: " + confirmation.key);
+            $("#getPassResult").html("<div style='margin-bottom:7px;'><b>Presentation ID:</b> " + confirmation.id + "</div>" + "<div><b>Presenter password:</b> " + confirmation.key + "</div>");
+            $('#presPassOverlay').fadeIn(400);
 
-		}
-	});
+        }
+    });
 }
 
 function submitPassword() {
@@ -415,9 +415,9 @@ function showHidePasswordCheckOverlay() {
 
 function submitCheckPassword() {
     var pwd = document.getElementById("presentationCheckPassword").value;
-	if(pwd) {
-		socket.emit("checkSlidePassword-server", {password: pwd, hash: getCurrentHash()});
-	}
+    if(pwd) {
+        socket.emit("checkSlidePassword-server", {password: pwd, hash: getCurrentHash()});
+    }
 }
 
 
@@ -434,7 +434,7 @@ function hideClickAllow(delay) {
     var newUrl = "http://" + document.location.hostname + ':' + location.port
     newUrl += "/remote/index.html?presentation=" + pathName;
     window.open(newUrl, "popupWindow", "width=1160, height=850, scrollbars=no");
-	showHideMenu(true);
+    showHideMenu(true);
 }*/
 
 var isRemoteOpen = false;
@@ -451,14 +451,14 @@ function showHideRemote() {
         hideNavigationButtons();
         slider._slidesContainer.off(slider._downEvent);
         slider._doc.off(slider._moveEvent)
-				   .off(slider._upEvent);
+                   .off(slider._upEvent);
         $('.royalSlider').on('dragstart', function (event) { event.preventDefault(); });
     } else {
         isRemoteOpen = false;
         label.html("");
         slider._slidesContainer.on(slider._downEvent, function (e) { console.log('_downEvent'); slider._onDragStart(e); });
         slider._doc.on(slider._moveEvent, function (e) { console.log('_moveEvent'); slider._onDragMove(e, false/*isThumbs*/); })
-				   .on(slider._upEvent, function (e) { console.log('_upEvent'); slider._onDragRelease(e, false/*isThumbs*/); });
+                   .on(slider._upEvent, function (e) { console.log('_upEvent'); slider._onDragRelease(e, false/*isThumbs*/); });
         turnLaser(false);
         turnDraw(false);
         clearCanvas();
@@ -468,105 +468,105 @@ function showHideRemote() {
 }
 
 function disableMenuItem(menuItem) {
-	$(menuItem).attr('title','only presenter can do this');
-	$(menuItem).attr('onclick','return false');
-	$(menuItem).off();
-	$(menuItem).unbind();
-	$(menuItem).addClass("grayedOut");
+    $(menuItem).attr('title','only presenter can do this');
+    $(menuItem).attr('onclick','return false');
+    $(menuItem).off();
+    $(menuItem).unbind();
+    $(menuItem).addClass("grayedOut");
 }
 function disableNonPresenterMenues() {
-	disableMenuItem("#menuRemote");
+    disableMenuItem("#menuRemote");
   disableMenuItem("#menuShowHideRemote");
-	disableMenuItem("#menuOpenVideoChat");
-	disableMenuItem("#menuPassword");
-	disableMenuItem("#menuPresKey");
-	disableMenuItem("#menuOpenScreensharing");
-	disableMenuItem("#menuRenamePresentation");
-	disableMenuItem("#menuOpenRecording");
+    disableMenuItem("#menuOpenVideoChat");
+    disableMenuItem("#menuPassword");
+    disableMenuItem("#menuPresKey");
+    disableMenuItem("#menuOpenScreensharing");
+    disableMenuItem("#menuRenamePresentation");
+    disableMenuItem("#menuOpenRecording");
 }
 
 function meetingMenu() {
-	if(meeting == 1) {
-		$("#menuPersonalNotes").remove();
-		$("#downloadPresentation").remove();
-		$("#menuPresKey").remove();
-		$("#menuMyPres").remove();
-		$("#menuRenamePresentation").remove();
-		$("#menuOpenRecording").remove();
-		$("#next").text("CLEAR");
-		$("#prev").remove();
-		$("#videochat").height("100%");
-		$("#videochat").width("220px");
-		$("#comments").css("right","0px");
-		$("#comments").height("30px");
-		$("#comments").width("220px");
-		$("#screensharing").width("75%");
-		$("#navButtons").width("85%");
-		//$("#screensharing").css('z-index', 0);
-		$("#closescreensharing").remove();
-		$('body').prepend('<div class="chalk"></div>');
-		$( document ).ready(function() {
-			if(isVideoChatOpen == 0 && isPresenter()) {
-				showHideVideoChat();
-			}
-			showHideComments();
-			$("#comments").hover(
-			    function(){
-			        $("#comments").height("93%");
-							$( "#urlChat" ).height("900px");
-							$("#comments").width("250px");
+    if(meeting == 1) {
+        $("#menuPersonalNotes").remove();
+        $("#downloadPresentation").remove();
+        $("#menuPresKey").remove();
+        $("#menuMyPres").remove();
+        $("#menuRenamePresentation").remove();
+        $("#menuOpenRecording").remove();
+        $("#next").text("CLEAR");
+        $("#prev").remove();
+        $("#videochat").height("100%");
+        $("#videochat").width("220px");
+        $("#comments").css("right","0px");
+        $("#comments").height("30px");
+        $("#comments").width("220px");
+        $("#screensharing").width("75%");
+        $("#navButtons").width("85%");
+        //$("#screensharing").css('z-index', 0);
+        $("#closescreensharing").remove();
+        $('body').prepend('<div class="chalk"></div>');
+        $( document ).ready(function() {
+            if(isVideoChatOpen == 0 && isPresenter()) {
+                showHideVideoChat();
+            }
+            showHideComments();
+            $("#comments").hover(
+                function(){
+                    $("#comments").height("93%");
+                            $( "#urlChat" ).height("900px");
+                            $("#comments").width("250px");
 
-			    },
-			    function(){
-			        $("#comments").height("30px");
-							$("#comments").width("220px");
-			    }
-			);
-			copyUrl();
-		});
-	}
+                },
+                function(){
+                    $("#comments").height("30px");
+                            $("#comments").width("220px");
+                }
+            );
+            copyUrl();
+        });
+    }
 }
 
 
 function isInIFrame(){
-	return (self!=top);
+    return (self!=top);
 }
 
 function renderMenuForIFrame(){
-	if(isInIFrame()){
-		$('#sliteWatermak').css({
-			"height": "60px",
-			"line-height": "60px",
-			"font-size": "60px"
-		});
-		$('.menuSubmenu').css({
-			"font-size": "40px",
-			"right": "250px",
-			"top": "50px"
-		});
-	}
+    if(isInIFrame()){
+        $('#sliteWatermak').css({
+            "height": "60px",
+            "line-height": "60px",
+            "font-size": "60px"
+        });
+        $('.menuSubmenu').css({
+            "font-size": "40px",
+            "right": "250px",
+            "top": "50px"
+        });
+    }
 }
 
 function isLocalhost() {
-	var location = document.location + "";
-	return (pathName && location.indexOf("file") === 0);
+    var location = document.location + "";
+    return (pathName && location.indexOf("file") === 0);
 }
 
 function isPresenter() {
-	if( typeof presenter !== 'undefined') {
-		var result = presenter > 0 ? true : false;
-		if(presentPassword > 0) {
-			result = true;
-		}
-		var location = document.location + "";
-		if(location && location.indexOf("file") === 0){ //localhost case
-			result = true;
-		}
-		return result;
-	}
-	else {
-		return false;
-	}
+    if( typeof presenter !== 'undefined') {
+        var result = presenter > 0 ? true : false;
+        if(presentPassword > 0) {
+            result = true;
+        }
+        var location = document.location + "";
+        if(location && location.indexOf("file") === 0){ //localhost case
+            result = true;
+        }
+        return result;
+    }
+    else {
+        return false;
+    }
 }
 
 function getPresentationInRemote() {
@@ -577,56 +577,56 @@ function getPresentationInRemote() {
 }
 
 function submitInsertVideoSlide() {
-	var result;
+    var result;
 
-	var val = $('#insertVideoSlideValue').val();
-	if(val){
-		if(val.match(/^[a-z0-9]+$/i)){
-			result = val;
-		}else{
-			var video_id = val.split('v=')[1];
-			var ampersandPosition = video_id.indexOf('&');
-			if(ampersandPosition != -1) {
-			  video_id = video_id.substring(0, ampersandPosition);
-			}
-			result =  video_id;
-		}
+    var val = $('#insertVideoSlideValue').val();
+    if(val){
+        if(val.match(/^[a-z0-9]+$/i)){
+            result = val;
+        }else{
+            var video_id = val.split('v=')[1];
+            var ampersandPosition = video_id.indexOf('&');
+            if(ampersandPosition != -1) {
+              video_id = video_id.substring(0, ampersandPosition);
+            }
+            result =  video_id;
+        }
 
         var slider = $(".royalSlider").data('royalSlider');
-		socket.emit('insertVideoId', { video_hash: result, slite_hash: getCurrentHash(), curr_slide: slider.currSlideId+1 });
-	}else{
-		alert("Your youtube url or id is wrong. Please see example above");
-	}
+        socket.emit('insertVideoId', { video_hash: result, slite_hash: getCurrentHash(), curr_slide: slider.currSlideId+1 });
+    }else{
+        alert("Your youtube url or id is wrong. Please see example above");
+    }
 
-	showHideInsertVideoSlideOverlay();
+    showHideInsertVideoSlideOverlay();
 }
 
 $("#navNext").click(function() {
-	if (isPresenter()) {
-		nextSlideRemote();
-	} else {
-		nextSlideLocal();
-	}
+    if (isPresenter()) {
+        nextSlideRemote();
+    } else {
+        nextSlideLocal();
+    }
 });
 
 $("#navPrev").click(function() {
-	if (isPresenter()) {
-		prevSlideRemote();
-	} else {
-		prevSlideLocal();
-	}
+    if (isPresenter()) {
+        prevSlideRemote();
+    } else {
+        prevSlideLocal();
+    }
 });
 
 function prevSlideLocal(){
-	var slider = $(".royalSlider").data('royalSlider');
-	slider.prev();
-	clearCanvas();
+    var slider = $(".royalSlider").data('royalSlider');
+    slider.prev();
+    clearCanvas();
 }
 
 function nextSlideLocal(){
-	var slider = $(".royalSlider").data('royalSlider');
-	slider.next();
-	clearCanvas();
+    var slider = $(".royalSlider").data('royalSlider');
+    slider.next();
+    clearCanvas();
 }
 
 if(isPresenter()){
@@ -636,14 +636,14 @@ if(isPresenter()){
 
 
 $('#prev').click(function() {
-	if (isPresenter()) {
-		prevSlideRemote();
-	}
+    if (isPresenter()) {
+        prevSlideRemote();
+    }
 });
 $('#next').click(function() {
-	if (isPresenter()) {
-		nextSlideRemote();
-	}
+    if (isPresenter()) {
+        nextSlideRemote();
+    }
 });
 $('#chatPanel').click(function () {
     showHideComments();
@@ -664,7 +664,7 @@ $('#closeHelpOverlay').click(function () {
     showHideHelpOverlay();
 });
 $('#closePassOverlay').click(function () {
-	$('#presPassOverlay').fadeOut(400);
+    $('#presPassOverlay').fadeOut(400);
 });
 $('#closeRenamePresentationOverlay').click(function () {
     showHideRenamePresentationOverlay();
@@ -683,23 +683,23 @@ $('#videochatpanel').click(function () {
 });
 
 if(isVideoChatOpen == 1){
-	$( document ).ready(function() {
-		showHideVideoChat();
-	});
+    $( document ).ready(function() {
+        showHideVideoChat();
+    });
 }
 $('#closevideo').click(function () {
     showHideVideoChat();
-	//config.attachStream && config.attachStream.stop();
+    //config.attachStream && config.attachStream.stop();
 });
 $('#closerecording').click(function () {
     recording();
-	//config.attachStream && config.attachStream.stop();
+    //config.attachStream && config.attachStream.stop();
 });
 $('#closescreensharing').click(function () {
     showHideScreensharing();
 });
 if(isScreensharingOpen == 1){
-	setTimeout(function(){showHideScreensharing()},2000);
+    setTimeout(function(){showHideScreensharing()},2000);
 }
 $('#submitInsertVideoSlide').click(function () {
     submitInsertVideoSlide();
@@ -711,41 +711,41 @@ $('#closeExplanator').click(function () {
     showHideExplanators();
 });
 $(document).mousemove(function () {
-	showHideNavButtons();
+    showHideNavButtons();
 });
 if (needToShowExplanators()) {
     showHideExplanators();
 }
 var hostname = window.location.hostname;
 if( hostname.indexOf("www") == 0){
-	hostname = hostname.substring(4);
+    hostname = hostname.substring(4);
 }
 if(presentationPassword == 1 && isPresenter() == false) {
     showHidePasswordCheckOverlay();
 }
 
 if( isMobile() ) {
-	$("#sliteWatermak").css("display","none");
+    $("#sliteWatermak").css("display","none");
 
-	if (window.innerHeight > window.innerWidth){
-	    $('#orientationOverlay').fadeIn(400);
-	}
+    if (window.innerHeight > window.innerWidth){
+        $('#orientationOverlay').fadeIn(400);
+    }
 
-	window.addEventListener("orientationchange", function() {
-		if (window.orientation == 0 || window.orientation == 180) {
-			$("#mainSlide").hide();
-			$('#orientationOverlay').fadeIn(400);
-		}
-		else {
-			$('#orientationOverlay').fadeOut(400);
-			resizeCanvas();
-			$("#mainSlide").show();
-		}
-	}, false);
+    window.addEventListener("orientationchange", function() {
+        if (window.orientation == 0 || window.orientation == 180) {
+            $("#mainSlide").hide();
+            $('#orientationOverlay').fadeIn(400);
+        }
+        else {
+            $('#orientationOverlay').fadeOut(400);
+            resizeCanvas();
+            $("#mainSlide").show();
+        }
+    }, false);
 
 }
 if( !isPresenter() ) {
-	disableNonPresenterMenues();
+    disableNonPresenterMenues();
 }
 // If meeting
 meetingMenu();
@@ -757,21 +757,21 @@ $('#slide').css('overflow','hidden');
 var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
 if(isPresenter()){
-	if (navigator.mozGetUserMedia) {
-		$('#install_chrome_extension').css("display","none");
-	}else if(isChrome){
-		$('#install_firefox_extension').css("display","none");
-	}else{
-		$('#install_firefox_extension').css("display","none");
-		$('#install_chrome_extension').html("<b>Screensharing is available ONLY for Chrome and Firefox browsers.</b>");
-	}
+    if (navigator.mozGetUserMedia) {
+        $('#install_chrome_extension').css("display","none");
+    }else if(isChrome){
+        $('#install_firefox_extension').css("display","none");
+    }else{
+        $('#install_firefox_extension').css("display","none");
+        $('#install_chrome_extension').html("<b>Screensharing is available ONLY for Chrome and Firefox browsers.</b>");
+    }
 }else{
-	$('#install_chrome_extension').css("display","none");
-	$('#install_firefox_extension').css("display","none");
+    $('#install_chrome_extension').css("display","none");
+    $('#install_firefox_extension').css("display","none");
 }
 if(!navigator.mozGetUserMedia && !isChrome){
-	$('#install_firefox_extension').css("display","none");
-		$('#install_chrome_extension').html("<b>Screensharing is available ONLY for Chrome and Firefox browsers.</b>");
+    $('#install_firefox_extension').css("display","none");
+        $('#install_chrome_extension').html("<b>Screensharing is available ONLY for Chrome and Firefox browsers.</b>");
 }
 
 
@@ -804,7 +804,7 @@ function updateTitle() {
 
     if (isInIFrame() == true) {
         //Temporary disabled, error in mobile app
-		//parent.document.title = newTitle;
+        //parent.document.title = newTitle;
     } else {
         document.title = newTitle;
     }
@@ -815,14 +815,14 @@ function askNumberOfUsers(){
 }
 
 $( window ).load(function() {
-	// Not works on real host - Show error mismatch 8081 & 80
-	 if (isPresenter() && !isInIFrame()) {
-		 var item = $('.menuSubmenu #menuRemote');
-		 item.show();
+    // Not works on real host - Show error mismatch 8081 & 80
+     if (isPresenter() && !isInIFrame()) {
+         var item = $('.menuSubmenu #menuRemote');
+         item.show();
     }
-	if (isPresenter() && !isInIFrame()) {
-		 var item = $('.menuSubmenu #menuPassword');
-		 item.show();
+    if (isPresenter() && !isInIFrame()) {
+         var item = $('.menuSubmenu #menuPassword');
+         item.show();
     }
 
     updateTitle();
@@ -874,14 +874,14 @@ $( window ).load(function() {
     var staticSlite = (slite === '/HASH_TEMPLATE/' || slite === '/<%= hash %>/');
     if (staticSlite) {
         slite = '';
-		number_of_slides = 13;
+        number_of_slides = 13;
     }
 
-		var addPimg = "";
+        var addPimg = "";
 
-		if(location.hostname.split('.')[0] != "www") {
-			addPimg = "";
-		}
+        if(location.hostname.split('.')[0] != "www") {
+            addPimg = "";
+        }
 
     for (var slide = 1; slide <= number_of_slides; ++slide) {
         var slide_html_path = addPimg + slite + "img" + (slide - 1) + ".jpg" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
@@ -895,29 +895,29 @@ $( window ).load(function() {
                 slide_html_path += ".html/img" + slide + ".html" + "?ts=" + (new Date().getTime()); //slide url with added time stamp to stop caching
             }
             var slide_html = "<div style='text-align:center' id=slide class='rsContent'>"
-						   + "<iframe src='" + slide_html_path + "' width='100%' height='100%' seamless> </iframe>"
-						   + "<div class='rsTmb'>"
-					       + "<h5>SLIDE" + slide + "</h5>"
-					       + "     <span>Slide " + slide + " here</span>"
-					       + "</div> </div>";
+                           + "<iframe src='" + slide_html_path + "' width='100%' height='100%' seamless> </iframe>"
+                           + "<div class='rsTmb'>"
+                           + "<h5>SLIDE" + slide + "</h5>"
+                           + "     <span>Slide " + slide + " here</span>"
+                           + "</div> </div>";
             slider.appendSlide(slide_html);
         } else { // !staticSlite
-						if(meeting == 1) {
-							slide_html_path = "/img/blank.png\' width='100%' height='100%";
-						}
+                        if(meeting == 1) {
+                            slide_html_path = "/img/blank.png\' width='100%' height='100%";
+                        }
             var slide_html = "<div style='position: relative' id='slide' class='rsContent'>"
-						           + "<img class=\"rsImg\" id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "'>"
-					             + "</div>";
+                                   + "<img class=\"rsImg\" id=\"actualSlide_" + slide + "\" src='" + slide_html_path + "'>"
+                                 + "</div>";
 
 
             slider.appendSlide(slide_html);
-						// Resize images
-					//var resizer = new Resizer({imgid:slide});
-					//	resizer.checkImage();
+                        // Resize images
+                    //var resizer = new Resizer({imgid:slide});
+                    //  resizer.checkImage();
         }
     }
 
-		var tSlider = $(".royalSlider").data('royalSlider');
+        var tSlider = $(".royalSlider").data('royalSlider');
 
     $("#video-gallery").css("height", "100%");
     $(".rsOverflow").css("height", "100%");
@@ -970,7 +970,7 @@ $( window ).load(function() {
   if (!isFile) {
       //socket = io.connect(document.location.hostname + ':' + location.port);
 
-	// We don't use this function
+    // We don't use this function
     /*socket.on('responseDownloadPresentation', function (data) {
         if (data.fileName) {
             console.log('Received Response to Downloading presentation: ' + data.fileName + ', redirecting...');
@@ -987,7 +987,7 @@ $( window ).load(function() {
 
 
     socket.on('changeSlideBroadcast', function (data) {
-				if(data.slideID == getCurrentHash() && isPresenter() === false) {
+                if(data.slideID == getCurrentHash() && isPresenter() === false) {
         var button = data.hello - 1;
             var slider = $(".royalSlider").data('royalSlider');
             console.log(button);
@@ -1032,24 +1032,24 @@ $( window ).load(function() {
 
     socket.on('broadcastVideoChat', function (data) {
         if (data.hash !== getCurrentHash() || isPresenter()) return;
-		// Reload video frame if two way signal communication signal was sent
+        // Reload video frame if two way signal communication signal was sent
 
-		if(data.reload > 0 || meeting == 1) {
-			if(data.reload == 2) {
-				if(navigator.userAgent.indexOf("Firefox") != -1 )  {
-						location.href="/" + getCurrentHash();
-				}
-				else {
-					document.getElementById("videoframe").contentWindow.changeClass();
-					document.getElementById("videoframe").contentWindow.addStream();
-				}
-			}
-			else if(data.reload == 1) {
-				document.getElementById("videoframe").contentWindow.location.reload();
-			}
-		}
+        if(data.reload > 0 || meeting == 1) {
+            if(data.reload == 2) {
+                if(navigator.userAgent.indexOf("Firefox") != -1 )  {
+                        location.href="/" + getCurrentHash();
+                }
+                else {
+                    document.getElementById("videoframe").contentWindow.changeClass();
+                    document.getElementById("videoframe").contentWindow.addStream();
+                }
+            }
+            else if(data.reload == 1) {
+                document.getElementById("videoframe").contentWindow.location.reload();
+            }
+        }
 
-		if(data.open == 2) {return;}
+        if(data.open == 2) {return;}
         if (data.open === isVideoChatOn) return;
         showHideVideoChat();
     });
@@ -1068,15 +1068,15 @@ $( window ).load(function() {
     });
 
     socket.on('nof-users', function (data) {
-						if(data.hash == getCurrentHash()) {
-	            hashUsers = data.nof_users;
-	            var usersText = "";
-	            if (!isNaN(hashUsers) && hashUsers >= 0) {
-	                usersText = " ( " + hashUsers + " user" + (hashUsers === 1 ? "" : "s") + " )";
-	            }
-	            $("#chatUsersLabel").html(usersText);
-	            updateTitle();
-						}
+                        if(data.hash == getCurrentHash()) {
+                hashUsers = data.nof_users;
+                var usersText = "";
+                if (!isNaN(hashUsers) && hashUsers >= 0) {
+                    usersText = " ( " + hashUsers + " user" + (hashUsers === 1 ? "" : "s") + " )";
+                }
+                $("#chatUsersLabel").html(usersText);
+                updateTitle();
+                        }
     });
 
   }
@@ -1089,50 +1089,50 @@ function getClearUrl() {
 }
 
 var Resizer = function (params) {
-	this.params = params;
-	this.count=0;
-	this.maxattempts = 10;
-	this.timeout = 0;
-	this.checkImage = function() {
-		var self = this;
-		self.count++;
-		self.image = $("#actualSlide_" + self.params.imgid);
-		if(typeof self.image[0] == "undefined") {
-			//console.log("Image" + self.params.imgid + " not loaded. Running again. ");
-			if(self.count < self.maxattempts) {
-				self.timeout = setTimeout(function(){self.checkImage()},1000);
-			}
-		}
-		else {
-			//console.log("Image found, getting the actual image size.");
-			if(self.image[0].naturalWidth == 0) {
-				if(self.count < self.maxattempts) {
-					self.timeout = setTimeout(function(){self.checkImage()},1000);
-				}
-			}
-			else {
-				if(self.params.imgid == number_of_slides) {
-					$("#loadingPage").hide();
-				}
-				// If everything is ok - resize image
-				self.image.animate({ "height": self.image[0].height * 100 / window.innerHeight + "%", "clear":"both"},300);
-				self.image.animate({ "width": self.image[0].width * 100 / window.innerWidth + "%", "clear":"both"},300);
-			}
-		}
-	}
+    this.params = params;
+    this.count=0;
+    this.maxattempts = 10;
+    this.timeout = 0;
+    this.checkImage = function() {
+        var self = this;
+        self.count++;
+        self.image = $("#actualSlide_" + self.params.imgid);
+        if(typeof self.image[0] == "undefined") {
+            //console.log("Image" + self.params.imgid + " not loaded. Running again. ");
+            if(self.count < self.maxattempts) {
+                self.timeout = setTimeout(function(){self.checkImage()},1000);
+            }
+        }
+        else {
+            //console.log("Image found, getting the actual image size.");
+            if(self.image[0].naturalWidth == 0) {
+                if(self.count < self.maxattempts) {
+                    self.timeout = setTimeout(function(){self.checkImage()},1000);
+                }
+            }
+            else {
+                if(self.params.imgid == number_of_slides) {
+                    $("#loadingPage").hide();
+                }
+                // If everything is ok - resize image
+                self.image.animate({ "height": self.image[0].height * 100 / window.innerHeight + "%", "clear":"both"},300);
+                self.image.animate({ "width": self.image[0].width * 100 / window.innerWidth + "%", "clear":"both"},300);
+            }
+        }
+    }
 
 
 }
 
 function copyUrl() {
-	$(".share-div").show();
-	document.getElementById('copyClipboardButton').addEventListener('click', function() {
-		alert("ULR copied to clipboard");
-		clipboard.copy({
-				'text/plain': location.href
-		}).then(
-				function(){console.log('success'); },
-				function(err){console.log('failure', err);
-		});
+    $(".share-div").show();
+    document.getElementById('copyClipboardButton').addEventListener('click', function() {
+        alert("ULR copied to clipboard");
+        clipboard.copy({
+                'text/plain': location.href
+        }).then(
+                function(){console.log('success'); },
+                function(err){console.log('failure', err);
+        });
 });
 }
