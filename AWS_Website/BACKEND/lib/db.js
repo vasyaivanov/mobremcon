@@ -151,7 +151,8 @@ var slidesSchema = mongoose.Schema({
   videoSession: {type: String},
   lastArchiveId: {type: String},
   presentationKey: {type: Number},
-  meeting: {type: Number, default:0 , max: 1}
+  meeting: {type: Number, default:0 , max: 1},
+  viewsCount: { type: Number,  default: 0 },
 });
 
 slidesSchema.plugin(mongooserand);

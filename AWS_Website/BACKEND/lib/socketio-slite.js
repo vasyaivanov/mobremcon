@@ -139,9 +139,32 @@ function notifyNofUsersChanged(socket, hash, local) {
     } else {
         socket.broadcast.emit("nof-users", data);
     }
-	if(LOG_GENERAL) {
-		console.log("nof-users emitted Users: " + data.nof_users + " for hash: " + data.hash);
-	}
+  	if(LOG_GENERAL) {
+  		console.log("nof-users emitted Users: " + data.nof_users + " for hash: " + data.hash);
+	  }
+}
+
+function incremenViewsCount(socket, hash)
+{
+  console.log("incremenViewsCount(hash:" + hash + ")");
+  if(typeof(hash) == "undefined")
+    return;
+
+  module.parent.exports.SlideScheme.findOne( {  sid : hash } , function (err, doc) {
+    if (!doc || err) {
+      console.error("incremenViewsCount: hash:" + hash + " not found");
+       return;
+    }
+    var count = doc.viewsCount;
+    count++;
+    module.parent.exports.SlideScheme.update({  sid : hash }, { $set: { viewsCount: count}}, function(errU, docU) {
+      if(errU || !docU)
+        console.error("incremenViewsCount: hash:" + hash + " not found");
+      else
+        socket.emit('viewsCount-client', {hash: hash, count: count});
+        console.log("Hash:" + hash + " viewsCount has incremented to:" + count);
+    });
+  });
 }
 
 module.parent.exports.io.use(function (socket, next) {
@@ -150,10 +173,11 @@ module.parent.exports.io.use(function (socket, next) {
             nofUsers[socket.handshake.query.hash] = 0;
         }
         nofUsers[socket.handshake.query.hash]++;
-		notifyNofUsersChanged(socket, socket.handshake.query.hash);
-		if(LOG_GENERAL) {
-			console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
-		}
+        incremenViewsCount(socket, socket.handshake.query.hash);
+    		notifyNofUsersChanged(socket, socket.handshake.query.hash);
+    		if(LOG_GENERAL) {
+    			console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+    		}
         return next();
     }
     // call next() with an Error if you need to reject the connection.

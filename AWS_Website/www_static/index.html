@@ -1,4 +1,4 @@
-<html lang="en">
+﻿<html lang="en">
 
 <head>
   <meta name="google-site-verification" content="7nn9RPhUUyIYiZuIowxrBTEC0nGRt64itGJ7Ns0emjk" />
@@ -416,7 +416,7 @@
                 </div>
               <%  }); %>
             <% } %>
-            <br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb<br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></div>
+            <br>Uploaded: <%= moment(slide.created).format('MMMM DD, YYYY hh.mm A') %><br>Size: <%= (slide.size/1024/1024).toFixed(2)   %> Mb  &nbsp&nbsp&nbspViews: <%= slide.viewsCount  %><br><a href="#" slideId="<%= slide.sid %>" class="deleteSlide">Delete presentation</a></div>
           </div>
     			<%  }); %>
         <% } %>
