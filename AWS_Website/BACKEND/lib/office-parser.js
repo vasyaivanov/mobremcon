@@ -8,7 +8,7 @@
 
     var XML_PATH = "./xml",
         EXT      = ['.docx', '.xlsx', '.pptx'];
-        DEBUG    = false;
+        DEBUG    = true;
 
 
 var OfficeParser = (function () {

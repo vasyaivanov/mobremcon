@@ -22,7 +22,7 @@ var express = require('express')
   , AWS_S3_BUCKET = "prezera-"
   , AWS_S3_VIDEO_BUCKET = "prezera-video"
   , os = require('os')
-  , DEBUG = false
+  , DEBUG = true
   , paypalIpn = require('paypal-ipn')
   , OpenTok = require('opentok')
   , opentok = new OpenTok('45572032', 'e3f048818dd4de8d7bebe5761ee74c16b16b3270');
@@ -213,7 +213,7 @@ if (fs.existsSync(path.join(localDir, www_static_dir, indexHtml))) {
     www_dir = awsDir;
 }
 www_dir = path.normalize(www_dir);
-console.log('www_dir: ' + www_dir);
+if(DEBUG) console.log('www_dir: ' + www_dir);
 
 // hash redirection
 var slitesDir = "slites";
@@ -289,10 +289,11 @@ app.use(passport.session());
 // Set session
 app.use(function (req, res, next) {
 
-if(!path.extname(req.url.substring(1))) {
-  console.log("PAGE_REQUEST: " + new Date().toLocaleDateString('en-US') + ", page: " + req.hostname + req.url + ', ' +  ((req.headers['user-agent']) ? req.headers['user-agent'] : 'bot'));
-  console.log('--------------');
-
+if (!path.extname(req.url.substring(1))) {
+    if (DEBUG) {
+      console.log("PAGE_REQUEST: " + new Date().toLocaleDateString('en-US') + ", page: " + req.hostname + req.url + ', ' +  ((req.headers['user-agent']) ? req.headers['user-agent'] : 'bot'));
+      console.log('--------------');
+    }
 }
 
 // Set session for unauth bots

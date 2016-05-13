@@ -25,7 +25,7 @@ function elapsedTime(note) {
     var precision = 0; // 0 decimal places
     var elapsed = process.hrtime(start)[1] / 1000000;
                                                            // divide by a million to get nano to milliseconds
-    console.log(note + ' in: ' + process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms"); // print message + time
+    if (LOG_GENERAL) console.log(note + ' in: ' + process.hrtime(start)[0] + " s, " + elapsed.toFixed(precision) + " ms"); // print message + time
     start = process.hrtime(); // reset the timer
     return elapsed;
 }
@@ -146,7 +146,7 @@ function notifyNofUsersChanged(socket, hash, local) {
 
 function incremenViewsCount(socket, hash)
 {
-  console.log("incremenViewsCount(hash:" + hash + ")");
+  if (LOG_GENERAL) console.log("incremenViewsCount(hash:" + hash + ")");
   if(typeof(hash) == "undefined")
     return;
 
@@ -162,7 +162,7 @@ function incremenViewsCount(socket, hash)
         console.error("incremenViewsCount: hash:" + hash + " not found");
       else
         socket.emit('viewsCount-client', {hash: hash, count: count});
-        console.log("Hash:" + hash + " viewsCount has incremented to:" + count);
+        if (LOG_GENERAL) console.log("Hash:" + hash + " viewsCount has incremented to:" + count);
     });
   });
 }
@@ -192,41 +192,75 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           if (pollAnswerArray.length > 0) {
               pollUpdate();
           }
-          console.log('SOCKET CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id + ' UserAgent:' + socket.handshake.headers['user-agent']);
-          console.log('--------------');
-            socket.on('disconnect', function () {
-                if (socket.handshake.query.type === 'user' && typeof socket.handshake.query.hash !== 'undefined') {
-                    if (isNaN(nofUsers[socket.handshake.query.hash])) {
-                        nofUsers[socket.handshake.query.hash] = 0;
-                    }
-                    nofUsers[socket.handshake.query.hash]--;
-                    if (nofUsers[socket.handshake.query.hash] < 0) {
-                        nofUsers[socket.handshake.query.hash] = 0;
-                    }
-                    // Remove users if 0 in room;
-                    if(nofUsers[socket.handshake.query.hash] == 0) {
-                      module.parent.exports.slideCheckPresenter({ hashId: socket.handshake.query.hash, currentUserId: userSession.currentUserId } , function(retData) {
-                        if (retData.found == 1 && retData.meeting == 1) {
-                          /*module.parent.exports.deletePresentation(socket.handshake.query.hash, function(ddd){
-                            console.log(ddd);
-                          });*/
-                        }
+          console.log('SOCKET CONNECTION on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id/* + ' UserAgent:' + socket.handshake.headers['user-agent']*/);
+          if (LOG_GENERAL) console.log('--------------');
+          socket.on('disconnect', function () {
+              if (socket.handshake.query.type === 'user' && typeof socket.handshake.query.hash !== 'undefined') {
+                  if (isNaN(nofUsers[socket.handshake.query.hash])) {
+                      nofUsers[socket.handshake.query.hash] = 0;
+                  }
+                  nofUsers[socket.handshake.query.hash]--;
+                  if (nofUsers[socket.handshake.query.hash] < 0) {
+                      nofUsers[socket.handshake.query.hash] = 0;
+                  }
+                  // Remove users if 0 in room;
+                  if(nofUsers[socket.handshake.query.hash] == 0) {
+                    module.parent.exports.slideCheckPresenter({ hashId: socket.handshake.query.hash, currentUserId: userSession.currentUserId } , function(retData) {
+                      if (retData.found == 1 && retData.meeting == 1) {
+                        /*module.parent.exports.deletePresentation(socket.handshake.query.hash, function(ddd){
+                          console.log(ddd);
+                        });*/
+                      }
 
-                      });
-                    }
+                    });
+                  }
 					notifyNofUsersChanged(socket, socket.handshake.query.hash);
 					if(LOG_GENERAL) {
 						console.log("User disconnected");
 						console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
 					}
-                }
+              }
+            if (typeof people[socket.id] !== "undefined") { //this handles the refresh of the name screen
+                purge(socket, "disconnect");
+            }
+            console.log('SOCKET DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
+            if(LOG_GENERAL) console.log('--------------');
+
+          });
+          
+          socket.on('error', function () {
+              if (socket.handshake.query.type === 'user' && typeof socket.handshake.query.hash !== 'undefined') {
+                  if (isNaN(nofUsers[socket.handshake.query.hash])) {
+                      nofUsers[socket.handshake.query.hash] = 0;
+                  }
+                  nofUsers[socket.handshake.query.hash]--;
+                  if (nofUsers[socket.handshake.query.hash] < 0) {
+                      nofUsers[socket.handshake.query.hash] = 0;
+                  }
+                  // Remove users if 0 in room;
+                  if (nofUsers[socket.handshake.query.hash] == 0) {
+                      module.parent.exports.slideCheckPresenter({ hashId: socket.handshake.query.hash, currentUserId: userSession.currentUserId } , function (retData) {
+                          if (retData.found == 1 && retData.meeting == 1) {
+                        /*module.parent.exports.deletePresentation(socket.handshake.query.hash, function(ddd){
+                          console.log(ddd);
+                        });*/
+                          }
+
+                      });
+                  }
+                  notifyNofUsersChanged(socket, socket.handshake.query.hash);
+                  if (LOG_GENERAL) {
+                      console.log("User disconnected");
+                      console.log('Users in ' + socket.handshake.query.hash + ': ' + nofUsers[socket.handshake.query.hash]);
+                  }
+              }
               if (typeof people[socket.id] !== "undefined") { //this handles the refresh of the name screen
                   purge(socket, "disconnect");
               }
-              console.log('SOCKET DISCONNECT on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
-              console.log('--------------');
+              console.log('SOCKET ERROR on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
+              if (LOG_GENERAL) console.log('--------------');
 
-          });
+          }); // socket.on('error')
 
           var uploadDir = path.join(www_dir, "UPLOAD/");
           function uploadStarted(name){
@@ -315,9 +349,9 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
 
           }
 
-          socket.on('error', function (data){
-            console.error(data);
-          });
+          //socket.on('error', function (data){
+          //  console.error(data);
+          //});
 
           socket.on('server-deleteSlide', function (data) {
         		var hashPath = path.join(www_dir, slitesDir, data.sid);
@@ -413,7 +447,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
 
       	socket.on('notes-server', function (data) {
-          console.log(data);
+            if (LOG_GENERAL) console.log(data);
       		var slideId = data.slideId.replace(/[^a-zA-Z0-9]/g,"");
       		var slidePath = www_dir + slitesDir + '/' + slideId + '/';
       		var tmpNote = userSession.userAuth ? 0 : 1;
@@ -980,8 +1014,10 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
           });
         });
 
-        socket.on('start-webrtc-clients', function(roomId) {
-          console.log("Starting sessions for clients....");
+        socket.on('start-webrtc-clients', function (roomId) {
+          if (LOG_GENERAL) {
+             console.log("Starting sessions for clients....");
+          }
           socket.broadcast.emit("start-webrtc-clients", roomId);
         });
 

@@ -18,7 +18,7 @@ var XML_PATH = 'xml'
   , MAX_QUEUE_LENGTH = 10000
   , WIDTH = 1280
   , COMPRESSION = 90
-  , DEBUG = false;
+  , DEBUG = true;
 
 var queue = new Queue.Queue(MAX_QUEUE_LENGTH);  // global queue for conversion
 var start = process.hrtime();

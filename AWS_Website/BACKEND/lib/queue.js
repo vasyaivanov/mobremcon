@@ -131,7 +131,7 @@ var Queue = function(maxQueueLength) {
     }); 
 	};
 
-	console.log("QUEUE created");
+	if(DEBUG) console.log("QUEUE created");
 }
 
 module.exports.Queue = Queue;
