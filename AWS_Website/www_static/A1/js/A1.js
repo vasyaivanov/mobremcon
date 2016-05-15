@@ -185,7 +185,7 @@ function showHideVideoChat() {
                 $(".closevideo").css("background-repeat", "no-repeat");
     } else {
                 $("#videoframe").attr("src","");
-                $(".closevideo").css("background", "url(../A1/img/webrtc/closeVideo_gray2.png)");
+                $(".closevideo").css("background", "url(../A1/img/webrtc/closeVideo_gray_openVideo.png)");
                 $(".closevideo").css("background-repeat", "no-repeat");
         isVideoChatOn = 0;
     }

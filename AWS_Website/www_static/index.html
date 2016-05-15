@@ -137,7 +137,7 @@
               <div id="uploadFalse"  class="uploadfile">
                   <button type="button" class="btn uploadButton" onclick="$('.myPres').click()">Limit reached.<br/>Click here to delete.</button>
               </div>
-              <input class="btn startMeetingButton" onclick="location.href='m/'" type="button" value="Start FREE meeting">
+              <!--<input class="btn startMeetingButton" onclick="location.href='m/'" type="button" value="Start FREE meeting">-->
 
             <% } else if (noUploadForUser == 2) {%>
 
@@ -402,13 +402,12 @@
     			<% slides.forEach(function(slide){ %>
     				<div class="presentationUpgrade row" id="slide_<%= slide.sid %>">
     				<div class="slidePres col-md-3 col-sm-3 col-xs-3">
-              <a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="img-rounded" width="100vw" height="100vw"></a></div>
+              <a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/"><img src="/<%= slide.sid %>/img0.jpg" class="myPresentationThumbnail" width="220vw" height="220vw"></a></div>
     				<div class="textPres col-md-6 col-sm-6 col-xs-6"><a href="/<% if(slide.scid != null) { %><%= slide.scid %><% } else { %><%= slide.sid %><% } %>/" class="presTitle"><%= slide.title %></a>
             <% if(slide.video.length) { %>
               <br>Video:<br>
               <% slide.video.forEach(function(video){ %>
                 <div class="videoPres col-md-3 col-sm-3 col-xs-3" id="<%= video %>">
-                  <p>MKDG</p>
                   <video width="320" height="240" controls>
                     <source src="<%= video %>" type="video/mp4">
                       Your browser does not support the video tag.

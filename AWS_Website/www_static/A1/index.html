@@ -128,7 +128,7 @@
 
 		<!--center-->
       <div id="screensharing" class="rsContainer">
-        <h1><div class="closeVideo" id="closescreensharing" style="position: absolute; right: 1%;" title="Close Screen Share">
+        <h1><div class="closeButton" id="closescreensharing" style="position: absolute; right: 1%;" title="Close Screen Share">
         </div></h1>
         <iframe width="100%" height="100%" id="screensharingiframe" src="" style="margin-left:5%;" scrolling="no"></iframe>
       </div>
@@ -139,7 +139,7 @@
 
 
 	<div id="personalNotes">
-		<div class="closevideo" id="closePersonalNotes"></div>
+		<div class="closeButton" id="closePersonalNotes"></div>
 		<center><div class='panelTitle'>Personal Notes (only you can see them)</div></center>
 		<p class="paper" id="personalNotesArea" contenteditable>
 		</p>
@@ -155,18 +155,18 @@
 	</div>
 
 	<div class='helpOverlay' id='helpOverlay'>
-		<div class="closevideo" id="closeHelpOverlay" style='margin-right:30px;' title="Close Video"></div>
+		<div class="closeButton" id="closeHelpOverlay" style='margin-right:30px;' title="Close Video"></div>
 		<iframe src="/A1/help.html" style='width:100%;height:100%'></iframe>
 	</div>
 
 	<div class='presPassOverlay' id='presPassOverlay'>
-		<div class="closevideo" id="closePassOverlay" style='margin-right:30px;' title="Close Video"></div>
+		<div class="closeButton" id="closePassOverlay" style='margin-right:30px;' title="Close Video"></div>
 		<div id="getPassResult" class="centerText"></div>
 	</div>
 
 
 	<div class='renamePresentationOverlay' id='renamePresentationOverlay'>
-		<div class="closevideo" id="closeRenamePresentationOverlay" style='margin-right:30px;'></div>
+		<div class="closeButton" id="closeRenamePresentationOverlay" style='margin-right:30px;'></div>
 		<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" id="paypalNewHashForm">
 		<input type="hidden" name="cmd" value="_s-xclick">
 		<input type="hidden" name="hosted_button_id" value="GJZCCMWDQ8YGG">
@@ -189,7 +189,7 @@
 	</div>
 
 	<div class='passwordCreateOverlay' id='passwordCreateOverlay'>
-		<div class="closevideo" id="closePasswordCreateOverlay" style='margin-right:30px;'></div>
+		<div class="closeButton" id="closePasswordCreateOverlay" style='margin-right:30px;'></div>
 		<center>
 			<div id="passwordDialog">
 					<div style="font-size:22px;">Password</div>
@@ -212,7 +212,7 @@
 	</div>
 
 	<div class='insertVideoSlideOverlay' id='insertVideoSlideOverlay'>
-		<div class="closevideo" id="closeInsertVideoSlideOverlay" style='margin-right:30px;'></div>
+		<div class="closeButton" id="closeInsertVideoSlideOverlay" style='margin-right:30px;'></div>
 		<center>
 			<div id="insertVideoSlide">
 				<div>Enter URL (adress) of <b>Youtube</b></div>
@@ -261,7 +261,7 @@
 				  <li><a href="javascript:recording()" id="menuOpenRecording" style="display: none"><span id='RecordingOpenCloseLabel'>Start</span> Recording (beta)</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
 				  <li><a href="javascript:showHideScreensharing()" id="menuOpenScreensharing"><span id='screensharingOpenCloseLabel'></span>Screen Share</a></li>
-          <li class="social"><a href="#">Share</a>
+          <li class="social"><a href="#">Invite Friends</a>
             <a href="javascript:shareFacebook()"  title="Facebook" class="socialF fa fa-facebook-square fa-lg"></a>
             <a href="javascript:shareTwitter()"  title="Twitter" class="socialT fa fa-twitter-square fa-lg"></a>
           </li>

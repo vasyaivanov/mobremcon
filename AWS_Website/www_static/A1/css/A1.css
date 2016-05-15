@@ -790,6 +790,21 @@ audio, video {
 		z-index: 999;
 	}
 
+	.closeButton {
+		/*float:right;
+		margin-top:7px;
+		margin-right: 7px !important;*/
+		float: right;
+    	opacity: 0.6;
+		cursor:pointer;
+		display: inline-block;
+		width: 25px;
+		height: 25px;
+		z-index: 999;
+		background-image: url('../../A1/img/webrtc/closeButtonXsmall.png');
+}
+	}
+
 	.closecomments {
 		float:right;
 		margin-top:7px;
