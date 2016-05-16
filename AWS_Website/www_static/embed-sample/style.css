@@ -1,0 +1,43 @@
+.prezera-style {
+  text-align: center;
+  width: 100%;
+}
+.prezera-style > input[type="file"] {
+  display: none;
+}
+
+.prezera-style > input[type="button"] {
+  width: 250px;
+  height: 50px;
+  border-color: #4D68B6;
+  font-weight: normal;
+  vertical-align: middle;
+  background: #00147C;
+  color: #84A4E0;
+  font-size: 18px;progressLabel-
+}
+
+[id^='progressLabel-'] {
+
+}
+
+[id^='progressBar-'] {
+  height: 20px;
+}
+
+.prezera-style > [id^='dialogBox-'] {
+  display: none;
+  width: 300px;
+  border: 1px solid gray;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.prezera-style > [id^='iframe-'] {
+  display: none;
+  width: 90%;
+  height: 80%;
+  padding:0px;
+  margin:0 auto;
+  border: 1px solid gray;
+}

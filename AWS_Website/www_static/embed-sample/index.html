@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Prezera simple embedded API v0.1</title>
+</head>
+<body bgcolor="ffffff">
+<hr>
+<!-- 1. We need to create one div, where our API will draw all elements -->
+<div id="prezera-div"></div>
+<!-- 2. Include prezera script -->
+<script src="https://www.prezera.com/js/embed/embed-prezera.js"></script>
+<!-- 3. Run script,
+a) VisualElement: id of our div (look at #1)
+b) style: Css we want to apply to our div
+c) styleUrl: Url for our CSS (Please follow the sample css, by default I use prezera-style)
+d) buttonValue: Upload button text
+ -->
+<script>
+var p = new Prezera({
+  visualElement: "prezera-div",
+  style: "prezera-style",
+  styleUrl: "//www.prezera.com/embed/style.css",
+  buttonText: "Upload"
+});
+</script>
+<hr>
+</body>
+</html>
