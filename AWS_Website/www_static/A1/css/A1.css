@@ -219,7 +219,7 @@ body {
 	/*width: 80%;*/
 	height: 100%;
 	float: right;
-}	
+}
 
 .videoGallery .rsTmb {
 	padding: 20px;
@@ -930,7 +930,7 @@ cursor: pointer;
 right: 0px;
 }
 .navButtonPrev{
-left: 0%;
+left: 27%;
 }
 
 /* imported from remote.css */
@@ -968,6 +968,18 @@ left: 0%;
     text-align: center;
     z-index: 2;
 		display: none;
+}
+
+@media screen and (min-width: 0px) and (max-width: 800px) {
+#navButtons{
+	left: 1%; 
+}
+.button {
+	margin-top: 0;
+	max-height: 48px;
+	margin-bottom: 0.5%;
+
+}
 }
 
 .topRow {
