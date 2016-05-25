@@ -50,7 +50,8 @@ socket.on("reconnect", function(err) {
 });
 
 function isMobile() {
-    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    // Added support for Android /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini
+    if (/webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return true;
     } else {
         return false;
@@ -725,6 +726,9 @@ if(presentationPassword == 1 && isPresenter() == false) {
 }
 
 if( isMobile() ) {
+    $('.videochatDisplay').hide();
+    $('.commentsDisplay').hide();
+
     $("#sliteWatermak").css("display","none");
 
     if (window.innerHeight > window.innerWidth){

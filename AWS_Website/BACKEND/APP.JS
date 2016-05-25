@@ -25,7 +25,7 @@ var express = require('express')
   , DEBUG = true
   , paypalIpn = require('paypal-ipn')
   , OpenTok = require('opentok')
-  , opentok = new OpenTok('45572032', 'e3f048818dd4de8d7bebe5761ee74c16b16b3270');
+  , opentok = new OpenTok('45595622', '14db5e0a19b95e8e5dd0e527ee3045fb703a168d');
 
 // AWS API config
 AWS.config.region = 'us-west-1';
@@ -217,7 +217,7 @@ if(DEBUG) console.log('www_dir: ' + www_dir);
 
 // hash redirection
 var slitesDir = "slites";
-var slitesHashLen = 5;
+var slitesHashLen = 4;
 module.exports.slitesHashLen = slitesHashLen;
 var slitesReg = "[0-9a-zA-Z]{" + slitesHashLen + "}";
 // middleware do render slites files from /slites folders

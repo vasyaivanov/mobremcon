@@ -338,7 +338,7 @@ body {
 
 
 .videochatDisplay {
-  	display: none;
+  	display: block;
 }
 @media screen and (min-width: 768px) {
   	.videochatDisplay {
@@ -441,7 +441,7 @@ body {
 }
 
 .commentsDisplay {
-  	display: none;
+  	display: block;
 }
 @media screen and (min-width: 768px) {
   	.commentsDisplay {
@@ -972,7 +972,7 @@ left: 27%;
 
 @media screen and (min-width: 0px) and (max-width: 800px) {
 #navButtons{
-	left: 1%; 
+	left: 1%;
 }
 .button {
 	margin-top: 0;
