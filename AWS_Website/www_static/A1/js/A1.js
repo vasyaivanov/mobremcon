@@ -184,7 +184,6 @@ function showHideVideoChat() {
 
     if (!isVideoChatOn) {
           isVideoChatOn = 1;
-          console.log("Starting video chat");
                 $("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
                 $(".closevideo").css("background", "url(../A1/img/webrtc/closeVideo_gray.png)");
                 $(".closevideo").css("background-repeat", "no-repeat");
@@ -502,6 +501,7 @@ function meetingMenu() {
         $("#prev").remove();
         $("#videochat").height("100%");
         $("#videochat").width("220px");
+        $("#videochat").show();
         $("#comments").css("right","0px");
         $("#comments").height("30px");
         $("#comments").width("220px");
@@ -511,8 +511,10 @@ function meetingMenu() {
         $("#closescreensharing").remove();
         $('body').prepend('<div class="chalk"></div>');
         $( document ).ready(function() {
+            $("#loadingPage").hide();
             if(isVideoChatOpen == 0 && isPresenter()) {
-                showHideVideoChat();
+              console.log("Showing video chat");
+                //showHideVideoChat();
             }
             showHideComments();
             $("#comments").hover(
