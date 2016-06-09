@@ -157,9 +157,9 @@ function showHideVideoChat() {
     }
 
 
-    if (isPresenter() && isVideoChatOn == 0) {
+    if(isPresenter() && isVideoChatOn == 1) {
             // Closing broadcast
-            socket.emit("presenterVideoChat", {open: isVideoChatOn, hash: getCurrentHash()});
+            socket.emit("presenterVideoChat", {open: 0, hash: getCurrentHash()});
     }
 
     var label = $("#videoChatOpenCloseLabel");
@@ -177,10 +177,14 @@ function showHideVideoChat() {
 
     //toggleMainWindow();
 
+    console.log("-----");
+    console.log(isVideoChatOn);
+    console.log("-----");
 
 
     if (!isVideoChatOn) {
-        isVideoChatOn = 1;
+          isVideoChatOn = 1;
+          console.log("Starting video chat");
                 $("#videoframe").attr("src","/video.html?presentation=" + getCurrentHash() + "&random=" + Math.random() * 999999999999999);
                 $(".closevideo").css("background", "url(../A1/img/webrtc/closeVideo_gray.png)");
                 $(".closevideo").css("background-repeat", "no-repeat");
@@ -630,7 +634,7 @@ function nextSlideLocal(){
     clearCanvas();
 }
 
-if(isPresenter()){
+if(isPresenter() && isVideoChatOpen == 0){
     showHideVideoChat();
     isVideoChatOn = 1;
 }
