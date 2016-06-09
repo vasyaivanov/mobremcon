@@ -1,9 +1,0 @@
-QUEUE created
-prezera-yulia-macbook-air
-www_dir: /Users/yuka/Documents/mobremcon/AWS_Website/
-Starting signaling server
-Socket.io Http server listening on port: 1337
-Express server listening on port: 8081
-Connected to DB
-Cache ready, number of entries=3
-Storage bucket response: BucketAlreadyOwnedByYou
