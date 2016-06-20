@@ -25,6 +25,16 @@ table {
   max-width: 100%;
 }
 
+.video-wrap {
+  float: left;
+  margin: 2%;
+  border: 1px solid #9799a7;
+}
+.zerro-size{
+  width: 10vw;
+}
+.text-QA{
+padding-top: 3vw;}
 /*progressbar*/
 
 #progressbar {
@@ -140,13 +150,13 @@ button.close {
 
 
 .product {
-    width: 50%;
-    height: 300px;
-    background: url(../img/meeting.jpg) no-repeat center center scroll;
+    width: 420px;
+    height: 315px;
 }
 
 .services {
-    padding: 50px 0;
+    padding: 2vw 0;
+    height: auto;
 }
 
 hr.small {
@@ -154,7 +164,7 @@ hr.small {
 }
 
 .service-item {
-    margin-bottom: 30px;
+    margin: 4vw 0 3vw 2vw;
 }
 
 /* Portfolio */
@@ -512,6 +522,7 @@ input.renameSlide {
 }
 
 @media screen and (max-device-width: 1024px) {
+
         video#bgvid {
         position: fixed;
         top: 50%;

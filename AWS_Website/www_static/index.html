@@ -169,6 +169,82 @@
             </div>
         </div>
     </section>-->
+
+    <!-- How to embed Prezera in your product -->
+    <section id="works" class="portfolio whiteBg allData mainData">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 text-center">
+                    <hr class="small">
+                      <div class="portfolio-item">
+                        <div class="col-md-12">
+                        <h3><strong>How to have live video/audio/powerpoint</br> in your product</strong></h3></br>
+                      </div>
+                        <div class="col-md-5 text-left ">
+                          <div class="text-left"><h3 class="text-align: center"> How to embed Prezera in your product</h3>
+                            <h4>Personas</h4>
+                            <ol>
+                              <li>Presenter - a person who will broadcast something live inside your product </li>
+                              <li>Website administrator - a person who maintains your product/website (probably a tech engineer)</li>
+                              <li>Audience - anyone user of your product/website who wants to see live content</li>
+                            </ol>
+                          </div>
+                          <h4>1. Presenter: upload to www.prezera.com</h4>
+                          <ul style="list-style-type:none">
+                            <li> Go to www.prezera.com</li>
+                            <li> Do:</li>
+                              <p>
+                                a)Upload .pptx file with presentation</br>
+                                OR</br>
+                                b) Upload .pptx with 1 page which background of the broadcast</br>
+
+                                This is it! You are already live!</br>
+                                Please note a unique code for your presentation in the url.</br>
+
+                              </p>
+                          </ul>
+                          <h4>2. Website/product administrator:</br>embed 1 line of code in html</h4>
+                          <p style="color:mediumblue"><span>&lt;</span>script type="text/javascript" <a style="color:mediumblue" href="https://www.prezera.com/js/embed/prezera-embed.js">src=https://www.prezera.com/js/embed/prezera-embed.js</a><span>&gt;</span><span>&lt;</span>/script<span>&gt;</span></p>
+                          <p>
+                              It is advisable to put this code right before closing <span>&lt;</span>/body<span>&gt;</span>tag.
+                              This code will put on your page a <strong>“Go Live”</strong> button.</br>
+                              Location and css of this button can be overwritten by you.</br>
+                          </p>
+                          <h4>3. Audience: open your website/product and click “Go Live”</br></br> <h4>
+
+                        </div>
+
+                        <div class="col-md-2 zerro-size">
+                        </div>
+
+                        <div class="col-md-5 text-left">
+                              <h3 class="text-align: center">   Q&A   </h3>
+                              <div class="text-QA">
+                                <h4>Do I need to install anything?</h4>
+                                  <p>No. Just go to prezera.com and it would start working.</br></p>
+                                <h4>Do I need to login?</h4>
+                                  <p>No (if you don’t want to). You can create a login if you want to control your presentations from</br>
+                                  <strong>any computer or phone</strong> otherwise, without login, you would be able to control it</br>
+                                  only from the computer or phone you uploaded it</br></p>
+                              <h4>What are limitation of Prezera?</h4>
+                              <ul>
+                                <li> Browser: only Chrome and Firefox so far are supported (check back later for more browser support)</li>
+                                <li> Internet: since this technology requires an internet connection, as any SaaS product we require that you have a stable good internet connection</li>
+                                <li> Computer power: Only presenter needs to have a normal modern computer since it will become a server to serve video to all your clients (benefit is that Prezera technology is very secure since it is peer-to-peer and over https)</li>
+                              </ul>
+                            </div>
+                        </div>
+
+                      </div>
+                </div>
+                <!-- /.col-lg-10 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+    </section>
+
+
     <!-- Our Product -->
     <section id="product" class="mainbackground services bg-primary allData mainData">
         <div class="container">
@@ -177,15 +253,16 @@
                     <h2>About Our Product</h2>
                     <hr class="small">
                     <div class="row">
-                        <div class="col-sm-12">
-                            <div class="col-sm-6 product">
+                        <div class="col-sm-12 col-md-12">
 
+                            <div class="col-md-5 product">
+                              <iframe width="420" height="315" class="video-wrap"
+                              src="https://www.youtube.com/embed/QtmQdylvF8o" frameborder="0" allowfullscreen>
+                              </iframe>
                             </div>
-                            <div class="col-sm-offset-1 col-sm-5 service-item text-left">
-                            </span>
-                                <h4 class="text-center">
-                                    <strong>PREZERA.COM™ - live online presentations.</strong>
-                                </h4>
+
+                            <div class="col-md-6 service-item text-left">
+                                <h4 class="text-center">PREZERA.COM™ - live online presentations.</h4>
                                 <p>PREZERA.COM™ enables you to present from inside your browser to a remote and in-house audiences. It comes with an iPhone remote control app. PREZERA.COM™ adds a social component inside your presentation allowing audience to connect with each other and presenter. Desktop sharing and video broadcasting make your presentation efficient. PREZERA.COM™ is the best and the simpliest way in the world to explain information from one person to many.</p>
                             </div>
                         </div>
@@ -485,7 +562,7 @@
 
   <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
     <div class="col-md-3 col-sm-3 col-xs-3">
-      <div class="payment-plan silver"><p id="plan-text">Silver</p><p id="price"> $4.99/year<br></p>
+      <div class="payment-plan silver"><p id="plan-text">Silver</p><p id="price"> $4.99/month<br></p>
           <% if (!user) { %>
             <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
           <% } else { %>
@@ -510,7 +587,7 @@
       </div>
     <div class="col-md-9 col-sm-9 col-xs-9">
       <ul class="upgrade_text">
-        <li id="small-screen-price"class="silver"><p id="plan-text">Silver</p><p id="price">($4.99/year)</p>
+        <li id="small-screen-price"class="silver"><p id="plan-text">Silver</p><p id="price">($4.99/month)</p>
         <div class="register">  <% if (!user) { %>
             <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('silver');">
             <% } else { %>
@@ -536,7 +613,7 @@
         <li>You can get your own domain on PREZERA, example: john.prezera.com<br></li>
         <li>You're allowed to upload to unlimited presentations up to <b>100mb</b> of space and <b>10</b> users/viewers <br></li>
         <li>Plus you would able to get custom names for your presentation for free! Example: john.prezera.com/MyPresentation<br></li>
-        <li>$4.99/year</li>
+        <li>$4.99/month</li>
       </ul>
     </div>
 
@@ -545,7 +622,7 @@
 
   <div class="listUpgrade col-md-12 col-sm-12 col-xs-12">
       <div class="col-md-3 col-sm-3 col-xs-3">
-        <div class="payment-plan gold"><p id="plan-text">Gold</p><p id="price"> $9.99/year <br></p>
+        <div class="payment-plan gold"><p id="plan-text">Gold</p><p id="price"> $9.99/month <br></p>
           <% if (!user) { %>
             <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
           <% } else { %>
@@ -579,7 +656,7 @@
       </div>
       <div class="col-md-9 col-sm-9 col-xs-9">
         <ul class="upgrade_text">
-          <li id="small-screen-price"class="gold"><p id="plan-text">Gold</p><p id="price">($9.99/year)</p>
+          <li id="small-screen-price"class="gold"><p id="plan-text">Gold</p><p id="price">($9.99/month)</p>
           <div class="register">
             <% if (!user) { %>
               <input type="button" value="Register" class="btn btn-default" onclick="$('.signUpUser').click();$('#signUpAccType').val('gold');">
@@ -616,7 +693,7 @@
           <li>You can get your own domain on PREZERA, example: john.prezera.com<br></li>
           <li>You're allowed to upload to unlimited presentations up to <b>500mb</b> of space and <b>15</b> users/viewers</br></li>
           <li>Plus you would able to get custom names for your presentation<br></li>
-          <li>$9.99/year<br></li>
+          <li>$9.99/month<br></li>
         </ul>
       </div>
 
