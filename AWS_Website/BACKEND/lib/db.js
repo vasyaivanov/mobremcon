@@ -168,6 +168,17 @@ slidesSchema.pre('save', function(next){
 
 slidesSchema.index({uid: 1, sid: 1}, {unique: true});
 
+
+var Slide = mongoose.model('slide', slidesSchema);
+
+// Removing videosessions
+Slide.update({   }, { $unset: {videoSession: ""}}, {multi: true}, function(errU, docU) {
+  if(errU || !docU)
+    console.error("Can not flush old video sessions");
+  else
+    console.log("Old video session were removed")
+});
+
 module.exports = {
   User: mongoose.model('User', userSchema),
   Note: mongoose.model('note', notesSchema),
@@ -175,5 +186,5 @@ module.exports = {
   Billing: mongoose.model('billing', billingSchema),
   VideoUploads: mongoose.model('upload', videoUploadsSchema),
   Subscription: mongoose.model('subscription', subscriptionSchema),
-  Slide: mongoose.model('slide', slidesSchema),
+  Slide: Slide
 }
