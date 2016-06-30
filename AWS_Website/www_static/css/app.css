@@ -1,5 +1,5 @@
 #login-screen, #main-chat-screen {
-	padding-top: 10px;
+	padding: 10vw 0 0 1vw;
     position: absolute;
     right: 0px;
     width: 100%;
