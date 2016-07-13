@@ -557,7 +557,24 @@ app.use(function (req, res, next) {
               res.redirect(301, "/" + hash + "/" );
             }
             else if(additional_param == "") {
-							res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole, meeting: data.meeting });
+              //console.log(data);
+              var show = false;
+              if(typeof data.password == undefined || data.password === undefined || data.password == "") {
+                show = true;
+              }
+              else {
+                console.log(data);
+                if(req.body.password == data.password || data.isPresenter == 1) {
+                  show = true;
+                }
+                else {
+                  res.render(path.join(www_dir, www_static_dir, "A1",'password.html'), {title: data.title, hash: data.sid });
+                }
+              }
+
+              if(show) {
+                res.render(path.join(www_dir, www_static_dir, "A1",'index.html'), {title: data.title, presenter: data.isPresenter, password: data.password ? 1 : 0 , payed:  data.payed , customurl: data.scid, isVideoChatOpen: data.isVideoChatOpen, isScreensharingOpen: data.isScreensharingOpen, slidesNum: data.slidesNum , hash: data.sid, role: module.exports.userRole, meeting: data.meeting });
+              }
             }
             else if (additional_param.match(/^img[0-9]{1,6}\.jpg(\?ts=[0-9]+)?$/i)) {  // img*.jpg files (from slites/hash folder)
               var extTsPos = additional_param.indexOf('.jpg?ts=', 4);

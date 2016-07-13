@@ -728,7 +728,7 @@ if( hostname.indexOf("www") == 0){
     hostname = hostname.substring(4);
 }
 if(presentationPassword == 1 && isPresenter() == false) {
-    showHidePasswordCheckOverlay();
+    //showHidePasswordCheckOverlay();
 }
 
 if( isMobile() ) {
