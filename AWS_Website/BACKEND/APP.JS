@@ -25,7 +25,7 @@ var express = require('express')
   , DEBUG = true
   , paypalIpn = require('paypal-ipn')
   , OpenTok = require('opentok')
-  , opentok = new OpenTok('45614892', '90d42ead8d77234dc0ccbbc7e03d1e4deaaa06e8');
+  , opentok = new OpenTok('45624792', '42c27a9d4c54cea9d5349f98e3cc8e12e34e9d1e');
 
 // AWS API config
 AWS.config.region = 'us-west-1';
@@ -1394,17 +1394,22 @@ function openTokSession(hashId,videoSession, presenter, callback) {
 
   if(typeof videoSession == "undefined") {
     opentok.createSession({mediaMode:"routed" /* , archiveMode:'always'*/}, function(err, session) {
-      Slide.update({ sid: hashId }, {$set: { videoSession : session.sessionId}}, {upsert: false},
-        function (err, numAffected) {
-            if(numAffected.nModified == 1) {
-              openTokToken(session.sessionId, sessionType[presenter], function(token) {
-                callback(token,session.sessionId);
-              });
-            }
-            else {
-              callback(0);
-            }
-      });
+      if(typeof session.sessionId != "undefined") {
+        Slide.update({ sid: hashId }, {$set: { videoSession : session.sessionId}}, {upsert: false},
+          function (err, numAffected) {
+              if(numAffected.nModified == 1) {
+                openTokToken(session.sessionId, sessionType[presenter], function(token) {
+                  callback(token,session.sessionId);
+                });
+              }
+              else {
+                callback(0);
+              }
+        });
+      }
+      else {
+        callback("undefined","undefined");
+      }
     });
   }
   else {
