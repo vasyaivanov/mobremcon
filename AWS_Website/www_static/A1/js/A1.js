@@ -136,14 +136,18 @@ function toggleMainWindow() {
 
 var isCommentsOpen = true;
 function showHideComments() {
-    $("#comments").slideToggle();
-    $("#comments").css('overflow', 'scroll');
+    //$("#comments").slideToggle();
+
+
+    //$("#comments").css('overflow', 'scroll');
     var label = $("#chatOpenCloseLabel");
     if (label.html() == "") {
         isCommentsOpen = true;
+        $("#comments").show();
         $("#chatOpenCloseLabel").html("Close ");
     } else {
         isCommentsOpen = false;
+        $("#comments").hide();
         $("#chatOpenCloseLabel").html("");
     }
     toggleMainWindow();
@@ -503,8 +507,8 @@ function meetingMenu() {
         $("#videochat").width("220px");
         $("#videochat").show();
         $("#comments").css("right","0px");
-        $("#comments").height("30px");
-        $("#comments").width("220px");
+        //$("#comments").height("30px");
+        //$("#comments").width("220px");
         $("#screensharing").width("75%");
         $("#navButtons").width("85%");
         //$("#screensharing").css('z-index', 0);
@@ -517,18 +521,18 @@ function meetingMenu() {
                 //showHideVideoChat();
             }
             showHideComments();
-            $("#comments").hover(
+            /*$("#comments").hover(
                 function(){
                     $("#comments").height("93%");
-                            $( "#urlChat" ).height("900px");
-                            $("#comments").width("250px");
+                            $( "#urlChat" ).height("100%");
+                            //$("#comments").width("250px");
 
                 },
                 function(){
                     $("#comments").height("30px");
-                            $("#comments").width("220px");
+                            //$("#comments").width("220px");
                 }
-            );
+            );*/
             copyUrl();
         });
     }
