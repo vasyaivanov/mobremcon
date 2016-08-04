@@ -738,6 +738,51 @@ if(presentationPassword == 1 && isPresenter() == false) {
 if( isMobile() ) {
     $('.videochatDisplay').hide();
     $('.commentsDisplay').hide();
+    $('#screensharing').remove();
+    $("#navNext").remove();
+    $("#navPrev").remove();
+
+    if( !isPresenter() ) {
+      document.addEventListener('touchstart', handleTouchStart, false);
+      document.addEventListener('touchmove', handleTouchMove, false);
+      document.addEventListener('touchend', function() {$(document).scrollTop(0);}, false);
+
+      var xDown = null;
+      var yDown = null;
+
+      function handleTouchStart(evt) {
+          xDown = evt.touches[0].clientX;
+          yDown = evt.touches[0].clientY;
+      };
+
+      function handleTouchMove(evt) {
+          if ( ! xDown || ! yDown ) {
+              return;
+          }
+
+          var xUp = evt.touches[0].clientX;
+          var yUp = evt.touches[0].clientY;
+
+          var xDiff = xDown - xUp;
+          var yDiff = yDown - yUp;
+
+          if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
+
+              if ( xDiff > 0 ) {
+                nextSlideLocal();
+              } else {
+                prevSlideLocal();
+              }
+          }
+          else {
+            evt.preventDefault();
+          }
+
+          xDown = null;
+          yDown = null;
+      };
+
+    }
 
     $("#sliteWatermak").css("display","none");
 
@@ -925,9 +970,11 @@ $( window ).load(function() {
 
 
             slider.appendSlide(slide_html);
-                        // Resize images
-                    //var resizer = new Resizer({imgid:slide});
-                    //  resizer.checkImage();
+                    // Resize images
+            /*if (isMobile()) {
+              var resizer = new Resizer({imgid:slide});
+              resizer.checkImage();
+            }*/
         }
     }
 
