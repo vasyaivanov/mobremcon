@@ -796,13 +796,16 @@ audio, video {
 	.closeButton {
 		/*float:right;
 		margin-top:7px;
-		margin-right: 7px !important;*/
+		margin-right: 7px !important;
 		float: right;
-    	opacity: 0.6;
+    	opacity: 0.6;*/
+		float:right;
+		background-repeat:no-repeat;
 		cursor:pointer;
 		display: inline-block;
-		width: 25px;
-		height: 25px;
+		margin: 3vw 90vw 10vw 5vw;
+		width: 48px;
+		height: 36px;
 		z-index: 999;
 		background-image: url('../../A1/img/webrtc/closeButtonXsmall.png');
 }
