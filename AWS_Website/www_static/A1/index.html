@@ -57,8 +57,8 @@
 
 <body> <!--onresize="resizeCanvas()">-->
 
-<div id="loadingPage" class="centerText">
-<img src="/A1/img/loading_spinner.gif" width="20">
+<div id="loadingPage" class="spinner">
+	<img src="/A1/img/loading_spinner.gif" width="20">
 </div>
 
 <div class='orientationOverlay' id='orientationOverlay'>
@@ -260,11 +260,14 @@
 				  <li><a href="javascript:showHideVideoChat()" id="menuOpenVideoChat"><span id='videoChatOpenCloseLabel'></span>Live Video</a></li>
 				  <li><a href="javascript:recording()" id="menuOpenRecording" style="display: none"><span id='RecordingOpenCloseLabel'>Start</span> Recording (beta)</a></li>
 				  <li><a href="javascript:showHidePersonalNotes()" id="menuPersonalNotes"><span id='personalNotesOpenCloseLabel'></span> Personal Notes</a></li>
-				  <li><a href="javascript:showHideScreensharing()" id="menuOpenScreensharing"><span id='screensharingOpenCloseLabel'></span>Screen Share</a></li>
-          <li class="social"><a href="#">Invite Friends</a>
+				  <li><a href="javascript:showHideScreensharing()" id="menuOpenScreensharing"><span id='screensharingOpenCloseLabel'></span>Screen Share</a></li> 
+				  <li><a href="javascript:shareEmail()" id="menuOpenShowTwitter"><span id='twitterOpenCloseLabel'></span>Invite by Email</a></li>
+				  <li><a href="javascript:shareFacebook()" id="menuOpenShowFacebook"><span id='facebookOpenCloseLabel'></span>Invite by Facebook</a></li>
+				  <li><a href="javascript:shareTwitter()" id="menuOpenShowTwitter"><span id='twitterOpenCloseLabel'></span>Invite by Twitter</a></li>				  
+          <!-- <li class="social"><a href="#">Invite Friends</a>
             <a href="javascript:shareFacebook()"  title="Facebook" class="socialF fa fa-facebook-square fa-lg"></a>
             <a href="javascript:shareTwitter()"  title="Twitter" class="socialT fa fa-twitter-square fa-lg"></a>
-          </li>
+          </li>-->
 
          <!--  <li><a href="javascript:shareFacebook()" id="shareFacebook">Share on Facebook</a></li>
 				  <li><a href="javascript:shareTwitter()" id="shareTwitter">Share on Twitter</a></li> -->

@@ -117,6 +117,9 @@ body {
 	visibility: visible;
 }
 
+.social:hover > .socialM, .social:activ > .socialM {
+	visibility: visible;
+}
 
 .socialF {
 	visibility: hidden;
@@ -131,7 +134,7 @@ body {
 	visibility: hidden;
 	top: 8px;
 	position: absolute;
-	right: 50%;
+	right: 10%;
 	z-index: 99;
 	padding: 0 !important;
 }
@@ -1101,6 +1104,16 @@ a { text-decoration: none; color: fff; }
 	display: none;
 	z-index: 3;
 }
+
+.spinner {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 65%;
+    margin-left: -50px; /* margin is -0.5 * dimension */
+    margin-top: -25px;
+	color: #FFFFFF;
+}​
 
 .centerText {
     position: absolute;

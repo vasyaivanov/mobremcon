@@ -77,6 +77,13 @@ function shareTwitter() {
     share("http://twitter.com/share");
 }
 
+function shareEmail() {
+    var email = '';
+    var subject = 'Invite to join Prezera';
+    var emailBody = 'Please join me as I am presenting now live at: ' + window.location.href;
+    window.location = 'mailto:' + email + '?subject=' + subject + '&body=' +   emailBody;
+}
+
 function openContactUs() {
      var form = document.createElement("form");
      form.method = "GET";
