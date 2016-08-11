@@ -227,8 +227,8 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
             if(LOG_GENERAL) console.log('--------------');
 
           });
-          
-          socket.on('error', function () {
+
+          socket.on('error', function (socketRerror) {
               if (socket.handshake.query.type === 'user' && typeof socket.handshake.query.hash !== 'undefined') {
                   if (isNaN(nofUsers[socket.handshake.query.hash])) {
                       nofUsers[socket.handshake.query.hash] = 0;
@@ -258,6 +258,7 @@ module.parent.exports.io.sockets.on('connection', function (socket) {
                   purge(socket, "disconnect");
               }
               console.log('SOCKET ERROR on', new Date().toLocaleTimeString() + ' Addr: ' + socket.handshake.headers.host + ' Socket: ' + socket.id);
+              console.log(socketRerror);
               if (LOG_GENERAL) console.log('--------------');
 
           }); // socket.on('error')
