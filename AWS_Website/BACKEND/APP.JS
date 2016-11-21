@@ -25,7 +25,7 @@ var express = require('express')
   , DEBUG = true
   , paypalIpn = require('paypal-ipn')
   , OpenTok = require('opentok')
-  , opentok = new OpenTok('45648682', '4a83c1558cace448fcee7d88d732afd65b2857f2');
+  , opentok = new OpenTok('45724392', '522cf757feb616525bd9b1f51a6c201fd23726bd');
 
 // AWS API config
 AWS.config.region = 'us-west-1';
